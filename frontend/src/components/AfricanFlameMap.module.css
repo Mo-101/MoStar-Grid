@@ -1,0 +1,417 @@
+.screen {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  color: var(--text-primary);
+  padding: clamp(1.5rem, 3vw, 3rem);
+}
+
+.consciousnessGrid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 140, 0, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 140, 0, 0.12) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mainContainer {
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.flameIcon {
+  font-size: 2.5rem;
+  animation: flame 2.2s ease-in-out infinite;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.7rem;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #ffd700, #ff8c00, #dc143c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  color: #bcbcbc;
+  font-size: 0.9rem;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  background: rgba(0, 255, 0, 0.1);
+  font-size: 0.9rem;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00ff00;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.navButton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 215, 0, 0.3), rgba(195, 139, 255, 0.25));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.navButton span {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.navButton:hover::before {
+  opacity: 1;
+}
+
+.navButton:hover span {
+  transform: translateX(-3px);
+}
+
+.navButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.5);
+}
+
+.visualizationArea {
+  position: relative;
+  min-height: 65vh;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.visualizationArea :global(.mapboxgl-map) {
+  font-family: var(--font-sans);
+}
+
+.mapFallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #ffd700;
+  font-size: 1rem;
+}
+
+.marker {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 12px;
+  padding: 0.35rem 0.6rem;
+  text-align: center;
+  width: 150px;
+  transform: translate(-50%, -110%);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+}
+
+.marker span {
+  font-size: 1.4rem;
+}
+
+.marker p {
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.marker small {
+  color: #b8b8b8;
+  font-size: 0.75rem;
+}
+
+.panel {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 215, 0, 0.28);
+  border-radius: 18px;
+  padding: 1.2rem;
+  pointer-events: auto;
+  width: min(360px, 90vw);
+}
+
+.panel h3 {
+  margin-top: 0;
+  color: #ffd700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+}
+
+.panelLeft {
+  top: 1.5rem;
+  left: 1.5rem;
+}
+
+.panelRight {
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+.panelBottomLeft {
+  bottom: 2rem;
+  left: 1.5rem;
+  width: min(460px, 95vw);
+}
+
+.panelBottomRight {
+  bottom: 2rem;
+  right: 1.5rem;
+}
+
+.metricBar + .metricBar {
+  margin-top: 0.8rem;
+}
+
+.metricHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.metricLabel {
+  color: #e0e0e0;
+}
+
+.metricValue {
+  font-family: var(--font-mono);
+}
+
+.progressBar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.25rem;
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.8s ease;
+}
+
+.agentsList {
+  margin-top: 1rem;
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.agentItem {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.agentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.agentName {
+  margin: 0;
+  font-weight: 600;
+}
+
+.agentStatus {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #b8b8b8;
+}
+
+.agentDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ff00;
+  animation: pulse 1.8s linear infinite;
+}
+
+.decisionBox {
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.decisionLabel {
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #ffd700;
+}
+
+.decisionTitle {
+  margin: 0.5rem 0 1rem;
+  font-size: 1rem;
+}
+
+.decisionStats {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.decisionStats small {
+  color: #b8b8b8;
+  display: block;
+  font-size: 0.75rem;
+}
+
+.decisionStats strong {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+}
+
+.success {
+  color: #00ff88;
+}
+
+.activityStream {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.activityItem {
+  border-left: 3px solid #ff8c00;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 8px 8px 0;
+  background: rgba(255, 140, 0, 0.12);
+}
+
+.activityTime {
+  font-size: 0.75rem;
+  color: #bcbcbc;
+}
+
+.controlPanel {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.6rem 1.4rem;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.75);
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.btn:hover {
+  border-color: #ffd700;
+}
+
+.active {
+  background: #ffd700;
+  color: #000;
+  border-color: #ffd700;
+}
+
+@media (max-width: 1100px) {
+  .panelLeft,
+  .panelRight,
+  .panelBottomLeft,
+  .panelBottomRight {
+    position: static;
+    width: 100%;
+    margin: 1rem auto;
+  }
+
+  .visualizationArea {
+    padding-bottom: 2rem;
+  }
+}
+
+@keyframes flame {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.05) rotate(-4deg);
+  }
+  75% {
+    transform: scale(0.95) rotate(4deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
