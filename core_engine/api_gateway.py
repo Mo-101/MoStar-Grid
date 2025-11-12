@@ -8,7 +8,7 @@ Bridges Ollama reasoning, Neo4j logging, and Voice synthesis into one unified in
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import os, httpx, asyncio
+import os
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import JSONResponse, FileResponse
 from dotenv import load_dotenv
@@ -21,55 +21,8 @@ from pydantic import BaseModel
 from core_engine.orchestrator import route_query, fetch_neo4j_context
 
 # === API routers ===
-reasoning_router = APIRouter()
-voice_router = APIRouter()
-logging_router = APIRouter()
-knowledge_router = APIRouter()
 router = APIRouter()
-
-
-class ReasonPayload(BaseModel):
-    prompt: str
-
-# === Knowledge integration endpoint ===
-@knowledge_router.post("/query")
-async def ask_knowledge(query: str = Form(...)):
-    """
-    Routes a query to the appropriate knowledge source and returns the response.
-    """
-    try:
-        context = await fetch_neo4j_context(query)
-        response = await route_query(query, context)
-        qid = log_mostar_moment("User", "Knowledge", f"Knowledge query for: {query}", "knowledge", 0.92)
-        return {"result": response, "quantum_id": qid}
-    except Exception as e:
-        err = f"Knowledge query failed: {e}"
-        log_mostar_moment("System", "Knowledge", err, "error", 0.4)
-        return JSONResponse(content={"error": err}, status_code=500)
-
-# === Reasoning endpoint ===
-@router.post("/reason")
-async def reason(payload: ReasonPayload):
-    neo4j_context = await fetch_neo4j_context(payload.prompt)
-    result = await route_query(payload.prompt, SYSTEM_PROMPT, neo4j_context)
-    log_mostar_moment("Mind Layer", result["model_used"], payload.prompt, "reason", result["complexity_score"])
-    return result
-
-# === Knowledge integration endpoint ===
-@knowledge_router.post("/query")
-async def ask_knowledge(query: str = Form(...)):
-    """
-    Routes a query to the appropriate knowledge source and returns the response.
-    """
-    try:
-        context = await fetch_neo4j_context(query)
-        response = await route_query(query, context)
-        qid = log_mostar_moment("User", "Knowledge", f"Knowledge query for: {query}", "knowledge", 0.92)
-        return {"result": response, "quantum_id": qid}
-    except Exception as e:
-        err = f"Knowledge query failed: {e}"
-        log_mostar_moment("System", "Knowledge", err, "error", 0.4)
-        return JSONResponse(content={"error": err}, status_code=500)
+knowledge_router = APIRouter()
 
 # === Load environment variables ===
 load_dotenv()
@@ -99,33 +52,47 @@ async def system_status():
     }
 
 
-# === Reasoning endpoint ===
+def _extract_prompt(content_type: str, body: dict | None, form_data: dict | None) -> str | None:
+    if form_data:
+        return form_data.get("prompt") or form_data.get("message")
+    if body:
+        return body.get("prompt") or body.get("message")
+    return None
+
+
 @app.post("/api/v1/reason")
-async def reason(prompt: str = Form(...)):
+async def reason_endpoint(request: Request):
     """
-    Passes a prompt to the Ollama model and returns the generated reasoning.
+    Passes a prompt through the hybrid router and returns the generated reasoning.
     """
     try:
-        async with httpx.AsyncClient(timeout=120) as client:
-            response = await client.post(
-                f"{OLLAMA_HOST}/api/generate",
-                json={"model": OLLAMA_MODEL, "prompt": prompt}
-            )
-
-        if response.status_code == 200:
-            data = response.json()
-            output = data.get("response", "").strip()
-            qid = log_mostar_moment("User", "Ollama", f"Ollama reasoning for: {prompt}", "reason", 0.92)
-            return {"result": output, "quantum_id": qid}
+        prompt: str | None = None
+        content_type = request.headers.get("content-type", "")
+        if "application/json" in content_type:
+            body = await request.json()
+            prompt = _extract_prompt(content_type, body, None)
         else:
-            err = f"Ollama returned {response.status_code}: {response.text}"
-            log_mostar_moment("System", "Ollama", err, "error", 0.4)
-            return JSONResponse(content={"error": err}, status_code=500)
+            form = await request.form()
+            prompt = _extract_prompt(content_type, None, dict(form))
+
+        if not prompt:
+            return JSONResponse(content={"error": "Missing prompt."}, status_code=400)
+
+        neo4j_context = await fetch_neo4j_context(prompt)
+        result = await route_query(prompt, SYSTEM_PROMPT, neo4j_context)
+        log_mostar_moment(
+            "Mind Layer",
+            result.get("model_used", "unknown"),
+            prompt,
+            "reason",
+            result.get("complexity_score", 0.0),
+        )
+        return result
 
     except Exception as e:
         err = f"Reasoning failed: {e}"
-        log_mostar_moment("System", "Ollama", err, "error", 0.3)
-        return JSONResponse(content={"error": str(e)}, status_code=500)
+        log_mostar_moment("System", "Reason", err, "error", 0.3)
+        return JSONResponse(content={"error": err}, status_code=500)
 
 
 # === Voice synthesis endpoint ===

@@ -41,14 +41,13 @@ class SpiritualEngine:
         ritual = {"operation": "seal", "payload": {"intention": intent, "layer": self.origin}}
         return self.mo.interpret(ritual)
 
-    if __name__ == "__main__":
-        soul = SpiritualEngine()
-        result = soul.bless_intent("Awaken the Flameborn")
-        print(json.dumps(result, indent=4))
-            """Generates a covenant ID using the current timestamp and a random number.
-
-            Returns:
-                str: A 16-character hexadecimal string representing the covenant ID.
-            """
-            base = f"{datetime.utcnow().isoformat()}_{random.randint(1000,9999)}"
-            return hashlib.sha256(base.encode()).hexdigest()[:16]
+if __name__ == "__main__":
+    soul = SpiritualEngine()
+    result = soul.bless_intent("Awaken the Flameborn")
+    print(json.dumps(result, indent=4))
+    # """Generates a covenant ID using the current timestamp and a random number.
+    # Returns:
+    # str: A 16-character hexadecimal string representing the covenant ID.
+    # """
+    # base = f"{datetime.utcnow().isoformat()}_{random.randint(1000,9999)}"
+    # return hashlib.sha256(base.encode()).hexdigest()[:16]
