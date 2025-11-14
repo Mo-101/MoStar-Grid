@@ -513,6 +513,288 @@
   color: #ff596c;
 }
 
+.agentOps {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1.5rem;
+}
+
+.agentVitals,
+.agentRosterPane {
+  background: rgba(6, 10, 18, 0.9);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2rem;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+}
+
+.agentStatGrid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.agentWarning {
+  margin-top: 1.2rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 179, 71, 0.35);
+  background: rgba(255, 179, 71, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 0 15px rgba(255, 179, 71, 0.12);
+}
+
+.agentWarning strong {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #ffb347;
+  margin-bottom: 0.2rem;
+}
+
+.agentWarning p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.agentStat {
+  padding: 1rem 1.2rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.agentStat p {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.agentStat strong {
+  display: block;
+  font-size: 1.9rem;
+  margin: 0.3rem 0;
+  color: var(--text-primary);
+}
+
+.agentStat small {
+  color: var(--text-muted);
+}
+
+.agentStatusRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+}
+
+.statusChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+}
+
+.statusChip strong {
+  letter-spacing: normal;
+  font-size: 0.9rem;
+}
+
+.statusChip[data-tone="active"],
+.agentBadge[data-tone="active"] {
+  color: #6dffe1;
+  border-color: rgba(109, 255, 225, 0.6);
+  background: rgba(109, 255, 225, 0.1);
+}
+
+.statusChip[data-tone="idle"],
+.agentBadge[data-tone="idle"] {
+  color: #ffb347;
+  border-color: rgba(255, 179, 71, 0.5);
+  background: rgba(255, 179, 71, 0.08);
+}
+
+.statusChip[data-tone="alert"],
+.agentBadge[data-tone="alert"] {
+  color: #ff6e96;
+  border-color: rgba(255, 110, 150, 0.5);
+  background: rgba(255, 110, 150, 0.08);
+}
+
+.capabilityTray {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  min-height: 48px;
+}
+
+.capabilityTray p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.capabilityChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.capabilityChip small {
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+}
+
+.agentRosterPane {
+  display: flex;
+  flex-direction: column;
+}
+
+.agentRosterHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.rosterMeta {
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.rosterList {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-height: 460px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scrollbar-width: thin;
+}
+
+.rosterList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rosterList::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}
+
+.agentRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr) 150px auto;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(11, 17, 32, 0.9), rgba(7, 10, 20, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  align-items: center;
+}
+
+.agentIdentity p {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.agentIdentity small {
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.agentCapabilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.capabilityBadge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.capabilityFallback {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.agentStrength {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 110px;
+}
+
+.agentStrength small {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.strengthMeter {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.strengthMeterFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #3b82f6, #6dffe1);
+  transition: width 0.35s ease;
+}
+
+.agentBadge {
+  justify-self: flex-end;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.emptyRoster {
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  color: var(--text-muted);
+}
+
 @keyframes whisper {
   0% {
     opacity: 0;
@@ -533,7 +815,8 @@
 
 @media (max-width: 1100px) {
   .networkGrid,
-  .lowerGrid {
+  .lowerGrid,
+  .agentOps {
     grid-template-columns: 1fr;
   }
 }
@@ -553,5 +836,17 @@
 
   .liveStats {
     grid-template-columns: 1fr;
+  }
+
+  .agentRow {
+    grid-template-columns: 1fr;
+  }
+
+  .agentBadge {
+    justify-self: flex-start;
+  }
+
+  .agentStrength {
+    width: 100%;
   }
 }

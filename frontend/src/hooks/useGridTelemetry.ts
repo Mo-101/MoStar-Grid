@@ -10,6 +10,14 @@ export type MomentRecord = {
   quantum_id: string;
 };
 
+export type AgentTelemetry = {
+  id: string;
+  name: string;
+  status: string;
+  manifestationStrength: number;
+  capabilities: string[];
+};
+
 export type BackendStatus = {
   ok: boolean;
   data?: {
@@ -29,6 +37,8 @@ export type GraphSummary = {
     distinctInitiators: number;
   };
   latest?: MomentRecord[];
+  agents?: AgentTelemetry[];
+  agentWarning?: string;
   error?: string;
 };
 

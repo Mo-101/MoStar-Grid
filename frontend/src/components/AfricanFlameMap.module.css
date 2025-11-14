@@ -258,6 +258,54 @@
   gap: 0.6rem;
 }
 
+.agentWarning {
+  margin-bottom: 0.8rem;
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 179, 71, 0.4);
+  background: rgba(255, 179, 71, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.85rem;
+}
+
+.agentWarning strong {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  color: #ffb347;
+}
+
+.agentId {
+  display: block;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.72rem;
+}
+
+.agentCaps {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-top: 0.3rem;
+}
+
+.agentCap {
+  padding: 0.2rem 0.55rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.agentCap[data-muted="true"] {
+  border-style: dashed;
+  color: rgba(255, 255, 255, 0.45);
+}
+
 .agentItem {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -290,6 +338,29 @@
   border-radius: 50%;
   background: #00ff00;
   animation: pulse 1.8s linear infinite;
+}
+
+.agentStrength {
+  margin-top: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.agentStrengthBar {
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.agentStrengthFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #3b82f6, #6dffe1);
+  transition: width 0.3s ease;
 }
 
 .decisionBox {

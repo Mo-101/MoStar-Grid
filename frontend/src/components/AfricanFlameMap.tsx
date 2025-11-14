@@ -2,10 +2,16 @@
 
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
-import { useGridTelemetry } from "@/hooks/useGridTelemetry";
+import { useGridTelemetry, AgentTelemetry } from "@/hooks/useGridTelemetry";
+import {
+  agentFallbackRoster,
+  formatAgentStatus,
+  resolveAgentTone,
+  toStrengthPercent,
+} from "@/lib/agentTelemetry";
 import styles from "./AfricanFlameMap.module.css";
 import GridNav from "./GridNav";
-import type { GridSite } from "./FlameAtlas";
+import type { GridSite } from "./FlameAtlas"; // Keep this import
 
 const FlameAtlas = dynamic(() => import("./FlameAtlas"), {
   ssr: false,
@@ -53,12 +59,11 @@ const gridSites: GridSite[] = [
   },
 ];
 
-const agentRoster = [
-  { glyph: "🔮", name: "Ifá Oracle Alpha", tier: "Kernel", accent: "#FFD700" },
-  { glyph: "⚖️", name: "Verdict Renderer", tier: "Verdict Engine", accent: "#FF8C00" },
-  { glyph: "📚", name: "Ancestral Memory", tier: "Knowledge System", accent: "#00FF88" },
-  { glyph: "🛡️", name: "Guardian Weave", tier: "Security Mesh", accent: "#60A5FA" },
-];
+const tonePalette = {
+  active: "#6dffe1",
+  idle: "#ffb347",
+  alert: "#ff6e96",
+} as const;
 
 const decisionTicket = {
   title: "Partnership Sovereignty Evaluation",
@@ -103,6 +108,15 @@ export default function AfricanFlameMap() {
       message: entry.description,
     }));
   }, [telemetry]);
+
+  const graphAgents = telemetry?.graph.agents;
+  const agentWarning = telemetry?.graph.agentWarning;
+  const agents = useMemo<AgentTelemetry[]>(() => {
+    if (graphAgents?.length) {
+      return graphAgents.slice(0, 4);
+    }
+    return agentFallbackRoster.slice(0, 4);
+  }, [graphAgents]);
 
   return (
     <div className={styles.screen}>
@@ -155,24 +169,57 @@ export default function AfricanFlameMap() {
           </div>
 
           <div className={`${styles.panel} ${styles.panelRight}`}>
-            <h3>🤖 Grid Agents</h3>
+            <h3>?? Grid Agents</h3>
+            {agentWarning && (
+              <div className={styles.agentWarning}>
+                <strong>Agent Sync Warning</strong>
+                <p>{agentWarning}</p>
+              </div>
+            )}
             <div className={styles.agentsList}>
-              {agentRoster.map((agent) => (
-                <div key={agent.name} className={styles.agentItem}>
-                  <div className={styles.agentHeader}>
-                    <div>
-                      <p className={styles.agentName}>
-                        {agent.glyph} {agent.name}
-                      </p>
-                      <small style={{ color: agent.accent }}>{agent.tier}</small>
+              {agents.map((agent) => {
+                const tone = resolveAgentTone(agent.status);
+                const toneColor = tonePalette[tone];
+                const strength = toStrengthPercent(agent.manifestationStrength);
+                const caps = (agent.capabilities ?? []).filter(Boolean).slice(0, 3);
+
+                return (
+                  <div key={`${agent.id}-${agent.name}`} className={styles.agentItem}>
+                    <div className={styles.agentHeader}>
+                      <div>
+                        <p className={styles.agentName}>{agent.name}</p>
+                        <small className={styles.agentId}>{agent.id}</small>
+                        {caps.length ? (
+                          <div className={styles.agentCaps}>
+                            {caps.map((capability) => (
+                              <span key={`${agent.id}-${capability}`} className={styles.agentCap}>
+                                {capability}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className={styles.agentCap} data-muted="true">
+                            Capability undisclosed
+                          </span>
+                        )}
+                      </div>
+                      <div className={styles.agentStatus}>
+                        <span
+                          className={styles.agentDot}
+                          style={{ background: toneColor, boxShadow: `0 0 10px ${toneColor}` }}
+                        />
+                        {formatAgentStatus(agent.status)}
+                      </div>
                     </div>
-                    <div className={styles.agentStatus}>
-                      <span className={styles.agentDot} />
-                      {telemetry?.backend.ok ? "Active" : "Listening"}
+                    <div className={styles.agentStrength}>
+                      <span>{strength}% manifestation</span>
+                      <div className={styles.agentStrengthBar}>
+                        <span className={styles.agentStrengthFill} style={{ width: `${strength}%` }} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 

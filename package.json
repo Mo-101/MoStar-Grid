@@ -17,6 +17,7 @@
     "concurrently": "^9.2.1"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.68.0"
+    "@anthropic-ai/sdk": "^0.68.0",
+    "react-map-gl": "^8.1.0"
   }
 }

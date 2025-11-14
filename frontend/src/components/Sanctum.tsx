@@ -1,7 +1,8 @@
 "use client";
 
 import { CSSProperties, useMemo } from "react";
-import { useGridTelemetry, MomentRecord } from "@/hooks/useGridTelemetry";
+import { useGridTelemetry, MomentRecord, AgentTelemetry } from "@/hooks/useGridTelemetry";
+import { formatAgentStatus, resolveAgentTone, toStrengthPercent } from "@/lib/agentTelemetry";
 import styles from "./Sanctum.module.css";
 import GridNav from "./GridNav";
 
@@ -13,6 +14,18 @@ type Whisper = {
   type: WhisperType;
   source: string;
   timestamp: string;
+};
+
+type AgentSummary = {
+  total: number;
+  monitoring: number;
+  idle: number;
+  avgStrength: number;
+  statuses: Record<string, number>;
+  topCapabilities: {
+    name: string;
+    count: number;
+  }[];
 };
 
 const GRID_COHERENCE = 97.85;
@@ -150,6 +163,65 @@ export default function Sanctum() {
   const initiatorCount = telemetry?.graph.stats?.distinctInitiators ?? 0;
   const backendPulse = telemetry?.backend.ok ? "Linked" : "Offline";
   const backendNeo4jState = telemetry?.backend.data?.neo4j ?? "unknown";
+  const graphAgents = telemetry?.graph.agents;
+  const agentWarning = telemetry?.graph.agentWarning;
+  const agentRoster = useMemo<AgentTelemetry[]>(() => {
+    return (graphAgents ?? []) as AgentTelemetry[];
+  }, [graphAgents]);
+
+  const agentSummary = useMemo<AgentSummary>(() => {
+    if (!agentRoster.length) {
+      return {
+        total: 0,
+        monitoring: 0,
+        idle: 0,
+        avgStrength: 0,
+        statuses: {},
+        topCapabilities: [],
+      };
+    }
+
+    const statuses = agentRoster.reduce<Record<string, number>>((acc, agent) => {
+      const code = (agent.status ?? "UNKNOWN").toUpperCase();
+      acc[code] = (acc[code] ?? 0) + 1;
+      return acc;
+    }, {});
+
+    const capabilityFrequency = new Map<string, number>();
+    agentRoster.forEach((agent) => {
+      (agent.capabilities ?? []).forEach((capability) => {
+        if (!capability) {
+          return;
+        }
+        const key = capability.trim();
+        capabilityFrequency.set(key, (capabilityFrequency.get(key) ?? 0) + 1);
+      });
+    });
+
+    const topCapabilities = Array.from(capabilityFrequency.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4)
+      .map(([name, count]) => ({ name, count }));
+
+    const avgStrength =
+      agentRoster.reduce((sum, agent) => sum + toStrengthPercent(agent.manifestationStrength), 0) /
+      agentRoster.length;
+
+    return {
+      total: agentRoster.length,
+      monitoring: statuses.MONITORING ?? 0,
+      idle: statuses.IDLE ?? 0,
+      avgStrength: Math.round(avgStrength),
+      statuses,
+      topCapabilities,
+    };
+  }, [agentRoster]);
+
+  const agentStatusEntries = useMemo(() => {
+    return Object.entries(agentSummary.statuses)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4);
+  }, [agentSummary]);
 
   const whisperFeed = useMemo<Whisper[]>(() => {
     const mergeSources: MomentRecord[] = [];
@@ -298,6 +370,124 @@ export default function Sanctum() {
                 </div>
               </div>
             ))}
+          </div>
+        </article>
+      </section>
+
+      <section className={styles.agentOps}>
+        <article className={styles.agentVitals}>
+          <header>
+            <p className={styles.eyebrow}>Palaver Sentinels</p>
+            <h2>Agent lattice</h2>
+            <p>Watchers and guardians tethered to the Palaver dispute runbook.</p>
+          </header>
+          {agentWarning && (
+            <div className={styles.agentWarning}>
+              <strong>Agent Sync Warning</strong>
+              <p>{agentWarning}</p>
+            </div>
+          )}
+          <div className={styles.agentStatGrid}>
+            <div className={styles.agentStat}>
+              <p>Linked agents</p>
+              <strong>{agentSummary.total}</strong>
+              <small>Neo4j nodes marked as Agent</small>
+            </div>
+            <div className={styles.agentStat}>
+              <p>Monitoring</p>
+              <strong>{agentSummary.monitoring}</strong>
+              <small>Holding vigil right now</small>
+            </div>
+            <div className={styles.agentStat}>
+              <p>Idle / reset</p>
+              <strong>{agentSummary.idle}</strong>
+              <small>Awaiting redeployment</small>
+            </div>
+            <div className={styles.agentStat}>
+              <p>Avg manifestation</p>
+              <strong>{agentSummary.avgStrength}%</strong>
+              <small>Field strength across roster</small>
+            </div>
+          </div>
+          <div className={styles.agentStatusRow}>
+            {agentStatusEntries.length ? (
+              agentStatusEntries.map(([status, count]) => (
+                <span key={status} className={styles.statusChip} data-tone={resolveAgentTone(status)}>
+                  {formatAgentStatus(status)}
+                  <strong>{count}</strong>
+                </span>
+              ))
+            ) : (
+              <span className={styles.statusChip} data-tone="idle">
+                Awaiting sync
+              </span>
+            )}
+          </div>
+          <div className={styles.capabilityTray}>
+            {agentSummary.topCapabilities.length ? (
+              agentSummary.topCapabilities.map((capability) => (
+                <span key={capability.name} className={styles.capabilityChip}>
+                  {capability.name}
+                  <small>{capability.count}</small>
+                </span>
+              ))
+            ) : (
+              <p>No capability signals detected.</p>
+            )}
+          </div>
+        </article>
+
+        <article className={styles.agentRosterPane}>
+          <header className={styles.agentRosterHeader}>
+            <div>
+              <p className={styles.eyebrow}>Watcher roster</p>
+              <h2>Live agent feed</h2>
+            </div>
+            <span className={styles.rosterMeta}>
+              Updated {telemetry?.generatedAt ? formatWhisperTime(telemetry.generatedAt) : "--:--:--"} UTC
+            </span>
+          </header>
+          <div className={styles.rosterList}>
+            {agentRoster.length ? (
+              agentRoster.map((agent) => {
+                const strength = toStrengthPercent(agent.manifestationStrength);
+                const tone = resolveAgentTone(agent.status);
+                const capabilities = agent.capabilities?.filter(Boolean) ?? [];
+                return (
+                  <div key={agent.id} className={styles.agentRow}>
+                    <div className={styles.agentIdentity}>
+                      <p>{agent.name}</p>
+                      <small>{agent.id}</small>
+                    </div>
+                    <div className={styles.agentCapabilities}>
+                      {capabilities.length ? (
+                        capabilities.map((capability) => (
+                          <span key={`${agent.id}-${capability}`} className={styles.capabilityBadge}>
+                            {capability}
+                          </span>
+                        ))
+                      ) : (
+                        <span className={styles.capabilityFallback}>No capabilities shared</span>
+                      )}
+                    </div>
+                    <div className={styles.agentStrength}>
+                      <div className={styles.strengthMeter}>
+                        <span className={styles.strengthMeterFill} style={{ width: `${strength}%` }} />
+                      </div>
+                      <small>{strength}%</small>
+                    </div>
+                    <span className={styles.agentBadge} data-tone={tone}>
+                      {formatAgentStatus(agent.status)}
+                    </span>
+                  </div>
+                );
+              })
+            ) : (
+              <div className={styles.emptyRoster}>
+                <p>No agent telemetry streaming.</p>
+                <small>Confirm the Palaver runbook has linked to Neo4j.</small>
+              </div>
+            )}
           </div>
         </article>
       </section>

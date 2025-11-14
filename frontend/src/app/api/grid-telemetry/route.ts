@@ -13,6 +13,14 @@ type MomentRecord = {
   quantum_id: string;
 };
 
+type AgentTelemetry = {
+  id: string;
+  name: string;
+  status: string;
+  manifestationStrength: number;
+  capabilities: string[];
+};
+
 const LOG_PATH =
   process.env.MOSTAR_MOMENTS_LOG ??
   path.resolve(process.cwd(), "..", "logs", "mostar_moments.jsonl");
@@ -76,7 +84,7 @@ async function fetchGraphSummary() {
 
     const session = driver.session();
     try {
-      const result = await session.run(
+      const summaryResult = await session.run(
         `
         MATCH (m:MostarMoment)
         WITH m
@@ -96,7 +104,34 @@ async function fetchGraphSummary() {
         `
       );
 
-      const record = result.records[0];
+      const record = summaryResult.records[0];
+      let agents: AgentTelemetry[] = [];
+      let agentWarning: string | undefined;
+
+      try {
+        const agentResult = await session.run(
+          `
+          MATCH (agent:Agent)
+          RETURN {
+            id: coalesce(agent.id, agent.name, toString(id(agent))),
+            name: coalesce(agent.name, agent.id, "Unnamed Agent"),
+            status: coalesce(agent.status, "UNKNOWN"),
+            manifestationStrength: coalesce(agent.manifestationStrength, 0.0),
+            capabilities: coalesce(agent.capabilities, [])
+          } AS agent
+          ORDER BY toUpper(agent.name)
+          `
+        );
+
+        agents = agentResult.records.map((agentRecord) => agentRecord.get("agent") as AgentTelemetry);
+        if (!agents.length) {
+          agentWarning =
+            "Neo4j is online but returned zero Agent nodes. Re-run the Palaver System seeding ritual.";
+        }
+      } catch (agentError) {
+        console.error("Agent telemetry query failed", agentError);
+      }
+
       return {
         ok: true,
         stats: {
@@ -105,6 +140,8 @@ async function fetchGraphSummary() {
           distinctInitiators: record?.get("distinctInitiators") ?? 0,
         },
         latest: (record?.get("latest") as MomentRecord[]) ?? [],
+        agents,
+        agentWarning,
       };
     } finally {
       await session.close();
