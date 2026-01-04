@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # === GRID CONNECTION (Neo4j Aura Secure) ===
-NEO4J_URI = os.getenv("NEO4J_URI", "neo4j+s://1d55c1d3.databases.neo4j.io")
+NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
 NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
 NEO4J_PASS = os.getenv("NEO4J_PASSWORD", "password")
 

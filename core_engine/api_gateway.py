@@ -27,7 +27,7 @@ knowledge_router = APIRouter()
 # === Load environment variables ===
 load_dotenv()
 
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "akiniobong10/Mostar-remoter_DCX001")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gemma3:4b")
 OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 NEO4J_URI = os.getenv("NEO4J_URI", "")
 TTS_LANG = os.getenv("TTS_LANG", "en")
@@ -43,7 +43,17 @@ audio_dir.mkdir(parents=True, exist_ok=True)
 # === Root status endpoint ===
 @app.get("/api/v1/status")
 async def system_status():
-    neo4j_state = "connected" if NEO4J_URI.startswith("neo4j") else "offline"
+    try:
+        from neo4j import GraphDatabase
+        driver = GraphDatabase.driver(
+            os.getenv("NEO4J_URI", "bolt://localhost:7687"),
+            auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", ""))
+        )
+        driver.verify_connectivity()
+        neo4j_state = "connected"
+        driver.close()
+    except:
+        neo4j_state = "offline"
     return {
         "system": "MoStar Grid API",
         "ollama_model": OLLAMA_MODEL,

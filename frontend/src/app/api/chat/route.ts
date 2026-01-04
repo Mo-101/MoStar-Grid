@@ -15,15 +15,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing chat message." }, { status: 400 });
     }
 
-    const params = new URLSearchParams({ prompt: message, language });
-    if (model) {
-      params.append("model", model);
-    }
-
     const response = await fetch(`${GRID_API_BASE}/api/v1/reason`, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        prompt: message,
+        ...(model && { model })
+      }),
     });
 
     if (!response.ok) {
@@ -40,3 +38,5 @@ export async function POST(request: Request) {
     );
   }
 }
+
+

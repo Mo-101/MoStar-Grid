@@ -1,0 +1,1976 @@
+{
+  "metadata": {
+    "title": "Ibibio Talking Dictionary",
+    "source": "Swarthmore College / Living Tongues Institute",
+    "version": "1.0 (2013)",
+    "total_entries": 196,
+    "entries_with_audio": 0,
+    "speakers": [
+      "Mfon Udoinyang",
+      "Itoro Ituen"
+    ],
+    "citation": "2013. Udọinyang, Mfọn and K. David Harrison. Ibibio Talking Dictionary."
+  },
+  "entries": [
+    {
+      "ibibio": "abom",
+      "tone_pattern": "[H.HL]",
+      "pos": "noun",
+      "english": "central beam of a house, it runs the length of the roof",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "abu",
+      "tone_pattern": "[HF]",
+      "pos": "noun",
+      "english": "dust",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "abubit",
+      "tone_pattern": "[LHH]",
+      "pos": "adjective",
+      "english": "black, ripe, mature",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "abịre",
+      "tone_pattern": "[LLL]",
+      "pos": "noun",
+      "english": "a kind of yam formerly only planted by women, water yam",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "abọikpa",
+      "tone_pattern": "[LHHL]",
+      "pos": "noun",
+      "english": "adolescent girl",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 4
+    },
+    {
+      "ibibio": "adukpọk",
+      "tone_pattern": "[LHL]",
+      "pos": "noun",
+      "english": "a plank, the board for the game of draughts (checkers)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "adọ",
+      "tone_pattern": "[LL]",
+      "pos": "noun",
+      "english": "cross the fingers",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "asabọ",
+      "tone_pattern": "[LHL]",
+      "pos": "noun",
+      "english": "python",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "atu",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "group, flock, herd",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "bọịyọ",
+      "tone_pattern": "[LH]",
+      "pos": "verb, transitive",
+      "english": "imitate",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "daiya",
+      "tone_pattern": "[HH]",
+      "pos": "verb, intransitive",
+      "english": "sleep",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "deep",
+      "tone_pattern": "[LL]",
+      "pos": "verb, transitive",
+      "english": "dip, steep, soak",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "deghe",
+      "tone_pattern": "[LH]",
+      "pos": "verb, intransitive",
+      "english": "fierce, brave, valiant, dare, become hot, burn (of pepper)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "diappa",
+      "tone_pattern": "[LL.H]",
+      "pos": "verb, transitive",
+      "english": "collect, gather, pull down tendrils",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "duọọk",
+      "tone_pattern": "[HHH]",
+      "pos": "verb, transitive",
+      "english": "to lose, throw away",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "dọ",
+      "tone_pattern": "[H]",
+      "pos": "verb, transitive; verb, intransitive",
+      "english": "marry",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "dọn̄",
+      "tone_pattern": "[L]",
+      "pos": "verb, transitive",
+      "english": "send, send for, send to (a person or a message)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "edʌt",
+      "tone_pattern": "[LH]",
+      "pos": "noun",
+      "english": "an uncircumcised man or woman",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "efuọọt",
+      "tone_pattern": "[HHHL]",
+      "pos": "noun",
+      "english": "nest",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 4
+    },
+    {
+      "ibibio": "eka",
+      "tone_pattern": "[LL]",
+      "pos": "noun",
+      "english": "mother",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ekpat",
+      "tone_pattern": "[LL]",
+      "pos": "noun",
+      "english": "bag, pocket; a piece of woven raffia",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ekịt",
+      "tone_pattern": "[LL]",
+      "pos": "noun",
+      "english": "axe",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "esịt",
+      "tone_pattern": "[HF]",
+      "pos": "noun",
+      "english": "the liver, heart, chest, inside; mind",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "feere",
+      "tone_pattern": "[HHH]",
+      "pos": "verb, intransitive",
+      "english": "become thin, light in weight, lightened",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "fiat",
+      "tone_pattern": "[LL]",
+      "pos": "verb, transitive",
+      "english": "spit, spit out (food, liquid, saliva)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "fịre",
+      "tone_pattern": "[LLH]",
+      "pos": "verb, transitive",
+      "english": "forget",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "idoidot",
+      "tone_pattern": "[L.LH.HL]",
+      "pos": "adjective",
+      "english": "bitter",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 4
+    },
+    {
+      "ibibio": "ikpan̄",
+      "tone_pattern": "[LH]",
+      "pos": "noun",
+      "english": "spoon",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ikpọn",
+      "tone_pattern": "[LH]",
+      "pos": "noun",
+      "english": "someone shorter than normal, a stunted person",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ikịm",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "gonorrhea",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ikọ",
+      "tone_pattern": "[LH]",
+      "pos": "noun",
+      "english": "a tiny fragrant leaf used to season soup",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "inuen",
+      "tone_pattern": "[HDH]",
+      "pos": "noun",
+      "english": "bird (generic term)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "isaisak",
+      "tone_pattern": "[LLHL]",
+      "pos": "adjective",
+      "english": "burnt, scorched",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 4
+    },
+    {
+      "ibibio": "iso",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "face, front, future",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "isọ",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "someone shorter than normal, a stunted person",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kasidet",
+      "tone_pattern": "[LLF]",
+      "pos": "noun",
+      "english": "cigarette",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "kebe",
+      "tone_pattern": "[HH]",
+      "pos": "verb, intransitive",
+      "english": "ebb (of the tide)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "keene",
+      "tone_pattern": "[LLH]",
+      "pos": "verb, transitive",
+      "english": "follow, company; help",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "kpa",
+      "tone_pattern": "[H]",
+      "pos": "verb, intransitive",
+      "english": "die, perish; become exhausted, overcome; fade; heal",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "kpam",
+      "tone_pattern": "[HL]",
+      "pos": "ideophone",
+      "english": "sound made by a flat object when it falls flat to the ground",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "kpe",
+      "tone_pattern": "[H]",
+      "pos": "verb, transitive",
+      "english": "plead, plead with, entreat, beg",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "kpee",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "plead, plead with, entreat, beg",
+      "speaker": "Itoro Ituen",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kpoomo",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "catch in the hands (plural of kpoppo)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "kpọi",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "cut off the end of a periwinkle",
+      "speaker": "Itoro Ituen",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kpọọk",
+      "tone_pattern": "[LL]",
+      "pos": "verb, transitive",
+      "english": "call, read aloud, invite",
+      "speaker": "Itoro Ituen",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kpọọk",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "loosen, untie, unwrap, unfasten, dismantle",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kpọọn̄ọ",
+      "tone_pattern": "[LLH]",
+      "pos": "verb, transitive",
+      "english": "hit, beat, hollow or flat sounds",
+      "speaker": "Itoro Ituen",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "kọk",
+      "tone_pattern": "[H]",
+      "pos": "verb, transitive",
+      "english": "grind between two stones",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "kọn̄n̄ọ",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "remove from a hook, unhang",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kọppọ",
+      "tone_pattern": "[LH]",
+      "pos": "verb, transitive",
+      "english": "remove from a hook, remove what hangs",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kọọn̄",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "hang (an object on a hook, around a person's neck)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kọọp",
+      "tone_pattern": "[HL]",
+      "pos": "noun",
+      "english": "cup; cigarette tin or other container",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mbai",
+      "tone_pattern": "[HDH]",
+      "pos": "noun",
+      "english": "piece, half piece",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mbansan̄",
+      "tone_pattern": "[LLHD]",
+      "pos": "noun",
+      "english": "groundnut",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mben",
+      "tone_pattern": "[LL]",
+      "pos": "noun",
+      "english": "side, edge",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "mbiet",
+      "tone_pattern": "[HHH]",
+      "pos": "noun",
+      "english": "weeds, grass",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mbọkọ",
+      "tone_pattern": "[LLL]",
+      "pos": "noun",
+      "english": "sugar cane",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mfịn",
+      "tone_pattern": "[LH]",
+      "pos": "noun",
+      "english": "today",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "mkpa",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "a natural covering, skin scab",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "mkpatat",
+      "tone_pattern": "[LLH]",
+      "pos": "noun",
+      "english": "a creeping plant with tiny leaves",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mkpidọn̄",
+      "tone_pattern": "[HHL]",
+      "pos": "noun",
+      "english": "a kind of plant with small bitter fruits",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mkpono",
+      "tone_pattern": "[HHH]",
+      "pos": "noun",
+      "english": "a seat without a back",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mkpọkọp",
+      "tone_pattern": "[LLL]",
+      "pos": "noun",
+      "english": "prison, jail, detention",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mkpọnọ",
+      "tone_pattern": "[HHH]",
+      "pos": "noun",
+      "english": "handcuffs, leg cuffs, shackles",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mkpọrọanyen",
+      "tone_pattern": "[HHH HL]",
+      "pos": "noun",
+      "english": "eyeball",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 4
+    },
+    {
+      "ibibio": "mkpụriikpu idem",
+      "tone_pattern": "[LHLLH HL]",
+      "pos": "noun",
+      "english": "rough skin, tough skin",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 6
+    },
+    {
+      "ibibio": "mmọọn̄",
+      "tone_pattern": "[HHH]",
+      "pos": "noun",
+      "english": "water",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "nan",
+      "tone_pattern": "[H]",
+      "pos": "verb, transitive",
+      "english": "injure, wound",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "ndap",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "dream",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "ndip",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "weeds",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "nditọn̄",
+      "tone_pattern": "[HHF]",
+      "pos": "noun",
+      "english": "eczema",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ndo",
+      "tone_pattern": "[HF]",
+      "pos": "noun",
+      "english": "a kind of small fish",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "ndu",
+      "tone_pattern": "[HL]",
+      "pos": "noun",
+      "english": "two hundred (from an old monetary system)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "ndubete",
+      "tone_pattern": "[HLHH]",
+      "pos": "noun",
+      "english": "jostling; a kind of game",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "nek",
+      "tone_pattern": "[H]",
+      "pos": "verb, intransitive, verb, transitive",
+      "english": "dance; fawn on",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "neme",
+      "tone_pattern": "[LH]",
+      "pos": "verb, intransitive",
+      "english": "converse, tell, inform",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "nte",
+      "tone_pattern": "[LL]",
+      "pos": "conjunction",
+      "english": "where",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "nten̄e nten̄e",
+      "tone_pattern": "[LLL LLL]",
+      "pos": "adverb",
+      "english": "unsteadily",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 4
+    },
+    {
+      "ibibio": "nti",
+      "tone_pattern": "[HF]",
+      "pos": "adjective",
+      "english": "good, genuine",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "nyeriye",
+      "tone_pattern": "[HHLL]",
+      "pos": "noun",
+      "english": "cornsilk, the tassel at the end of an ear of corn",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "nyie",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive, verb, intransitive",
+      "english": "have; must; appear to be, exist",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "n̄karasịn",
+      "tone_pattern": "[HHHF]",
+      "pos": "noun",
+      "english": "kerosine",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "n̄karika",
+      "tone_pattern": "[LLHF]",
+      "pos": "noun",
+      "english": "a plant with hot peppery fruit and leaves",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "n̄kuku",
+      "tone_pattern": "[LLL]",
+      "pos": "noun",
+      "english": "an insect of the grasshopper type",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "n̄kukumkpọyọriyọ",
+      "tone_pattern": "[HHHLLLHL]",
+      "pos": "noun",
+      "english": "locust",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 6
+    },
+    {
+      "ibibio": "nọọn̄ọ",
+      "tone_pattern": "[LLH]",
+      "pos": "verb, transitive",
+      "english": "give (pl. of nọ)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "sieen̄",
+      "tone_pattern": "[HHH]",
+      "pos": "verb, transitive",
+      "english": "throw up to someone what one has done",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "suum",
+      "tone_pattern": "[LL]",
+      "pos": "verb, transitive",
+      "english": "take fire, carry fire",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "tap",
+      "tone_pattern": "[L]",
+      "pos": "ideophone",
+      "english": "sound of wood being cut",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "toto",
+      "tone_pattern": "[HH]",
+      "pos": "preposition, conjunction",
+      "english": "since, starting from (time only)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "tui",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "awaken",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "tʌn",
+      "tone_pattern": "[H]",
+      "pos": "verb, intransitive",
+      "english": "become stupid, retarded",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "tịnnọ",
+      "tone_pattern": "[LH]",
+      "pos": "verb, intransitive",
+      "english": "become sluggish",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "tọ",
+      "tone_pattern": "[H]",
+      "pos": "verb, transitive",
+      "english": "hit, hit the mark; knock against",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "ukpọ",
+      "tone_pattern": "[HF]",
+      "pos": "noun",
+      "english": "a kind of tree with soft wood",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "uso",
+      "tone_pattern": "[HD]",
+      "pos": "phrase",
+      "english": "What day?",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "uta",
+      "tone_pattern": "[LH]",
+      "pos": "numeral",
+      "english": "three",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "utan",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "sand on the shore",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "uyo",
+      "tone_pattern": "[LH]",
+      "pos": "noun",
+      "english": "bread, biscuit",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "yokko",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive, verb, intransitive",
+      "english": "see at an unexpected time or place",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "abara",
+      "tone_pattern": "[LLH]",
+      "pos": "noun",
+      "english": "mens robes",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "abọrọ",
+      "tone_pattern": "[HHL]",
+      "pos": "noun",
+      "english": "sexual organ of snail",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "adeesi",
+      "tone_pattern": "[LHLL]",
+      "pos": "noun",
+      "english": "rice",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 4
+    },
+    {
+      "ibibio": "afo",
+      "tone_pattern": "[LL]",
+      "pos": "pronoun",
+      "english": "you",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "akube",
+      "tone_pattern": "[HHF]",
+      "pos": "noun",
+      "english": "chameleon",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "ayịt",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "crying, weeping",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ba",
+      "tone_pattern": "[L]",
+      "pos": "verb, transitive",
+      "english": "find and keep",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "baba",
+      "tone_pattern": "[HH]",
+      "pos": "verb, intransitive",
+      "english": "become in need of, get into straits",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "biere",
+      "tone_pattern": "[LLH]",
+      "pos": "verb, intransitive; verb, transitive",
+      "english": "stop, cease, conclude",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "da",
+      "tone_pattern": "[H]",
+      "pos": "verb, intransitive",
+      "english": "stand",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "da",
+      "tone_pattern": "[L]",
+      "pos": "noun",
+      "english": "term of address used between men",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "daap",
+      "tone_pattern": "[LL]",
+      "pos": "verb, transitive",
+      "english": "remove from the embers what has been roasting",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "dianna",
+      "tone_pattern": "[HHH]",
+      "pos": "verb, transitive",
+      "english": "take away, separate two things",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "duak",
+      "tone_pattern": "[HH]",
+      "pos": "verb, intransitive",
+      "english": "intend, wish",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "duọ",
+      "tone_pattern": "[LH]",
+      "pos": "verb, intransitive",
+      "english": "fall, fall down",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "dʌk",
+      "tone_pattern": "[H]",
+      "pos": "verb, transitive",
+      "english": "enter, go into, join",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "dọkkọ",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "tell",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "dọnọ",
+      "tone_pattern": "[LH]",
+      "pos": "verb, transitive",
+      "english": "become smooth",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "dọọk",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "climb (tree, hill)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ebọnọ",
+      "tone_pattern": "[LLL]",
+      "pos": "noun",
+      "english": "a kind of slug found on plantain leaves",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "efiat",
+      "tone_pattern": "[LHH]",
+      "pos": "noun",
+      "english": "bitter kola",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "ekondo",
+      "tone_pattern": "[LLL]",
+      "pos": "noun",
+      "english": "world",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "ekpa",
+      "tone_pattern": "[LL]",
+      "pos": "noun",
+      "english": "stomach; a bag-like object",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ekun̄ọ",
+      "tone_pattern": "[LH]",
+      "pos": "noun",
+      "english": "copulation",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "fiime",
+      "tone_pattern": "[HHH]",
+      "pos": "verb, transitive",
+      "english": "torture",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "fịk",
+      "tone_pattern": "[H]",
+      "pos": "verb, intransitive; verb, transitive",
+      "english": "become heaped up, piled up",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "fịm",
+      "tone_pattern": "[L]",
+      "pos": "verb, transitive",
+      "english": "fan, wave, swing; hover, float",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "idaat",
+      "tone_pattern": "[HHL]",
+      "pos": "noun",
+      "english": "crazyness, mad person",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "idem",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "body, self (reflexive)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ikpeghe",
+      "tone_pattern": "[HHH]",
+      "pos": "noun",
+      "english": "partition; section of bush",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "ikịt",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "tortoise",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "inua",
+      "tone_pattern": "[HHF]",
+      "pos": "noun",
+      "english": "mouth",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "isan̄",
+      "tone_pattern": "[HF]",
+      "pos": "noun",
+      "english": "walk, journey; gait",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "itiaita",
+      "tone_pattern": "[LHLH]",
+      "pos": "number",
+      "english": "eight",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 5
+    },
+    {
+      "ibibio": "ituet",
+      "tone_pattern": "[LLL]",
+      "pos": "noun",
+      "english": "a leech; a kind of fish",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "iwuo",
+      "tone_pattern": "[HHH]",
+      "pos": "noun",
+      "english": "nose",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "kokko",
+      "tone_pattern": "[HH]",
+      "pos": "verb, intransitive",
+      "english": "rise, puff, swell; become conceited",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kpappa",
+      "tone_pattern": "[LH]",
+      "pos": "verb, transitive",
+      "english": "lift something very heavy",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kpara",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "push a heavy object; wheel, roll",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kpeek",
+      "tone_pattern": "[LL]",
+      "pos": "verb, transitive",
+      "english": "slow down and walk carefully",
+      "speaker": "Itoro Ituen",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kpeen̄",
+      "tone_pattern": "[LL]",
+      "pos": "verb, transitive",
+      "english": "slow down and walk carefully",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kpim",
+      "tone_pattern": "[L]",
+      "pos": "ideophone",
+      "english": "sound of the eka ibit (a large drum)",
+      "speaker": "Itoro Ituen",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "kpọkkọ",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "peel with hand or knife; unlock; bleach",
+      "speaker": "Itoro Ituen",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kuoko",
+      "tone_pattern": "[LLH]",
+      "pos": "verb, transitive",
+      "english": "rub off, erase, wipe clean, polish",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "kọk",
+      "tone_pattern": "[L]",
+      "pos": "verb, transitive",
+      "english": "retch, vomit",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "kọn̄",
+      "tone_pattern": "[L]",
+      "pos": "verb, intransitive",
+      "english": "knock, tap",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "kọọk",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "cure, heal, perform juju",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "kọọp",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "hang; spread out to dry",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mbio",
+      "tone_pattern": "[HHH]",
+      "pos": "noun",
+      "english": "dirt, refuse, garbage",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "meem",
+      "tone_pattern": "[LL]",
+      "pos": "verb, transitive",
+      "english": "slacken; relax the body",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mek",
+      "tone_pattern": "[L]",
+      "pos": "verb, transitive",
+      "english": "choose, select",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "men",
+      "tone_pattern": "[L]",
+      "pos": "verb, transitive",
+      "english": "swallow",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "mkpa nnʌk",
+      "tone_pattern": "[LH HD]",
+      "pos": "noun",
+      "english": "ring",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mkpai",
+      "tone_pattern": "[HHH]",
+      "pos": "noun",
+      "english": "small sticks used to support young yam shoots",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mkpap itit",
+      "tone_pattern": "[LF HL]",
+      "pos": "noun",
+      "english": "skin of the vagina",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "mkpara",
+      "tone_pattern": "[LHL]",
+      "pos": "adjective",
+      "english": "small",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "mkparikpa",
+      "tone_pattern": "[LHHH]",
+      "pos": "noun",
+      "english": "a large calabash used as a buoy",
+      "speaker": "Itoro Ituen",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "mkpefiọk",
+      "tone_pattern": "[LH LL]",
+      "pos": "noun",
+      "english": "regret",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "mkpịparan̄ukot",
+      "tone_pattern": "[HHH HL]",
+      "pos": "noun",
+      "english": "shin",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 5
+    },
+    {
+      "ibibio": "mkpọ",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "thing, something; matter event",
+      "speaker": "Itoro Ituen",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "mma",
+      "tone_pattern": "[LH]",
+      "pos": "conj.",
+      "english": "so, so that",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "ndedịbe",
+      "tone_pattern": "[LHHH]",
+      "pos": "adjective",
+      "english": "secret",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "ndidiino",
+      "tone_pattern": "[HLHHHL]",
+      "pos": "noun",
+      "english": "the pelvic area",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 4
+    },
+    {
+      "ibibio": "ndufeen̄e",
+      "tone_pattern": "[HLHH]",
+      "pos": "adjective",
+      "english": "unsteady; shiftless",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 4
+    },
+    {
+      "ibibio": "nduwughọ",
+      "tone_pattern": "[HLHH]",
+      "pos": "noun",
+      "english": "stain",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "nse",
+      "tone_pattern": "[LH]",
+      "pos": "interrogative",
+      "english": "what",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "ntanta",
+      "tone_pattern": "[HFHF]",
+      "pos": "noun",
+      "english": "smallpox",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ntọ",
+      "tone_pattern": "[LL]",
+      "pos": "noun",
+      "english": "children, young of animals",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "nyọọn̄",
+      "tone_pattern": "[LL]",
+      "pos": "verb, intransitive",
+      "english": "be tall, long, far, high, deep",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "n̄ke",
+      "tone_pattern": "[LH]",
+      "pos": "noun",
+      "english": "folktale, proverb",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "n̄ko",
+      "tone_pattern": "[LH]",
+      "pos": "noun",
+      "english": "over there, yonder",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "n̄kukuak",
+      "tone_pattern": "[HHHH]",
+      "pos": "noun",
+      "english": "a percussion instrument",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "n̄wagha",
+      "tone_pattern": "[HH]",
+      "pos": "verb, intransitive",
+      "english": "become congested; become odorous",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "n̄wara",
+      "tone_pattern": "[LLH]",
+      "pos": "adjective",
+      "english": "granular, in grains",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "n̄wịp",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "weeds, grass",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "set",
+      "tone_pattern": "[H]",
+      "pos": "verb, transitive",
+      "english": "choke, cause choking",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "suaan",
+      "tone_pattern": "[LLL]",
+      "pos": "verb, transitive",
+      "english": "scatter things; strew things about",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "sʌghọ",
+      "tone_pattern": "[HH]",
+      "pos": "verb, intransitive",
+      "english": "become left over, remain",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "sọọt",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "cluck at to show annoyance",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "temme",
+      "tone_pattern": "[LH]",
+      "pos": "verb, transitive",
+      "english": "explain, direct, tell how",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "tep",
+      "tone_pattern": "[L]",
+      "pos": "ideophone",
+      "english": "describes water falling drop by drop",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "ti",
+      "tone_pattern": "[F]",
+      "pos": "noun",
+      "english": "tea",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "tobo",
+      "tone_pattern": "[LH]",
+      "pos": "verb, transitive",
+      "english": "place an order",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "tʌm",
+      "tone_pattern": "[L]",
+      "pos": "verb, transitive",
+      "english": "taste liquid, take a sip, sip",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "tįn̄n̄e",
+      "tone_pattern": "[HH]",
+      "pos": "verb, transitive",
+      "english": "eat a little bit at a time",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "uba",
+      "tone_pattern": "[LL]",
+      "pos": "numeral",
+      "english": "second",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ubịt",
+      "tone_pattern": "[LH]",
+      "pos": "noun",
+      "english": "birth mark",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "ufiin",
+      "tone_pattern": "[LHH]",
+      "pos": "noun",
+      "english": "left (direction)",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "uma",
+      "tone_pattern": "[HH]",
+      "pos": "noun",
+      "english": "miser, tight-fisted person",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "unyan̄",
+      "tone_pattern": "[LF]",
+      "pos": "noun",
+      "english": "a kind of fresh water eel",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "uyagha",
+      "tone_pattern": "[LHH]",
+      "pos": "adjective",
+      "english": "empty, wasted, devoid of purpose",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "uyai",
+      "tone_pattern": "[LLL]",
+      "pos": "noun",
+      "english": "beauty",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 3
+    },
+    {
+      "ibibio": "waya",
+      "tone_pattern": "[LH]",
+      "pos": "verb, intransitive",
+      "english": "sneeze",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "yeet",
+      "tone_pattern": "[H]",
+      "pos": "verb, transitive",
+      "english": "having the urge to sleep",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 2
+    },
+    {
+      "ibibio": "yok",
+      "tone_pattern": "[H]",
+      "pos": "verb, intransitive",
+      "english": "move about, become restless, fidget",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    },
+    {
+      "ibibio": "yịt",
+      "tone_pattern": "[H]",
+      "pos": "verb, transitive",
+      "english": "attach, put together, fasten, lock, hang",
+      "speaker": "Mfon Udoinyang",
+      "audio_file": null,
+      "frequency": 0,
+      "syllable_count": 1
+    }
+  ]
+}

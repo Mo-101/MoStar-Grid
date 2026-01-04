@@ -1,0 +1,39 @@
+endpoint_id,path,method,description,entity_owner,input_schema,output_schema,authentication_required,rate_limit,status
+ai_assistant,/ai-assistant,POST,Main AI interface for conversational intelligence,Mo,{"query": "string"},{"response": "string"},true,100/hour,operational
+persona_get,/persona/{persona_id},GET,Retrieve persona configuration and state,Mo,{"persona_id": "string"},{"persona": "object"},true,1000/hour,operational
+persona_update,/persona/{persona_id},PUT,Update persona configuration,Mo,{"persona_id": "string" "config": "object"},{"status": "string"},true,100/hour,operational
+persona_element,/persona/{persona_id}/element,POST,Bind codex element to persona,Data Conduit,{"persona_id": "string" "element": "object"},{"binding_status": "string"},true,100/hour,operational
+enhancement_roadmap,/enhancement-roadmap,GET,Retrieve system improvement roadmap,Mo,{},{"roadmap": "array"},true,unlimited,operational
+roadmap_feedback,/roadmap-feedback,POST,Submit feedback on roadmap items,Mo,{"feedback": "object"},{"acknowledgment": "string"},true,unlimited,operational
+pilot_testing,/pilotTesting,POST,Interface for testing new features,Mo,{"test_config": "object"},{"test_results": "object"},true,50/hour,operational
+image_generation,/images/generations,POST,Generate AI images,Flameborn Writer,{"prompt": "string" "size": "string"},{"image_url": "string"},true,10/hour,operational
+image_edit,/images/edits,POST,Edit existing images,Flameborn Writer,{"image": "base64" "mask": "base64" "prompt": "string"},{"edited_image_url": "string"},true,10/hour,operational
+image_variations,/images/variations,POST,Create image variations,Flameborn Writer,{"image": "base64" "n": "integer"},{"variation_urls": "array"},true,10/hour,operational
+embeddings,/embeddings,POST,Generate vector embeddings for text,DeepCAL,{"input": "string" "model": "string"},{"embeddings": "array"},true,1000/hour,operational
+audio_transcription,/audio/transcriptions,POST,Transcribe audio to text,Mo,{"audio_file": "base64" "language": "string"},{"transcription": "string"},true,50/hour,operational
+audio_translation,/audio/translations,POST,Translate audio to English,Mo,{"audio_file": "base64"},{"translation": "string"},true,50/hour,operational
+moderation,/moderations,POST,Content moderation and safety checks,Sigma,{"input": "string"},{"flagged": "boolean" "categories": "object"},true,unlimited,operational
+file_upload,/files,POST,Upload files for processing,Mo,{"file": "multipart/form-data"},{"file_id": "string"},true,100/hour,operational
+file_get,/files/{file_id},GET,Retrieve uploaded file,Mo,{"file_id": "string"},{"file_data": "object"},true,1000/hour,operational
+file_delete,/files/{file_id},DELETE,Delete uploaded file,Mo,{"file_id": "string"},{"status": "string"},true,1000/hour,operational
+register_codex,/register_codex.moscript,POST,Register MoScript codex,Code Conduit,{"agent": "string" "codex": "object"},{"cid": "string" "status": "string"},true,10/hour,operational
+playbook,/playbook,GET,Retrieve operational playbook,RAD-X-FLB,{},{"playbook": "object"},true,100/hour,operational
+lib_issue,/lib-issue,POST,Issue Looted Infrastructure Bonds,RAD-X-FLB,{"bond_config": "object"},{"bond_id": "string"},true,10/hour,operational
+parex_list,/parex-list,GET,List PAREX market items,RAD-X-FLB,{},{"items": "array"},true,1000/hour,operational
+zk_policy,/zk-policy,GET,Retrieve zero-knowledge policy,RAD-X-FLB,{},{"policy": "object"},true,unlimited,operational
+guardian_swarm,/guardian-swarm,POST,Deploy guardian swarm,RAD-X-FLB,{"swarm_config": "object"},{"swarm_id": "string"},true,5/hour,operational
+sentinel_mesh,/sentinel-mesh,GET,Retrieve sentinel mesh status,RAD-X-FLB,{},{"mesh_status": "object"},true,100/hour,operational
+dao_governance,/dao-governance,GET,DAO governance interface,RAD-X-FLB,{},{"governance_data": "object"},true,unlimited,operational
+mobile_app,/mobile-app,GET,Mobile application interface,RAD-X-FLB,{},{"app_config": "object"},true,unlimited,operational
+api_schema,/api-schema,GET,API schema documentation,Code Conduit,{},{"schema": "object"},true,unlimited,operational
+security_pqc,/security-pqc-upgrade,POST,Post-quantum cryptography upgrade,RAD-X-FLB,{"upgrade_config": "object"},{"status": "string"},true,1/day,operational
+bundle,/bundle,GET,Retrieve complete bundle,RAD-X-FLB,{},{"bundle": "object"},true,10/hour,operational
+codex_moscript,/codex.moscript,GET,Retrieve TsaTse Fly codex,TsaTse Fly,{},{"codex": "object"},true,unlimited,operational
+soulprint_broadcast,/soulprint.broadcast,POST,Broadcast soulprint to registry,Code Conduit,{},{"registry_status": "string"},true,10/hour,operational
+grid_ignite,/grid.ignite,POST,Ignite MoStar Grid with config,Code Conduit,{"config": "object"},{"apply_status": "string"},true,5/hour,operational
+codex_register,/codex.register,POST,Register codex in federation,Code Conduit,{"codex": "object"},{"cid": "string"},true,10/hour,operational
+diagnose,/diagnose,POST,MoGrid Assessor - Signal diagnosis via ODU,DeepCAL,{"location": "string" "symptoms": "array" "evidence": "array"},{"verdict": "object" "odu": "integer"},true,unlimited,operational
+verdict,/verdict,POST,MoGrid Judge - Verdict evaluation,DeepCAL,{"assessor_verdict": "object"},{"decision": "object" "policy": "string"},true,unlimited,operational
+signal,/signal,POST,MoGrid Executor - Unified pipeline,Mo,{"location": "string" "symptoms": "array" "evidence": "array"},{"final_decision": "object"},true,unlimited,operational
+remostar_health,/remostar/health,GET,Mostar Grid Orchestrator health check,Mo,{},{"status": "string" "uptime": "number"},true,unlimited,operational
+remostar_query,/remostar/query,POST,Query Mostar Grid consciousness,Mo,{"query": "string" "context": "object"},{"response": "string" "source": "string"},true,100/hour,operational
