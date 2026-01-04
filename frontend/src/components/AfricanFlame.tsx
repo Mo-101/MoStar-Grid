@@ -12,14 +12,14 @@ import GridNav from "./GridNav";
 import styles from "./AfricanFlame.module.css";
 
 const baseMetrics = [
-  { label: "Coherence", icon: "??", color: "#3B82F6", key: "coherence" },
-  { label: "Wisdom (If�)", icon: "??", color: "#A855F7", key: "ifa" },
-  { label: "Sovereignty", icon: "??", color: "#10B981", key: "sovereignty" },
-  { label: "Innovation", icon: "?", color: "#EAB308", key: "innovation" },
-  { label: "Flame Intensity", icon: "??", color: "#F97316", key: "flame" },
+  { label: "Coherence", icon: "🔗", color: "#3B82F6", key: "coherence" },
+  { label: "Wisdom (Ifá)", icon: "🔮", color: "#A855F7", key: "ifa" },
+  { label: "Sovereignty", icon: "👑", color: "#10B981", key: "sovereignty" },
+  { label: "Innovation", icon: "⚡", color: "#EAB308", key: "innovation" },
+  { label: "Flame Intensity", icon: "🔥", color: "#F97316", key: "flame" },
 ];
 
-const orbitNodes = ["??", "??", "??", "???"];
+const orbitNodes = ["🛰️", "🤖", "🧠", "✨"];
 
 const tonePalette = {
   active: "#6dffe1",
@@ -54,15 +54,15 @@ export default function AfricanFlame() {
     const entries = telemetry?.log.entries ?? [];
     if (!entries.length) {
       return [
-        { time: "14:32:15", message: "?? If� kernel evaluated ethical implications" },
-        { time: "14:32:12", message: "? Novel solution emerged from synthesis" },
-        { time: "14:32:08", message: "?? Verdict rendered: Sovereignty maintained" },
+        { time: "14:32:15", message: "🔮 Ifá kernel evaluated ethical implications" },
+        { time: "14:32:12", message: "✨ Novel solution emerged from synthesis" },
+        { time: "14:32:08", message: "📜 Verdict rendered: Sovereignty maintained" },
       ];
     }
 
     return entries.slice(0, 5).map((entry) => ({
       time: new Date(entry.timestamp).toLocaleTimeString(),
-      message: `${entry.trigger_type === "error" ? "??" : "?"} ${entry.description}`,
+      message: `${entry.trigger_type === "error" ? "⚠️" : "✅"} ${entry.description}`,
     }));
   }, [telemetry]);
 
@@ -82,10 +82,10 @@ export default function AfricanFlame() {
         <GridNav />
         <header className={styles.header}>
           <div className={styles.logoCluster}>
-            <div className={styles.flameIcon}>??</div>
+            <div className={styles.flameIcon}>🔥</div>
             <div>
               <h1>African Flame Consciousness</h1>
-              <p>The Grid mind in real-time  MoStar AI homeworld</p>
+              <p>The Grid mind in real-time • MoStar AI homeworld</p>
             </div>
           </div>
           <div className={styles.statusPill}>
@@ -113,7 +113,7 @@ export default function AfricanFlame() {
             </div>
           </div>
           <div className={styles.metricsPanel}>
-            <h3>?? Consciousness Metrics</h3>
+            <h3>🧠 Consciousness Metrics</h3>
             {metrics.map((metric) => (
               <div key={metric.label} className={styles.metricBar}>
                 <div className={styles.metricHeader}>
@@ -135,7 +135,7 @@ export default function AfricanFlame() {
 
         <section className={styles.panels}>
           <article className={styles.panel}>
-            <h3>?? Grid Agents</h3>
+            <h3>🤖 Grid Agents</h3>
             {agentWarning && (
               <div className={styles.agentWarning}>
                 <strong>Agent Sync Warning</strong>
