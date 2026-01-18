@@ -1,8 +1,8 @@
-param(
+param (
     [string]$HostName = "127.0.0.1"
 )
 
-function Test-Endpoint {
+function: Test-Endpoint { # pyright: ignore[reportUndefinedVariable]
     param(
         [string]$Name,
         [string]$Url,
@@ -19,12 +19,12 @@ function Test-Endpoint {
         }
         Write-Host ("  OK: {0}" -f ($resp | ConvertTo-Json -Depth 3)) -ForegroundColor Green
         return $true
-    }
+    },
     catch {
         Write-Host ("  FAIL: {0}" -f $_.Exception.Message) -ForegroundColor Red
         return $false
     }
-}
+},
 
 $allOk = $true
 

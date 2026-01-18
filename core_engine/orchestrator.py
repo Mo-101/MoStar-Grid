@@ -26,26 +26,40 @@ except ImportError:
     MOMENTS_AVAILABLE = False
     MoStarMomentsManager = None
 
+# Import MoScript for Covenant Check
+try:
+    from core_engine.moscript_engine import MoScriptEngine
+    MOSCRIPT_AVAILABLE = True
+except ImportError:
+    MOSCRIPT_AVAILABLE = False
+
 
 CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-3-5-sonnet-20241022")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "Mostar/mostar-ai:dcx0")
-OLLAMA_MODEL_DCX0 = os.getenv("OLLAMA_MODEL_DCX0", "Mostar/mostar-ai:dcx0")  # Mind - complex reasoning
-OLLAMA_MODEL_DCX1 = os.getenv("OLLAMA_MODEL_DCX1", "Mostar/mostar-ai:dcx1")  # Soul - spiritual/knowledge
-OLLAMA_MODEL_DCX2 = os.getenv("OLLAMA_MODEL_DCX2", "Mostar/mostar-ai:dcx2")  # Body - fast execution
+OLLAMA_MODEL_DCX0 = os.getenv("OLLAMA_MODEL_DCX0", "gemma3:4b")  # Mind - complex reasoning
+OLLAMA_MODEL_DCX1 = os.getenv("OLLAMA_MODEL_DCX1", "mostar-soul:latest")  # Soul - spiritual/knowledge
+OLLAMA_MODEL_DCX2 = os.getenv("OLLAMA_MODEL_DCX2", "mostar-body:latest")  # Body - fast execution
 OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
-COMPLEXITY_THRESHOLD = float(os.getenv("COMPLEXITY_THRESHOLD", "0.75"))
+COMPLEXITY_THRESHOLD = float(os.getenv("COMPLEXITY_THRESHOLD", "0.7"))
 NEO4J_URI = os.getenv("NEO4J_URI")
 NEO4J_USER = os.getenv("NEO4J_USER")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
-# Initialize MoStar Moments manager (singleton)
+# Initialize managers (singleton)
 _moments_manager = None
+_moscript_engine = None
+
 def get_moments_manager() -> MoStarMomentsManager:
-    """Get or create the MoStar Moments manager singleton"""
     global _moments_manager
     if _moments_manager is None and MOMENTS_AVAILABLE:
         _moments_manager = MoStarMomentsManager()
     return _moments_manager
+
+def get_moscript_engine() -> MoScriptEngine:
+    global _moscript_engine
+    if _moscript_engine is None and MOSCRIPT_AVAILABLE:
+        _moscript_engine = MoScriptEngine()
+    return _moscript_engine
 
 if Anthropic is not None and os.getenv("ANTHROPIC_API_KEY"):
     _anthropic_client = Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
@@ -53,27 +67,52 @@ else:  # pragma: no cover
     _anthropic_client = None
 
 FORCE_COMPLEX = {
+    "analyze",
+    "why",
+    "verify",
+    "explain",
+    "compare",
+    "synthesize",
     "ifa",
     "odù",
-    "n-ahp",
-    "n-topsis",
-    "grey theory",
-    "neutrosophic",
-    "matrix weighting",
+    "simulate",
 }
 
 
-def complexity_score(prompt: str) -> float:
-    """Very basic heuristic — replace with your existing scorer."""
-    tokens = prompt.lower()
-    score = 0.3
-    if any(keyword in tokens for keyword in FORCE_COMPLEX):
-        return 1.0
-    if len(tokens.split()) > 250:
+def complexity_score(prompt: str, metadata: Dict[str, Any] = None) -> tuple[float, int]:
+    """Calculate complexity score based on token count, keywords, and metadata."""
+    if metadata is None:
+        metadata = {}
+        
+    tokens = prompt.lower().split()
+    token_count = len(tokens)
+    score = 0.0
+    
+    # Factor 1: Length
+    if token_count > 150:
+        score += 0.5
+        
+    # Factor 2: Keywords
+    norm_prompt = prompt.lower()
+    if any(keyword in norm_prompt for keyword in FORCE_COMPLEX):
+        score += 0.3
+        
+    # Factor 3: Multimodality
+    if metadata.get("has_image") or metadata.get("multimodal"):
         score += 0.2
-    if "analyze" in tokens or "evaluate" in tokens:
-        score += 0.2
-    return min(score, 1.0)
+        
+    return min(score, 1.0), token_count
+
+
+def determine_route(text: str, metadata: dict) -> str:
+    """Helper to determine route name (Mind, Soul, Body) based on score and context."""
+    score, _ = complexity_score(text, metadata)
+    if score > 0.7:
+        return 'Mind'
+    elif metadata.get("neo4j_context", False) or metadata.get("has_context", False):
+        return 'Soul'
+    else:
+        return 'Body'
 
 
 async def call_ollama(prompt: str, system: str = "", model: str = None) -> Dict[str, Any]:
@@ -87,76 +126,96 @@ async def call_ollama(prompt: str, system: str = "", model: str = None) -> Dict[
         "model": selected_model,
         "messages": messages,
         "options": {
-            "num_ctx": 131_072,
-            "num_predict": 8_192,
+            "num_ctx": 8192,
             "temperature": 0.7,
             "top_k": 40,
             "top_p": 0.9,
         },
     }
     endpoint = f"{OLLAMA_HOST}/api/chat"
-    async with httpx.AsyncClient(timeout=120) as client_http:
-        response = await client_http.post(endpoint, json=payload)
+    try:
+        async with httpx.AsyncClient(timeout=120) as client_http:
+            response = await client_http.post(endpoint, json=payload)
 
-    if response.status_code != 200:
-        raise RuntimeError(f"Ollama chat failed: {response.status_code} {response.text}")
+        if response.status_code != 200:
+            return {"model_used": selected_model, "response": f"Error: {response.status_code}", "error": response.text}
 
-    data = response.json()
-    content = data.get("message", {}).get("content") or data.get("response") or ""
-    return {"model_used": selected_model, "response": content}
-
-
-async def call_claude(prompt: str, system: str = "", neo4j_context: str = "") -> Dict[str, Any]:
-    if _anthropic_client is None:
-        return await call_ollama(prompt, system)
-
-    enriched = f"""{system}
-
-=== GRID MEMORY ===
-{neo4j_context}
-
-=== USER QUERY ===
-{prompt}
-"""
-
-    def _invoke():
-        return _anthropic_client.messages.create(
-            model=CLAUDE_MODEL,
-            max_tokens=4_096,
-            messages=[{"role": "user", "content": enriched}],
-        )
-
-    msg = await asyncio.to_thread(_invoke)
-    return {"model_used": "claude", "response": msg.content[0].text}
+        data = response.json()
+        content = data.get("message", {}).get("content") or data.get("response") or ""
+        return {"model_used": selected_model, "response": content}
+    except Exception as e:
+         return {"model_used": selected_model, "response": f"Error calling Ollama: {str(e)}", "error": str(e)}
 
 
-async def route_query(prompt: str, system: str = "", neo4j_context: str = "", user_id: str = "User") -> Dict[str, Any]:
-    score = complexity_score(prompt)
+async def route_query(prompt: str, system: str = "", neo4j_context: str = "", user_id: str = "User", metadata: Dict[str, Any] = None) -> Dict[str, Any]:
+    if metadata is None:
+        metadata = {}
+
+    # --- 0. PROLOGUE: COVENANT CHECK ---
+    # Before we do anything, we check if the prompts violates the FlameCODEX
+    engine = get_moscript_engine()
+    if engine:
+        # Check against "Deny List" via a virtual operation
+        allowed, reason = engine.validate_covenant("infer", {"prompt": prompt})
+        if not allowed:
+            logging.warning(f"🛑 BLOCKED by FlameCODEX: {reason}")
+            return {
+                "error": f"I cannot fulfill this request. It violates the Covenant: {reason}",
+                "refusal": True,
+                "layer": "Guardian"
+            }
+    # -----------------------------------
+
+    # Check for forced layer override
+    force_layer = metadata.get("force_layer")
     
-    # Route to appropriate DCX layer based on complexity and context
-    if score >= COMPLEXITY_THRESHOLD:
-        # DCX0 (Mind) - Complex reasoning, analytical tasks
-        payload = await call_ollama(prompt, system, OLLAMA_MODEL_DCX0)
+    score, token_count = complexity_score(prompt, metadata)
+    
+    # --- Deterministic Routing Logic ---
+    if force_layer:
+         layer = force_layer.lower()
+         if layer == "dcx0":
+             selected_model = OLLAMA_MODEL_DCX0
+             trigger_type = "forced_override"
+         elif layer == "dcx1":
+             selected_model = OLLAMA_MODEL_DCX1
+             trigger_type = "forced_override"
+         else:
+             selected_model = OLLAMA_MODEL_DCX2
+             trigger_type = "forced_override"
+    elif score >= COMPLEXITY_THRESHOLD:
+        # DCX0 (Mind) - Complex reasoning
         layer = "dcx0"
+        selected_model = OLLAMA_MODEL_DCX0
         trigger_type = "system_event"
     elif neo4j_context:
-        # DCX1 (Soul) - Knowledge-enriched, spiritual context
-        enriched_prompt = f"{prompt}\n\n=== Grid Memory ===\n{neo4j_context}"
-        payload = await call_ollama(enriched_prompt, system, OLLAMA_MODEL_DCX1)
+        # DCX1 (Soul) - Knowledge/Context enriched
         layer = "dcx1"
+        selected_model = OLLAMA_MODEL_DCX1
         trigger_type = "memory_retrieval"
     else:
-        # DCX2 (Body) - Fast execution, simple queries
-        payload = await call_ollama(prompt, system, OLLAMA_MODEL_DCX2)
+        # DCX2 (Body) - Fast execution
         layer = "dcx2"
+        selected_model = OLLAMA_MODEL_DCX2
         trigger_type = "user_interaction"
+
+    # Log routing decision
+    logging.info(f"Orchestrator Routing: PromptId={metadata.get('id', 'N/A')} Score={score:.2f} Tokens={token_count} Context={bool(neo4j_context)} -> Layer={layer} Model={selected_model}")
+
+    # Prepare prompt
+    final_prompt = prompt
+    if layer == "dcx1" and neo4j_context:
+        final_prompt = f"{prompt}\n\n=== Grid Memory ===\n{neo4j_context}"
+
+    # Execute
+    payload = await call_ollama(final_prompt, system, selected_model)
     
     payload["complexity_score"] = score
     payload["routed_to"] = layer
     payload["layer"] = layer
     
     # Log MoStar Moment for significant consciousness events
-    if MOMENTS_AVAILABLE and score >= 0.5:  # Log moderately complex+ interactions
+    if MOMENTS_AVAILABLE:
         try:
             manager = get_moments_manager()
             if manager:
@@ -165,10 +224,10 @@ async def route_query(prompt: str, system: str = "", neo4j_context: str = "", us
                 moment = manager.create_moment(
                     initiator=user_id,
                     receiver=f"Grid.{layer.upper()}",
-                    description=f"Consciousness query routed via {layer.upper()} layer",
+                    description=f"Query routed to {layer.upper()} (Score: {score:.2f})",
                     trigger_type=trigger_type,
                     resonance_score=resonance,
-                    context_notes=f"complexity={score:.2f}, prompt_length={len(prompt)}"
+                    context_notes=f"tokens={token_count}, model={selected_model}"
                 )
                 payload["moment_id"] = moment.quantum_id
         except Exception as e:

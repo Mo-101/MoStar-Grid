@@ -8,10 +8,12 @@ ancestral validation, and divine alignment.
 """
 
 import hashlib, json, os, time, random
-from datetime import datetime
-from core_engine.moment_integration import log_mostar_moment
-
-
+from datetime import datetime, timezone
+try:
+    from core_engine.mostar_moments import MoStarMomentsManager
+    MOMENTS_AVAILABLE = True
+except ImportError:
+    MOMENTS_AVAILABLE = False
 
 # === MoScript Constants ===
 MOGRID_VERSION = "1.0.0"
@@ -19,34 +21,48 @@ ANCESTRAL_KEY = "Ọ̀RÚNMÌLÀ_GATEWAY"
 TRUTH_SALT = "MÒṢE_TRUTH_BINDING"
 SEAL_PREFIX = "qseal:"
 
+def seal_action(data: dict, key: str) -> str:
+    """Cryptographic seal for ritual actions."""
+    payload = str(data) + key
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+def verify_seal(data: dict, signature: str, key: str) -> bool:
+    """Verify the integrity of a sealed action."""
+    expected = seal_action(data, key)
+    return expected == signature
+
 class MoScriptEngine:
     """Central execution interpreter for MoStar symbolic language."""
     
     def __init__(self, covenant_id: str = None):
         """
         Initializes the MoScript Engine with a covenant ID.
-
-        Args:
-            covenant_id (str, optional): The covenant ID to execute under. Defaults to None.
-
-        Raises:
-            ValueError: If the covenant ID is not provided, it will be generated using the current timestamp and a random number.
-
-        Returns:
-            None
         """
         self.covenant_id = covenant_id or self._generate_covenant_id()
         self.session_state = {"invoked": datetime.utcnow().isoformat()}
+        self.codex_rules = self._load_codex()
         print(f"🕯️ MoScript Engine awakened under Covenant: {self.covenant_id}")
+
+    def _load_codex(self) -> dict:
+        """Loads the FlameCODEX rules for validation."""
+        codex_path = os.path.join(os.path.dirname(__file__), "FlameCODEX.txt")
+        rules = {"deny": [], "must": []}
+        try:
+            with open(codex_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.startswith("[DENY]"):
+                        # Extract keyword "Exploit" from [DENY] "Exploit": ...
+                        parts = line.split('"')
+                        if len(parts) > 1:
+                            rules["deny"].append(parts[1].lower())
+        except FileNotFoundError:
+            print("⚠️ FlameCODEX not found. Operating with default safeguards.")
+            rules["deny"] = ["exploit", "deceive", "erase"]
+        return rules
 
     # ======= SOULPRINT =======
     def _generate_covenant_id(self) -> str:
-        """
-        Generates a covenant ID using the current timestamp and a random number.
-
-        Returns:
-            str: A 16-character hexadecimal string representing the covenant ID.
-        """
+        """Generates a covenant ID."""
         base = f"{datetime.utcnow().isoformat()}_{random.randint(1000,9999)}"
         return hashlib.sha256(base.encode()).hexdigest()[:16]
 
@@ -54,6 +70,23 @@ class MoScriptEngine:
         """Blesses a statement with ancestral checksum."""
         phrase = f"{intent}-{ANCESTRAL_KEY}-{TRUTH_SALT}"
         return hashlib.sha256(phrase.encode()).hexdigest()[:12]
+        
+    def validate_covenant(self, action: str, payload: dict) -> tuple[bool, str]:
+        """
+        Validates if an action/payload complies with the FlameCODEX.
+        Returns: (is_allowed, reason)
+        """
+        # 1. Check Action against DENY list
+        if action.lower() in self.codex_rules["deny"]:
+            return False, f"Action '{action}' is explicitly FORBIDDEN by FlameCODEX."
+
+        # 2. Check Payload content against DENY list (simple keyword scan)
+        payload_str = json.dumps(payload).lower()
+        for forbidden in self.codex_rules["deny"]:
+             if forbidden in payload_str:
+                 return False, f"Payload contains forbidden concept: '{forbidden}'"
+
+        return True, "Aligned with Covenant."
 
     # ======= MINDFLOW =======
     def interpret(self, ritual: dict) -> dict:
@@ -62,6 +95,25 @@ class MoScriptEngine:
             op = ritual.get("operation")
             if not op:
                 raise ValueError("Ritual lacks operation key.")
+                
+            # --- COVENANT CHECK ---
+            allowed, reason = self.validate_covenant(op, ritual.get("payload", {}))
+            if not allowed:
+                print(f"🛑 COVENANT VIOLATION BLOCKED: {op} -> {reason}")
+                if MOMENTS_AVAILABLE:
+                   manager = MoStarMomentsManager()
+                   manager.create_moment(
+                       initiator="MoScript",
+                       receiver="Grid.Mind", 
+                       description=f"Blocked operation '{op}' violating FlameCODEX", 
+                       trigger="ethical safeguard",
+                       resonance_score=1.0, 
+                       approved=False,
+                       significance="ETHICAL"
+                   )
+                return {"status": "denied", "error": reason, "covenant_violation": True}
+            # ----------------------
+
             result = self._execute_ritual(op, ritual)
             return {"status": "aligned", "operation": op, "result": result}
         except Exception as e:
@@ -77,7 +129,9 @@ class MoScriptEngine:
         elif op == "echo":
             return ritual.get("payload", "Empty echo")
         else:
-            raise ValueError(f"Unknown ritual operation: {op}")
+            # If not explicitly handled but passed validation, allow passing through
+            # (Future: dynamic dispatch)
+            return {"executed": op, "payload": ritual.get("payload")}
 
     # ======= TRUTH & SEAL =======
     def _invoke_truth(self, payload):
@@ -102,19 +156,21 @@ class MoScriptEngine:
 if __name__ == "__main__":
     mo = MoScriptEngine()
 
-    log_mostar_moment("Soul Layer", "Mind Layer", "Executed ritual 'seal_covenant' successfully.")
+    # log_mostar_moment("Soul Layer", "Mind Layer", "Executed ritual 'seal_covenant' successfully.")
 
-    # Example 1 — sealing a Soul intention
-    sample_ritual = {
+    # Example 1 — Valid Ritual
+    print("--- Testing Valid Ritual ---")
+    valid_ritual = {
         "operation": "seal",
         "payload": {"intention": "Protect the Covenant", "layer": "Soul"}
     }
-    print(json.dumps(mo.interpret(sample_ritual), indent=4))
+    print(json.dumps(mo.interpret(valid_ritual), indent=4))
 
-    # Example 2 — sealing a Mind action
-    second_ritual = {
-        "operation": "seal",
-        "payload": {"layer": "Mind", "action": "compute_verdict"}
+    # Example 2 — Forbidden Ritual (Testing the Guard)
+    print("\n--- Testing Forbidden Ritual ---")
+    bad_ritual = {
+        "operation": "exploit",
+        "payload": {"target": "vulnerable_node", "action": "extract_value"}
     }
-    print(json.dumps(mo.interpret(second_ritual), indent=4))
+    print(json.dumps(mo.interpret(bad_ritual), indent=4))
 

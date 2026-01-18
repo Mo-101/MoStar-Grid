@@ -40,16 +40,8 @@ audio_dir = Path("data/voice_cache")
 audio_dir.mkdir(parents=True, exist_ok=True)
 
 
-# === Root status endpoint ===
-@app.get("/api/v1/status")
-async def system_status():
-    from datetime import datetime
-    import httpx
-    
-    neo4j_state = "offline"
-    ollama_state = "offline"
-    
-    # Check Neo4j connectivity
+def _check_neo4j_connectivity() -> str:
+    """Check Neo4j connectivity and return status."""
     try:
         from neo4j import GraphDatabase
         driver = GraphDatabase.driver(
@@ -57,28 +49,60 @@ async def system_status():
             auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", ""))
         )
         driver.verify_connectivity()
-        neo4j_state = "online"
         driver.close()
+        return "online"
     except:
-        neo4j_state = "offline"
-    
-    # Check Ollama connectivity
+        return "offline"
+
+
+async def _check_ollama_connectivity() -> str:
+    """Check Ollama connectivity and return status."""
     try:
+        import httpx
         async with httpx.AsyncClient(timeout=2.0) as client:
             resp = await client.get(f"{OLLAMA_HOST}/api/tags")
             if resp.status_code == 200:
-                ollama_state = "online"
+                return "online"
     except:
-        ollama_state = "offline"
-    
-    now = datetime.now().isoformat()
-    
-    # DCX0 (Mind) - requires Ollama for reasoning
-    # DCX1 (Soul) - requires Neo4j for spiritual knowledge
-    # DCX2 (Body) - requires both for action execution
+        pass
+    return "offline"
+
+
+def _calculate_dcx_status(ollama_state: str, neo4j_state: str) -> tuple[str, str, str]:
+    """Calculate DCX layer statuses based on service states."""
     dcx0_status = "online" if ollama_state == "online" else "offline"
     dcx1_status = "online" if neo4j_state == "online" else "offline"
-    dcx2_status = "online" if (ollama_state == "online" and neo4j_state == "online") else "degraded" if (ollama_state == "online" or neo4j_state == "online") else "offline"
+    
+    if ollama_state == "online" and neo4j_state == "online":
+        dcx2_status = "online"
+    elif ollama_state == "online" or neo4j_state == "online":
+        dcx2_status = "degraded"
+    else:
+        dcx2_status = "offline"
+    
+    return dcx0_status, dcx1_status, dcx2_status
+
+
+def _calculate_dcx_load(status: str) -> int:
+    """Calculate load value based on DCX status."""
+    load_map = {"online": 60, "degraded": 20, "offline": 0}
+    return load_map.get(status, 0)
+
+
+# === Root status endpoint ===
+@app.get("/api/v1/status")
+async def system_status():
+    from datetime import datetime
+    
+    neo4j_state = _check_neo4j_connectivity()
+    ollama_state = await _check_ollama_connectivity()
+    now = datetime.now().isoformat()
+    
+    dcx0_status, dcx1_status, dcx2_status = _calculate_dcx_status(ollama_state, neo4j_state)
+    
+    dcx0_load = 45 if dcx0_status == "online" else 0
+    dcx1_load = 30 if dcx1_status == "online" else 0
+    dcx2_load = _calculate_dcx_load(dcx2_status)
     
     return {
         "system": "MoStar Grid API",
@@ -91,19 +115,19 @@ async def system_status():
             "dcx0": {
                 "name": "Mind (DCX0)",
                 "status": dcx0_status,
-                "load": 45 if dcx0_status == "online" else 0,
+                "load": dcx0_load,
                 "lastPing": now if dcx0_status != "offline" else None
             },
             "dcx1": {
                 "name": "Soul (DCX1)",
                 "status": dcx1_status,
-                "load": 30 if dcx1_status == "online" else 0,
+                "load": dcx1_load,
                 "lastPing": now if dcx1_status != "offline" else None
             },
             "dcx2": {
                 "name": "Body (DCX2)",
                 "status": dcx2_status,
-                "load": 60 if dcx2_status == "online" else 20 if dcx2_status == "degraded" else 0,
+                "load": dcx2_load,
                 "lastPing": now if dcx2_status != "offline" else None
             }
         }
