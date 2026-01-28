@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 const GRID_API_BASE =
   process.env.GRID_API_BASE ??
   process.env.NEXT_PUBLIC_GRID_API_BASE ??
-  "http://localhost:8001";
+  "http://localhost:8000";
 
 export async function POST(request: Request) {
   try {

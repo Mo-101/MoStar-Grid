@@ -201,7 +201,7 @@ async def reason_endpoint(request: Request):
             result.get("model_used", "unknown"),
             prompt,
             "reason",
-            result.get("complexity_score", 0.0),
+            result.get("complexity_score", 0.0)
         )
         return result
 

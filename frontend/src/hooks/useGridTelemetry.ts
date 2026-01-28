@@ -74,6 +74,7 @@ export function useGridTelemetry(pollInterval = 6000) {
           setError(null);
         }
       } catch (err) {
+        console.error("Telemetry Fetch Error:", err);
         if (active) {
           setError(err instanceof Error ? err.message : "Unknown error");
         }

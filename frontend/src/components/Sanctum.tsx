@@ -159,12 +159,12 @@ export default function Sanctum() {
     telemetry?.graph.stats?.avgResonance != null
       ? (telemetry.graph.stats.avgResonance * 100)
       : GRID_COHERENCE;
-  const totalMoments = telemetry?.graph.stats?.totalMoments ?? 0;
-  const initiatorCount = telemetry?.graph.stats?.distinctInitiators ?? 0;
-  const backendPulse = telemetry?.backend.ok ? "Linked" : "Offline";
-  const backendNeo4jState = telemetry?.backend.data?.neo4j ?? "unknown";
-  const graphAgents = telemetry?.graph.agents;
-  const agentWarning = telemetry?.graph.agentWarning;
+  const totalMoments = telemetry?.graph?.stats?.totalMoments ?? 0;
+  const initiatorCount = telemetry?.graph?.stats?.distinctInitiators ?? 0;
+  const backendPulse = telemetry?.backend?.ok ? "Linked" : "Offline";
+  const backendNeo4jState = telemetry?.backend?.data?.neo4j ?? "unknown";
+  const graphAgents = telemetry?.graph?.agents;
+  const agentWarning = telemetry?.graph?.agentWarning;
   const agentRoster = useMemo<AgentTelemetry[]>(() => {
     const agents = (graphAgents ?? []) as AgentTelemetry[];
     // Deduplicate agents by id to prevent React key warnings
@@ -264,8 +264,8 @@ export default function Sanctum() {
             entry.resonance_score < 0.45
               ? "error"
               : entry.resonance_score < 0.75
-              ? "warn"
-              : "info",
+                ? "warn"
+                : "info",
         }));
     }
 

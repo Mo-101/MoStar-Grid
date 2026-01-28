@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const CONSCIOUSNESS_API_BASE =
-  process.env.CONSCIOUSNESS_API_BASE ?? "http://localhost:8001";
+  process.env.CONSCIOUSNESS_API_BASE ?? "http://localhost:8000";
 
 export async function GET() {
   try {

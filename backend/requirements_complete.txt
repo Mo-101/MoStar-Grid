@@ -1,29 +1,35 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# MOSTAR GRID - DEPENDENCIES
-# "First African AI Homeworld"
+# MOSTAR GRID - COMPLETE BACKEND DEPENDENCIES
+# 'First African AI Homeworld'
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# Core API
+# Core API Framework
 fastapi>=0.104.0
 uvicorn[standard]>=0.24.0
 pydantic>=2.5.0
+
+# Form Data (for voice endpoint)
 python-multipart>=0.0.6
 
-# Database - Neon PostgreSQL
-asyncpg>=0.29.0
+# Text-to-Speech (Voice Layer)
+gtts>=2.5.0
 
-# Neo4j (optional - for graph consciousness)
+# Database - PostgreSQL (Neon)
+asyncpg>=0.29.0
+psycopg2-binary>=2.9.9
+
+# Neo4j Graph Database
 neo4j>=5.14.0
 
-# AI Integration
+# AI Integration (optional)
 ollama>=0.1.0
 
-# Text-to-Speech
-gtts>=2.5.0
+# HTTP Client
+httpx>=0.25.0
+aiohttp>=3.9.0
 
 # Utilities
 python-dotenv>=1.0.0
-httpx>=0.25.0
 
-# For production
+# Production Server
 gunicorn>=21.2.0

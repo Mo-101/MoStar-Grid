@@ -11,4 +11,4 @@
         "JAVA_HOME": "C:\\Tools\\jdk-17.0.17+10",
         "Path": "${env:Path};C:\\Tools\\onnxruntime-1.23.2\\lib;C:\\Tools\\PortableGit\\bin;C:\\Tools\\python-3.15.0a3-embed-amd64;C:\\Tools\\docker;C:\\Tools\\dotnet-sdk-10.0.101-win-x64;C:\\Tools\\git-2.52.0.windows.1\\bin;C:\\Tools\\jdk-17.0.17+10\\bin;C:\\Tools\\jdk-25.0.1+8\\bin;C:\\Tools\\miniforge-25.11.0-1\\Scripts;C:\\Tools\\miniforge-25.11.0-1\\Library\\bin;C:\\Tools\\node-v24.12.0-win-x64"
     }
-}
+}f

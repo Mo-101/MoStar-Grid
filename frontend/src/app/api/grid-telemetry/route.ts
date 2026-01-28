@@ -27,7 +27,7 @@ const LOG_PATH =
 
 const STATUS_ENDPOINT =
   process.env.CORE_ENGINE_STATUS_URL ??
-  "http://localhost:8001/api/v1/status";
+  "http://localhost:8000/api/v1/status";
 
 const TELEMETRY_WINDOW = Number(process.env.MOSTAR_TELEMETRY_WINDOW ?? "12");
 

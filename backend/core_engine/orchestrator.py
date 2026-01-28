@@ -255,7 +255,7 @@ async def route_query(prompt: str, system: str = "", neo4j_context: str = "", us
                     initiator=user_id,
                     receiver=f"Grid.{layer.upper()}",
                     description=f"Query routed to {layer.upper()} (Score: {score:.2f})",
-                    trigger_type=trigger_type,
+                    trigger=trigger_type,
                     resonance_score=resonance,
                     context_notes=f"tokens={token_count}, model={selected_model}"
                 )
