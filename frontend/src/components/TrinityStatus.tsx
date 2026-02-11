@@ -29,11 +29,11 @@ export function TrinityStatus() {
             ...prev,
             ...Object.entries(data.layers).reduce((acc, [key, value]) => {
               // Ensure value is an object before spreading
-              const layerData = typeof value === 'object' && value !== null ? value as Partial<LayerStatus> : {};
+              const layerData = typeof value === 'object' && value !== null ? value : {};
               acc[key] = {
                 ...prev[key],
-                ...layerData,
-                status: layerData.status || "offline",
+                ...(layerData as Partial<LayerStatus>),
+                status: (layerData as any).status || "offline",
               } as LayerStatus;
               return acc;
             }, {} as Record<string, LayerStatus>),
@@ -61,54 +61,39 @@ export function TrinityStatus() {
   };
 
   return (
-    <div className="space-y-4">
-      {Object.entries(status).map(([key, layer]) => (
-        <div
-          key={key}
-          className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-4 transition-all hover:bg-white/10"
-        >
-          <div className="flex items-start space-x-3">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+        Trinity Status
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {Object.entries(status).map(([key, layer]) => (
+          <div
+            key={key}
+            className="border rounded-lg p-4 flex items-start space-x-3"
+          >
             <div
               className={`w-3 h-3 rounded-full mt-1 flex-shrink-0 ${statusColor(
                 layer.status
-              )} ${layer.status === 'online' ? 'animate-pulse' : ''}`}
+              )}`}
             />
             <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-medium text-white truncate">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
                 {layer.name}
               </h3>
-              <p className="text-xs text-purple-300 mt-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Status:{" "}
                 <span className="capitalize">{layer.status ?? "unknown"}</span>
               </p>
-              <div className="mt-2">
-                <div className="flex items-center justify-between text-xs text-purple-400 mb-1">
-                  <span>Load</span>
-                  <span>{layer.load ?? 0}%</span>
-                </div>
-                <div className="w-full bg-white/10 rounded-full h-1.5">
-                  <div
-                    className={`h-1.5 rounded-full transition-all ${
-                      layer.status === 'online' 
-                        ? 'bg-gradient-to-r from-green-400 to-green-600' 
-                        : layer.status === 'degraded'
-                        ? 'bg-gradient-to-r from-yellow-400 to-yellow-600'
-                        : 'bg-gradient-to-r from-red-400 to-red-600'
-                    }`}
-                    style={{ width: `${layer.load ?? 0}%` }}
-                  />
-                </div>
-              </div>
-              <p className="text-xs text-purple-400 mt-2">
-                Last ping:{" "}
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Load: {layer.load ?? 0}% • Last ping:{" "}
                 {layer.lastPing
                   ? new Date(layer.lastPing).toLocaleTimeString()
                   : "Never"}
               </p>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

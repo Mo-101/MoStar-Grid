@@ -1,0 +1,144 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "purpose": "Pattern-to-outcome validation for Ifa-based decision system",
+    "validation_method": "XOR-based pattern matching with semantic overlay"
+  },
+  "pattern_matching_algorithm": {
+    "step_1": "Convert input situation to 8-bit binary pattern",
+    "step_2": "Split into two 4-bit codes (left and right)",
+    "step_3": "Map each 4-bit code to Principal Odu",
+    "step_4": "Retrieve semantic meaning for both Odu",
+    "step_5": "Combine meanings using XOR logic and semantic fusion",
+    "step_6": "Generate decision based on combined pattern",
+    "step_7": "Validate outcome against expected pattern behavior"
+  },
+  "input_encoding_rules": {
+    "health_domain": {
+      "bit_0": "Vitality (0=low, 1=high)",
+      "bit_1": "Contamination (0=clean, 1=contaminated)",
+      "bit_2": "Acute_condition (0=no, 1=yes)",
+      "bit_3": "Chronic_condition (0=no, 1=yes)",
+      "bit_4": "Community_health (0=poor, 1=good)",
+      "bit_5": "Treatment_available (0=no, 1=yes)",
+      "bit_6": "Hidden_factors (0=no, 1=yes)",
+      "bit_7": "System_chaos (0=ordered, 1=chaotic)"
+    },
+    "infrastructure_domain": {
+      "bit_0": "Flow_rate (0=low, 1=high)",
+      "bit_1": "Contamination (0=clean, 1=contaminated)",
+      "bit_2": "Blockage (0=no, 1=yes)",
+      "bit_3": "System_age (0=new, 1=old)",
+      "bit_4": "Community_access (0=poor, 1=good)",
+      "bit_5": "Maintenance (0=poor, 1=good)",
+      "bit_6": "Hidden_leaks (0=no, 1=yes)",
+      "bit_7": "Multiple_failures (0=no, 1=yes)"
+    }
+  },
+  "validation_scenarios": [
+    {
+      "scenario_id": 1,
+      "name": "Clean water source with good flow",
+      "domain": "infrastructure",
+      "input_pattern": "00000000",
+      "left_odu": "Ogbe",
+      "right_odu": "Ogbe",
+      "combined_odu": "Ogbe-Ogbe (Eji Ogbe)",
+      "expected_decision": "Maintain preventive care, regular inspections",
+      "expected_priority": "PREVENTIVE",
+      "expected_outcome": "Continued good performance",
+      "validation_criteria": "System maintains high performance metrics"
+    },
+    {
+      "scenario_id": 2,
+      "name": "Contaminated water with system failure",
+      "domain": "infrastructure",
+      "input_pattern": "11111111",
+      "left_odu": "Oyeku",
+      "right_odu": "Oyeku",
+      "combined_odu": "Oyeku-Oyeku (Oyeku Meji)",
+      "expected_decision": "Emergency cleansing, system renewal",
+      "expected_priority": "CRITICAL",
+      "expected_outcome": "System cleansing and renewal required",
+      "validation_criteria": "Contamination eliminated, system restored"
+    },
+    {
+      "scenario_id": 3,
+      "name": "Pipe blockage with good source",
+      "domain": "infrastructure",
+      "input_pattern": "01100000",
+      "left_odu": "Odi",
+      "right_odu": "Ogbe",
+      "combined_odu": "Odi-Ogbe",
+      "expected_decision": "Clear blockages, restore flow",
+      "expected_priority": "HIGH",
+      "expected_outcome": "Flow restored after blockage removal",
+      "validation_criteria": "Flow rate returns to normal"
+    },
+    {
+      "scenario_id": 4,
+      "name": "Disease outbreak in community",
+      "domain": "health",
+      "input_pattern": "11110000",
+      "left_odu": "Oyeku",
+      "right_odu": "Ogbe",
+      "combined_odu": "Oyeku-Ogbe (Ogbe Oyeku)",
+      "expected_decision": "Deep cleansing, renewal after darkness",
+      "expected_priority": "CRITICAL",
+      "expected_outcome": "Outbreak contained, renewal begins",
+      "validation_criteria": "Disease incidence decreases, health improves"
+    },
+    {
+      "scenario_id": 5,
+      "name": "Hidden infrastructure corruption",
+      "domain": "infrastructure",
+      "input_pattern": "10110000",
+      "left_odu": "Ika",
+      "right_odu": "Ogbe",
+      "combined_odu": "Ika-Ogbe",
+      "expected_decision": "Investigate hidden issues, restore order",
+      "expected_priority": "HIGH",
+      "expected_outcome": "Hidden corruption revealed and corrected",
+      "validation_criteria": "System integrity restored, corruption eliminated"
+    },
+    {
+      "scenario_id": 6,
+      "name": "System chaos with multiple failures",
+      "domain": "infrastructure",
+      "input_pattern": "11000000",
+      "left_odu": "Owonrin",
+      "right_odu": "Ogbe",
+      "combined_odu": "Owonrin-Ogbe",
+      "expected_decision": "Restore order, prevent cascading failures",
+      "expected_priority": "CRITICAL",
+      "expected_outcome": "Order restored, cascade prevented",
+      "validation_criteria": "System stabilized, failures contained"
+    },
+    {
+      "scenario_id": 7,
+      "name": "Healing in progress with good treatment",
+      "domain": "health",
+      "input_pattern": "00110000",
+      "left_odu": "Irosun",
+      "right_odu": "Ogbe",
+      "combined_odu": "Irosun-Ogbe",
+      "expected_decision": "Apply healing measures, treat root causes",
+      "expected_priority": "MODERATE",
+      "expected_outcome": "Successful healing and recovery",
+      "validation_criteria": "Health metrics improve, recovery complete"
+    },
+    {
+      "scenario_id": 8,
+      "name": "Community health with good resources",
+      "domain": "health",
+      "input_pattern": "01110000",
+      "left_odu": "Obara",
+      "right_odu": "Ogbe",
+      "combined_odu": "Obara-Ogbe",
+      "expected_decision": "Strengthen community health, collective action",
+      "expected_priority": "MODERATE",
+      "expected_outcome": "Community health improved",
+      "validation_criteria": "Community health metrics improve"
+    }
+  ]
+}

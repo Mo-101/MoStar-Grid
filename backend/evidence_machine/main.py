@@ -21,7 +21,7 @@ Copyright © 2026 MoStar Industries
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .api import consciousness, moments, performance
+from .api import consciousness, moments, performance, grid_metrics
 
 # Create FastAPI app
 app = FastAPI(
@@ -58,6 +58,9 @@ async def root():
             "consciousness": "/api/consciousness/live",
             "moments": "/api/moments/recent",
             "performance": "/api/performance/compare",
+            "grid_stats": "/api/metrics/grid-stats",
+            "node_stats": "/api/metrics/nodes",
+            "evolution": "/api/metrics/evolution",
         },
         "documentation": {
             "swagger": "/docs",

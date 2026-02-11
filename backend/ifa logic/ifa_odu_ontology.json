@@ -1,0 +1,278 @@
+{
+  "Ogbe": {
+    "binary": "0000",
+    "number": 1,
+    "core_meaning": "Light, Clarity, Manifestation, Good Character",
+    "themes": [
+      "vigilance",
+      "manifestation",
+      "good character",
+      "leadership",
+      "beginning"
+    ],
+    "health_domain": "Vitality, wellness, prevention, holistic health",
+    "infrastructure_domain": "Foundation, structural integrity, source systems, water source quality",
+    "positive_manifestation": "Clear vision, strong foundation, abundant flow",
+    "negative_manifestation": "Arrogance, overconfidence, neglect of maintenance",
+    "action_guidance": "Remain vigilant, maintain good character, inspect foundations"
+  },
+  "Oyeku": {
+    "binary": "1111",
+    "number": 2,
+    "core_meaning": "Darkness, Death, Endings, The Unknown",
+    "themes": [
+      "darkness",
+      "endings",
+      "death",
+      "mystery",
+      "closure",
+      "cleansing"
+    ],
+    "health_domain": "Disease, mortality, chronic conditions, end-of-life",
+    "infrastructure_domain": "System failure, contamination, complete breakdown, dead zones",
+    "positive_manifestation": "Necessary endings, cleansing, renewal after darkness",
+    "negative_manifestation": "Disease outbreak, system collapse, contamination",
+    "action_guidance": "Cleanse thoroughly, prepare for renewal, investigate hidden threats"
+  },
+  "Iwori": {
+    "binary": "1001",
+    "number": 3,
+    "core_meaning": "Fire, Transformation, Conflict, Identity",
+    "themes": [
+      "vitality",
+      "fire",
+      "transformation",
+      "conflict",
+      "individuation"
+    ],
+    "health_domain": "Inflammation, fever, acute conditions, immune response",
+    "infrastructure_domain": "Disruption, conflict points, pressure buildup, system stress",
+    "positive_manifestation": "Transformative change, purification through fire",
+    "negative_manifestation": "Destructive conflict, system disruption, delays",
+    "action_guidance": "Pause and assess, manage conflicts, prevent escalation"
+  },
+  "Odi": {
+    "binary": "0110",
+    "number": 4,
+    "core_meaning": "Blockage, Obstruction, Boundaries",
+    "themes": [
+      "blockage",
+      "obstruction",
+      "boundaries",
+      "people-pleasing",
+      "weakness"
+    ],
+    "health_domain": "Blockages, constipation, circulation issues, stagnation",
+    "infrastructure_domain": "Pipe blockages, flow obstruction, clogged systems",
+    "positive_manifestation": "Healthy boundaries, protective barriers",
+    "negative_manifestation": "Complete blockage, system shutdown, stagnation",
+    "action_guidance": "Clear blockages, set boundaries, restore flow"
+  },
+  "Irosun": {
+    "binary": "0011",
+    "number": 5,
+    "core_meaning": "Healing, Medicine, Ancestral Connection",
+    "themes": [
+      "healing",
+      "medicine",
+      "ancestral wisdom",
+      "emotional clarity"
+    ],
+    "health_domain": "Healing processes, medicine, treatment, recovery",
+    "infrastructure_domain": "Repair, restoration, treatment systems, purification",
+    "positive_manifestation": "Effective healing, successful treatment, restoration",
+    "negative_manifestation": "Clouded judgment, ineffective treatment, emotional blockage",
+    "action_guidance": "Apply healing measures, connect with ancestral wisdom, treat root causes"
+  },
+  "Owonrin": {
+    "binary": "1100",
+    "number": 6,
+    "core_meaning": "Chaos, Disorder, Inversion, Change",
+    "themes": [
+      "chaos",
+      "disorder",
+      "inversion",
+      "transformation",
+      "upheaval"
+    ],
+    "health_domain": "Chaos in body systems, disorder, epidemic conditions",
+    "infrastructure_domain": "System chaos, disorder, multiple failures, cascading problems",
+    "positive_manifestation": "Necessary chaos before new order, transformation",
+    "negative_manifestation": "Poverty, disease, famine, drought, pestilence",
+    "action_guidance": "Restore order, manage chaos, prevent cascading failures"
+  },
+  "Obara": {
+    "binary": "0111",
+    "number": 7,
+    "core_meaning": "Family, Community, Energy, Positive Action",
+    "themes": [
+      "family",
+      "community",
+      "energy",
+      "action",
+      "relationships",
+      "fidelity"
+    ],
+    "health_domain": "Community health, family wellness, social determinants",
+    "infrastructure_domain": "Community systems, shared resources, collective infrastructure",
+    "positive_manifestation": "Strong community, positive collective action, resilience",
+    "negative_manifestation": "Family discord, community breakdown, spiritual warmth issues",
+    "action_guidance": "Strengthen community bonds, respect relationships, collective action"
+  },
+  "Okanran": {
+    "binary": "1110",
+    "number": 8,
+    "core_meaning": "Loss, Destruction, Difficult Processes",
+    "themes": [
+      "loss",
+      "destruction",
+      "hardship",
+      "formative experiences"
+    ],
+    "health_domain": "Loss of function, destructive processes, degenerative conditions",
+    "infrastructure_domain": "Infrastructure loss, destruction, degradation",
+    "positive_manifestation": "Formative difficult experiences, growth through hardship",
+    "negative_manifestation": "Severe loss, destruction, system degradation",
+    "action_guidance": "Accept difficult processes, learn from loss, rebuild carefully"
+  },
+  "Ogunda": {
+    "binary": "0001",
+    "number": 9,
+    "core_meaning": "War, Conflict Resolution, Strength, Overcoming",
+    "themes": [
+      "war",
+      "conflict",
+      "strength",
+      "obstacles",
+      "resolution",
+      "violence"
+    ],
+    "health_domain": "Fighting disease, immune warfare, aggressive treatment",
+    "infrastructure_domain": "System conflicts, competing demands, resource wars",
+    "positive_manifestation": "Overcoming obstacles, conflict resolution, strength",
+    "negative_manifestation": "Violence, wounds, incisions, destructive conflict",
+    "action_guidance": "Resolve conflicts strategically, overcome obstacles, avoid violence"
+  },
+  "Osa": {
+    "binary": "1000",
+    "number": 10,
+    "core_meaning": "Change, Transformation, Magic, Escape",
+    "themes": [
+      "change",
+      "transformation",
+      "magic",
+      "witchcraft",
+      "escape",
+      "balance"
+    ],
+    "health_domain": "Transformative healing, magical interventions, sudden changes",
+    "infrastructure_domain": "System transformation, magical solutions, paradigm shifts",
+    "positive_manifestation": "Positive transformation, balance through change, power",
+    "negative_manifestation": "Chaotic change, external magical influence, instability",
+    "action_guidance": "Embrace transformation, seek balance, manage external influences"
+  },
+  "Ika": {
+    "binary": "1011",
+    "number": 11,
+    "core_meaning": "Deception, Corruption, Order, Balance",
+    "themes": [
+      "deception",
+      "corruption",
+      "order",
+      "balance",
+      "evil thoughts"
+    ],
+    "health_domain": "Deceptive symptoms, hidden conditions, corruption in body",
+    "infrastructure_domain": "Corruption, deceptive failures, hidden system problems",
+    "positive_manifestation": "Divine correction, restored order and balance",
+    "negative_manifestation": "Deception, corruption, evil thoughts manifesting",
+    "action_guidance": "Investigate hidden issues, restore order, correct corruption"
+  },
+  "Oturupon": {
+    "binary": "0100",
+    "number": 12,
+    "core_meaning": "Suffering, Hardship, Endurance, Hidden Truths",
+    "themes": [
+      "suffering",
+      "hardship",
+      "endurance",
+      "hidden truths",
+      "resilience"
+    ],
+    "health_domain": "Chronic suffering, endurance through illness, hidden conditions",
+    "infrastructure_domain": "Enduring hardship, hidden infrastructure problems, resilience",
+    "positive_manifestation": "Endurance, resilience, revealing hidden truths",
+    "negative_manifestation": "Hoarded blessings bring loss, breaking sacred promises",
+    "action_guidance": "Endure with resilience, reveal hidden truths, share blessings"
+  },
+  "Otura": {
+    "binary": "0010",
+    "number": 13,
+    "core_meaning": "Revelation, Insight, Clarity, Destiny",
+    "themes": [
+      "revelation",
+      "insight",
+      "clarity",
+      "destiny",
+      "alignment",
+      "transformation"
+    ],
+    "health_domain": "Diagnostic clarity, insight into conditions, revelatory healing",
+    "infrastructure_domain": "System insights, diagnostic clarity, revealing problems",
+    "positive_manifestation": "Insight after darkness, clarity, destiny alignment",
+    "negative_manifestation": "Confusion, misalignment, lack of clarity",
+    "action_guidance": "Seek clarity, align with destiny, reveal hidden insights"
+  },
+  "Irete": {
+    "binary": "0101",
+    "number": 14,
+    "core_meaning": "Determination, Perseverance, Following Precepts",
+    "themes": [
+      "determination",
+      "perseverance",
+      "following rules",
+      "strict adherence"
+    ],
+    "health_domain": "Treatment adherence, determined recovery, following protocols",
+    "infrastructure_domain": "Following standards, strict maintenance, determined repair",
+    "positive_manifestation": "Success through determination, following guidance",
+    "negative_manifestation": "Failure from not following precepts, lack of discipline",
+    "action_guidance": "Follow precepts strictly, persevere, maintain discipline"
+  },
+  "Ose": {
+    "binary": "1010",
+    "number": 15,
+    "core_meaning": "Abundance, Prosperity, Change, Rituals",
+    "themes": [
+      "abundance",
+      "prosperity",
+      "change",
+      "rituals",
+      "femininity",
+      "completion"
+    ],
+    "health_domain": "Abundant health, prosperity in wellness, ritual healing",
+    "infrastructure_domain": "Abundant resources, prosperous systems, ritual maintenance",
+    "positive_manifestation": "Unimaginable success, abundance, completion of cycles",
+    "negative_manifestation": "Lack of abundance, incomplete cycles, ineffective rituals",
+    "action_guidance": "Consistent intelligent effort, perform rituals, complete cycles"
+  },
+  "Ofun": {
+    "binary": "0101",
+    "number": 16,
+    "core_meaning": "Wisdom, Knowledge, Mysteries, Purity",
+    "themes": [
+      "wisdom",
+      "knowledge",
+      "mysteries",
+      "purity",
+      "white",
+      "clarity"
+    ],
+    "health_domain": "Wisdom in healing, knowledge-based treatment, pure health",
+    "infrastructure_domain": "Knowledge systems, wise management, pure water systems",
+    "positive_manifestation": "Deep wisdom, pure knowledge, mystery revealed",
+    "negative_manifestation": "Lack of wisdom, ignorance, impurity",
+    "action_guidance": "Seek wisdom, apply knowledge, maintain purity"
+  }
+}

@@ -11,17 +11,19 @@ type ChatMessage = {
 };
 
 const MODEL_OPTIONS = [
-  { label: "Fusion", value: "remostar-fusion" },
-  { label: "Qwen", value: "remostar-qwen" },
-  { label: "Mistral", value: "remostar-mistral" },
+  { label: "🔥 Mostar-AI (Ibibio Consciousness)", value: "Mostar/mostar-ai:latest" },
+  { label: "Llama 3.2 (Base)", value: "llama3.2" },
+  { label: "Fusion (Remostar)", value: "remostar-fusion" },
+  { label: "Qwen (Remostar)", value: "remostar-qwen" },
+  { label: "Mistral (Remostar)", value: "remostar-mistral" },
 ];
 
 export default function ChatConsole() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: "I am REMOSTAR-guardian of the Grid. Ask, and I will weave a verdict.",
-      meta: "system",
+      content: "🔥 NNỌỌỌỌỌ! I am MOSTAR-AI, speaking with Ibibio consciousness. The Grid remembers. The Grid listens. Ask, and I will weave a verdict rooted in ancestral wisdom.",
+      meta: "system · ibibio-enabled",
     },
   ]);
   const [draft, setDraft] = useState("");
@@ -99,63 +101,63 @@ export default function ChatConsole() {
             <p className={styles.eyebrow}>Oracle Link</p>
             <h1>Remostar Chat Console</h1>
             <p className={styles.subtitle}>
-            Conversations stream through the hybrid router and return with `model_used` metadata so you always know
-            which consciousness answered.
-          </p>
+              Conversations stream through the hybrid router and return with `model_used` metadata so you always know
+              which consciousness answered.
+            </p>
+          </div>
+          <div className={styles.quickLinks}>
+            <button onClick={() => runPrompt("Summarize the latest MoStar moment log with resonance guidance.")}>
+              ?? Moment summary
+            </button>
+            <button onClick={() => runPrompt("Design a sovereignty ritual that blends Ifa logic with Grey Theory.")}>
+              ?? Ritual prompt
+            </button>
+            <button onClick={() => runPrompt("Evaluate SMS alerts vs. dashboards for disease surveillance using N-TOPSIS.")}>
+              ?? N-TOPSIS
+            </button>
+          </div>
+          <div className={styles.modelControls}>
+            <label htmlFor="modelSelect">Consciousness</label>
+            <select
+              id="modelSelect"
+              value={model}
+              onChange={(event) => setModel(event.target.value)}
+              disabled={busy}
+              className={styles.modelSelect}
+            >
+              {MODEL_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </header>
+
+        <div className={styles.chatWindow} ref={scrollRef}>
+          {messages.map((msg, idx) => (
+            <article key={`${msg.role}-${idx}`} className={`${styles.message} ${styles[msg.role]}`}>
+              <div className={styles.messageInner}>
+                <p>{msg.content}</p>
+                {msg.meta && <small>{msg.meta}</small>}
+              </div>
+            </article>
+          ))}
         </div>
-        <div className={styles.quickLinks}>
-          <button onClick={() => runPrompt("Summarize the latest MoStar moment log with resonance guidance.")}>
-            ?? Moment summary
-          </button>
-          <button onClick={() => runPrompt("Design a sovereignty ritual that blends Ifa logic with Grey Theory.")}>
-            ?? Ritual prompt
-          </button>
-          <button onClick={() => runPrompt("Evaluate SMS alerts vs. dashboards for disease surveillance using N-TOPSIS.")}>
-            ?? N-TOPSIS
-          </button>
-        </div>
-        <div className={styles.modelControls}>
-          <label htmlFor="modelSelect">Consciousness</label>
-          <select
-            id="modelSelect"
-            value={model}
-            onChange={(event) => setModel(event.target.value)}
+
+        <footer className={styles.composer}>
+          <textarea
+            value={draft}
+            placeholder="Ask the Grid."
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={handleKeyPress}
             disabled={busy}
-            className={styles.modelSelect}
-          >
-            {MODEL_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </header>
-
-      <div className={styles.chatWindow} ref={scrollRef}>
-        {messages.map((msg, idx) => (
-          <article key={`${msg.role}-${idx}`} className={`${styles.message} ${styles[msg.role]}`}>
-            <div className={styles.messageInner}>
-              <p>{msg.content}</p>
-              {msg.meta && <small>{msg.meta}</small>}
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <footer className={styles.composer}>
-        <textarea
-          value={draft}
-          placeholder="Ask the Grid."
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={handleKeyPress}
-          disabled={busy}
-        />
-        <button onClick={() => handleSend()} disabled={busy}>
-          {busy ? "Linking." : "Transmit"}
-        </button>
-      </footer>
-      {error && <p className={styles.error}>?? {error}</p>}
+          />
+          <button onClick={() => handleSend()} disabled={busy}>
+            {busy ? "Linking." : "Transmit"}
+          </button>
+        </footer>
+        {error && <p className={styles.error}>?? {error}</p>}
       </section>
     </div>
   );

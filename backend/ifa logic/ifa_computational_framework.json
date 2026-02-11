@@ -1,0 +1,96 @@
+{
+  "ifa_computational_framework": {
+    "version": "1.0",
+    "date_compiled": "2026-01-02",
+    "compiled_by": "MOSTLY AI Assistant",
+    "sources": [
+      "Olagunju et al., Scientific African 20 (2023) - Binary encoding",
+      "ifa-odu.com - Odu meanings and interpretations",
+      "daily-ifa.com - Odu spiritual wisdom",
+      "asanee44.com - Odu FAQs and guidance",
+      "Multiple academic and traditional sources"
+    ],
+    "core_components": {
+      "1_binary_system": {
+        "description": "16 Principal Odu as 4-bit binary codes",
+        "total_odu": 16,
+        "total_combinations": 256,
+        "encoding": "I = 0 (single mark), II = 1 (double mark)",
+        "group_operation": "XOR (addition mod 2)"
+      },
+      "2_semantic_ontology": {
+        "description": "Semantic meanings mapped to each Odu",
+        "domains": [
+          "health",
+          "water_infrastructure"
+        ],
+        "file": "ifa_odu_ontology.json",
+        "total_odu_documented": 16
+      },
+      "3_decision_rules": {
+        "description": "Odu → Action mappings for health and infrastructure",
+        "file": "ifa_decision_rules.json",
+        "priority_levels": [
+          "CRITICAL",
+          "URGENT",
+          "HIGH",
+          "MODERATE",
+          "LOW",
+          "PREVENTIVE"
+        ],
+        "rule_types": [
+          "positive_actions",
+          "negative_actions",
+          "indicators"
+        ]
+      },
+      "4_validation_logic": {
+        "description": "Pattern-to-outcome validation framework",
+        "file": "ifa_validation_logic.json",
+        "validation_method": "XOR-based pattern matching with semantic overlay",
+        "total_scenarios": 8
+      }
+    },
+    "computational_algorithm": {
+      "input": "8-bit binary pattern representing situation state",
+      "step_1": "Split 8-bit into two 4-bit codes",
+      "step_2": "Map each 4-bit to Principal Odu (1-16)",
+      "step_3": "Retrieve semantic meanings for both Odu",
+      "step_4": "Apply XOR logic: Combined_Odu = Left_Odu ⊕ Right_Odu",
+      "step_5": "Fuse semantic meanings from both Odu",
+      "step_6": "Retrieve decision rules for combined pattern",
+      "step_7": "Generate prioritized action recommendations",
+      "step_8": "Validate against expected outcomes",
+      "output": "Prioritized actions with Odu-based reasoning"
+    },
+    "what_is_verified": [
+      "16 Principal Odu binary codes (peer-reviewed)",
+      "XOR group algebra operations (mathematical proof)",
+      "256 Odu combinations (16×16 matrix)",
+      "Semantic meanings from traditional sources",
+      "Decision rule framework (compiled from research)"
+    ],
+    "what_is_not_verified": [
+      "Exact Babalawo interpretation methodology (oral tradition only)",
+      "Ese verse selection algorithm (not documented)",
+      "Parallel evaluation of all 256 patterns (no implementation found)",
+      "Quantitative accuracy metrics on real-world data (not available)"
+    ],
+    "implementation_requirements": {
+      "required_for_production": [
+        "Real-world health/infrastructure data for training",
+        "Validation against actual outcomes",
+        "Babalawo consultation for semantic accuracy",
+        "Iterative refinement based on field testing",
+        "Ethical review for cultural appropriateness"
+      ]
+    },
+    "key_differences_from_standard_ml": {
+      "1_parallel_pattern_evaluation": "All 256 Odu patterns evaluated simultaneously vs sequential decision trees",
+      "2_semantic_reasoning": "Decisions explained through Odu meanings vs black-box predictions",
+      "3_xor_logic": "XOR-based pattern combination vs linear regression/neural networks",
+      "4_cultural_grounding": "Rooted in ancestral wisdom vs purely data-driven",
+      "5_holistic_context": "Considers spiritual/community dimensions vs isolated metrics"
+    }
+  }
+}
