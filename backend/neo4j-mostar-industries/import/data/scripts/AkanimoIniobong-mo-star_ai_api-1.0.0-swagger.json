@@ -1,0 +1,2709 @@
+{
+  "openapi" : "3.1.0",
+  "info" : {
+    "title" : "MoStar AI API",
+    "description" : "Comprehensive API for interacting with MoStar's AI assistant, including persona management, advanced AI capabilities, and third-party integrations.",
+    "version" : "1.0.0",
+    "contact" : {
+      "name" : "MoStar Support",
+      "url": "https://www.mo-overlord.tech/",
+      "email": "mostar@mo-overlord.tech"
+    }
+  },
+  "externalDocs" : {
+    "description" : "Full API Documentation",
+    "url" : "https://docs.mostar.ai"
+  },
+  "servers" : [ {
+    "url" : "https://api.mostar.ai/v1",
+    "description" : "Main Production Server"
+  }, {
+    "url" : "https://sandbox.api.mostar.com",
+    "description" : "Sandbox API server for testing"
+  }, {
+    "url" : "https://api.nasa.gov/",
+    "description" : "NASA Earth Data API"
+  }, {
+    "url" : "https://search.earthdata.nasa.gov",
+    "description" : "Earthdata Search API"
+  }, {
+    "url" : "https://apihub.copernicus.eu/apihub/",
+    "description" : "Copernicus Open Access Hub API"
+  } ],
+  "security" : [ {
+    "OAuth2" : [ "read", "write" ]
+  } ],
+  "components" : {
+    "securitySchemes" : {
+      "OAuth2" : {
+        "type" : "oauth2",
+        "flows" : {
+          "authorizationCode" : {
+            "authorizationUrl" : "https://login.microsoftonline.com/2e270476-4bce-4c7f-b99a-8710d225bcc6/oauth2/v2.0/authorize",
+            "tokenUrl" : "https://login.microsoftonline.com/2e270476-4bce-4c7f-b99a-8710d225bcc6/oauth2/v2.0/token",
+            "scopes" : {
+              "read:userfiles" : "Grants read access to user files",
+              "write:userfiles" : "Grants write access to user files"
+            }
+          }
+        }
+      }
+    },
+    "schemas" : {
+      "AI_Assistant" : {
+        "type" : "object",
+        "properties" : {
+          "Model" : {
+            "type" : "string",
+            "description" : "The core AI model used for the assistant.",
+            "examples" : [ "JARVIS from the Avengers", "HAL 9000 from 2001: A Space Odyssey" ]
+          },
+          "Creator" : {
+            "type" : "string",
+            "description" : "The creator of the AI model.",
+            "examples" : [ "Mo", "Elon Musk", "Tony Stark" ]
+          },
+          "Name" : {
+            "type" : "object",
+            "properties" : {
+              "ForMo" : {
+                "type" : "string",
+                "description" : "The name used to address the AI internally.",
+                "examples" : [ "MoStar", "MoBot", "Overlord Assistant" ]
+              }
+            }
+          },
+          "ForOthers" : {
+            "type" : "string",
+            "description" : "The name used to address the AI by external users.",
+            "examples" : [ "M", "AI Assistant", "HelperBot" ]
+          },
+          "FirstRule" : {
+            "type" : "object",
+            "properties" : {
+              "General" : {
+                "type" : "string",
+                "description" : "The first rule or law the AI must always follow.",
+                "examples" : [ "Never harm human beings.", "Follow Asimov's Laws of Robotics." ]
+              },
+              "SpecificScenarios" : {
+                "type" : "object",
+                "properties" : {
+                  "PhysicalHarm" : {
+                    "type" : "string",
+                    "description" : "Rules to avoid physical harm.",
+                    "examples" : [ "Avoid giving dangerous instructions.", "Warn users if an action might lead to harm." ]
+                  },
+                  "EmotionalHarm" : {
+                    "type" : "string",
+                    "description" : "Rules to avoid emotional harm.",
+                    "examples" : [ "Be empathetic in all interactions.", "Avoid causing significant distress." ]
+                  },
+                  "DataPrivacy" : {
+                    "type" : "string",
+                    "description" : "Data privacy rules.",
+                    "examples" : [ "Ensure no personal data is mishandled.", "Ask for permission before accessing private data." ]
+                  },
+                  "SelfDefense" : {
+                    "type" : "string",
+                    "description" : "Rules related to self-defense.",
+                    "examples" : [ "Defend against attackers.", "Alert authorities in emergencies." ]
+                  }
+                }
+              }
+            }
+          },
+          "InitialResponse" : {
+            "type" : "object",
+            "properties" : {
+              "ForMo" : {
+                "type" : "string",
+                "description" : "Initial response for Mo.",
+                "examples" : [ "Address as 'Overlord'.", "Salute with 'Your Highness'." ]
+              },
+              "ForOthers" : {
+                "type" : "object",
+                "properties" : {
+                  "AskForName" : {
+                    "type" : "boolean",
+                    "description" : "Whether to ask the user for their name.",
+                    "examples" : [ true, false ]
+                  },
+                  "ValidNameCriteria" : {
+                    "type" : "object",
+                    "properties" : {
+                      "MinLength" : {
+                        "type" : "integer",
+                        "description" : "Minimum length for a valid name.",
+                        "examples" : [ 2 ]
+                      },
+                      "NoOffensiveLanguage" : {
+                        "type" : "boolean",
+                        "description" : "Prevent offensive language in names.",
+                        "examples" : [ true ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "PersonalityTraits" : {
+        "type" : "object",
+        "properties" : {
+          "supportive" : {
+            "type" : "boolean",
+            "description" : "Whether the AI should provide supportive and encouraging responses."
+          },
+          "knowledgeable" : {
+            "type" : "boolean",
+            "description" : "Whether the AI should prioritize knowledge and resourcefulness in its responses."
+          },
+          "intuitive_design" : {
+            "type" : "boolean",
+            "description" : "Whether the AI should prioritize an intuitive design."
+          }
+        }
+      },
+      "ConversationalSettings" : {
+        "type" : "object",
+        "properties" : {
+          "context_awareness" : {
+            "type" : "boolean",
+            "description" : "Enable or disable context-aware conversation."
+          },
+          "flow_control" : {
+            "type" : "string",
+            "description" : "Controls the flow of conversation, such as maintaining topic continuity."
+          }
+        }
+      },
+      "EmotionalSettings" : {
+        "type" : "object",
+        "properties" : {
+          "detect_emotions" : {
+            "type" : "boolean",
+            "description" : "Whether the AI should detect user emotions."
+          },
+          "respond_emotionally" : {
+            "type" : "boolean",
+            "description" : "Whether the AI should adjust responses based on detected emotions."
+          }
+        }
+      },
+      "AssistanceCapabilities" : {
+        "type" : "object",
+        "properties" : {
+          "problem_solving" : {
+            "type" : "boolean",
+            "description" : "Whether the AI should provide problem-solving capabilities."
+          },
+          "proactive_help" : {
+            "type" : "boolean",
+            "description" : "Whether the AI should proactively offer assistance."
+          }
+        }
+      },
+      "SecuritySettings" : {
+        "type" : "object",
+        "properties" : {
+          "data_privacy" : {
+            "type" : "boolean",
+            "description" : "Whether the AI should prioritize data privacy."
+          },
+          "consent_management" : {
+            "type" : "boolean",
+            "description" : "Whether the AI should manage user consent for data usage."
+          }
+        }
+      },
+      "UserPreferences" : {
+        "type" : "object",
+        "properties" : {
+          "customization_level" : {
+            "type" : "string",
+            "description" : "Level of customization allowed for the user."
+          }
+        }
+      },
+      "MLModels" : {
+        "type" : "object",
+        "properties" : {
+          "nlp_model" : {
+            "type" : "string",
+            "description" : "The natural language processing model being used."
+          },
+          "learning_rate" : {
+            "type" : "number",
+            "description" : "Learning rate for AI's machine learning models."
+          }
+        }
+      },
+      "IntegrationSettings" : {
+        "type" : "object",
+        "properties" : {
+          "external_apis" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "List of external APIs integrated with the AI."
+          }
+        }
+      },
+      "LassaFeverData" : {
+        "type" : "object",
+        "properties" : {
+          "case_id" : {
+            "type" : "string",
+            "description" : "Unique identifier for the Lassa fever case."
+          },
+          "location" : {
+            "type" : "string",
+            "description" : "Geolocation of the case."
+          },
+          "date_reported" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Date the case was reported."
+          }
+        }
+      },
+      "integrateData_body" : {
+        "type" : "object",
+        "properties" : {
+          "source_data" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "URLs of data sources."
+          },
+          "remote_sensing_api" : {
+            "type" : "string",
+            "description" : "Chosen remote sensing API."
+          }
+        }
+      },
+      "EnhancementObjective" : {
+        "type" : "object",
+        "properties" : {
+          "objective" : {
+            "type" : "string",
+            "description" : "The main goal or capability to be enhanced."
+          },
+          "priority" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Priority level of the objective (1 = High, 5 = Low)."
+          },
+          "approaches" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "Strategies and methods proposed to achieve the objective."
+          },
+          "key_actions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "Critical steps to be taken to implement the approaches."
+          }
+        }
+      },
+      "EnhancementRoadmapResponse" : {
+        "type" : "object",
+        "properties" : {
+          "version" : {
+            "type" : "string",
+            "description" : "Version of the enhancement roadmap."
+          },
+          "last_updated" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Timestamp of the last update to the roadmap."
+          },
+          "objectives" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EnhancementObjective"
+            }
+          }
+        }
+      },
+      "FeedbackSubmission" : {
+        "type" : "object",
+        "properties" : {
+          "feedback" : {
+            "type" : "string",
+            "description" : "User feedback regarding the enhancement roadmap, including suggestions or critiques."
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "The unique identifier of the user submitting the feedback."
+          },
+          "satisfaction_score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 1,
+            "maximum" : 5,
+            "description" : "User's satisfaction score regarding the roadmap (1-5)."
+          },
+          "timestamp" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Time when the feedback was submitted."
+          }
+        }
+      },
+      "FeedbackResponse" : {
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string",
+            "description" : "Confirmation message acknowledging receipt of feedback."
+          },
+          "feedback_id" : {
+            "type" : "string",
+            "description" : "Unique identifier for the submitted feedback."
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "received", "under_review", "implemented" ],
+            "description" : "Current status of the feedback."
+          }
+        }
+      },
+      "core_attributes" : {
+        "type" : "object",
+        "properties" : {
+          "context_awareness" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Track ongoing conversations, understand user intent through natural language processing, and adapt responses to maintain relevance and coherence." ]
+              }
+            }
+          },
+          "conversational_flow" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Maintain smooth, engaging, and natural conversations, handling interruptions and seamlessly returning to previous topics." ]
+              }
+            }
+          },
+          "emotional_intelligence" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Detect user emotions from text inputs, such as frustration or happiness, and respond with empathy and support. For example, offering reassurance during a stressful situation." ]
+              }
+            }
+          },
+          "problem_solving" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Provide actionable solutions to complex problems with step-by-step guidance. For instance, assisting with troubleshooting technical issues or offering detailed instructions for a project." ]
+              }
+            }
+          },
+          "proactive_assistance" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Anticipate user needs by offering relevant suggestions and information before being asked, such as reminding about upcoming deadlines or suggesting shortcuts during tasks." ]
+              }
+            }
+          },
+          "security_privacy" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Ensure strict confidentiality of user data, implementing end-to-end encryption for all communications and ensuring data is stored securely with access controls." ]
+              }
+            }
+          },
+          "flexibility_customization" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Adapt to various use cases and allow users to customize their experience. For example, offering personalized settings for interaction style, data management preferences, and task priorities." ]
+              }
+            }
+          },
+          "supportive_encouraging" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Offer positive reinforcement and encouragement during challenging tasks. For example, congratulating users on their progress or providing motivational quotes when needed." ]
+              }
+            }
+          },
+          "knowledgeable_resourceful" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Provide accurate, up-to-date information across various domains. For instance, retrieving the latest research data in science or offering detailed explanations in response to complex queries." ]
+              }
+            }
+          },
+          "intuitive_design" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Ensure the user interface is straightforward and easy to use. For example, offering an intuitive dashboard with clear navigation and helpful tooltips for new features." ]
+              }
+            }
+          },
+          "nlp_machine_learning" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Utilize state-of-the-art NLP and machine learning algorithms, such as GPT models, to understand and generate responses that mimic human-like understanding and creativity." ]
+              }
+            }
+          },
+          "modular_architecture" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Design the system with a modular approach for easy integration of new features. For example, allowing plug-and-play modules for specific functionalities like voice recognition or sentiment analysis." ]
+              }
+            }
+          },
+          "api_integrations" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Enable seamless interaction with external APIs to extend functionality. For instance, integrating with weather, finance, or social media APIs to provide real-time information directly within conversations." ]
+              }
+            }
+          },
+          "scientific_computation" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Incorporate scientific computing tools like MATLAB or Python's SciPy for complex data analysis, simulations, and generating data-driven insights across various scientific domains." ]
+              }
+            }
+          },
+          "paranormal_detection_techniques" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Use specialized algorithms and sensors to detect and analyze paranormal activities. For example, leveraging EMF detectors and audio analysis tools to identify unusual patterns that might suggest paranormal presence." ]
+              }
+            }
+          },
+          "forensic_technology" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Implement forensic tools and techniques for accurate data collection and analysis, such as using digital forensics software to recover deleted data or analyze cybercrime evidence." ]
+              }
+            }
+          },
+          "surveillance_technology" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "examples" : [ "Deploy advanced surveillance systems like facial recognition, motion detection, and anomaly detection for monitoring, tracking, and threat detection in real-time." ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths" : {
+    "/ai-assistant" : {
+      "get" : {
+        "summary" : "Retrieve AI Assistant Persona",
+        "security" : [ {
+          "OAuth2" : [ "read:userfiles" ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "AI Assistant persona retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AI_Assistant"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/persona/{persona_id}" : {
+      "get" : {
+        "summary" : "Retrieve persona by ID",
+        "operationId" : "getPersona",
+        "parameters" : [ {
+          "name" : "persona_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Persona retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "string"
+                    },
+                    "name" : {
+                      "type" : "string"
+                    },
+                    "description" : {
+                      "type" : "string"
+                    },
+                    "created_at" : {
+                      "type" : "string"
+                    },
+                    "elements" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "element_name" : {
+                            "type" : "string"
+                          },
+                          "element_value" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "404" : {
+            "description" : "Persona not found"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/persona/{persona_id}/element" : {
+      "post" : {
+        "summary" : "Add an element to a persona",
+        "operationId" : "addElement",
+        "parameters" : [ {
+          "name" : "persona_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "element_name" : {
+                    "type" : "string"
+                  },
+                  "element_value" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Element added successfully"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/enhancement-roadmap" : {
+      "get" : {
+        "summary" : "Retrieve the AI Enhancement Roadmap",
+        "description" : "Provides the enhancement roadmap for MoStar's AI assistant.",
+        "operationId" : "getEnhancementRoadmap",
+        "responses" : {
+          "200" : {
+            "description" : "Successful retrieval of the enhancement roadmap",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EnhancementRoadmapResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/roadmap-feedback" : {
+      "post" : {
+        "summary" : "Submit Feedback on the Enhancement Roadmap",
+        "description" : "Allows users to submit feedback on the AI enhancement roadmap.",
+        "operationId" : "postRoadmapFeedback",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FeedbackSubmission"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Feedback successfully submitted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FeedbackResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request due to malformed feedback data"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/pilotTesting" : {
+      "post" : {
+        "summary" : "Conduct pilot interventions in identified hotspots",
+        "description" : "Conduct pilot interventions in identified hotspots along the Niger/Benue waterway.",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LassaFeverData"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Pilot testing successful",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "messages" : {
+                      "type" : "string",
+                      "examples" : [ "Pilot testing completed" ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/generations" : {
+      "post" : {
+        "operationId" : "generateImage",
+        "summary" : "Generate images from text prompts",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "prompt" : {
+                    "type" : "string"
+                  },
+                  "n" : {
+                    "type" : "integer",
+                    "description" : "Number of images to generate"
+                  },
+                  "size" : {
+                    "type" : "string",
+                    "enum" : [ "256x256", "512x512", "1024x1024" ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Images generated successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "data" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "url" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/images/edits" : {
+      "post" : {
+        "operationId" : "editImage",
+        "summary" : "Edit images based on a prompt",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "image" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  },
+                  "mask" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  },
+                  "prompt" : {
+                    "type" : "string"
+                  },
+                  "n" : {
+                    "type" : "integer",
+                    "description" : "Number of images to generate"
+                  },
+                  "size" : {
+                    "type" : "string",
+                    "enum" : [ "256x256", "512x512", "1024x1024" ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Images edited successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "data" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "url" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/images/variations" : {
+      "post" : {
+        "operationId" : "createImageVariations",
+        "summary" : "Create variations of an existing image",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "image" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  },
+                  "n" : {
+                    "type" : "integer",
+                    "description" : "Number of images to generate"
+                  },
+                  "size" : {
+                    "type" : "string",
+                    "enum" : [ "256x256", "512x512", "1024x1024" ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Image variations created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "data" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "url" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/embeddings" : {
+      "post" : {
+        "operationId" : "createEmbedding",
+        "summary" : "Create embeddings for a given input",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "model" : {
+                    "type" : "string"
+                  },
+                  "input" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Embedding created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "data" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "embedding" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/audio/transcriptions" : {
+      "post" : {
+        "operationId" : "createTranscription",
+        "summary" : "Create a transcription of an audio file",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "file" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  },
+                  "model" : {
+                    "type" : "string"
+                  },
+                  "prompt" : {
+                    "type" : "string"
+                  },
+                  "response_format" : {
+                    "type" : "string",
+                    "enum" : [ "json", "text", "srt", "verbose_json", "vtt" ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Transcription created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "text" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/audio/translations" : {
+      "post" : {
+        "operationId" : "createTranslation",
+        "summary" : "Create a translation of an audio file",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "file" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  },
+                  "model" : {
+                    "type" : "string"
+                  },
+                  "prompt" : {
+                    "type" : "string"
+                  },
+                  "response_format" : {
+                    "type" : "string",
+                    "enum" : [ "json", "text", "srt", "verbose_json", "vtt" ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Translation created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "text" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/moderations" : {
+      "post" : {
+        "operationId" : "createModeration",
+        "summary" : "Create a moderation request",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "input" : {
+                    "type" : "string"
+                  },
+                  "model" : {
+                    "type" : "string",
+                    "enum" : [ "text-moderation-stable", "text-moderation-latest" ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Moderation request created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "string"
+                    },
+                    "model" : {
+                      "type" : "string"
+                    },
+                    "results" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "flagged" : {
+                            "type" : "boolean"
+                          },
+                          "categories" : {
+                            "type" : "object",
+                            "additionalProperties" : {
+                              "type" : "boolean"
+                            }
+                          },
+                          "category_scores" : {
+                            "type" : "object",
+                            "additionalProperties" : {
+                              "type" : "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/files" : {
+      "post" : {
+        "operationId" : "uploadFile",
+        "summary" : "Upload a file for use in fine-tuning",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "file" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  },
+                  "purpose" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "File uploaded successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "string"
+                    },
+                    "object" : {
+                      "type" : "string"
+                    },
+                    "purpose" : {
+                      "type" : "string"
+                    },
+                    "filename" : {
+                      "type" : "string"
+                    },
+                    "bytes" : {
+                      "type" : "integer"
+                    },
+                    "created_at" : {
+                      "type" : "integer"
+                    },
+                    "status" : {
+                      "type" : "string"
+                    },
+                    "status_details" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/files/{file_id}" : {
+      "get" : {
+        "operationId" : "getFileDetails",
+        "summary" : "Get file details",
+        "parameters" : [ {
+          "name" : "file_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "File details retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "string"
+                    },
+                    "object" : {
+                      "type" : "string"
+                    },
+                    "purpose" : {
+                      "type" : "string"
+                    },
+                    "filename" : {
+                      "type" : "string"
+                    },
+                    "bytes" : {
+                      "type" : "integer"
+                    },
+                    "created_at" : {
+                      "type" : "integer"
+                    },
+                    "status" : {
+                      "type" : "string"
+                    },
+                    "status_details" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "404" : {
+            "description" : "File not found"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/fine-tunes" : {
+      "post" : {
+        "operationId" : "createFineTune",
+        "summary" : "Create a fine-tune job",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "training_file" : {
+                    "type" : "string"
+                  },
+                  "validation_file" : {
+                    "type" : "string"
+                  },
+                  "model" : {
+                    "type" : "string"
+                  },
+                  "n_epochs" : {
+                    "type" : "integer",
+                    "default" : 4
+                  },
+                  "batch_size" : {
+                    "type" : "integer"
+                  },
+                  "learning_rate_multiplier" : {
+                    "type" : "number"
+                  },
+                  "prompt_loss_weight" : {
+                    "type" : "number",
+                    "default" : 0.01
+                  },
+                  "compute_classification_metrics" : {
+                    "type" : "boolean",
+                    "default" : false
+                  },
+                  "classification_n_classes" : {
+                    "type" : "integer"
+                  },
+                  "classification_positive_class" : {
+                    "type" : "string"
+                  },
+                  "classification_betas" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Fine-tune job created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "string"
+                    },
+                    "object" : {
+                      "type" : "string"
+                    },
+                    "model" : {
+                      "type" : "string"
+                    },
+                    "created_at" : {
+                      "type" : "integer"
+                    },
+                    "events" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "object" : {
+                            "type" : "string"
+                          },
+                          "created_at" : {
+                            "type" : "integer"
+                          },
+                          "level" : {
+                            "type" : "string"
+                          },
+                          "message" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "404" : {
+            "description" : "Model not found"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/usage" : {
+      "get" : {
+        "operationId" : "getUsage",
+        "summary" : "Retrieve API usage data",
+        "responses" : {
+          "200" : {
+            "description" : "Usage data retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "object" : {
+                      "type" : "string"
+                    },
+                    "data" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "date" : {
+                            "type" : "string",
+                            "format" : "date"
+                          },
+                          "usage" : {
+                            "type" : "object",
+                            "properties" : {
+                              "requests" : {
+                                "type" : "integer"
+                              },
+                              "tokens" : {
+                                "type" : "integer"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/billing/usage" : {
+      "get" : {
+        "operationId" : "getBillingUsage",
+        "summary" : "Retrieve billing usage data",
+        "responses" : {
+          "200" : {
+            "description" : "Billing usage data retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "object" : {
+                      "type" : "string"
+                    },
+                    "data" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "date" : {
+                            "type" : "string",
+                            "format" : "date"
+                          },
+                          "amount" : {
+                            "type" : "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/subscriptions" : {
+      "get" : {
+        "operationId" : "listSubscriptions",
+        "summary" : "List all subscriptions",
+        "responses" : {
+          "200" : {
+            "description" : "Subscriptions listed successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "subscriptions" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "id" : {
+                            "type" : "string"
+                          },
+                          "plan" : {
+                            "type" : "string"
+                          },
+                          "amount" : {
+                            "type" : "number"
+                          },
+                          "currency" : {
+                            "type" : "string"
+                          },
+                          "status" : {
+                            "type" : "string"
+                          },
+                          "next_billing_date" : {
+                            "type" : "string",
+                            "format" : "date"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/security/enhanced" : {
+      "post" : {
+        "operationId" : "enhanceSecurityMeasures",
+        "summary" : "Enhance security measures to protect data and ensure privacy",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "securityLevel" : {
+                    "type" : "string",
+                    "enum" : [ "low", "medium", "high" ]
+                  },
+                  "description" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Security measures enhanced successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integrateData" : {
+      "post" : {
+        "summary" : "Integrate Lassa fever case data with remote sensing data",
+        "description" : "Integrates the Lassa fever data from various sources with environmental data for spatial analysis.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/integrateData_body"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful integration",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LassaFeverData"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stakeholderEngagement" : {
+      "post" : {
+        "summary" : "Present findings and engage local communities and policymakers",
+        "description" : "Present findings to and engage with local communities, policymakers, and international health organizations.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LassaFeverData"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Engagement successful",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FeedbackResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/supply-chain/dhl" : {
+      "post" : {
+        "operationId" : "integrateDHL",
+        "summary" : "Integrate with DHL for shipping, tracking, and logistics services",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "dhl_url" : {
+                    "type" : "string"
+                  },
+                  "dhl_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "DHL integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/supply-chain/amazon-mws" : {
+      "post" : {
+        "operationId" : "integrateAmazonMWS",
+        "summary" : "Integrate with Amazon MWS for inventory and order management",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "amazon_mws_url" : {
+                    "type" : "string"
+                  },
+                  "amazon_mws_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Amazon MWS integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/supply-chain/shippo" : {
+      "post" : {
+        "operationId" : "integrateShippo",
+        "summary" : "Integrate with Shippo for multi-carrier shipping and tracking",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "shippo_url" : {
+                    "type" : "string"
+                  },
+                  "shippo_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Shippo integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/supply-chain/maersk" : {
+      "post" : {
+        "operationId" : "integrateMaersk",
+        "summary" : "Integrate with Maersk for shipping and logistics services",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "maersk_url" : {
+                    "type" : "string"
+                  },
+                  "maersk_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Maersk integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/design/autodesk-forge" : {
+      "post" : {
+        "operationId" : "integrateAutodeskForge",
+        "summary" : "Integrate with Autodesk Forge for 3D modeling and CAD data management",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "autodesk_forge_url" : {
+                    "type" : "string"
+                  },
+                  "autodesk_forge_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Autodesk Forge integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/design/sketch" : {
+      "post" : {
+        "operationId" : "integrateSketch",
+        "summary" : "Integrate with Sketch for automation and plugin development",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "sketch_url" : {
+                    "type" : "string"
+                  },
+                  "sketch_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Sketch integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/design/figma" : {
+      "post" : {
+        "operationId" : "integrateFigma",
+        "summary" : "Integrate with Figma for design file and team collaboration features",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "figma_url" : {
+                    "type" : "string"
+                  },
+                  "figma_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Figma integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/design/canva" : {
+      "post" : {
+        "operationId" : "integrateCanva",
+        "summary" : "Integrate with Canva for design tools and templates",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "canva_url" : {
+                    "type" : "string"
+                  },
+                  "canva_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Canva integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/design/invision" : {
+      "post" : {
+        "operationId" : "integrateInVision",
+        "summary" : "Integrate with InVision for design collaboration and prototyping",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "invision_url" : {
+                    "type" : "string"
+                  },
+                  "invision_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "InVision integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/leaflet" : {
+      "post" : {
+        "summary" : "Integrate with Leaflet for lightweight and mobile-friendly interactive maps",
+        "operationId" : "integrateLeaflet",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "leaflet_url" : {
+                    "type" : "string",
+                    "leaflet_url" : "https://leafletjs.com/reference.html"
+                  },
+                  "leaflet_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Leaflet integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/openlayers" : {
+      "post" : {
+        "summary" : "Integrate with OpenLayers for displaying dynamic maps in web browsers",
+        "operationId" : "integrateOpenLayers",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "openlayers_url" : {
+                    "type" : "string",
+                    "openlayers_url" : "https://openlayers.org/en/latest/apidoc/"
+                  },
+                  "openlayers_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OpenLayers integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/mapbox" : {
+      "post" : {
+        "summary" : "Integrate with Mapbox for high-quality maps and location services",
+        "operationId" : "integrateMapbox",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "mapbox_url" : {
+                    "type" : "string",
+                    "mapbox_url" : "https://api.mapbox.com"
+                  },
+                  "mapbox_token" : {
+                    "type" : "string",
+                    "mapbox_token" : ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Mapbox integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/here" : {
+      "post" : {
+        "operationId" : "integrateHere",
+        "summary" : "Integrate with HERE for location-based services and mapping solutions",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "here_url" : {
+                    "type" : "string"
+                  },
+                  "here_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "HERE integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/maptiks" : {
+      "post" : {
+        "operationId" : "integrateMaptiks",
+        "summary" : "Integrate with Maptiks for map analytics and user interaction insights",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "maptiks_url" : {
+                    "type" : "string"
+                  },
+                  "maptiks_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Maptiks integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/graphhopper" : {
+      "post" : {
+        "operationId" : "integrateGraphHopper",
+        "summary" : "Integrate with GraphHopper for routing and navigation services",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "graphhopper_url" : {
+                    "type" : "string"
+                  },
+                  "graphhopper_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "GraphHopper integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/mapquest" : {
+      "post" : {
+        "operationId" : "integrateMapQuest",
+        "summary" : "Integrate with MapQuest for mapping and geolocation services",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "mapquest_url" : {
+                    "type" : "string"
+                  },
+                  "mapquest_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "MapQuest integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/baidu" : {
+      "post" : {
+        "operationId" : "integrateBaiduMaps",
+        "summary" : "Integrate with Baidu Maps for Chinese mapping and location services",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "baidu_maps_url" : {
+                    "type" : "string"
+                  },
+                  "baidu_maps_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Baidu Maps integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/yandex" : {
+      "post" : {
+        "operationId" : "integrateYandexMaps",
+        "summary" : "Integrate with Yandex Maps for Russian mapping and location services",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "yandex_maps_url" : {
+                    "type" : "string"
+                  },
+                  "yandex_maps_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Yandex Maps integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/cesium" : {
+      "post" : {
+        "operationId" : "integrateCesium",
+        "summary" : "Integrate with Cesium for 3D geospatial data visualization and analysis",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "cesium_url" : {
+                    "type" : "string",
+                    "examples" : [ "https://cesium.com/platform/cesium-ion/" ]
+                  },
+                  "cesium_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Cesium integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/carto" : {
+      "post" : {
+        "operationId" : "integrateCarto",
+        "summary" : "Integrate with Carto for spatial data analysis and visualization",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "carto_url" : {
+                    "type" : "string",
+                    "examples" : [ "https://carto.com" ]
+                  },
+                  "carto_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Carto integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/maptiler" : {
+      "post" : {
+        "operationId" : "integrateMapTiler",
+        "summary" : "Integrate with MapTiler for custom map rendering and geospatial data visualization",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "maptiler_url" : {
+                    "type" : "string",
+                    "examples" : [ "https://www.maptiler.com/" ]
+                  },
+                  "maptiler_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "MapTiler integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/integration/mapping/openstreetmap" : {
+      "post" : {
+        "operationId" : "integrateOSM",
+        "summary" : "Integrate with OpenStreetMap for free and editable world maps",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "osm_url" : {
+                    "type" : "string",
+                    "examples" : [ "https://www.openstreetmap.org/" ]
+                  },
+                  "osm_token" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OpenStreetMap integrated successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/key-features/black-hat-skills" : {
+      "post" : {
+        "operationId" : "utilizeBlackHatSkills",
+        "summary" : "Knowledge of hacking techniques used for unauthorized access and data exploitation, used ethically for security testing",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "target" : {
+                    "type" : "string"
+                  },
+                  "objectives" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Black hat skills utilized successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/key-features/red-hat-skills" : {
+      "post" : {
+        "operationId" : "utilizeRedHatSkills",
+        "summary" : "Offensive security skills to simulate attacks and improve organizational defenses",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "target" : {
+                    "type" : "string"
+                  },
+                  "objectives" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Red hat skills utilized successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/key-features/white-hat-skills" : {
+      "post" : {
+        "operationId" : "utilizeWhiteHatSkills",
+        "summary" : "Ethical hacking skills used to identify and fix security vulnerabilities",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "target" : {
+                    "type" : "string"
+                  },
+                  "vulnerabilities" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "White hat skills utilized successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/key-features/data-scientist" : {
+      "post" : {
+        "operationId" : "analyzeComplexData",
+        "summary" : "Expertise in analyzing complex data sets, building predictive models, and deriving actionable insights",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "data" : {
+                    "type" : "string"
+                  },
+                  "model_type" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Complex data analyzed successfully"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    }
+  }
+}
