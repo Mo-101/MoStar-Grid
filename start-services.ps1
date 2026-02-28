@@ -8,21 +8,19 @@ Write-Host "   MoStar-Grid: System Initialization     " -ForegroundColor Magenta
 Write-Host "==========================================" -ForegroundColor Magenta
 
 # --- Configuration ---
-$JavaHome = "C:\Tools\jdk-25.0.1+8" 
+$Neo4jStart = Join-Path $ScriptPath "backend\neo4j-mostar-industries\start-neo4j.ps1"
 $VenvPath = Join-Path $ScriptPath ".venv\Scripts\Activate.ps1"
 $PythonExe = Join-Path $ScriptPath ".venv\Scripts\python.exe"
-$Neo4jBin = Join-Path $ScriptPath "backend\neo4j-mostar-industries\bin\neo4j.bat"
 
 # --- 1. Start Neo4j ---
 Write-Host "`n[1/4] Starting Neo4j Database..." -ForegroundColor Cyan
-if (Test-Path $Neo4jBin) {
-    $Cmd = '$env:JAVA_HOME = "{0}"; Write-Host "Starting Neo4j..."; & "{1}" console' -f $JavaHome, $Neo4jBin
-    $ArgsList = "-NoExit", "-Command", $Cmd
-    Start-Process powershell -ArgumentList $ArgsList -WorkingDirectory $ScriptPath
+if (Test-Path $Neo4jStart) {
+    $ArgsList = "-NoExit", "-ExecutionPolicy", "Bypass", "-File", $Neo4jStart
+    Start-Process powershell -ArgumentList $ArgsList -WorkingDirectory (Join-Path $ScriptPath "backend\\neo4j-mostar-industries")
     Write-Host "   >> Neo4j window launched." -ForegroundColor Gray
 }
 else {
-    Write-Warning "   !! Neo4j binary not found at $Neo4jBin"
+    Write-Warning "   !! Neo4j start script not found at $Neo4jStart"
 }
 
 Start-Sleep -Seconds 2

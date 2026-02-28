@@ -3,8 +3,7 @@
 $ErrorActionPreference = "Continue"
 $ScriptPath = $PSScriptRoot
 
-$JavaHome = "C:\Tools\jdk-25.0.1+8"
-$Neo4jBin = Join-Path $ScriptPath "backend\neo4j-mostar-industries\bin\neo4j.bat"
+$Neo4jStart = Join-Path $ScriptPath "backend\neo4j-mostar-industries\start-neo4j.ps1"
 $PythonExe = Join-Path $ScriptPath ".venv\Scripts\python.exe"
 $LogsDir = Join-Path $ScriptPath "logs"
 
@@ -12,13 +11,12 @@ $LogsDir = Join-Path $ScriptPath "logs"
 if (-not (Test-Path $LogsDir)) { New-Item -ItemType Directory -Path $LogsDir | Out-Null }
 
 Write-Host "[1/2] Starting Neo4j..." -ForegroundColor Cyan
-if (Test-Path $Neo4jBin) {
-    $Cmd = '$env:JAVA_HOME = "{0}"; Write-Host "Starting Neo4j..."; & "{1}" console' -f $JavaHome, $Neo4jBin
-    Start-Process powershell -ArgumentList "-NoExit", "-Command", $Cmd -WorkingDirectory $ScriptPath
+if (Test-Path $Neo4jStart) {
+    Start-Process powershell -ArgumentList "-NoExit", "-ExecutionPolicy", "Bypass", "-File", $Neo4jStart -WorkingDirectory (Join-Path $ScriptPath "backend\\neo4j-mostar-industries")
     Write-Host "   >> Neo4j console window launched." -ForegroundColor Gray
 }
 else {
-    Write-Warning "Neo4j binary not found at $Neo4jBin"
+    Write-Warning "Neo4j start script not found at $Neo4jStart"
 }
 
 Start-Sleep -Seconds 2

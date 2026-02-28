@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import FloatingOracle from '@/components/FloatingOracle';
 
 interface VitalCheck {
     component: string;
@@ -8,7 +9,7 @@ interface VitalCheck {
     status: string;
     latency_ms: number;
     message: string;
-    details?: any;
+    details?: Record<string, unknown>;
 }
 
 interface GridVitalsReport {
@@ -221,6 +222,7 @@ export default function GridVitalsPage() {
                     <p className="mt-1">Auto-refreshes every 30 seconds</p>
                 </div>
             </div>
+            <FloatingOracle />
         </div>
     );
 }
