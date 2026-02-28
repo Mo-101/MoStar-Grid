@@ -1,9 +1,10 @@
-import AfricanFlame from "@/components/AfricanFlameMap";
+import Sanctum from "@/components/Sanctum";
+import FloatingOracle from "@/components/FloatingOracle";
 
 export default function Home() {
   return (
     <main>
-      <AfricanFlame />
+      <FloatingOracle />
     </main>
   );
 }

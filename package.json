@@ -8,27 +8,39 @@
     "start": "cd frontend && npm run start",
     "backend": "python -m uvicorn core_engine.api_gateway:app --reload --port 8001",
     "grid": "concurrently \"npm:backend\" \"npm:dev\"",
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "start-all": "powershell -File ./start-services.ps1",
-    "start-backend": "powershell -File ./start-backend.ps1",
-=======
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
     "health-check": "powershell -File scripts/health-check.ps1"
   },
   "workspaces": [
     "frontend"
   ],
   "devDependencies": {
-<<<<<<< HEAD
-<<<<<<< HEAD
+    "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
+    "react-map-gl": "^8.1.0"
+  }
+}
+
+{
+  "name": "grid-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm run start",
+    "backend": "python -m uvicorn core_engine.api_gateway:app --reload --port 8001",
+    "grid": "concurrently \"npm:backend\" \"npm:dev\"",
+    "start-all": "powershell -File ./start-services.ps1",
+    "start-backend": "powershell -File ./start-backend.ps1",
+    "health-check": "powershell -File scripts/health-check.ps1"
+  },
+  "workspaces": [
+    "frontend"
+  ],
+  "devDependencies": {
     "@types/node": "^25.0.9",
-=======
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
     "concurrently": "^9.2.1"
   },
   "dependencies": {
