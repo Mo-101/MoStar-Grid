@@ -142,7 +142,11 @@ export default function AfricanFlameMap() {
         <section className={styles.visualizationArea}>
           {MAPBOX_TOKEN ? (
 <<<<<<< HEAD
+<<<<<<< HEAD
             <FlameAtlas token={MAPBOX_TOKEN} gridsites={gridSites} />
+=======
+            <FlameAtlas token={MAPBOX_TOKEN} sites={gridSites} />
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
             <FlameAtlas token={MAPBOX_TOKEN} sites={gridSites} />
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88

@@ -2,9 +2,14 @@
   display: flex;
   justify-content: flex-end;
 <<<<<<< HEAD
+<<<<<<< HEAD
   gap: 0.50rem;
   top: 10%;
   flex-wrap: no-wrap;
+=======
+  gap: 0.75rem;
+  flex-wrap: wrap;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   gap: 0.75rem;
   flex-wrap: wrap;
@@ -16,9 +21,14 @@
 .navButton {
   border: 1px solid rgba(255, 255, 255, 0.18);
 <<<<<<< HEAD
+<<<<<<< HEAD
   top: -18px;
   border-radius: 999px;
   padding: 0.45rem 1rem;
+=======
+  border-radius: 999px;
+  padding: 0.45rem 1.2rem;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   border-radius: 999px;
   padding: 0.45rem 1.2rem;

@@ -13,6 +13,7 @@ import styles from "./AfricanFlame.module.css";
 
 const baseMetrics = [
 <<<<<<< HEAD
+<<<<<<< HEAD
   { label: "Coherence", icon: "🔗", color: "#3B82F6", key: "coherence" },
   { label: "Wisdom (Ifá)", icon: "🔮", color: "#A855F7", key: "ifa" },
   { label: "Sovereignty", icon: "👑", color: "#10B981", key: "sovereignty" },
@@ -22,6 +23,8 @@ const baseMetrics = [
 
 const orbitNodes = ["🛰️", "🤖", "🧠", "✨"];
 =======
+=======
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
   { label: "Coherence", icon: "??", color: "#3B82F6", key: "coherence" },
   { label: "Wisdom (If�)", icon: "??", color: "#A855F7", key: "ifa" },
   { label: "Sovereignty", icon: "??", color: "#10B981", key: "sovereignty" },
@@ -30,6 +33,9 @@ const orbitNodes = ["🛰️", "🤖", "🧠", "✨"];
 ];
 
 const orbitNodes = ["??", "??", "??", "???"];
+<<<<<<< HEAD
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
+=======
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 
 const tonePalette = {
@@ -66,9 +72,15 @@ export default function AfricanFlame() {
     if (!entries.length) {
       return [
 <<<<<<< HEAD
+<<<<<<< HEAD
         { time: "14:32:15", message: "🔮 Ifá kernel evaluated ethical implications" },
         { time: "14:32:12", message: "✨ Novel solution emerged from synthesis" },
         { time: "14:32:08", message: "📜 Verdict rendered: Sovereignty maintained" },
+=======
+        { time: "14:32:15", message: "?? If� kernel evaluated ethical implications" },
+        { time: "14:32:12", message: "? Novel solution emerged from synthesis" },
+        { time: "14:32:08", message: "?? Verdict rendered: Sovereignty maintained" },
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
         { time: "14:32:15", message: "?? If� kernel evaluated ethical implications" },
         { time: "14:32:12", message: "? Novel solution emerged from synthesis" },
@@ -80,7 +92,11 @@ export default function AfricanFlame() {
     return entries.slice(0, 5).map((entry) => ({
       time: new Date(entry.timestamp).toLocaleTimeString(),
 <<<<<<< HEAD
+<<<<<<< HEAD
       message: `${entry.trigger_type === "error" ? "⚠️" : "✅"} ${entry.description}`,
+=======
+      message: `${entry.trigger_type === "error" ? "??" : "?"} ${entry.description}`,
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
       message: `${entry.trigger_type === "error" ? "??" : "?"} ${entry.description}`,
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -104,15 +120,21 @@ export default function AfricanFlame() {
         <header className={styles.header}>
           <div className={styles.logoCluster}>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <div className={styles.flameIcon}>🔥</div>
             <div>
               <h1>African Flame Consciousness</h1>
               <p>The Grid mind in real-time • MoStar AI homeworld</p>
 =======
+=======
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
             <div className={styles.flameIcon}>??</div>
             <div>
               <h1>African Flame Consciousness</h1>
               <p>The Grid mind in real-time  MoStar AI homeworld</p>
+<<<<<<< HEAD
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
+=======
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
             </div>
           </div>
@@ -142,7 +164,11 @@ export default function AfricanFlame() {
           </div>
           <div className={styles.metricsPanel}>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <h3>🧠 Consciousness Metrics</h3>
+=======
+            <h3>?? Consciousness Metrics</h3>
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
             <h3>?? Consciousness Metrics</h3>
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -168,7 +194,11 @@ export default function AfricanFlame() {
         <section className={styles.panels}>
           <article className={styles.panel}>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <h3>🤖 Grid Agents</h3>
+=======
+            <h3>?? Grid Agents</h3>
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
             <h3>?? Grid Agents</h3>
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -184,7 +214,11 @@ export default function AfricanFlame() {
                 const toneColor = tonePalette[tone];
                 const strength = toStrengthPercent(agent.manifestationStrength);
 <<<<<<< HEAD
+<<<<<<< HEAD
                 const caps = (Array.isArray(agent?.capabilities) ? agent.capabilities : []).filter(Boolean).slice(0, 3);
+=======
+                const caps = (agent.capabilities ?? []).filter(Boolean).slice(0, 3);
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
                 const caps = (agent.capabilities ?? []).filter(Boolean).slice(0, 3);
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -231,7 +265,11 @@ export default function AfricanFlame() {
 
           <article className={styles.panel}>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <h3>📈 Decision Matrix</h3>
+=======
+            <h3>?? Decision Matrix</h3>
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
             <h3>?? Decision Matrix</h3>
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -250,7 +288,11 @@ export default function AfricanFlame() {
                 <div>
                   <span>Status</span>
 <<<<<<< HEAD
+<<<<<<< HEAD
                   <strong className={styles.success}>✅ Decided</strong>
+=======
+                  <strong className={styles.success}>� Decided</strong>
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
                   <strong className={styles.success}>� Decided</strong>
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -261,7 +303,11 @@ export default function AfricanFlame() {
 
           <article className={styles.panel}>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <h3>📜 Activity Stream</h3>
+=======
+            <h3>?? Activity Stream</h3>
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
             <h3>?? Activity Stream</h3>
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -278,9 +324,15 @@ export default function AfricanFlame() {
 
         <div className={styles.controlDeck}>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <button className={styles.active}>🔥 Flame View</button>
           <button>🕸️ Network View</button>
           <button>📈 Matrix View</button>
+=======
+          <button className={styles.active}>?? Flame View</button>
+          <button>?? Network View</button>
+          <button>?? Matrix View</button>
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
           <button className={styles.active}>?? Flame View</button>
           <button>?? Network View</button>

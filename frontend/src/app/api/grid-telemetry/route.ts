@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import neo4j, { Driver } from "neo4j-driver";
 
@@ -354,6 +355,8 @@ export async function GET() {
 }
 
 =======
+=======
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 import neo4j, { Driver } from "neo4j-driver";
 import { promises as fs } from "fs";
 import path from "path";
@@ -530,4 +533,7 @@ export async function GET() {
     generatedAt: new Date().toISOString(),
   });
 }
+<<<<<<< HEAD
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
+=======
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88

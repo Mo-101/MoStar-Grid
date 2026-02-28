@@ -1,12 +1,72 @@
-node_modules/
-.env*
-.tools/
-jdk-*/
-*.zip
-backend/neo4j-mostar-industries/data/
-backend/neo4j-mostar-industries/logs/
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build outputs
 .next/
 dist/
+dist-ssr/
 build/
+out/
+
+# Environment files
+.env*
+!.env.example
+
+# IDE and editor files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Java/Neo4j
+jdk-*/
+*.jar
+backend/neo4j-mostar-industries/data/
+backend/neo4j-mostar-industries/logs/
+
+# Tools and temporary
+.tools/
+*.zip
+*.tar.gz
+*.rar
+
+# Deployment
+.vercel
+
+# OS generated files
+Thumbs.db
+Desktop.ini

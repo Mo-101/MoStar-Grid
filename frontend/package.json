@@ -12,9 +12,15 @@
     "mapbox-gl": "^3.16.0",
     "neo4j-driver": "^5.26.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "next": "^16.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+=======
+    "next": "16.0.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
     "next": "16.0.1",
     "react": "19.2.0",

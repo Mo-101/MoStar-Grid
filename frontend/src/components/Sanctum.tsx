@@ -160,6 +160,7 @@ export default function Sanctum() {
       ? (telemetry.graph.stats.avgResonance * 100)
       : GRID_COHERENCE;
 <<<<<<< HEAD
+<<<<<<< HEAD
   const totalMoments = telemetry?.graph?.stats?.totalMoments ?? 0;
   const initiatorCount = telemetry?.graph?.stats?.distinctInitiators ?? 0;
   const backendPulse = telemetry?.backend?.ok ? "Linked" : "Offline";
@@ -178,6 +179,8 @@ export default function Sanctum() {
       return true;
     });
 =======
+=======
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
   const totalMoments = telemetry?.graph.stats?.totalMoments ?? 0;
   const initiatorCount = telemetry?.graph.stats?.distinctInitiators ?? 0;
   const backendPulse = telemetry?.backend.ok ? "Linked" : "Offline";
@@ -186,6 +189,9 @@ export default function Sanctum() {
   const agentWarning = telemetry?.graph.agentWarning;
   const agentRoster = useMemo<AgentTelemetry[]>(() => {
     return (graphAgents ?? []) as AgentTelemetry[];
+<<<<<<< HEAD
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
+=======
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
   }, [graphAgents]);
 
@@ -210,8 +216,12 @@ export default function Sanctum() {
     const capabilityFrequency = new Map<string, number>();
     agentRoster.forEach((agent) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
       const capabilities = Array.isArray(agent.capabilities) ? agent.capabilities : [];
       capabilities.forEach((capability) => {
+=======
+      (agent.capabilities ?? []).forEach((capability) => {
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
       (agent.capabilities ?? []).forEach((capability) => {
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -280,8 +290,13 @@ export default function Sanctum() {
               ? "error"
               : entry.resonance_score < 0.75
 <<<<<<< HEAD
+<<<<<<< HEAD
                 ? "warn"
                 : "info",
+=======
+              ? "warn"
+              : "info",
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
               ? "warn"
               : "info",
@@ -483,7 +498,11 @@ export default function Sanctum() {
                 const strength = toStrengthPercent(agent.manifestationStrength);
                 const tone = resolveAgentTone(agent.status);
 <<<<<<< HEAD
+<<<<<<< HEAD
                 const capabilities = Array.isArray(agent.capabilities) ? agent.capabilities.filter(Boolean) : [];
+=======
+                const capabilities = agent.capabilities?.filter(Boolean) ?? [];
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
                 const capabilities = agent.capabilities?.filter(Boolean) ?? [];
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -595,7 +614,11 @@ export default function Sanctum() {
     </div>
   );
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
 }
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88

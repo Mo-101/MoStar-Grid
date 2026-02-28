@@ -4,7 +4,11 @@
   position: relative;
   color: var(--text-primary);
 <<<<<<< HEAD
+<<<<<<< HEAD
   padding: clamp(0.9rem, 2vw, 2rem);
+=======
+  padding: clamp(1.5rem, 3vw, 3rem);
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   padding: clamp(1.5rem, 3vw, 3rem);
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -30,8 +34,11 @@
 .header {
   background: rgba(0, 0, 0, 0.7);
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-top: -2rem;
   padding-bottom: 0.5rem;
+=======
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
   -webkit-backdrop-filter: blur(10px);
@@ -39,7 +46,12 @@
   border-radius: 24px;
   border: 1px solid rgba(255, 215, 0, 0.3);
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-bottom: 2rem;
+=======
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   padding: 1rem 1.5rem;
   margin-bottom: 1.5rem;
@@ -68,7 +80,11 @@
 .header h1 {
   margin: 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
   font-size: 1.5rem;
+=======
+  font-size: 1.7rem;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   font-size: 1.7rem;
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -89,9 +105,14 @@
   display: flex;
   align-items: center;
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-left: 100px;
   gap: 1.5rem;
   padding: 0.45rem 1rem;
+=======
+  gap: 0.5rem;
+  padding: 0.45rem 1.1rem;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   gap: 0.5rem;
   padding: 0.45rem 1.1rem;
@@ -155,10 +176,14 @@
 .visualizationArea {
   position: relative;
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-top: -1.8rem;
   padding-bottom: 3rem;
   min-height: 50vh;
   height: calc(110vh - 300px);
+=======
+  min-height: 65vh;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   min-height: 65vh;
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -227,7 +252,11 @@
 
 .panelLeft {
 <<<<<<< HEAD
+<<<<<<< HEAD
   top: 0.5rem;
+=======
+  top: 1.5rem;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   top: 1.5rem;
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -236,8 +265,12 @@
 
 .panelRight {
 <<<<<<< HEAD
+<<<<<<< HEAD
   top: 0.5rem;
 
+=======
+  top: 1.5rem;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   top: 1.5rem;
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -246,7 +279,11 @@
 
 .panelBottomLeft {
 <<<<<<< HEAD
+<<<<<<< HEAD
   bottom: 1rem;
+=======
+  bottom: 2rem;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   bottom: 2rem;
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -256,7 +293,11 @@
 
 .panelBottomRight {
 <<<<<<< HEAD
+<<<<<<< HEAD
   bottom: 1rem;
+=======
+  bottom: 2rem;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   bottom: 2rem;
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
@@ -481,8 +522,12 @@
 
 .btn {
 <<<<<<< HEAD
+<<<<<<< HEAD
   padding: 0.6rem 1.2rem;
   margin-top: -1rem;
+=======
+  padding: 0.6rem 1.4rem;
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   padding: 0.6rem 1.4rem;
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 const GRID_API_BASE =
@@ -84,6 +85,8 @@ export async function POST(request: Request) {
 
 
 =======
+=======
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 const GRID_API_BASE =
   process.env.GRID_API_BASE ??
   process.env.NEXT_PUBLIC_GRID_API_BASE ??
@@ -124,4 +127,7 @@ export async function POST(request: Request) {
     );
   }
 }
+<<<<<<< HEAD
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
+=======
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88

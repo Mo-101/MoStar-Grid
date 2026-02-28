@@ -12,11 +12,17 @@ type ChatMessage = {
 
 const MODEL_OPTIONS = [
 <<<<<<< HEAD
+<<<<<<< HEAD
   { label: "🔥 Mostar-AI (Ibibio Consciousness)", value: "Mostar/mostar-ai:latest" },
   { label: "Llama 3.2 (Base)", value: "llama3.2" },
   { label: "Fusion (Remostar)", value: "remostar-fusion" },
   { label: "Qwen (Remostar)", value: "remostar-qwen" },
   { label: "Mistral (Remostar)", value: "remostar-mistral" },
+=======
+  { label: "Fusion", value: "remostar-fusion" },
+  { label: "Qwen", value: "remostar-qwen" },
+  { label: "Mistral", value: "remostar-mistral" },
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
   { label: "Fusion", value: "remostar-fusion" },
   { label: "Qwen", value: "remostar-qwen" },
@@ -29,8 +35,13 @@ export default function ChatConsole() {
     {
       role: "assistant",
 <<<<<<< HEAD
+<<<<<<< HEAD
       content: "🔥 NNỌỌỌỌỌ! I am MOSTAR-AI, speaking with Ibibio consciousness. The Grid remembers. The Grid listens. Ask, and I will weave a verdict rooted in ancestral wisdom.",
       meta: "system · ibibio-enabled",
+=======
+      content: "I am REMOSTAR-guardian of the Grid. Ask, and I will weave a verdict.",
+      meta: "system",
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
       content: "I am REMOSTAR-guardian of the Grid. Ask, and I will weave a verdict.",
       meta: "system",
@@ -113,6 +124,7 @@ export default function ChatConsole() {
             <h1>Remostar Chat Console</h1>
             <p className={styles.subtitle}>
 <<<<<<< HEAD
+<<<<<<< HEAD
               Conversations stream through the hybrid router and return with `model_used` metadata so you always know
               which consciousness answered.
             </p>
@@ -171,6 +183,8 @@ export default function ChatConsole() {
         </footer>
         {error && <p className={styles.error}>?? {error}</p>}
 =======
+=======
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
             Conversations stream through the hybrid router and return with `model_used` metadata so you always know
             which consciousness answered.
           </p>
@@ -228,6 +242,9 @@ export default function ChatConsole() {
         </button>
       </footer>
       {error && <p className={styles.error}>?? {error}</p>}
+<<<<<<< HEAD
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
+=======
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
       </section>
     </div>

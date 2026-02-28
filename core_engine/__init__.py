@@ -9,6 +9,7 @@ if not _actual_core_engine.exists():
     raise ImportError(f"Expected core_engine package at {_actual_core_engine}")
 
 __path__ = [str(_actual_core_engine)]
+<<<<<<< HEAD
 
 # Export MoStar Moments system
 try:
@@ -22,3 +23,5 @@ try:
     )
 except ImportError:
     pass  # Module not yet available
+=======
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88

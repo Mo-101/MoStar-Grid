@@ -47,6 +47,18 @@ class GridTrainingPipeline:
 
     @staticmethod
     def _create_pipeline_tx(tx, pipeline_id, name, config, status, created_at, updated_at):
+        """
+        Create a new training pipeline node in the database.
+
+        Parameters:
+            tx (neo4j.Transaction): The transaction to write to.
+            pipeline_id (str): The unique ID of the pipeline.
+            name (str): The name of the pipeline.
+            config (str): The configuration of the pipeline as a JSON string.
+            status (int): The status of the pipeline as an integer.
+            created_at (str): The timestamp when the pipeline was created in ISO format.
+            updated_at (str): The timestamp when the pipeline was last updated in ISO format.
+        """
         query = """
         CREATE (p:TrainingPipeline {
             pipeline_id: $pipeline_id,
@@ -74,6 +86,13 @@ class GridTrainingPipeline:
 
     @staticmethod
     def _update_pipeline_status_tx(tx, pipeline_id, status):
+        """
+        Update the status of a training pipeline in the database.
+
+        :param tx: The Neo4j transaction to execute the query in.
+        :param pipeline_id: The ID of the training pipeline to update.
+        :param status: The new status of the training pipeline.
+        """
         query = """
         MATCH (p:TrainingPipeline {pipeline_id: $pipeline_id})
         SET p.status = $status, p.updated_at = $updated_at
@@ -97,6 +116,13 @@ class GridTrainingPipeline:
 
     @staticmethod
     def _get_pipeline_tx(tx, pipeline_id):
+        """
+        Retrieve a pipeline from the database.
+
+        :param tx: The Neo4j transaction to execute the query in.
+        :param pipeline_id: The ID of the training pipeline to retrieve.
+        :return: A single result containing the pipeline data, or None if no pipeline is found.
+        """
         query = """
         MATCH (p:TrainingPipeline {pipeline_id: $pipeline_id})
         RETURN p.pipeline_id AS pipeline_id, p.name AS name, p.config AS config,

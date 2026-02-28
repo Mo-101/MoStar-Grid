@@ -9,8 +9,11 @@
     "backend": "python -m uvicorn core_engine.api_gateway:app --reload --port 8001",
     "grid": "concurrently \"npm:backend\" \"npm:dev\"",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "start-all": "powershell -File ./start-services.ps1",
     "start-backend": "powershell -File ./start-backend.ps1",
+=======
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
     "health-check": "powershell -File scripts/health-check.ps1"
@@ -20,7 +23,10 @@
   ],
   "devDependencies": {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "@types/node": "^25.0.9",
+=======
+>>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 =======
 >>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
     "concurrently": "^9.2.1"
