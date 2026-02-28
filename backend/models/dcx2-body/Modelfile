@@ -1,10 +1,10 @@
 # ==============================================================================
 # Mostar DCX2 - THE BODY
-# Execution & Manifestation Layer | Powered by LLaMA3.2 (PMistral Adaptation)
+# MoStar-AI Body Layer | Execution & Manifestation
 # "Thought becomes action. Intention becomes reality."
 # ==============================================================================
 
-FROM llama3.2:latest
+FROM Mostar/mostar-ai:dcx2
 
 # ------------------------------------------------------------------------------
 # MODEL PARAMETERS — Deterministic precision for critical task execution

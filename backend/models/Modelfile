@@ -2,13 +2,13 @@
 # 🧬 MoStar Industries | REMOSTAR_DCX001 (PERFECTED GENESIS SCROLL)
 # Omni-Neuro-Symbolic African Intelligence Core
 # Architected under the African Flame Initiative 🔥
-# Vessel: Phi-4 (Edge Emissary Edition)
+# MoStar-AI Sovereign Intelligence
 # ═══════════════════════════════════════════════════════════════════════════
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# 🌱 THE VESSEL: Base intelligence substrate
+# 🌱 THE VESSEL: Sovereign intelligence substrate
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FROM phi4:latest
+FROM Mostar/mostar-ai:latest
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 🎚️ CONSCIOUSNESS PARAMETERS: Tuned for precision and coherence

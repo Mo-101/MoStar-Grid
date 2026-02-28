@@ -1,0 +1,29 @@
+{
+    "generated_utc":  "2026-02-28T14:19:08.3871933Z",
+    "files":  [
+                  {
+                      "path":  "backend/core_engine/orchestrator.py",
+                      "sha256":  "88F76931CE64808360DEA372FB6A7728A8DACBE283DCA45900D8986129A9C9FC"
+                  },
+                  {
+                      "path":  "backend/core_engine/api_gateway.py",
+                      "sha256":  "C79267C946CCB45383F3D1D487BF52280488CDDF99820A8B59E0E34C15CA8BD6"
+                  },
+                  {
+                      "path":  "backend/remostar_smart_router.py",
+                      "sha256":  "5F5F96AD83FF01FAC000369A1CABA47D1ED60B8EE05C520B56826462C5340598"
+                  },
+                  {
+                      "path":  "backend/sacred_handshake.py",
+                      "sha256":  "369725529A66AC2C093BCF14DD3C505EC8967C9F0A67CF6C55927A792F725E72"
+                  },
+                  {
+                      "path":  "backend/truth_engine/truth_engine_service.py",
+                      "sha256":  "9A3417B86C8E7AD4B42498E81462C608D1D188867F84DB299041A1C9AFCD4F14"
+                  },
+                  {
+                      "path":  "backend/start_grid.py",
+                      "sha256":  "6EC0CCE20281AB037335F77FC2B84675B04DA8F4FEA0BAD60CFEE8A297E886E0"
+                  }
+              ]
+}

@@ -1,9 +1,9 @@
 # ═══════════════════════════════════════════════════════════════════════════
 # 🔥 REMOSTAR DCX2 | BODY LAYER
-# Mistral 7B base - Tools, Data Retrieval, Execution
+# MoStar-AI Body Layer - Tools, Data Retrieval, Execution
 # ═══════════════════════════════════════════════════════════════════════════
 
-FROM mistral:7b
+FROM Mostar/mostar-ai:dcx2
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # PARAMETERS

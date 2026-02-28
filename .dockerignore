@@ -1,49 +1,23 @@
-# Git and version control
 .git
-.gitignore
-
-# Python
 .venv
-venv
 __pycache__
 *.pyc
-*.pyo
-*.pyd
-.pytest_cache
-.coverage
-.tox
-
-# Node.js
 node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Build outputs
 .next
-dist
-build
-out
-
-# Environment files
-.env*
-!.env.example
-.env*.local
-
-# IDE and editor files
-.vscode
-.idea
-.devcontainer
-.trunk
-
-# Project specific
 audio_cache
 data/memory_store_backup
 temp_memory_store
 logs
 tests
-
-# Frontend specific
+.pytest_cache
+.trunk
+.vscode
+.devcontainer
 frontend/node_modules
 frontend/.next
+
+node_modules
+npm-debug.log
+.next
+.git
+.env*.local

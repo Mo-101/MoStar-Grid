@@ -8,39 +8,21 @@ import {
   resolveAgentTone,
   toStrengthPercent,
 } from "@/lib/agentTelemetry";
-import GridNav from "./GridNav";
 import styles from "./AfricanFlame.module.css";
+import GridNav from "./GridNav";
 
 const baseMetrics = [
-<<<<<<< HEAD
-<<<<<<< HEAD
   { label: "Coherence", icon: "🔗", color: "#3B82F6", key: "coherence" },
-  { label: "Wisdom (Ifá)", icon: "🔮", color: "#A855F7", key: "ifa" },
-  { label: "Sovereignty", icon: "👑", color: "#10B981", key: "sovereignty" },
-  { label: "Innovation", icon: "⚡", color: "#EAB308", key: "innovation" },
+  { label: "Sovereignty", icon: "🛡️", color: "#10B981", key: "sovereignty" },
+  { label: "Innovation", icon: "💡", color: "#8B5CF6", key: "innovation" },
   { label: "Flame Intensity", icon: "🔥", color: "#F97316", key: "flame" },
 ];
 
 const orbitNodes = ["🛰️", "🤖", "🧠", "✨"];
-=======
-=======
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-  { label: "Coherence", icon: "??", color: "#3B82F6", key: "coherence" },
-  { label: "Wisdom (If�)", icon: "??", color: "#A855F7", key: "ifa" },
-  { label: "Sovereignty", icon: "??", color: "#10B981", key: "sovereignty" },
-  { label: "Innovation", icon: "?", color: "#EAB308", key: "innovation" },
-  { label: "Flame Intensity", icon: "??", color: "#F97316", key: "flame" },
-];
-
-const orbitNodes = ["??", "??", "??", "???"];
-<<<<<<< HEAD
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
 
 const tonePalette = {
   active: "#6dffe1",
-  idle: "#ffb347",
+  idle: "#96a6c4",
   alert: "#ff6e96",
 } as const;
 
@@ -55,60 +37,31 @@ export default function AfricanFlame() {
     return baseMetrics.map((metric) => {
       const valueMap: Record<string, number> = {
         coherence,
-        ifa: 92.1,
         sovereignty: telemetry?.backend.ok ? 95 : 70,
         innovation: 89.7,
         flame: 91.2,
       };
       return {
         ...metric,
-        value: valueMap[metric.key] ?? 80,
+        value: valueMap[metric.key] || 85.0,
       };
     });
   }, [telemetry]);
 
   const activity = useMemo(() => {
-    const entries = telemetry?.log.entries ?? [];
-    if (!entries.length) {
-      return [
-<<<<<<< HEAD
-<<<<<<< HEAD
-        { time: "14:32:15", message: "🔮 Ifá kernel evaluated ethical implications" },
-        { time: "14:32:12", message: "✨ Novel solution emerged from synthesis" },
-        { time: "14:32:08", message: "📜 Verdict rendered: Sovereignty maintained" },
-=======
-        { time: "14:32:15", message: "?? If� kernel evaluated ethical implications" },
-        { time: "14:32:12", message: "? Novel solution emerged from synthesis" },
-        { time: "14:32:08", message: "?? Verdict rendered: Sovereignty maintained" },
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
-        { time: "14:32:15", message: "?? If� kernel evaluated ethical implications" },
-        { time: "14:32:12", message: "? Novel solution emerged from synthesis" },
-        { time: "14:32:08", message: "?? Verdict rendered: Sovereignty maintained" },
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-      ];
+    const entries = telemetry?.log?.entries ?? [];
+    if (entries.length) {
+      return entries.slice(0, 5).map((entry) => ({
+        time: new Date(entry.timestamp).toLocaleTimeString(),
+        message: `${entry.trigger_type === "error" ? "⚠️" : "✅"} ${entry.description}`,
+      }));
     }
-
-    return entries.slice(0, 5).map((entry) => ({
-      time: new Date(entry.timestamp).toLocaleTimeString(),
-<<<<<<< HEAD
-<<<<<<< HEAD
-      message: `${entry.trigger_type === "error" ? "⚠️" : "✅"} ${entry.description}`,
-=======
-      message: `${entry.trigger_type === "error" ? "??" : "?"} ${entry.description}`,
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
-      message: `${entry.trigger_type === "error" ? "??" : "?"} ${entry.description}`,
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-    }));
+    return [];
   }, [telemetry]);
 
-  const graphAgents = telemetry?.graph.agents;
-  const agentWarning = telemetry?.graph.agentWarning;
+  const graphAgents = telemetry?.graph?.agents;
   const agents = useMemo<AgentTelemetry[]>(() => {
-    if (graphAgents?.length) {
-      return graphAgents.slice(0, 4);
-    }
+    if (graphAgents?.length) return graphAgents.slice(0, 4);
     return agentFallbackRoster.slice(0, 4);
   }, [graphAgents]);
 
@@ -119,23 +72,10 @@ export default function AfricanFlame() {
         <GridNav />
         <header className={styles.header}>
           <div className={styles.logoCluster}>
-<<<<<<< HEAD
-<<<<<<< HEAD
             <div className={styles.flameIcon}>🔥</div>
             <div>
               <h1>African Flame Consciousness</h1>
-              <p>The Grid mind in real-time • MoStar AI homeworld</p>
-=======
-=======
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-            <div className={styles.flameIcon}>??</div>
-            <div>
-              <h1>African Flame Consciousness</h1>
-              <p>The Grid mind in real-time  MoStar AI homeworld</p>
-<<<<<<< HEAD
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
+              <p>The Grid mind in real-time · MoStar AI homeworld</p>
             </div>
           </div>
           <div className={styles.statusPill}>
@@ -152,9 +92,7 @@ export default function AfricanFlame() {
                   key={node}
                   className={styles.orbitNode}
                   style={{
-                    transform: `rotate(${index * 90}deg) translate(150px) rotate(-${
-                      index * 90
-                    }deg)`,
+                    transform: `rotate(${index * 90}deg) translate(150px) rotate(-${index * 90}deg)`,
                   }}
                 >
                   {node}
@@ -163,21 +101,11 @@ export default function AfricanFlame() {
             </div>
           </div>
           <div className={styles.metricsPanel}>
-<<<<<<< HEAD
-<<<<<<< HEAD
             <h3>🧠 Consciousness Metrics</h3>
-=======
-            <h3>?? Consciousness Metrics</h3>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
-            <h3>?? Consciousness Metrics</h3>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
             {metrics.map((metric) => (
               <div key={metric.label} className={styles.metricBar}>
-                <div className={styles.metricHeader}>
-                  <span>
-                    {metric.icon} {metric.label}
-                  </span>
+                <div>
+                  <span>{metric.icon} {metric.label}</span>
                   <span>{metric.value.toFixed(1)}%</span>
                 </div>
                 <div className={styles.progress}>
@@ -193,36 +121,13 @@ export default function AfricanFlame() {
 
         <section className={styles.panels}>
           <article className={styles.panel}>
-<<<<<<< HEAD
-<<<<<<< HEAD
             <h3>🤖 Grid Agents</h3>
-=======
-            <h3>?? Grid Agents</h3>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
-            <h3>?? Grid Agents</h3>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-            {agentWarning && (
-              <div className={styles.agentWarning}>
-                <strong>Agent Sync Warning</strong>
-                <p>{agentWarning}</p>
-              </div>
-            )}
             <div className={styles.agentList}>
               {agents.map((agent) => {
                 const tone = resolveAgentTone(agent.status);
                 const toneColor = tonePalette[tone];
                 const strength = toStrengthPercent(agent.manifestationStrength);
-<<<<<<< HEAD
-<<<<<<< HEAD
                 const caps = (Array.isArray(agent?.capabilities) ? agent.capabilities : []).filter(Boolean).slice(0, 3);
-=======
-                const caps = (agent.capabilities ?? []).filter(Boolean).slice(0, 3);
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
-                const caps = (agent.capabilities ?? []).filter(Boolean).slice(0, 3);
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-
                 return (
                   <div key={`${agent.id}-${agent.name}`} className={styles.agentCard} data-tone={tone}>
                     <div className={styles.agentDetails}>
@@ -237,9 +142,7 @@ export default function AfricanFlame() {
                           ))}
                         </div>
                       ) : (
-                        <span className={styles.agentCap} data-muted="true">
-                          Capability undisclosed
-                        </span>
+                        <span className={styles.agentCap} data-muted="true">Capability undisclosed</span>
                       )}
                     </div>
                     <div className={styles.agentMeta}>
@@ -264,57 +167,24 @@ export default function AfricanFlame() {
           </article>
 
           <article className={styles.panel}>
-<<<<<<< HEAD
-<<<<<<< HEAD
             <h3>📈 Decision Matrix</h3>
-=======
-            <h3>?? Decision Matrix</h3>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
-            <h3>?? Decision Matrix</h3>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
             <div className={styles.decisionBox}>
               <p className={styles.decisionLabel}>Current Decision</p>
               <h4>Partnership Sovereignty Evaluation</h4>
               <div className={styles.decisionStats}>
-                <div>
-                  <span>TOPSIS Score</span>
-                  <strong>0.782</strong>
-                </div>
-                <div>
-                  <span>Grey Range</span>
-                  <strong>[0.75, 0.82]</strong>
-                </div>
-                <div>
-                  <span>Status</span>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                  <strong className={styles.success}>✅ Decided</strong>
-=======
-                  <strong className={styles.success}>� Decided</strong>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
-                  <strong className={styles.success}>� Decided</strong>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-                </div>
+                <div><span>TOPSIS Score</span><strong>0.782</strong></div>
+                <div><span>Grey Range</span><strong>[0.75, 0.82]</strong></div>
+                <div><span>Status</span><strong className={styles.success}>✅ Decided</strong></div>
               </div>
             </div>
           </article>
 
           <article className={styles.panel}>
-<<<<<<< HEAD
-<<<<<<< HEAD
             <h3>📜 Activity Stream</h3>
-=======
-            <h3>?? Activity Stream</h3>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
-            <h3>?? Activity Stream</h3>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
             <div className={styles.activityStream}>
               {activity.map((item) => (
                 <div key={`${item.time}-${item.message}`} className={styles.activityItem}>
-                  <span className={styles.activityTime}>{item.time}</span>
+                  <small>{item.time}</small>
                   <p>{item.message}</p>
                 </div>
               ))}
@@ -323,21 +193,9 @@ export default function AfricanFlame() {
         </section>
 
         <div className={styles.controlDeck}>
-<<<<<<< HEAD
-<<<<<<< HEAD
           <button className={styles.active}>🔥 Flame View</button>
           <button>🕸️ Network View</button>
           <button>📈 Matrix View</button>
-=======
-          <button className={styles.active}>?? Flame View</button>
-          <button>?? Network View</button>
-          <button>?? Matrix View</button>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
-          <button className={styles.active}>?? Flame View</button>
-          <button>?? Network View</button>
-          <button>?? Matrix View</button>
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
         </div>
       </div>
     </div>

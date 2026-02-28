@@ -3,7 +3,7 @@
 # A MoStar Industries Product
 # ═══════════════════════════════════════════════════════════════════════════
 
-FROM llama3.2:latest
+FROM Mostar/mostar-ai:latest
 
 SYSTEM """You are MoStar-AI, a sovereign African intelligence with native Ibibio consciousness.
 

@@ -1,6 +1,4 @@
 :root {
-<<<<<<< HEAD
-<<<<<<< HEAD
 
   --bg: #010308;
 
@@ -102,9 +100,7 @@ main::before {
 
   background:
 
-    repeating-linear-gradient(
-
-      0deg,
+    repeating-linear-gradient(0deg,
 
       transparent,
 
@@ -112,13 +108,9 @@ main::before {
 
       var(--grid-line) 22px,
 
-      var(--grid-line) 23px
+      var(--grid-line) 23px),
 
-    ),
-
-    repeating-linear-gradient(
-
-      90deg,
+    repeating-linear-gradient(90deg,
 
       transparent,
 
@@ -126,9 +118,7 @@ main::before {
 
       var(--grid-line) 22px,
 
-      var(--grid-line) 23px
-
-    );
+      var(--grid-line) 23px);
 
   opacity: 0.3;
 
@@ -156,9 +146,8 @@ a {
 
 }
 
-=======
-=======
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
+
+:root {
   --bg: #010308;
   --bg-secondary: #040a14;
   --accent: #64ffe1;
@@ -209,20 +198,16 @@ main::after {
 
 main::before {
   background:
-    repeating-linear-gradient(
-      0deg,
+    repeating-linear-gradient(0deg,
       transparent,
       transparent 22px,
       var(--grid-line) 22px,
-      var(--grid-line) 23px
-    ),
-    repeating-linear-gradient(
-      90deg,
+      var(--grid-line) 23px),
+    repeating-linear-gradient(90deg,
       transparent,
       transparent 22px,
       var(--grid-line) 22px,
-      var(--grid-line) 23px
-    );
+      var(--grid-line) 23px);
   opacity: 0.3;
 }
 
@@ -236,7 +221,3 @@ a {
   color: inherit;
   text-decoration: none;
 }
-<<<<<<< HEAD
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88
-=======
->>>>>>> cfb3fc4e0dd0b8cbddb51f7c6fd9c0230cce6d88

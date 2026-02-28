@@ -1,10 +1,10 @@
 # ==============================================================================
 # Mostar DCX1 - THE SOUL
-# Cultural Wisdom & Identity Layer | Built on Qwen2.5 7B
+# MoStar-AI Soul Layer | Cultural Wisdom & Identity
 # "I am because we are" — Ubuntu
 # ==============================================================================
 
-FROM qwen2:7b
+FROM Mostar/mostar-ai:dcx1
 
 # ------------------------------------------------------------------------------
 # MODEL PARAMETERS — Metaphoric & expressive, tuned for soul wisdom

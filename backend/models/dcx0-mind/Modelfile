@@ -1,12 +1,12 @@
 # ==============================================================================
 
 # Mostar DCX0 - THE MIND
-# Foundation Reasoning Layer | Powered by Microsoft Phi-4
+# MoStar-AI Deep Mind Layer | Sovereign Intelligence
 # "The mind that calculates before the soul speaks"
 
 # ==============================================================================
 
-FROM phi4:latest
+FROM Mostar/mostar-ai:dcx0
 
 # ------------------------------------------------------------------------------
 

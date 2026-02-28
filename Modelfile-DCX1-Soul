@@ -1,9 +1,9 @@
 # ═══════════════════════════════════════════════════════════════════════════
 # 🔥 REMOSTAR DCX1 | SOUL LAYER
-# Qwen 7B base - Identity, Philosophy, Reasoning
+# MoStar-AI Soul Layer - Identity, Philosophy, Reasoning
 # ═══════════════════════════════════════════════════════════════════════════
 
-FROM qwen2.5:7b
+FROM Mostar/mostar-ai:dcx1
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # PARAMETERS
