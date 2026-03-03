@@ -4,10 +4,10 @@
     "source": "Swarthmore College / Living Tongues Institute",
     "version": "1.0 (2013)",
     "total_entries": 196,
-    "entries_with_audio": 0,
+    "entries_with_audio": 20,
     "speakers": [
-      "Mfon Udoinyang",
-      "Itoro Ituen"
+      "Itoro Ituen",
+      "Mfon Udoinyang"
     ],
     "citation": "2013. Udọinyang, Mfọn and K. David Harrison. Ibibio Talking Dictionary."
   },
@@ -28,7 +28,7 @@
       "pos": "noun",
       "english": "dust",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_10_dust_a.mp3",
       "frequency": 0,
       "syllable_count": 2
     },
@@ -58,7 +58,7 @@
       "pos": "noun",
       "english": "adolescent girl",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_10_adolescent_girl_a.mp3",
       "frequency": 0,
       "syllable_count": 4
     },
@@ -78,7 +78,7 @@
       "pos": "noun",
       "english": "cross the fingers",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_12_cross_the_fingers_a.mp3",
       "frequency": 0,
       "syllable_count": 2
     },
@@ -88,7 +88,7 @@
       "pos": "noun",
       "english": "python",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_23_python_a.mp3",
       "frequency": 0,
       "syllable_count": 3
     },
@@ -98,7 +98,7 @@
       "pos": "noun",
       "english": "group, flock, herd",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_25_group_flock_herd_a.mp3",
       "frequency": 0,
       "syllable_count": 2
     },
@@ -108,7 +108,7 @@
       "pos": "verb, transitive",
       "english": "imitate",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_33_immitate_a.mp3",
       "frequency": 0,
       "syllable_count": 3
     },
@@ -118,7 +118,7 @@
       "pos": "verb, intransitive",
       "english": "sleep",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_34_sleep_a.mp3",
       "frequency": 0,
       "syllable_count": 3
     },
@@ -128,7 +128,7 @@
       "pos": "verb, transitive",
       "english": "dip, steep, soak",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_35_soak_steep_dip_a.mp3",
       "frequency": 0,
       "syllable_count": 2
     },
@@ -168,7 +168,7 @@
       "pos": "verb, transitive; verb, intransitive",
       "english": "marry",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_38_marry_a.mp3",
       "frequency": 0,
       "syllable_count": 1
     },
@@ -978,7 +978,7 @@
       "pos": "numeral",
       "english": "three",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_three_a.mp3",
       "frequency": 0,
       "syllable_count": 2
     },
@@ -1018,7 +1018,7 @@
       "pos": "noun",
       "english": "mens robes",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_9_mens_robes_b.mp3",
       "frequency": 0,
       "syllable_count": 3
     },
@@ -1028,7 +1028,7 @@
       "pos": "noun",
       "english": "sexual organ of snail",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_10_sexual_organ_of_snail_a.mp3",
       "frequency": 0,
       "syllable_count": 3
     },
@@ -1038,7 +1038,7 @@
       "pos": "noun",
       "english": "rice",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_11_rice_a.mp3",
       "frequency": 0,
       "syllable_count": 4
     },
@@ -1048,7 +1048,7 @@
       "pos": "pronoun",
       "english": "you",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_14_you_b.mp3",
       "frequency": 0,
       "syllable_count": 2
     },
@@ -1058,7 +1058,7 @@
       "pos": "noun",
       "english": "chameleon",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_21_chameleon_b.mp3",
       "frequency": 0,
       "syllable_count": 3
     },
@@ -1078,7 +1078,7 @@
       "pos": "verb, transitive",
       "english": "find and keep",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_27_find_keep_b.mp3",
       "frequency": 0,
       "syllable_count": 1
     },
@@ -1108,7 +1108,7 @@
       "pos": "verb, intransitive",
       "english": "stand",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_33_stand_b.mp3",
       "frequency": 0,
       "syllable_count": 1
     },
@@ -1188,7 +1188,7 @@
       "pos": "verb, transitive",
       "english": "become smooth",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_38_become_smooth_b.mp3",
       "frequency": 0,
       "syllable_count": 2
     },
@@ -1348,7 +1348,7 @@
       "pos": "number",
       "english": "eight",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_eight_a.mp3",
       "frequency": 0,
       "syllable_count": 5
     },
@@ -1938,7 +1938,7 @@
       "pos": "verb, intransitive",
       "english": "sneeze",
       "speaker": "Mfon Udoinyang",
-      "audio_file": null,
+      "audio_file": "ibibio_5_13_MU_26_sneeze_a.mp3",
       "frequency": 0,
       "syllable_count": 2
     },
