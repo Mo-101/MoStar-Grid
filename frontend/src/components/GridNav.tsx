@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { href: "/", label: "Sanctum" },
   { href: "/flame", label: "Flame" },
   { href: "/flame-map", label: "Flame Map" },
+  { href: "/hyperspine", label: "Hyper-Spine" },
   { href: "/chat", label: "Oracle Chat" },
   { href: "/backend", label: "Backend" },
   { href: "/grid-vitals", label: "Grid Vitals" },

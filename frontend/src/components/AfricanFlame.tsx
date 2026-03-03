@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 import { useGridTelemetry, AgentTelemetry } from "@/hooks/useGridTelemetry";
 import {
-  agentFallbackRoster,
   formatAgentStatus,
   resolveAgentTone,
   toStrengthPercent,
@@ -33,17 +32,22 @@ export default function AfricanFlame() {
     const coherence =
       telemetry?.graph.stats?.avgResonance != null
         ? Math.min(100, Math.max(0, telemetry.graph.stats.avgResonance * 100))
-        : 87.3;
+        : 0;
+
+    // Calculate synthetic real-time metrics based on live backend data rather than hardcodes
+    const activeNodes = telemetry?.graph.total_nodes ?? 0;
+    const baseP = activeNodes > 0 ? Math.min(100, (activeNodes / 100000) * 100) : 0;
+
     return baseMetrics.map((metric) => {
       const valueMap: Record<string, number> = {
         coherence,
-        sovereignty: telemetry?.backend.ok ? 95 : 70,
-        innovation: 89.7,
-        flame: 91.2,
+        sovereignty: telemetry?.backend.ok ? 100 : 0,
+        innovation: telemetry?.graph.moments_24h ?? 0 > 0 ? 100 : baseP,
+        flame: baseP,
       };
       return {
         ...metric,
-        value: valueMap[metric.key] || 85.0,
+        value: valueMap[metric.key] || 0,
       };
     });
   }, [telemetry]);
@@ -61,8 +65,8 @@ export default function AfricanFlame() {
 
   const graphAgents = telemetry?.graph?.agents;
   const agents = useMemo<AgentTelemetry[]>(() => {
-    if (graphAgents?.length) return graphAgents.slice(0, 4);
-    return agentFallbackRoster.slice(0, 4);
+    if (Array.isArray(graphAgents) && graphAgents.length) return graphAgents.slice(0, 4);
+    return [];
   }, [graphAgents]);
 
   return (

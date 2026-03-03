@@ -17,12 +17,12 @@ from datetime import datetime
 # CONFIGURATION
 # ============================================================================
 
-NEO4J_URI = "neo4j+s://1d55c1d3.databases.neo4j.io"
+NEO4J_URI = "bolt://localhost:7687"
 NEO4J_USER = "neo4j"
 NEO4J_PASSWORD = "your_password_here"  # ← UPDATE THIS
 
 # Base directory where CSV files are located
-CSV_BASE_DIR = r"C:\Users\AI\Documents\MoStar\Mo Docs\neo4j-community-2025.10.1\import"
+CSV_BASE_DIR = r"c:\Users\idona\OneDrive - World Health Organization\Documents\Dev\MoStar-Grid\backend\neo4j-mostar-industries\import"
 
 # ============================================================================
 # NEO4J CONNECTION

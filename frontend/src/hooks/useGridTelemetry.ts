@@ -25,6 +25,13 @@ export type BackendStatus = {
     neo4j?: string;
     tts_language?: string;
     ollama_model?: string;
+    layers?: Record<string, {
+      name: string;
+      model: string;
+      status: string;
+      load: number;
+      lastPing: string;
+    }>;
   };
   error?: string;
 };
@@ -37,7 +44,11 @@ export type GraphSummary = {
     distinctInitiators: number;
   };
   latest?: MomentRecord[];
-  agents?: AgentTelemetry[];
+  agents?: AgentTelemetry[] | number;
+  layer_nodes?: Record<string, number>;
+  layer_moments?: Record<string, { count: number; avg_resonance: number }>;
+  total_nodes?: number;
+  moments_24h?: number;
   agentWarning?: string;
   error?: string;
 };

@@ -1,0 +1,17 @@
+decision_framework_id,framework_name,component_type,component_name,description,status,complexity,computational_time_seconds,accuracy_percent,data_coverage_required_percent
+df-001,Neutrosophic AHP + TOPSIS + Grey,integrated_framework,Complete Decision Pipeline,Multi-criteria decision making under uncertainty,operational,high,300,87,60
+nahp-001,Neutrosophic AHP,weight_calculation,Criteria Weight Calculator,Calculates weights using neutrosophic pairwise comparisons,operational,medium,60,90,80
+ntopsis-001,Neutrosophic TOPSIS,ranking_algorithm,Alternative Ranking Engine,Ranks alternatives by similarity to ideal solution,operational,medium,120,85,70
+grey-001,Grey Theory,incomplete_data_handler,Grey Relational Analysis,Handles incomplete and uncertain information,operational,low,30,82,40
+nahp-scale-001,Equal Importance,comparison_scale,N(0.50; 0.20; 0.50),Neutrosophic number for equal importance,active,low,0,100,100
+nahp-scale-002,Weak Advantage,comparison_scale,N(0.55; 0.30; 0.40),Neutrosophic number for weak advantage,active,low,0,100,100
+nahp-scale-003,Moderate Advantage,comparison_scale,N(0.60; 0.25; 0.35),Neutrosophic number for moderate advantage,active,low,0,100,100
+nahp-scale-004,Strong Advantage,comparison_scale,N(0.70; 0.20; 0.25),Neutrosophic number for strong advantage,active,low,0,100,100
+nahp-scale-005,Very Strong,comparison_scale,N(0.80; 0.15; 0.15),Neutrosophic number for very strong importance,active,low,0,100,100
+nahp-scale-006,Extreme,comparison_scale,N(0.90; 0.10; 0.05),Neutrosophic number for extreme importance,active,low,0,100,100
+app-001,WHO Hub Selection,application,15 Hubs Ranked,Selected optimal WHO AFRO hub configuration (2021),completed,high,450,89,75
+app-002,Lassa Fever Response,application,Route Optimization,Optimized medical supply routes during outbreak (2019),completed,high,320,84,55
+app-003,COVID Vaccine Distribution,application,Cold Chain Routes,Selected vaccine distribution routes (2021-2022),completed,very_high,780,91,68
+metric-001,Decisions Made,performance_metric,1247,Total decisions since 2021,active,na,na,na,na
+metric-002,Average Decision Time,performance_metric,<5 minutes,For 10 alternatives with 8 criteria,active,na,na,na,na
+metric-003,Robustness,performance_metric,±15%,Weight variation tolerance,active,na,na,na,na

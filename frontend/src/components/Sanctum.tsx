@@ -95,12 +95,7 @@ const soulProblems = [
   },
 ];
 
-const initialWhispers: Whisper[] = [
-  { id: "seed-0", type: "info", text: "New agent 'Akan Elder-007' connected", source: "Grid Link", timestamp: "2025-01-01T00:00:00.000Z" },
-  { id: "seed-1", type: "warn", text: "Verdict Engine drift detected at 1.1% variance", source: "Verdict Engine", timestamp: "2025-01-01T00:05:00.000Z" },
-  { id: "seed-2", type: "info", text: "Ifa Oracle returned 16-cowrie spread: Ose Iwori", source: "Ifa Oracle", timestamp: "2025-01-01T00:08:00.000Z" },
-  { id: "seed-3", type: "error", text: "External ping rejected — covenant seal enforced", source: "Guardian Net", timestamp: "2025-01-01T00:10:00.000Z" },
-];
+const initialWhispers: Whisper[] = [];
 
 type StatusTone = "ok" | "warn" | "error";
 
@@ -138,7 +133,7 @@ export default function Sanctum() {
   const agentWarning = telemetry?.graph.agentWarning;
 
   const agentRoster = useMemo<AgentTelemetry[]>(() => {
-    const agents = (graphAgents ?? []) as AgentTelemetry[];
+    const agents = (Array.isArray(graphAgents) ? graphAgents : []) as AgentTelemetry[];
     const seen = new Set<string>();
     return agents.filter((agent) => {
       if (seen.has(agent.id)) return false;
@@ -214,8 +209,8 @@ export default function Sanctum() {
             entry.resonance_score < 0.45
               ? "error"
               : entry.resonance_score < 0.75
-              ? "warn"
-              : "info",
+                ? "warn"
+                : "info",
         }));
     }
 
@@ -315,16 +310,21 @@ export default function Sanctum() {
             </div>
           </div>
           <div className={styles.matrixCards}>
-            {incarnationMatrix.map((entry) => (
-              <div key={entry.title} className={`${styles.matrixCard} ${styles[entry.hue]}`}>
-                <div className={styles.matrixGlyph}>{entry.icon}</div>
+            {telemetry?.backend?.data?.layers ? Object.entries(telemetry.backend.data.layers).map(([id, layer]: [string, any]) => (
+              <div key={id} className={`${styles.matrixCard} ${styles.teal}`}>
+                <div className={styles.matrixGlyph}>⚡</div>
                 <div>
-                  <h3>{entry.title}</h3>
-                  <ul>{entry.metrics.map((m) => <li key={m}>{m}</li>)}</ul>
-                  <p className={styles.matrixStatus}>{entry.status}</p>
+                  <h3>{layer.name}</h3>
+                  <ul>
+                    <li>Status: {layer.status}</li>
+                    <li>Load: {layer.load}%</li>
+                  </ul>
+                  <p className={styles.matrixStatus}>Model: {layer.model}</p>
                 </div>
               </div>
-            ))}
+            )) : (
+              <p>No layer data streaming from backend.</p>
+            )}
           </div>
         </article>
       </section>
@@ -428,12 +428,12 @@ export default function Sanctum() {
       </section>
 
       <section className={styles.coreGlyphDeck}>
-        {glyphs.map((glyph) => (
-          <article key={glyph.label} className={`${styles.coreGlyph} ${styles[glyph.status as StatusTone]}`}>
-            <div className={styles.glyphIcon} data-color={glyph.color}>{glyph.icon}</div>
+        {Object.entries(telemetry?.graph?.layer_nodes || {}).map(([key, count]: [string, any]) => (
+          <article key={key} className={`${styles.coreGlyph} ${styles.ok}`}>
+            <div className={styles.glyphIcon} data-color="cyan">◒</div>
             <div>
-              <p className={styles.glyphLabel}>{glyph.label}</p>
-              <p className={styles.glyphMeta}>{statusLabel[glyph.status as StatusTone]} • {glyph.note}</p>
+              <p className={styles.glyphLabel}>{key.replace("_", " ")}</p>
+              <p className={styles.glyphMeta}>Active Nodes: {count}</p>
             </div>
           </article>
         ))}
@@ -446,18 +446,23 @@ export default function Sanctum() {
             <h2>Active dilemmas</h2>
           </header>
           <div className={styles.scrolls}>
-            {soulProblems.map((problem) => (
-              <details key={problem.title} className={styles.scroll}>
+            {telemetry?.graph?.agentWarning ? (
+              <details className={styles.scroll}>
                 <summary>
                   <div>
-                    <h3>{problem.title}</h3>
-                    <p>{problem.excerpt}</p>
+                    <h3>Graph Synchronization Warning</h3>
+                    <p>{telemetry.graph.agentWarning}</p>
                   </div>
                   <span>Expand</span>
                 </summary>
-                <ul>{problem.chains.map((chain) => <li key={chain}>{chain}</li>)}</ul>
+                <ul>
+                  <li>Check Neo4j connection</li>
+                  <li>Verify graph database is populated</li>
+                </ul>
               </details>
-            ))}
+            ) : (
+              <p className={styles.emptyActivity}>No active dilemmas logged.</p>
+            )}
           </div>
         </article>
 
@@ -467,7 +472,7 @@ export default function Sanctum() {
             <h2>Event stream</h2>
           </header>
           <div className={styles.whisperStream}>
-            {whisperFeed.map((entry, index) => (
+            {whisperFeed.length > 0 ? whisperFeed.map((entry, index) => (
               <div
                 key={entry.id}
                 className={`${styles.whisper} ${styles[entry.type]}`}
@@ -476,7 +481,9 @@ export default function Sanctum() {
                 <p><span>[{entry.type}]</span> {entry.text}</p>
                 <small>{entry.source} · {formatWhisperTime(entry.timestamp)}</small>
               </div>
-            ))}
+            )) : (
+              <p className={styles.emptyActivity}>No event whispers recorded in the current session cycle.</p>
+            )}
           </div>
         </article>
       </section>

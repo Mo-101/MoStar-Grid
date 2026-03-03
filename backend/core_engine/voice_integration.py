@@ -157,8 +157,8 @@ class MostarVoice:
     # ── gTTS language codes ───────────────────────────────────────
     # Ibibio not supported by gTTS — English proxy until native model
     _GTTS_CODES = {
-        "ibibio":  "en",
-        "yoruba":  "yo",
+        "ibibio":  "en",   # Proxy — Ibibio not in gTTS
+        "yoruba":  "en",   # FIXED: 'yo' not supported by gTTS, use English proxy
         "english": "en",
         "swahili": "sw",
     }

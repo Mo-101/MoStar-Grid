@@ -1,6 +1,7 @@
 /**
- * Grid Telemetry — proxies to the sovereign backend /api/v1/telemetry endpoint
- * Maps the response to the TelemetryPayload shape expected by useGridTelemetry
+ * Grid Telemetry — proxies to the sovereign backend
+ * Fetches /api/v1/telemetry and /api/v1/status independently
+ * Maps to TelemetryPayload shape for useGridTelemetry
  */
 
 import { NextResponse } from "next/server";
@@ -8,47 +9,72 @@ import { NextResponse } from "next/server";
 const GRID_API =
   process.env.GRID_API_BASE ??
   process.env.NEXT_PUBLIC_GRID_API_BASE ??
-  "http://localhost:7001";
+  "http://127.0.0.1:7001";
+
+console.log("[TELEMETRY_ROUTE] Using GRID_API:", GRID_API);
+
+async function safeFetch(url: string, timeoutMs = 12000) {
+  console.log(`[TELEMETRY_ROUTE] Fetching: ${url}`);
+  try {
+    const res = await fetch(url, {
+      signal: AbortSignal.timeout(timeoutMs),
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      console.warn(`[TELEMETRY_ROUTE] Fetch failed for ${url}: ${res.status}`);
+      return { ok: false, error: `HTTP ${res.status}`, data: null };
+    }
+    const data = await res.json();
+    console.log(`[TELEMETRY_ROUTE] Success for ${url}`);
+    return { ok: true, error: null, data };
+  } catch (err) {
+    console.error(`[TELEMETRY_ROUTE] Error fetching ${url}:`, err);
+    return { ok: false, error: err instanceof Error ? err.message : String(err), data: null };
+  }
+}
 
 export async function GET() {
-  // Try the full telemetry endpoint
-  try {
-    const [telRes, statusRes] = await Promise.all([
-      fetch(`${GRID_API}/api/v1/telemetry`, { signal: AbortSignal.timeout(8000), cache: "no-store" }),
-      fetch(`${GRID_API}/api/v1/status`, { signal: AbortSignal.timeout(4000), cache: "no-store" }),
-    ]);
+  const [tel, status] = await Promise.all([
+    safeFetch(`${GRID_API}/api/v1/telemetry`, 12000),
+    safeFetch(`${GRID_API}/api/v1/status`, 12000),
+  ]);
 
-    const telData = telRes.ok ? await telRes.json() : null;
-    const statusData = statusRes.ok ? await statusRes.json() : null;
+  const telData = tel.data;
+  const statusData = status.data;
 
-    // Map to TelemetryPayload shape expected by useGridTelemetry
-    return NextResponse.json({
-      backend: {
-        ok: statusRes.ok,
-        data: statusData ?? undefined,
-        error: statusRes.ok ? undefined : `status returned ${statusRes.status}`,
+  // If telemetry failed but status worked, or vice versa, we still return the aggregate
+  const agentsCount = Array.isArray(telData?.agents)
+    ? telData.agents.length
+    : (telData?.agents ?? 0);
+
+  return NextResponse.json({
+    backend: {
+      ok: status.ok,
+      data: statusData ?? undefined,
+      error: status.ok ? undefined : status.error,
+    },
+    graph: {
+      ok: tel.ok ?? false,
+      stats: {
+        totalMoments: telData?.total_moments ?? telData?.stats?.totalMoments ?? 0,
+        avgResonance: telData?.avg_resonance ?? telData?.stats?.avgResonance ?? null,
+        distinctInitiators: agentsCount,
       },
-      graph: {
-        ok: telData?.ok ?? false,
-        stats: telData?.stats ?? { totalMoments: 0, avgResonance: null, distinctInitiators: 0 },
-        latest: telData?.latest ?? [],
-        agents: telData?.agents ?? [],
-        agentWarning: telData?.agents?.length === 0 ? "No agents found in graph — Neo4j may be offline" : undefined,
-        error: telData?.ok ? undefined : (telData?.error ?? "Telemetry unavailable"),
-      },
-      log: {
-        entries: telData?.latest ?? [],
-        path: "neo4j://MoStarMoment",
-      },
-      generatedAt: telData?.timestamp ?? new Date().toISOString(),
-    });
-  } catch (err) {
-    // Total failure — backend unreachable
-    return NextResponse.json({
-      backend: { ok: false, error: err instanceof Error ? err.message : String(err) },
-      graph: { ok: false, stats: null, latest: [], agents: [] },
-      log: { entries: [], path: "error" },
-      generatedAt: new Date().toISOString(),
-    });
-  }
+      latest: telData?.recent_moments ?? telData?.latest ?? [],
+      agents: telData?.agents ?? [],
+      layer_nodes: telData?.layer_nodes ?? {},
+      layer_moments: telData?.layer_moments ?? {},
+      total_nodes: telData?.total_nodes ?? 0,
+      moments_24h: telData?.moments_24h ?? 0,
+      agentWarning: agentsCount === 0
+        ? "No agents found in graph — Neo4j may be offline"
+        : undefined,
+      error: tel.ok ? undefined : (telData?.error ?? tel.error ?? "Telemetry unavailable"),
+    },
+    log: {
+      entries: telData?.recent_moments ?? telData?.latest ?? [],
+      path: "neo4j://MoStarMoment",
+    },
+    generatedAt: telData?.timestamp ?? new Date().toISOString(),
+  });
 }

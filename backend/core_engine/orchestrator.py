@@ -352,7 +352,8 @@ async def fetch_neo4j_context(prompt: str, limit: int = 5) -> str:
     def _query() -> str:
         try:
             driver = GraphDatabase.driver(
-                NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD)
+                NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD),
+                connection_timeout=3, max_connection_lifetime=60,
             )
         except Exception as e:
             logging.warning(f"[ORCHESTRATOR] Neo4j connection failed: {e}")
@@ -403,11 +404,17 @@ if __name__ == "__main__":
         ]
 
         for prompt, meta in tests:
-            ctx = await fetch_neo4j_context(prompt)
+            # FIXED: Don't crash if Neo4j is offline
+            try:
+                ctx = await fetch_neo4j_context(prompt)
+            except Exception:
+                ctx = ""
+                print(f"[TEST] Neo4j offline — skipping context fetch")
+
             result = await route_query(prompt, neo4j_context=ctx, metadata=meta)
             print(f"Prompt : {prompt[:60]}")
             print(f"Layer  : {result.get('routed_to')} | Model: {result.get('model_used')}")
-            print(f"Score  : {result.get('complexity_score'):.2f}")
+            print(f"Score  : {result.get('complexity_score', 0):.2f}")
             print(f"Reply  : {result.get('response','')[:80]}")
             print()
 

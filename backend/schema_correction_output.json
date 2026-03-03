@@ -1,0 +1,63 @@
+{
+  "MATCH (n:IbibioWords) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "frequency:int",
+        "syllables:int",
+        "speaker",
+        "tone_pattern",
+        "word:ID",
+        "pos",
+        "audio_file",
+        "english"
+      ]
+    }
+  ],
+  "MATCH (n:Neo4jAgents) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "name",
+        "created_at",
+        "updated_at",
+        "agent_id",
+        "status",
+        "capabilities"
+      ]
+    }
+  ],
+  "MATCH (n:HealingPractices) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "name",
+        "cultural_significance",
+        "related_philosophy",
+        "spiritual_component",
+        "regions",
+        "practitioners",
+        "purpose",
+        "related_plants",
+        "methods"
+      ]
+    }
+  ],
+  "MATCH (n:MostarMoment) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "id",
+        "actors",
+        "tags",
+        "label",
+        "refs",
+        "files",
+        "kind",
+        "narrative",
+        "confidence",
+        "metadata",
+        "projects",
+        "impact",
+        "title",
+        "date"
+      ]
+    }
+  ]
+}

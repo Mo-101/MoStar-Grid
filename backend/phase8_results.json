@@ -1,0 +1,184 @@
+{
+  "count_by_type": [
+    {
+      "relationship_type": "NATIVE_TO",
+      "total": 2720
+    },
+    {
+      "relationship_type": "PRACTICED_IN",
+      "total": 2353
+    },
+    {
+      "relationship_type": "ROOTED_IN",
+      "total": 2227
+    },
+    {
+      "relationship_type": "SAME_OPERATION_GROUP",
+      "total": 1342
+    },
+    {
+      "relationship_type": "LEFT_PARENT",
+      "total": 480
+    },
+    {
+      "relationship_type": "RIGHT_PARENT",
+      "total": 480
+    },
+    {
+      "relationship_type": "DOCUMENTS_ENDPOINT",
+      "total": 48
+    },
+    {
+      "relationship_type": "GUIDED_BY_PHILOSOPHY",
+      "total": 29
+    },
+    {
+      "relationship_type": "DOUBLED_ODU",
+      "total": 24
+    },
+    {
+      "relationship_type": "EMBODIES_PHILOSOPHY",
+      "total": 18
+    },
+    {
+      "relationship_type": "SUPPORTS_HEALING",
+      "total": 15
+    },
+    {
+      "relationship_type": "SAME_PROJECT",
+      "total": 3
+    }
+  ],
+  "total_relationships": [
+    {
+      "TOTAL_RELATIONSHIPS": 9739
+    }
+  ],
+  "connected_nodes": [
+    {
+      "connected_nodes": 821
+    }
+  ],
+  "isolated_nodes": [
+    {
+      "label": [
+        "Neo4jMetrics"
+      ],
+      "isolated": 60575
+    },
+    {
+      "label": [
+        "Neo4jTasks"
+      ],
+      "isolated": 3358
+    },
+    {
+      "label": [
+        "Adulthood"
+      ],
+      "isolated": 1300
+    },
+    {
+      "label": [
+        "Adolescence"
+      ],
+      "isolated": 1300
+    },
+    {
+      "label": [
+        "KnowledgeGraph"
+      ],
+      "isolated": 1300
+    },
+    {
+      "label": [
+        "Childhood"
+      ],
+      "isolated": 1300
+    },
+    {
+      "label": [
+        "Science"
+      ],
+      "isolated": 1300
+    },
+    {
+      "label": [
+        "RealLife"
+      ],
+      "isolated": 1300
+    },
+    {
+      "label": [
+        "Ethics"
+      ],
+      "isolated": 1300
+    },
+    {
+      "label": [
+        "Culture"
+      ],
+      "isolated": 1131
+    },
+    {
+      "label": [
+        "Infancy"
+      ],
+      "isolated": 1050
+    },
+    {
+      "label": [
+        "Neo4jAgents"
+      ],
+      "isolated": 500
+    },
+    {
+      "label": [
+        "Neo4jEvents"
+      ],
+      "isolated": 500
+    },
+    {
+      "label": [
+        "IbibioDictionaryEntry"
+      ],
+      "isolated": 392
+    },
+    {
+      "label": [
+        "IfaOduSystem"
+      ],
+      "isolated": 256
+    },
+    {
+      "label": [
+        "IbibioAudio"
+      ],
+      "isolated": 222
+    },
+    {
+      "label": [
+        "IbibioWords"
+      ],
+      "isolated": 196
+    },
+    {
+      "label": [
+        "Mostarindustries-core"
+      ],
+      "isolated": 65
+    },
+    {
+      "label": [
+        "MostarApiEndpoint"
+      ],
+      "isolated": 48
+    },
+    {
+      "label": [
+        "ApiEndpoints"
+      ],
+      "isolated": 38
+    }
+  ]
+}

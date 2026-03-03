@@ -1,0 +1,435 @@
+{
+  "MATCH (n:IfaMajorOdu) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "binary",
+        "core_meaning",
+        "number",
+        "health_domain",
+        "name",
+        "negative_manifestation",
+        "action_guidance",
+        "infrastructure_domain",
+        "positive_manifestation"
+      ]
+    }
+  ],
+  "MATCH (n:IfaCompoundOdu) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "complement",
+        "reversed",
+        "ones_count",
+        "right_value",
+        "decimal",
+        "is_palindrome",
+        "right_nibble",
+        "left_value",
+        "zeros_count",
+        "hex",
+        "is_alternating",
+        "left_right_xor",
+        "left_nibble",
+        "is_symmetric",
+        "type",
+        "binary_pattern",
+        "name",
+        "id",
+        "parity"
+      ]
+    }
+  ],
+  "MATCH (n:IbibioWord) RETURN keys(n) LIMIT 1": [],
+  "MATCH (n:IbibioAudio) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "speaker",
+        "meaning",
+        "language",
+        "relative_path",
+        "size_kb",
+        "media_type",
+        "filename"
+      ]
+    }
+  ],
+  "MATCH (n:Agent) RETURN keys(n) LIMIT 1": [],
+  "MATCH (n:AfricanPhilosophies) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "name",
+        "manifestation",
+        "origin_region",
+        "ethical_guidance",
+        "associated_governance",
+        "related_proverbs",
+        "core_principle",
+        "origin_country"
+      ]
+    }
+  ],
+  "MATCH (n:HealingPractice) RETURN keys(n) LIMIT 1": [],
+  "MATCH (n:MedicinalPlants) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "preparation",
+        "regions",
+        "contraindications",
+        "dosage",
+        "related_healing_practice",
+        "spiritual_use",
+        "philosophy_embodied",
+        "scientific_name",
+        "medicinal_uses",
+        "local_names"
+      ]
+    }
+  ],
+  "MATCH (n:Culture) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "neural_embedding",
+        "id",
+        "historical_context",
+        "cultural_element",
+        "modern_relevance",
+        "meaning_or_purpose",
+        "recorded_at",
+        "primary_language",
+        "wisdom_encoded",
+        "transmission_method",
+        "symbolic_representation",
+        "description",
+        "region"
+      ]
+    }
+  ],
+  "MATCH (n:MoStarMoment) RETURN keys(n) LIMIT 1": [],
+  "MATCH (n:MostarApiDoc) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "summary",
+        "description",
+        "method",
+        "path",
+        "tags",
+        "source",
+        "operationId"
+      ]
+    }
+  ],
+  "MATCH (n:GridDocument) RETURN keys(n) LIMIT 1": [
+    {
+      "keys(n)": [
+        "doc_type",
+        "title",
+        "size_kb",
+        "line_count",
+        "char_count",
+        "content",
+        "filename"
+      ]
+    }
+  ],
+  "MATCH (n) UNWIND labels(n) AS lbl RETURN lbl, count(*) AS cnt ORDER BY cnt DESC": [
+    {
+      "lbl": "Neo4jMetrics",
+      "cnt": 60575
+    },
+    {
+      "lbl": "Neo4jTasks",
+      "cnt": 3358
+    },
+    {
+      "lbl": "Adolescence",
+      "cnt": 1300
+    },
+    {
+      "lbl": "Adulthood",
+      "cnt": 1300
+    },
+    {
+      "lbl": "Childhood",
+      "cnt": 1300
+    },
+    {
+      "lbl": "Culture",
+      "cnt": 1300
+    },
+    {
+      "lbl": "Ethics",
+      "cnt": 1300
+    },
+    {
+      "lbl": "KnowledgeGraph",
+      "cnt": 1300
+    },
+    {
+      "lbl": "RealLife",
+      "cnt": 1300
+    },
+    {
+      "lbl": "Science",
+      "cnt": 1300
+    },
+    {
+      "lbl": "Infancy",
+      "cnt": 1050
+    },
+    {
+      "lbl": "Neo4jAgents",
+      "cnt": 500
+    },
+    {
+      "lbl": "Neo4jEvents",
+      "cnt": 500
+    },
+    {
+      "lbl": "IfaCompoundOdu",
+      "cnt": 480
+    },
+    {
+      "lbl": "IbibioDictionaryEntry",
+      "cnt": 392
+    },
+    {
+      "lbl": "IfaOduSystem",
+      "cnt": 256
+    },
+    {
+      "lbl": "IbibioAudio",
+      "cnt": 222
+    },
+    {
+      "lbl": "IbibioWords",
+      "cnt": 196
+    },
+    {
+      "lbl": "MostarApiDoc",
+      "cnt": 71
+    },
+    {
+      "lbl": "Mostarindustries-core",
+      "cnt": 65
+    },
+    {
+      "lbl": "MostarApiEndpoint",
+      "cnt": 48
+    },
+    {
+      "lbl": "ApiEndpoints",
+      "cnt": 38
+    },
+    {
+      "lbl": "IfaRules",
+      "cnt": 32
+    },
+    {
+      "lbl": "IfaPrincipalOdu",
+      "cnt": 32
+    },
+    {
+      "lbl": "MedicinalPlants",
+      "cnt": 31
+    },
+    {
+      "lbl": "HealingPractices",
+      "cnt": 28
+    },
+    {
+      "lbl": "IndigenousGovernance",
+      "cnt": 28
+    },
+    {
+      "lbl": "OmniNeuroSymbolicAi",
+      "cnt": 28
+    },
+    {
+      "lbl": "AfricanPhilosophies",
+      "cnt": 27
+    },
+    {
+      "lbl": "Neo4jSnapshot",
+      "cnt": 25
+    },
+    {
+      "lbl": "GridDocument",
+      "cnt": 21
+    },
+    {
+      "lbl": "IbibioLanguageIntegration",
+      "cnt": 20
+    },
+    {
+      "lbl": "IfaMajorOdu",
+      "cnt": 16
+    },
+    {
+      "lbl": "DecisionIntelligenceFramework",
+      "cnt": 16
+    },
+    {
+      "lbl": "IfaOduOntology",
+      "cnt": 16
+    },
+    {
+      "lbl": "EntityEcosystem",
+      "cnt": 13
+    },
+    {
+      "lbl": "IfaValidationLogic",
+      "cnt": 10
+    },
+    {
+      "lbl": "IfaValidationValidationScenarios",
+      "cnt": 8
+    },
+    {
+      "lbl": "IfaComputationalComponent",
+      "cnt": 4
+    },
+    {
+      "lbl": "MomentNodesSeed",
+      "cnt": 3
+    },
+    {
+      "lbl": "MostarMoment",
+      "cnt": 3
+    },
+    {
+      "lbl": "GridBinaryDoc",
+      "cnt": 3
+    },
+    {
+      "lbl": "MomentRelsSeed",
+      "cnt": 2
+    },
+    {
+      "lbl": "MntrkEndpoint",
+      "cnt": 1
+    },
+    {
+      "lbl": "MoSoulprint",
+      "cnt": 1
+    },
+    {
+      "lbl": "SymbolicLogic",
+      "cnt": 1
+    },
+    {
+      "lbl": "GlyphSeed",
+      "cnt": 1
+    },
+    {
+      "lbl": "SparkSeed",
+      "cnt": 1
+    }
+  ],
+  "MATCH (w:IbibioWord) RETURN w.word, w.english, w.audio_file LIMIT 5": [],
+  "MATCH (a:IbibioAudio) RETURN a.filename, a.word, a.audio_file LIMIT 5": [
+    {
+      "a.filename": "Ibibio16_MU_39_wish.mp3",
+      "a.word": null,
+      "a.audio_file": null
+    },
+    {
+      "a.filename": "Ibibio16_MU_40_become_busy.mp3",
+      "a.word": null,
+      "a.audio_file": null
+    },
+    {
+      "a.filename": "Ibibio16_MU_40_coffee_dregs.mp3",
+      "a.word": null,
+      "a.audio_file": null
+    },
+    {
+      "a.filename": "Ibibio16_MU_40_enter.mp3",
+      "a.word": null,
+      "a.audio_file": null
+    },
+    {
+      "a.filename": "Ibibio16_MU_40_to_fall_down.mp3",
+      "a.word": null,
+      "a.audio_file": null
+    }
+  ],
+  "MATCH (n:IfaMajorOdu) RETURN n.name, n.binary, n.decimal, n.binary_code LIMIT 3": [
+    {
+      "n.name": "Ogbe",
+      "n.binary": "0000",
+      "n.decimal": null,
+      "n.binary_code": null
+    },
+    {
+      "n.name": "Oyeku",
+      "n.binary": "1111",
+      "n.decimal": null,
+      "n.binary_code": null
+    },
+    {
+      "n.name": "Iwori",
+      "n.binary": "1001",
+      "n.decimal": null,
+      "n.binary_code": null
+    }
+  ],
+  "MATCH (n:IfaCompoundOdu) RETURN n.name, n.combined_odu, n.binary_code, n.decimal LIMIT 3": [
+    {
+      "n.name": "Odu_001",
+      "n.combined_odu": null,
+      "n.binary_code": null,
+      "n.decimal": 1
+    },
+    {
+      "n.name": "Odu_002",
+      "n.combined_odu": null,
+      "n.binary_code": null,
+      "n.decimal": 2
+    },
+    {
+      "n.name": "Odu_003",
+      "n.combined_odu": null,
+      "n.binary_code": null,
+      "n.decimal": 3
+    }
+  ],
+  "MATCH (n:Agent) RETURN n.name, n.agent_id, n.domain, n.category LIMIT 3": [],
+  "MATCH (n:AfricanPhilosophies) RETURN n.name, n.domain, n.culture, n.category LIMIT 3": [
+    {
+      "n.name": "Ubuntu",
+      "n.domain": null,
+      "n.culture": null,
+      "n.category": null
+    },
+    {
+      "n.name": "Ukama",
+      "n.domain": null,
+      "n.culture": null,
+      "n.category": null
+    },
+    {
+      "n.name": "Ujamaa",
+      "n.domain": null,
+      "n.culture": null,
+      "n.category": null
+    }
+  ],
+  "MATCH (n:Culture) RETURN n.name, n.domain, n.category LIMIT 3": [
+    {
+      "n.name": null,
+      "n.domain": null,
+      "n.category": null
+    },
+    {
+      "n.name": null,
+      "n.domain": null,
+      "n.category": null
+    },
+    {
+      "n.name": null,
+      "n.domain": null,
+      "n.category": null
+    }
+  ],
+  "MATCH (n:HealingPractice) RETURN n.name, n.category, n.domain, n.cultural_element LIMIT 3": []
+}

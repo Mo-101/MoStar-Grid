@@ -1,0 +1,85 @@
+{
+  "aliases": {
+    "ibibio_word": {
+      "error": "{neo4j_code: Neo.DatabaseError.Transaction.TransactionLogError} {message: Could not append transaction: Transaction #682 {started 2026-03-02 16:39:55.008+0000, committed 2026-03-02 16:39:55.016+0000, with 197 commands in this transaction, lease -1, latest committed transaction id when started was 677, consensusIndex: -1} to log.} {gql_status: 2DN06} {gql_status_description: error: invalid transaction termination - failed to append transaction. There was an error on appending the transaction. See logs for more information.}"
+    },
+    "healing_practice": {
+      "error": "{neo4j_code: Neo.DatabaseError.Transaction.TransactionLogError} {message: Could not append transaction: Transaction #683 {started 2026-03-02 16:39:55.023+0000, committed 2026-03-02 16:39:55.041+0000, with 34 commands in this transaction, lease -1, latest committed transaction id when started was 677, consensusIndex: -1} to log.} {gql_status: 2DN06} {gql_status_description: error: invalid transaction termination - failed to append transaction. There was an error on appending the transaction. See logs for more information.}"
+    },
+    "agent": {
+      "error": "{neo4j_code: Neo.DatabaseError.Transaction.TransactionLogError} {message: Could not append transaction: Transaction #684 {started 2026-03-02 16:39:55.054+0000, committed 2026-03-02 16:39:55.093+0000, with 501 commands in this transaction, lease -1, latest committed transaction id when started was 677, consensusIndex: -1} to log.} {gql_status: 2DN06} {gql_status_description: error: invalid transaction termination - failed to append transaction. There was an error on appending the transaction. See logs for more information.}"
+    },
+    "moment": {
+      "error": "{neo4j_code: Neo.DatabaseError.Transaction.TransactionLogError} {message: Could not append transaction: Transaction #685 {started 2026-03-02 16:39:55.098+0000, committed 2026-03-02 16:39:55.114+0000, with 8 commands in this transaction, lease -1, latest committed transaction id when started was 677, consensusIndex: -1} to log.} {gql_status: 2DN06} {gql_status_description: error: invalid transaction termination - failed to append transaction. There was an error on appending the transaction. See logs for more information.}"
+    },
+    "governance": {
+      "error": "{neo4j_code: Neo.DatabaseError.Transaction.TransactionLogError} {message: Could not append transaction: Transaction #686 {started 2026-03-02 16:39:55.119+0000, committed 2026-03-02 16:39:55.136+0000, with 29 commands in this transaction, lease -1, latest committed transaction id when started was 677, consensusIndex: -1} to log.} {gql_status: 2DN06} {gql_status_description: error: invalid transaction termination - failed to append transaction. There was an error on appending the transaction. See logs for more information.}"
+    },
+    "entity": {
+      "error": "{neo4j_code: Neo.DatabaseError.Transaction.TransactionLogError} {message: Could not append transaction: Transaction #687 {started 2026-03-02 16:39:55.140+0000, committed 2026-03-02 16:39:55.159+0000, with 14 commands in this transaction, lease -1, latest committed transaction id when started was 677, consensusIndex: -1} to log.} {gql_status: 2DN06} {gql_status_description: error: invalid transaction termination - failed to append transaction. There was an error on appending the transaction. See logs for more information.}"
+    },
+    "metric": {
+      "error": "{neo4j_code: Neo.DatabaseError.Transaction.TransactionLogError} {message: Could not append transaction: Transaction #688 {started 2026-03-02 16:39:55.166+0000, committed 2026-03-02 16:39:55.770+0000, with 60576 commands in this transaction, lease -1, latest committed transaction id when started was 677, consensusIndex: -1} to log.} {gql_status: 2DN06} {gql_status_description: error: invalid transaction termination - failed to append transaction. There was an error on appending the transaction. See logs for more information.}"
+    },
+    "task": {
+      "error": "{neo4j_code: Neo.DatabaseError.Transaction.TransactionLogError} {message: Could not append transaction: Transaction #689 {started 2026-03-02 16:39:55.832+0000, committed 2026-03-02 16:39:55.889+0000, with 3359 commands in this transaction, lease -1, latest committed transaction id when started was 677, consensusIndex: -1} to log.} {gql_status: 2DN06} {gql_status_description: error: invalid transaction termination - failed to append transaction. There was an error on appending the transaction. See logs for more information.}"
+    },
+    "ibibio_entry": {
+      "error": "{neo4j_code: Neo.DatabaseError.Transaction.TransactionLogError} {message: Could not append transaction: Transaction #690 {started 2026-03-02 16:39:55.912+0000, committed 2026-03-02 16:39:55.912+0000, with 1 commands in this transaction, lease -1, latest committed transaction id when started was 677, consensusIndex: -1} to log.} {gql_status: 2DN06} {gql_status_description: error: invalid transaction termination - failed to append transaction. There was an error on appending the transaction. See logs for more information.}"
+    }
+  },
+  "verifications": {
+    "verify_ibibio": [
+      {
+        "IbibioWord": 0
+      }
+    ],
+    "verify_agent": [
+      {
+        "Agent": 0
+      }
+    ],
+    "verify_healing": [
+      {
+        "HealingPractice": 0
+      }
+    ],
+    "verify_governance": [
+      {
+        "Governance": 0
+      }
+    ],
+    "verify_metric": [
+      {
+        "Metric": 0
+      }
+    ]
+  },
+  "discovery": {
+    "metric_keys": [
+      {
+        "keys(n)": [
+          "metric_id",
+          "timestamp",
+          "task_id",
+          "value",
+          "name"
+        ]
+      }
+    ],
+    "task_keys": [
+      {
+        "keys(n)": [
+          "result",
+          "completed_at",
+          "parameters",
+          "task_id",
+          "created_at",
+          "agent_id",
+          "status",
+          "type"
+        ]
+      }
+    ]
+  }
+}

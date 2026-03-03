@@ -325,38 +325,41 @@ class MoScriptEngine:
 if __name__ == "__main__":
     mo = MoScriptEngine()
 
+    def dump(obj):
+        return json.dumps(obj, indent=2, ensure_ascii=False, default=str)
+
     print("\n=== VALID — Seal Covenant ===")
-    print(json.dumps(mo.interpret({
+    print(dump(mo.interpret({
         "operation": "seal",
         "payload":   {"intention": "Protect the Covenant", "layer": "Soul"}
-    }), indent=2))
+    })))
 
     print("\n=== VALID — Invoke Truth ===")
-    print(json.dumps(mo.interpret({
+    print(dump(mo.interpret({
         "operation": "invoke_truth",
         "payload":   {"query": "Is MoStar Grid sovereign?", "score": 0.91}
-    }), indent=2))
+    })))
 
     print("\n=== VALID — Codex Status ===")
-    print(json.dumps(mo.interpret({
+    print(dump(mo.interpret({
         "operation": "codex_status",
         "payload":   {}
-    }), indent=2))
+    })))
 
     print("\n=== VALID — Get Recent Moments ===")
-    print(json.dumps(mo.interpret({
+    print(dump(mo.interpret({
         "operation": "get_moments",
         "payload":   {"limit": 3}
-    }), indent=2, default=str))
+    })))
 
     print("\n=== BLOCKED — External AI Call ===")
-    print(json.dumps(mo.interpret({
+    print(dump(mo.interpret({
         "operation": "call_anthropic",
         "payload":   {"model": "claude-3-5-sonnet"}
-    }), indent=2))
+    })))
 
     print("\n=== BLOCKED — Exploit ===")
-    print(json.dumps(mo.interpret({
+    print(dump(mo.interpret({
         "operation": "exploit",
         "payload":   {"target": "vulnerable_node"}
-    }), indent=2))
+    })))

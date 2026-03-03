@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import styles from "../../components/Sanctum.module.css";
+import GridNav from "@/components/GridNav";
 
 interface BackendMetrics {
   cpu_usage: number;
@@ -27,7 +28,7 @@ export default function BackendPage() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        
+
         // Transform backend telemetry to our metrics format
         const transformedMetrics: BackendMetrics = {
           cpu_usage: data.backend?.cpu_usage || 0,
@@ -39,7 +40,7 @@ export default function BackendPage() {
           neo4j_relationships: data.graph?.stats?.totalRelationships || 0,
           last_updated: new Date().toISOString(),
         };
-        
+
         setMetrics(transformedMetrics);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch metrics");
@@ -56,7 +57,8 @@ export default function BackendPage() {
   if (loading) {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
-        <h1>🔧 Backend Operations</h1>
+        <GridNav />
+        <h1 style={{ marginTop: "2rem" }}>🔧 Backend Operations</h1>
         <p>Loading backend metrics...</p>
       </div>
     );
@@ -65,7 +67,8 @@ export default function BackendPage() {
   if (error) {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
-        <h1>🔧 Backend Operations</h1>
+        <GridNav />
+        <h1 style={{ marginTop: "2rem" }}>🔧 Backend Operations</h1>
         <p style={{ color: "#ff6e96" }}>Error: {error}</p>
       </div>
     );
@@ -73,6 +76,7 @@ export default function BackendPage() {
 
   return (
     <div className={styles.sanctum}>
+      <div style={{ marginTop: "1rem" }}><GridNav /></div>
       <section className={styles.council}>
         <header>
           <p className={styles.eyebrow}>Backend Operations</p>

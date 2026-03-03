@@ -22,17 +22,16 @@ class APIExecutor:
         self.layer = "Body Layer"
 
     def perform_action(self, endpoint, data):
-        # Placeholder for future real API calls
-    """
-    Executes an action via an external API, completing the covenant of intent.
-    
-    Args:
-        endpoint (str): The API endpoint to call.
-        data (dict): The data to pass to the API endpoint.
-    
-    Returns:
-        dict: The result of the API call, containing the status, timestamp, and response data.
-    """
+        """
+        Executes an action via an external API, completing the covenant of intent.
+        
+        Args:
+            endpoint (str): The API endpoint to call.
+            data (dict): The data to pass to the API endpoint.
+        
+        Returns:
+            dict: The result of the API call, containing the status, timestamp, and response data.
+        """
         response = {"endpoint": endpoint, "status": "executed", "timestamp": time.time(), "data": data}
         ritual = {"operation": "seal", "payload": {"layer": self.layer, "response": response}}
         return self.mo.interpret(ritual)
