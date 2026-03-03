@@ -87,3 +87,4 @@ backend/neo4j-mostar-industries/data_wired_default/
 backend/neo4j-mostar-industries/import/*.json
 backend/*.json
 data/voice_cache/
+.env*.local
