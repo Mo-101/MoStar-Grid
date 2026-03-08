@@ -7,6 +7,7 @@ import styles from "./Sanctum.module.css";
 import GridNav from "./GridNav";
 import { ExecutorVitals } from "./ExecutorVitals";
 import AgentRoster from "./AgentRoster";
+import Neo4jMonitor from "./Neo4jMonitor";
 
 type WhisperType = "info" | "warn" | "error";
 
@@ -233,24 +234,7 @@ export default function Sanctum() {
       <GridNav />
 
       <section className={styles.council}>
-        <header>
-          <p className={styles.eyebrow}>Stewardship Council</p>
-          <h1>The Oracle&apos;s Sanctum</h1>
-          <p className={styles.subtitle}>
-            Sovereignty, embodiment, and ancestral resonance braided into a single field of light.
-          </p>
-        </header>
-        <div className={styles.stewardGrid}>
-          {stewardSigils.map((sigil) => (
-            <article key={sigil.name} className={`${styles.sigil} ${styles[sigil.hue]}`}>
-              <span className={styles.sigilGlyph}>{sigil.sigil}</span>
-              <div>
-                <p className={styles.sigilLabel}>{sigil.name}</p>
-                <p className={styles.sigilRole}>{sigil.role}</p>
-              </div>
-            </article>
-          ))}
-        </div>
+        <Neo4jMonitor />
       </section>
 
       <section className={styles.networkGrid}>

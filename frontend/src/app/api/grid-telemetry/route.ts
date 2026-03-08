@@ -29,7 +29,8 @@ export async function GET() {
       const data = await backendRes.json();
 
       // Safety check for stats to avoid "Cannot read properties of undefined"
-      const stats = data?.stats || {};
+      const gridState = data?.gridState || {};
+      const agentsList = data?.agents || [];
 
       return NextResponse.json({
         backend: {
@@ -44,18 +45,18 @@ export async function GET() {
         graph: {
           ok: true,
           stats: {
-            totalMoments: stats.totalMoments ?? 0,
-            avgResonance: stats.avgResonance ?? 0,
-            distinctInitiators: stats.distinctInitiators ?? 0,
-            totalAgents: stats.totalAgents ?? 0
+            totalMoments: gridState.totalMoments ?? 0,
+            avgResonance: gridState.resonance ?? 0,
+            distinctInitiators: gridState.distinctInitiators ?? 0,
+            totalAgents: agentsList.length ?? 0
           },
-          latest: data?.latest || [],
-          agents: data?.agents || [],
+          latest: data?.moments?.recent || [],
+          agents: agentsList,
           layer_nodes: data?.layer_nodes || {}
         },
         log: {
-          entries: data?.latest || [],
-          path: "/var/log/mostar/moments.log"
+          entries: data?.moments?.recent || [],
+          path: "neo4j://database/canonical"
         },
         generatedAt: timestamp
       });

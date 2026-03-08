@@ -41,15 +41,21 @@ class CanonicalTelemetryEngine:
         grid_state_cypher = """
             MATCH (m:MoStarMoment)
             RETURN avg(coalesce(m.resonance_score, 0.85)) as avg_resonance,
-                   max(m.timestamp) as last_cycle
+                   max(m.timestamp) as last_cycle,
+                   count(m) as totalMoments,
+                   count(distinct m.initiator) as distinctInitiators
         """
         grid_state_records = await self._safe_traverse(grid_state_cypher, "telemetry_grid_state")
         
         avg_resonance = 0.85
         last_cycle = datetime.now(timezone.utc).isoformat()
+        total_moments = 0
+        distinct_initiators = 0
         if grid_state_records:
             avg_resonance = float(grid_state_records[0].get("avg_resonance") or 0.85)
             last_cycle = grid_state_records[0].get("last_cycle") or last_cycle
+            total_moments = grid_state_records[0].get("totalMoments") or 0
+            distinct_initiators = grid_state_records[0].get("distinctInitiators") or 0
 
         # Calculate a pseudo confidence based on resonance threshold
         confidence = min(100.0, max(0.0, avg_resonance * 100 + 5.0))
@@ -96,13 +102,28 @@ class CanonicalTelemetryEngine:
         body_cypher = """MATCH (m:MoStarMoment {layer: 'BODY'}) RETURN m.quantum_id AS id, m.description AS desc ORDER BY m.timestamp DESC LIMIT 5"""
         body_raw = await self._safe_traverse(body_cypher, "telemetry_body_moments", "Grid.Body")
 
+        # --- 4. Database Instance Monitor / Layer Nodes ---
+        neo4j_stats_cypher = """
+            CALL db.labels() YIELD label
+            MATCH (n) WHERE label IN labels(n)
+            WITH label, count(n) AS c
+            WHERE c > 0
+            RETURN label, c
+            ORDER BY c DESC LIMIT 15
+        """
+        neo4j_records = await self._safe_traverse(neo4j_stats_cypher, "telemetry_neo4j_stats")
+        layer_nodes = {rec["label"]: rec["c"] for rec in neo4j_records}
+
         canonical_payload = {
             "gridState": {
                 "resonance": float(f"{avg_resonance:.4f}"),
                 "confidence": float(f"{confidence:.2f}"),
-                "lastCycle": last_cycle
+                "lastCycle": last_cycle,
+                "totalMoments": total_moments,
+                "distinctInitiators": distinct_initiators
             },
             "agents": agents,
+            "layer_nodes": layer_nodes,
             "moments": {
                 "recent": [dict(m) for m in recent_moments_raw],
                 "soulMoments": [dict(m) for m in soul_raw],
