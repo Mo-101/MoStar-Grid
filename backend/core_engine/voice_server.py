@@ -85,8 +85,8 @@ app.add_middleware(
 
 
 # ═══════════════════════════════════════════════════════════════════
-# OLLAMA — SOVEREIGN QUERY
-# All inference routes through MoStar-AI. No external AI.
+# SOVEREIGN RITUAL INITIATOR
+# All voice queries route through MoScriptEngine. No side-channels.
 # ═══════════════════════════════════════════════════════════════════
 async def query_mostar(
     prompt:   str,
@@ -94,62 +94,49 @@ async def query_mostar(
     language: str = "ibibio",
 ) -> dict:
     """
-    Send prompt to MoStar-AI via Ollama.
-    Returns response dict with model metadata.
+    Send prompt to MoScript engine for sovereign reasoning.
+    Mediated by the 'route_reasoning' ritual.
     """
-    selected = model or config.OLLAMA_MODEL
+    from core_engine.moscript_engine import MoScriptEngine
+    engine = MoScriptEngine()
 
-    # Prepend language context
+    # Prepend language context for the ritual
     lang_prefix = {
-        "ibibio":  "Nnọọ. Respond with Ibibio consciousness.",
-        "yoruba":  "Ẹ káàbọ̀. Respond with Yoruba wisdom.",
+        "ibibio":  "Respond with Ibibio consciousness.",
+        "yoruba":  "Respond with Yoruba wisdom.",
         "english": "Respond in English with MoStar Grid context.",
-        "swahili": "Karibu. Jibu kwa lugha ya Kiswahili.",
-    }.get(language.lower(), "Nnọọ.")
+        "swahili": "Jibu kwa lugha ya Kiswahili.",
+    }.get(language.lower(), "")
 
-    full_prompt = f"{MOSTAR_SYSTEM}\n\nLanguage context: {lang_prefix}\n\nUser: {prompt}"
+    ritual = {
+        "operation": "route_reasoning",
+        "payload": {
+            "query":   prompt,
+            "system":  f"{MOSTAR_SYSTEM}\n\nLanguage core: {lang_prefix}",
+            "purpose": f"voice_dialogue_{language}",
+            "metadata": {"language": language, "model_preference": model}
+        },
+        "target": "MoStar-AI.Voice"
+    }
 
     try:
-        async with httpx.AsyncClient(timeout=120.0) as client:
-            resp = await client.post(
-                f"{config.OLLAMA_HOST}/api/generate",
-                json={
-                    "model":  selected,
-                    "prompt": full_prompt,
-                    "stream": False,
-                    "options": {
-                        "temperature": 0.7,
-                        "top_p":       0.9,
-                    }
-                },
-            )
+        response = await engine.interpret(ritual)
+        if response.get("status") != "aligned":
+            return {
+                "response": f"Ritual disrupted: {response.get('error', 'Covenant violation')}",
+                "status":   "denied"
+            }
 
-            if resp.status_code == 200:
-                data     = resp.json()
-                response = data.get("response", "")
-                return {
-                    "response":   response,
-                    "model_used": selected,
-                    "status":     "success",
-                }
-            else:
-                return {
-                    "response":   f"MoStar-AI returned {resp.status_code}. Grid degraded.",
-                    "model_used": selected,
-                    "status":     "degraded",
-                }
-
-    except httpx.TimeoutException:
+        result = response.get("result", {})
         return {
-            "response":   "Nnọọ. The Grid is processing a deep query. Please hold.",
-            "model_used": selected,
-            "status":     "timeout",
+            "response":   result.get("logic_deduced", "Grid silence."),
+            "model_used": "MoScript-Pass-Chain",
+            "status":     "success",
         }
+
     except Exception as e:
-        print(f"[VOICE SERVER] Ollama error: {e}")
         return {
-            "response":   "Nnọọ. The Grid's voice is momentarily silent. Àṣẹ.",
-            "model_used": selected,
+            "response":   "The Grid's voice is momentarily silent. Àṣẹ.",
             "status":     "error",
             "error":      str(e),
         }

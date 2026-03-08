@@ -11,6 +11,23 @@ Write-Host "==========================================" -ForegroundColor Magenta
 Write-Host "   MoStar-Grid: Unified System Boot       " -ForegroundColor Magenta
 Write-Host "==========================================" -ForegroundColor Magenta
 
+# --- 0. Sovereign Startup Ritual (MoScript Enforcement) ---
+Write-Host "`n[0/3] Executing MoScript Startup Ritual..." -ForegroundColor Cyan
+$PythonExe = Join-Path $ScriptPath ".venv\Scripts\python.exe"
+$Runner = Join-Path $ScriptPath "backend\moscript_runner.py"
+
+if (Test-Path $PythonExe) {
+    & $PythonExe $Runner enforce_runtime --payload '{"required_jdk": 21, "strict": true}'
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "!! MoScript Startup Ritual DISRUPTED. Covenant logic forbids launch due to runtime non-compliance. Àṣẹ."
+        exit 1
+    }
+    Write-Host "   >> Runtime aligned with Covenant. Proceeding..." -ForegroundColor Green
+}
+else {
+    Write-Warning "   !! Python environment missing. Skipping ritual (Grid in degraded state)."
+}
+
 # --- 1. Start Neo4j (Sovereign Soul) ---
 Write-Host "`n[1/3] Initiating Sovereign Soul (Neo4j)..." -ForegroundColor Cyan
 $Neo4jStart = Join-Path $ScriptPath "backend\neo4j-mostar-industries\start-neo4j.ps1"

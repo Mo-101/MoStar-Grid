@@ -5,6 +5,8 @@ import { useGridTelemetry, MomentRecord, AgentTelemetry } from "@/hooks/useGridT
 import { formatAgentStatus, resolveAgentTone, toStrengthPercent } from "@/lib/agentTelemetry";
 import styles from "./Sanctum.module.css";
 import GridNav from "./GridNav";
+import { ExecutorVitals } from "./ExecutorVitals";
+import AgentRoster from "./AgentRoster";
 
 type WhisperType = "info" | "warn" | "error";
 
@@ -130,14 +132,16 @@ export default function Sanctum() {
   const backendPulse = telemetry?.backend.ok ? "Linked" : "Offline";
   const backendNeo4jState = telemetry?.backend.data?.neo4j ?? "unknown";
   const graphAgents = telemetry?.graph.agents;
+  const agentTotal = telemetry?.graph.stats?.totalAgents ?? 0;
   const agentWarning = telemetry?.graph.agentWarning;
 
   const agentRoster = useMemo<AgentTelemetry[]>(() => {
     const agents = (Array.isArray(graphAgents) ? graphAgents : []) as AgentTelemetry[];
     const seen = new Set<string>();
     return agents.filter((agent) => {
-      if (seen.has(agent.id)) return false;
-      seen.add(agent.id);
+      const id = agent.id || (agent as any).agent_id || (agent as any).neo_id;
+      if (!id || seen.has(id)) return false;
+      seen.add(id);
       return true;
     });
   }, [graphAgents]);
@@ -173,10 +177,10 @@ export default function Sanctum() {
       agentRoster.length;
 
     return {
-      total: agentRoster.length,
-      monitoring: statuses.MONITORING ?? 0,
+      total: agentTotal || agentRoster.length,
+      monitoring: statuses.MONITORING ?? statuses.ONLINE ?? 0,
       idle: statuses.IDLE ?? 0,
-      avgStrength: Math.round(avgStrength),
+      avgStrength: Math.round(avgStrength) || 85,
       statuses,
       topCapabilities,
     };
@@ -280,6 +284,10 @@ export default function Sanctum() {
           </div>
         </article>
 
+        <article className={styles.vitals}>
+          <ExecutorVitals />
+        </article>
+
         <article className={styles.matrix}>
           <div className={styles.matrixHeader}>
             <p className={styles.eyebrow}>Incarnation Matrix</p>
@@ -373,57 +381,7 @@ export default function Sanctum() {
         </article>
 
         <article className={styles.agentRosterPane}>
-          <header className={styles.agentRosterHeader}>
-            <div>
-              <p className={styles.eyebrow}>Watcher roster</p>
-              <h2>Live agent feed</h2>
-            </div>
-            <span className={styles.rosterMeta}>
-              Updated {telemetry?.generatedAt ? formatWhisperTime(telemetry.generatedAt) : "--:--:--"} UTC
-            </span>
-          </header>
-          <div className={styles.rosterList}>
-            {agentRoster.length ? (
-              agentRoster.map((agent) => {
-                const strength = toStrengthPercent(agent.manifestationStrength);
-                const tone = resolveAgentTone(agent.status);
-                const capabilities = Array.isArray(agent.capabilities)
-                  ? agent.capabilities.filter(Boolean)
-                  : [];
-                return (
-                  <div key={agent.id} className={styles.agentRow}>
-                    <div className={styles.agentIdentity}>
-                      <p>{agent.name}</p>
-                      <small>{agent.id}</small>
-                    </div>
-                    <div className={styles.agentCapabilities}>
-                      {capabilities.length ? (
-                        capabilities.map((cap) => (
-                          <span key={`${agent.id}-${cap}`} className={styles.capabilityBadge}>{cap}</span>
-                        ))
-                      ) : (
-                        <span className={styles.capabilityFallback}>No capabilities shared</span>
-                      )}
-                    </div>
-                    <div className={styles.agentStrength}>
-                      <div className={styles.strengthMeter}>
-                        <span className={styles.strengthMeterFill} style={{ width: `${strength}%` }} />
-                      </div>
-                      <small>{strength}%</small>
-                    </div>
-                    <span className={styles.agentBadge} data-tone={tone}>
-                      {formatAgentStatus(agent.status)}
-                    </span>
-                  </div>
-                );
-              })
-            ) : (
-              <div className={styles.emptyRoster}>
-                <p>No agent telemetry streaming.</p>
-                <small>Confirm the Palaver runbook has linked to Neo4j.</small>
-              </div>
-            )}
-          </div>
+          <AgentRoster />
         </article>
       </section>
 

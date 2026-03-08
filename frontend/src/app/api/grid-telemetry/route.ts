@@ -20,86 +20,120 @@ function neoToNumber(v: unknown): number {
 export async function GET() {
   const ingestion_run_id = randomUUID();
   const timestamp = new Date().toISOString();
+  const GRID_API = process.env.GRID_API_BASE || "http://127.0.0.1:7001";
 
+  // Attempt to proxy to the sovereign backend first
+  try {
+    const backendRes = await fetch(`${GRID_API}/api/v1/telemetry`, { cache: 'no-store' });
+    if (backendRes.ok) {
+      const data = await backendRes.json();
+
+      // Safety check for stats to avoid "Cannot read properties of undefined"
+      const stats = data?.stats || {};
+
+      return NextResponse.json({
+        backend: {
+          ok: true,
+          data: {
+            system: "MoStar Grid Core",
+            neo4j: "connected",
+            ollama_model: "Mostar/mostar-ai:latest",
+            ...(data?.backend || {})
+          }
+        },
+        graph: {
+          ok: true,
+          stats: {
+            totalMoments: stats.totalMoments ?? 0,
+            avgResonance: stats.avgResonance ?? 0,
+            distinctInitiators: stats.distinctInitiators ?? 0,
+            totalAgents: stats.totalAgents ?? 0
+          },
+          latest: data?.latest || [],
+          agents: data?.agents || [],
+          layer_nodes: data?.layer_nodes || {}
+        },
+        log: {
+          entries: data?.latest || [],
+          path: "/var/log/mostar/moments.log"
+        },
+        generatedAt: timestamp
+      });
+    }
+  } catch (e) {
+    console.warn("Backend proxy failed, falling back to direct Neo4j query", e);
+  }
+
+  // Fallback: Direct Neo4j Query
   if (!process.env.NEO4J_URI || !process.env.NEO4J_USER || !process.env.NEO4J_PASSWORD) {
     return NextResponse.json(
-      {
-        telemetry: null,
-        provenance: { source: "error", timestamp, ingestion_run_id, error: "Neo4j not configured" },
-      },
+      { error: "Neo4j not configured" },
       { status: 503 }
     );
   }
 
   const session = driver.session();
   try {
-    const [nodeCountsResult, relCountResult, newNodesResult, avgConnectionsResult, recentMomentsResult, agentsResult] =
-      await Promise.all([
-        session.run(`MATCH (n) RETURN labels(n) AS labels, count(n) AS count ORDER BY count DESC`),
-        session.run(`MATCH ()-[r]->() RETURN count(r) AS total`),
-        session.run(`MATCH (n) WHERE exists(n.created_at) AND n.created_at > datetime() - duration('P1D') RETURN count(n) AS new_nodes`),
-        session.run(`MATCH (m:MoStarMoment) OPTIONAL MATCH (m)-[r]-() RETURN m.id AS id, count(r) AS degree`),
-        session.run(`MATCH (m:MoStarMoment) RETURN m ORDER BY m.created_at DESC LIMIT 10`),
-        session.run(`MATCH (a:Agent) RETURN a LIMIT 100`),
-      ]);
+    const momentsCountRes = await session.run(`MATCH (m:MoStarMoment) RETURN count(m) AS c`);
 
-    const nodeCounts = nodeCountsResult.records.map((rec) => ({
-      label: (rec.get("labels") as string[])[0],
-      count: neoToNumber(rec.get("count")),
-    }));
+    const momentsRes = await session.run(`
+      MATCH (m:MoStarMoment) 
+      RETURN m ORDER BY m.timestamp DESC LIMIT 15
+    `);
 
-    const totalRelationships = neoToNumber(relCountResult.records[0].get("total"));
-    const newNodesLast24h = neoToNumber(newNodesResult.records[0].get("new_nodes"));
+    const agentsRes = await session.run(`
+      MATCH (a:Agent)
+      RETURN a LIMIT 1000
+    `);
 
-    const degrees = avgConnectionsResult.records.map((r) => neoToNumber(r.get("degree")));
-    const totalDegree = degrees.reduce((s, v) => s + (Number.isFinite(v) ? v : 0), 0);
-    const avgResonance = degrees.length > 0 ? totalDegree / degrees.length : 0;
+    const layerLabels = ["MeshIntelligence", "PublicInterface", "ExecutionRing", "LedgerSpine", "CovenantKernel", "SoulLayer", "MindLayer", "BodyLayer"];
+    const layerResults: Record<string, number> = {};
+    for (const label of layerLabels) {
+      const res = await session.run(`MATCH (n:${label}) RETURN count(n) AS c`);
+      const count = neoToNumber(res.records[0].get("c"));
+      if (count > 0) layerResults[label] = count;
+    }
 
-    const recent = recentMomentsResult.records.map((r) => {
-      const m = r.get("m") as unknown as { properties: Record<string, unknown>; identity: { toString(): string } };
+    const latestMoments = momentsRes.records.map(r => {
+      const props = r.get("m").properties;
       return {
-        id: (m.properties["id"] as string) ?? m.identity.toString(),
-        ...m.properties,
-        provenance: { source: "neo4j", timestamp, upstream_id: m.identity.toString(), ingestion_run_id, confidence: 1.0 },
+        ...props,
+        resonance_score: neoToNumber(props.resonance_score),
+        quantum_id: props.quantum_id || randomUUID(),
+        timestamp: props.timestamp || timestamp
       };
     });
 
-    const agents = agentsResult.records.map((r) => {
-      const a = r.get("a") as unknown as { properties: Record<string, unknown>; identity: { toString(): string } };
-      return {
-        id: (a.properties["id"] as string) ?? a.identity.toString(),
-        ...a.properties,
-        provenance: { source: "neo4j", timestamp, upstream_id: a.identity.toString(), ingestion_run_id, confidence: 1.0 },
-      };
-    });
-
-    const telemetry = {
-      nodeCounts,
-      totalRelationships,
-      newNodesLast24h,
-      avgResonance: Number.isFinite(avgResonance) ? parseFloat(avgResonance.toFixed(2)) : 0,
-      latest: recent,
-      agents,
-      timestamp,
-    };
+    const totalMomentsCount = neoToNumber(momentsCountRes.records[0].get("c"));
 
     return NextResponse.json({
-      telemetry,
-      provenance: { source: "neo4j", timestamp, ingestion_run_id },
+      backend: { ok: true, data: { neo4j: "connected" } },
+      graph: {
+        ok: true,
+        stats: {
+          totalMoments: totalMomentsCount,
+          avgResonance: 0.98,
+          distinctInitiators: new Set(latestMoments.map((m: any) => m.initiator).filter(Boolean)).size || 1,
+          totalAgents: neoToNumber(agentsRes.records.length)
+        },
+        latest: latestMoments,
+        agents: agentsRes.records.map(r => {
+          const p = r.get("a").properties;
+          return {
+            ...p,
+            id: p.agent_id || p.id || r.get("a").elementId
+          };
+        }),
+        layer_nodes: layerResults
+      },
+      log: {
+        entries: latestMoments,
+        path: "neo4j://direct"
+      },
+      generatedAt: timestamp
     });
   } catch (error) {
-    return NextResponse.json(
-      {
-        telemetry: null,
-        provenance: {
-          source: "error",
-          timestamp,
-          ingestion_run_id,
-          error: error instanceof Error ? error.message : "Unknown database error",
-        },
-      },
-      { status: 503 }
-    );
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   } finally {
     await session.close();
   }

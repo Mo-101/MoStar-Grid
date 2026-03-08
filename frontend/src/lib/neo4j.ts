@@ -5,7 +5,9 @@ const user = process.env.NEO4J_USER;
 const password = process.env.NEO4J_PASSWORD;
 
 if (!uri || !user || !password) {
-  console.warn('Neo4j credentials missing – moments API may return 503');
+  console.warn('❌ Neo4j credentials missing – moments API will return 503');
+} else {
+  console.log('✅ Neo4j driver initializing for:', uri);
 }
 
 export const driver = neo4j.driver(

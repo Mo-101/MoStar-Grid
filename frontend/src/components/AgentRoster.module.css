@@ -1,0 +1,184 @@
+.rosterContainer {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.rosterHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1rem;
+}
+
+.rosterHeader h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.05em;
+}
+
+.agentGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    max-height: 700px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+}
+
+.agentGrid::-webkit-scrollbar {
+    width: 4px;
+}
+
+.agentGrid::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 99px;
+}
+
+.agentCard {
+    background: rgba(8, 14, 28, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+}
+
+.agentCard:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    background: rgba(12, 20, 38, 0.8);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(100, 255, 225, 0.1);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.agentName {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.statusBadge {
+    padding: 0.125rem 0.625rem;
+    border-radius: 999px;
+    font-size: 0.625rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.status-online {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.status-offline {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.status-unknown {
+    background: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+    border: 1px solid rgba(107, 114, 128, 0.4);
+}
+
+.agentId {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+.capabilitiesSection {
+    margin-top: 1.5rem;
+}
+
+.sectionLabel {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.75rem;
+}
+
+.capabilityList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.capabilityBadge {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.5rem;
+    font-size: 0.625rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.capabilityBadge:hover {
+    background: rgba(100, 255, 225, 0.1);
+    border-color: var(--accent);
+}
+
+.fallbackText {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+    opacity: 0.5;
+}
+
+.cardFooter {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.taskCount {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.taskCount span {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.timestamp {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.loading,
+.error {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.error {
+    color: #ef4444;
+}

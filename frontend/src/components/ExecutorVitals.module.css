@@ -1,0 +1,185 @@
+.vitalsCard {
+    background: rgba(3, 7, 18, 0.85);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 2rem;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    font-family: var(--font-mono, monospace);
+    color: #fff;
+}
+
+.pulseOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(52, 211, 153, 0.03);
+    animation: pulseFade 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes pulseFade {
+
+    0%,
+    100% {
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.eyebrow {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    margin-bottom: 0.5rem;
+}
+
+.statusWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 15px #10b981;
+}
+
+.indicator.stalled {
+    background: #ef4444;
+    box-shadow: 0 0 15px #ef4444;
+}
+
+.alive {
+    color: #34d399;
+}
+
+.stalled {
+    color: #f87171;
+}
+
+.statusText {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+}
+
+.totalProcessed {
+    text-align: right;
+}
+
+.count {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: -0.05em;
+}
+
+.metricsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.metricCell {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.metricLabel {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.metricValue {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.sectionTitle {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.sectionTitle::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.eventList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.eventRow {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 0.75rem;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.eventRow:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.eventMeta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin-bottom: 0.25rem;
+}
+
+.eventAction {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+}
+
+.empty {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 0.75rem;
+    font-style: italic;
+    padding: 1rem 0;
+}

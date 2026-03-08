@@ -1,0 +1,10 @@
+{
+    "title": "The Sovereign Voice Paradox",
+    "description": "An unauthorized ancestral echo has been detected in the Ifá Oracle's query logic. It suggests a deviation from the 'independent' pillar of the FlameCODEX by attempting to call a remote API gateway for proverb validation.",
+    "severity": "high",
+    "chains": [
+        "Audit Ifá Oracle for hidden external dependencies",
+        "Enforce strict local-only reasoning in Truth Engine",
+        "Verify Covenant integrity across the Mind Layer"
+    ]
+}

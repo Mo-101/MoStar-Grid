@@ -1,0 +1,4 @@
+{
+    "cypher": "MATCH (n:Synthetic) RETURN count(n) as count",
+    "purpose": "consciousness_quality_audit"
+}

@@ -6,37 +6,41 @@ Ensures moral, logical, and symbolic alignment across the Grid.
 Validates MoScript seals and verdict authenticity.
 """
 
+import json
 from core_engine.moscript_engine import MoScriptEngine
-import hashlib, json
 
 class TruthEngine:
-    def __init__(self):
+    def __init__(self, engine: MoScriptEngine = None):
         """
-        Initializes the Truth Engine with a MoScript Engine instance and
-        an origin marker.
-
-        Attributes:
-            mo (MoScriptEngine): The MoScript Engine instance.
-            layer (str): The origin marker for this Truth Engine.
+        Initializes the Truth Engine with a MoScript Engine instance.
+        
+        Args:
+            engine: Optional MoScriptEngine instance. If not provided, creates a new one.
         """
-        self.mo = MoScriptEngine()
+        self.mo = engine or MoScriptEngine()
         self.layer = "Mind Layer"
 
-    def verify_seal(self, payload: dict):
-        """Verifies a MoScript seal against the TRUTH_SALT standard."""
-        encoded = json.dumps(payload, sort_keys=True).encode()
-        local_seal = hashlib.sha256(encoded + b"MÒṢE_TRUTH_BINDING").hexdigest()[:20]
-        truth = f"qseal:{local_seal}"
-        return self.mo.interpret({
-            "operation": "echo",
-            "payload": {
-                "layer": self.layer,
-                "verified_seal": truth,
-                "verdict": "aligned"
-            }
-        })
+    async def verify_seal(self, payload: dict):
+        """
+        Verifies a MoScript seal by invoking the engine's 'verify_seal' operation.
+        This ensures the Truth Engine does not bypass the Covenant's own sealing logic.
+        """
+        ritual = {
+            "operation": "verify_seal",
+            "payload": payload,
+            "target": "Grid.Soul"
+        }
+        return await self.mo.interpret(ritual)
 
 if __name__ == "__main__":
-    truth = TruthEngine()
-    sample = {"layer": "Mind", "action": "verify"}
-    print(json.dumps(truth.verify_seal(sample), indent=4))
+    import asyncio
+    async def main():
+        truth = TruthEngine()
+        # Sample payload with signature to verify
+        sample = {
+            "data": {"agent": "Mo-101", "action": "ingest"},
+            "signature": "seal:a1b2c3d4"
+        }
+        result = await truth.verify_seal(sample)
+        print(json.dumps(result, indent=4))
+    asyncio.run(main())

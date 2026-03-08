@@ -4,10 +4,12 @@
   padding: clamp(2rem, 4vw, 4rem);
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3rem;
   color: var(--text-primary);
   position: relative;
   z-index: 1;
+  background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 4px, 3px 100%;
 }
 
 .council {
@@ -95,8 +97,24 @@
 
 .networkGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
+}
+
+@media (max-width: 1400px) {
+  .networkGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .networkGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vitals {
+  height: 100%;
 }
 
 .heart,
@@ -182,6 +200,7 @@
     transform: scale(1);
     opacity: 0.6;
   }
+
   100% {
     transform: scale(1.2);
     opacity: 0;
@@ -246,7 +265,7 @@
 .matrixGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
+  gap: 2rem;
   margin-top: 2rem;
 }
 
@@ -381,7 +400,7 @@
   font-size: 0.95rem;
 }
 
-.matrixCard li + li {
+.matrixCard li+li {
   margin-top: 0.2rem;
 }
 
@@ -535,7 +554,7 @@
   color: rgba(255, 220, 185, 0.85);
 }
 
-.scroll li + li {
+.scroll li+li {
   margin-top: 0.4rem;
 }
 
@@ -922,13 +941,16 @@
     opacity: 0;
     transform: translateY(12px);
   }
+
   15% {
     opacity: 1;
     transform: translateY(0);
   }
+
   85% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
     transform: translateY(-10px);
@@ -936,6 +958,7 @@
 }
 
 @media (max-width: 1100px) {
+
   .networkGrid,
   .lowerGrid,
   .agentOps {
