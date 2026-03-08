@@ -9,7 +9,8 @@
       {
         "ignore": [
           "scrollbar-width",
-          "scrollbar-width: thin"
+          "scrollbar-width: thin",
+          "backdrop-filter"
         ]
       }
     ],

@@ -182,3 +182,93 @@
 .error {
     color: #ef4444;
 }
+
+/* Filter Bar */
+.filterBar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.searchInput {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.searchInput::placeholder {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.filterCount {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.agentCount {
+    font-size: 0.9rem;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* More badge for truncated capabilities */
+.moreBadge {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-muted);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pageBtn {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pageBtn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent);
+}
+
+.pageBtn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pageInfo {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}

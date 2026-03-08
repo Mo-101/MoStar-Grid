@@ -1,9 +1,19 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState, useMemo, useRef } from "react";
-import ForceGraph3D, { ForceGraphMethods } from "react-force-graph-3d";
+import dynamic from "next/dynamic";
 import * as THREE from "three";
 import styles from "./ConstellationEngine.module.css";
+
+// Dynamically import ForceGraph3D to avoid SSR issues
+const ForceGraph3D = dynamic(
+    () => import("react-force-graph-3d").then((mod) => mod.default),
+    { ssr: false }
+);
+
+// Type for the ref - use any since ForceGraphMethods is complex
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ForceGraphRef = any;
 
 interface GraphNode {
     id: string | number;
@@ -23,11 +33,18 @@ interface GraphLink {
 }
 
 export default function ConstellationEngine() {
-    const fgRef = useRef<any>(null);
+    const fgRef = useRef<ForceGraphRef>(null);
     const [graphData, setGraphData] = useState<{ nodes: GraphNode[]; links: GraphLink[] }>({ nodes: [], links: [] });
     const [loading, setLoading] = useState(true);
+    const [isClient, setIsClient] = useState(false);
 
-    const GRID_API = process.env.NEXT_PUBLIC_GRID_API_BASE || "http://127.0.0.1:7001";
+    const GRID_API = process.env.NEXT_PUBLIC_GRID_API_BASE || "http://localhost:8001";
+
+    // Ensure client-side only rendering - deferred to avoid cascading renders
+    useEffect(() => {
+        const timer = setTimeout(() => setIsClient(true), 0);
+        return () => clearTimeout(timer);
+    }, []);
 
     const fetchGraph = async () => {
         try {
@@ -43,10 +60,12 @@ export default function ConstellationEngine() {
     };
 
     useEffect(() => {
+        if (!isClient) return;
         fetchGraph();
-        const interval = setInterval(fetchGraph, 10000); // Poll every 10s
+        const interval = setInterval(fetchGraph, 10000);
         return () => clearInterval(interval);
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isClient]);
 
     const getNodeColor = (labels: string[]) => {
         if (labels.includes("Agent")) return "#00F5FF";       // Electric Cyan
@@ -69,6 +88,32 @@ export default function ConstellationEngine() {
         }
     };
 
+    // Create node 3D object - only on client
+    const nodeThreeObject = useMemo(() => {
+        if (!isClient) return undefined;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (node: any) => {
+            const color = getNodeColor(node.labels);
+            const size = 3 + (node.resonance * 4);
+            const group = new THREE.Group();
+            const geometry = new THREE.SphereGeometry(size, 16, 16);
+            const material = new THREE.MeshBasicMaterial({ color });
+            const sphere = new THREE.Mesh(geometry, material);
+            group.add(sphere);
+            if (node.resonance > 0.7) {
+                const glowGeometry = new THREE.SphereGeometry(size * 1.5, 16, 16);
+                const glowMaterial = new THREE.MeshBasicMaterial({
+                    color,
+                    transparent: true,
+                    opacity: 0.15
+                });
+                const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+                group.add(glow);
+            }
+            return group;
+        };
+    }, [isClient]);
+
     return (
         <div className={styles.container}>
             <header className={styles.overlay}>
@@ -84,71 +129,51 @@ export default function ConstellationEngine() {
                 </div>
             </header>
 
-            <ForceGraph3D
-                ref={fgRef}
-                graphData={graphData}
-                backgroundColor="#020617"
-                showNavInfo={false}
+            {loading && (
+                <div className={styles.loadingOverlay}>
+                    <div className={styles.spinner} />
+                    <span>Syncing with Neo4j constellation...</span>
+                </div>
+            )}
 
-                // Node Appearance
-                nodeLabel={(node: any) => `
-                    <div style="background: rgba(0,0,0,0.8); padding: 8px; border: 1px solid #06b6d4; border-radius: 4px; color: white;">
-                        <b style="color: #fbbf24">${node.labels[0]}</b><br/>
-                        ${node.name}<br/>
-                        <small>Resonance: ${node.resonance.toFixed(3)}</small>
-                    </div>
-                `}
-                nodeThreeObject={(node: any) => {
-                    const color = getNodeColor(node.labels);
-                    const size = 3 + (node.resonance * 4);
-
-                    // Create a grouping
-                    const group = new THREE.Group();
-
-                    // Core sphere
-                    const geometry = new THREE.SphereGeometry(size, 16, 16);
-                    const material = new THREE.MeshBasicMaterial({ color });
-                    const sphere = new THREE.Mesh(geometry, material);
-                    group.add(sphere);
-
-                    // Add a glow halo if resonance is high
-                    if (node.resonance > 0.7) {
-                        const glowGeometry = new THREE.SphereGeometry(size * 1.5, 16, 16);
-                        const glowMaterial = new THREE.MeshBasicMaterial({
-                            color,
-                            transparent: true,
-                            opacity: 0.15
-                        });
-                        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-                        group.add(glow);
-                    }
-
-                    return group;
-                }}
-
-                // Link Appearance
-                linkWidth={1}
-                linkColor={(link: any) => getLinkColor(link.rel)}
-                linkDirectionalParticles={2}
-                linkDirectionalParticleSpeed={0.005}
-                linkDirectionalParticleWidth={1.5}
-                linkDirectionalParticleColor={(link: any) => getLinkColor(link.rel)}
-
-                // Physics Optimization
-                d3VelocityDecay={0.3}
-                onNodeClick={(node: any) => {
-                    // Aim at node from outside it
-                    const distance = 40;
-                    const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
-                    if (fgRef.current) {
-                        fgRef.current.cameraPosition(
-                            { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
-                            node,
-                            3000
-                        );
-                    }
-                }}
-            />
+            {isClient && (
+                <ForceGraph3D
+                    ref={fgRef}
+                    graphData={graphData}
+                    backgroundColor="#020617"
+                    showNavInfo={false}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    nodeLabel={(node: any) => `
+                        <div style="background: rgba(0,0,0,0.8); padding: 8px; border: 1px solid #06b6d4; border-radius: 4px; color: white;">
+                            <b style="color: #fbbf24">${node.labels[0]}</b><br/>
+                            ${node.name}<br/>
+                            <small>Resonance: ${node.resonance.toFixed(3)}</small>
+                        </div>
+                    `}
+                    nodeThreeObject={nodeThreeObject}
+                    linkWidth={1}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    linkColor={(link: any) => getLinkColor(link.rel)}
+                    linkDirectionalParticles={2}
+                    linkDirectionalParticleSpeed={0.005}
+                    linkDirectionalParticleWidth={1.5}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    linkDirectionalParticleColor={(link: any) => getLinkColor(link.rel)}
+                    d3VelocityDecay={0.3}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    onNodeClick={(node: any) => {
+                        const distance = 40;
+                        const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
+                        if (fgRef.current) {
+                            fgRef.current.cameraPosition(
+                                { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
+                                node,
+                                3000
+                            );
+                        }
+                    }}
+                />
+            )}
 
             <footer className={styles.footerOverlay}>
                 <div className={styles.controlInfo}>
@@ -164,3 +189,4 @@ export default function ConstellationEngine() {
         </div>
     );
 }
+

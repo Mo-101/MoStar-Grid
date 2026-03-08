@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import GridNav from "@/components/GridNav";
 
 // ═══════════════════════════════════════════════════════════════
 // THEME
@@ -435,7 +436,9 @@ export default function HyperSpine() {
         : "87";
 
     return (
-        <div className="fixed inset-0 flex flex-col overflow-hidden font-mono" style={{ background: THEME.bg }}>
+        <>
+            <GridNav />
+            <div className="fixed inset-0 flex flex-col overflow-hidden font-mono" style={{ background: THEME.bg, top: '48px' }}>
             <style>{`
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         .ins { animation: fadeIn .18s ease; }
@@ -881,6 +884,6 @@ export default function HyperSpine() {
                     Click nodes to inspect / filter edges above / animated packets indicate active flows
                 </div>
             </footer>
-        </div>
+        </>
     );
 }
