@@ -441,7 +441,7 @@ class MoScriptEngine:
             "query":         query,
             "lingua_parsed": linguistic.get("response"),
             "logic_deduced": deduction.get("response"),
-            "model_chain":   ["qwen", "mistral"],
+            "model_trace":   ["qwen", "mistral"],
             "resonance":     resonance,
             "purpose":       purpose,
             "status":        "aligned",
