@@ -25,6 +25,10 @@ export default function Neo4jMonitor() {
     const layerNodes = telemetry?.graph?.layer_nodes || {};
     const totalNodesMapped = Object.values(layerNodes).reduce((sum, count) => sum + count, 0);
 
+    const totalNodes = telemetry?.graph?.stats?.totalNodes || 0;
+    const totalRelationships = telemetry?.graph?.stats?.totalRelationships || 0;
+    const moments24h = telemetry?.graph?.stats?.moments24h || 0;
+
     const entries = Object.entries(layerNodes).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
     return (
@@ -42,16 +46,18 @@ export default function Neo4jMonitor() {
 
             <div className={styles.metricsGrid}>
                 <div className={styles.metricCard}>
-                    <span className={styles.metricLabel}>Total MoStar Moments</span>
+                    <span className={styles.metricLabel}>Total Moments</span>
                     <span className={styles.metricValue}>{moments.toLocaleString()}</span>
                 </div>
                 <div className={styles.metricCard}>
-                    <span className={styles.metricLabel}>Active Entities</span>
-                    <span className={styles.metricValue}>{totalNodesMapped.toLocaleString()}</span>
+                    <span className={styles.metricLabel}>Nodes & Rels</span>
+                    <span className={styles.metricValue}>
+                        {totalNodes.toLocaleString()} <small>/</small> {totalRelationships.toLocaleString()}
+                    </span>
                 </div>
                 <div className={styles.metricCard}>
-                    <span className={styles.metricLabel}>Connection Stream</span>
-                    <span className={styles.metricValue}>{neo4jStatus}</span>
+                    <span className={styles.metricLabel}>Activity (24h)</span>
+                    <span className={styles.metricValue}>{moments24h.toLocaleString()}</span>
                 </div>
             </div>
 

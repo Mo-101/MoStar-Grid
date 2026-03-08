@@ -43,6 +43,9 @@ export type GraphSummary = {
     avgResonance: number | null;
     distinctInitiators: number;
     totalAgents?: number;
+    totalNodes?: number;
+    totalRelationships?: number;
+    moments24h?: number;
   };
   latest?: MomentRecord[];
   agents?: AgentTelemetry[] | number;

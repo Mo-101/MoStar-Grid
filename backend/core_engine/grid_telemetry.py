@@ -114,13 +114,36 @@ class CanonicalTelemetryEngine:
         neo4j_records = await self._safe_traverse(neo4j_stats_cypher, "telemetry_neo4j_stats")
         layer_nodes = {rec["label"]: rec["c"] for rec in neo4j_records}
 
+        nodes_cypher = "MATCH (n) RETURN count(n) AS c"
+        nodes_res = await self._safe_traverse(nodes_cypher, "telemetry_total_nodes")
+        total_nodes = nodes_res[0].get("c", 0) if nodes_res else 0
+
+        rels_cypher = "MATCH ()-[r]->() RETURN count(r) AS c"
+        rels_res = await self._safe_traverse(rels_cypher, "telemetry_total_rels")
+        total_rels = rels_res[0].get("c", 0) if rels_res else 0
+
+        # Activity in last 24 hours
+        yesterday = (datetime.now(timezone.utc).timestamp() - 86400)
+        # Convert to ISO string or however the timestamp is stored. Assuming ISO or float.
+        # Let's try to match the timestamp format in the DB.
+        activity_cypher = """
+            MATCH (m:MoStarMoment)
+            WHERE datetime(m.timestamp) > datetime() - duration('P1D')
+            RETURN count(m) AS c
+        """
+        activity_res = await self._safe_traverse(activity_cypher, "telemetry_activity_24h")
+        moments_24h = activity_res[0].get("c", 0) if activity_res else 0
+
         canonical_payload = {
             "gridState": {
                 "resonance": float(f"{avg_resonance:.4f}"),
                 "confidence": float(f"{confidence:.2f}"),
                 "lastCycle": last_cycle,
                 "totalMoments": total_moments,
-                "distinctInitiators": distinct_initiators
+                "distinctInitiators": distinct_initiators,
+                "totalNodes": total_nodes,
+                "totalRelationships": total_rels,
+                "moments24h": moments_24h
             },
             "agents": agents,
             "layer_nodes": layer_nodes,

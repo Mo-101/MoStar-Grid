@@ -48,7 +48,10 @@ export async function GET() {
             totalMoments: gridState.totalMoments ?? 0,
             avgResonance: gridState.resonance ?? 0,
             distinctInitiators: gridState.distinctInitiators ?? 0,
-            totalAgents: agentsList.length ?? 0
+            totalAgents: agentsList.length ?? 0,
+            totalNodes: gridState.totalNodes ?? 0,
+            totalRelationships: gridState.totalRelationships ?? 0,
+            moments24h: gridState.moments24h ?? 0
           },
           latest: data?.moments?.recent || [],
           agents: agentsList,
@@ -87,6 +90,14 @@ export async function GET() {
       RETURN a LIMIT 1000
     `);
 
+    const nodesCountRes = await session.run(`MATCH (n) RETURN count(n) AS c`);
+    const relsCountRes = await session.run(`MATCH ()-[r]->() RETURN count(r) AS c`);
+    const activityCountRes = await session.run(`
+      MATCH (m:MoStarMoment)
+      WHERE datetime(m.timestamp) > datetime() - duration('P1D')
+      RETURN count(m) AS c
+    `);
+
     const layerLabels = ["MeshIntelligence", "PublicInterface", "ExecutionRing", "LedgerSpine", "CovenantKernel", "SoulLayer", "MindLayer", "BodyLayer"];
     const layerResults: Record<string, number> = {};
     for (const label of layerLabels) {
@@ -115,7 +126,10 @@ export async function GET() {
           totalMoments: totalMomentsCount,
           avgResonance: 0.98,
           distinctInitiators: new Set(latestMoments.map((m: any) => m.initiator).filter(Boolean)).size || 1,
-          totalAgents: neoToNumber(agentsRes.records.length)
+          totalAgents: neoToNumber(agentsRes.records.length),
+          totalNodes: neoToNumber(nodesCountRes.records[0].get("c")),
+          totalRelationships: neoToNumber(relsCountRes.records[0].get("c")),
+          moments24h: neoToNumber(activityCountRes.records[0].get("c"))
         },
         latest: latestMoments,
         agents: agentsRes.records.map(r => {
