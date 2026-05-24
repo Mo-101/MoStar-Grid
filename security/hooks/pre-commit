@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# MoStar Grid pre-commit gate. Refuses commits that violate canon hygiene.
+# Install: ln -sf ../../security/hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -euo pipefail
+fail() { echo "❌ pre-commit: $1" >&2; exit 1; }
+
+# 1. Block any .env that isn't .env.example
+if git diff --cached --name-only | grep -E '(^|/)\.env($|\.[^/]*$)' | grep -v '\.env\.example$' >/dev/null; then
+  fail ".env files must not be committed. Use .env.example."
+fi
+
+# 2. Block private keys
+if git diff --cached --name-only | grep -E '(^|/)(id_(ed25519|rsa|ecdsa|dsa)|.*\.pem|.*\.key)$' >/dev/null; then
+  fail "Private key file in staging. Refusing."
+fi
+
+# 3. Block files > 5MB
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  size=$(stat -c%s "$f" 2>/dev/null || stat -f%z "$f")
+  if [ "$size" -gt 5242880 ]; then
+    fail "File $f exceeds 5MB ($size bytes). Use Git LFS or _vault/."
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACM)
+
+# 4. Reject "T"-style empty commit messages
+COMMIT_MSG_FILE="${1:-.git/COMMIT_EDITMSG}"
+if [ -f "$COMMIT_MSG_FILE" ]; then
+  msg=$(grep -v '^#' "$COMMIT_MSG_FILE" | tr -d '[:space:]')
+  if [ ${#msg} -lt 12 ]; then
+    fail "Commit message too short (<12 chars after trim). No 'T' commits."
+  fi
+fi
+
+# 5. Block Zone.Identifier cruft
+if git diff --cached --name-only | grep ':Zone.Identifier$' >/dev/null; then
+  fail "Zone.Identifier files refused. Clean WSL/NTFS cruft before commit."
+fi
+
+# 6. Run gitleaks if available
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --no-banner --redact || fail "gitleaks: staged secret detected."
+fi
+
+echo "✅ pre-commit: passed."
