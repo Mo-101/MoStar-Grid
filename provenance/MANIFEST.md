@@ -7,6 +7,10 @@
 | 2026-04 | New repo named `mostar-grid-core`. Old repo becomes `MoStar-Grid-Archive`, read-only. | The Flame Architect |
 | 2026-04 | Ibibio corpus source of truth lives in `mostar-grid-core/soul/ibibio/`. Idim Ikang imports. | The Flame Architect |
 | 2026-04 | Prime law clarified in canon: **Woo interprets, TruthEngine governs, Grid executes.** | The Flame Architect |
+| 2026-05-26 | **Phase 4.0a doctrinal pivot:** first live cognition loop is **Assisted Canon Ingestion**, not governance. Governance (4.0b) waits for graph density thresholds. Epistemic structuring precedes decision. Sealed by RFC `rfcs/2026-05-phase-4.0a-canon-ingestion.md` and diagram `architecture/phase-4.0a-ingestion-loop.md`. Convergence partner: Claude. v2 governance-first runtime is **superseded** until reshape spec lands. | The Flame Architect |
+| 2026-05-26 | **Human Correction Law sealed:** If human correction contradicts model interpretation, the correction is authoritative canon. Model output preserved as prior in provenance, never as truth. | The Flame Architect |
+| 2026-05-26 | **Forbidden behaviors during 4.0a sealed:** autonomous graph mutation, schema mutation, automatic ontology expansion, self-generated provenance, self-modifying prompts, self-authorized execution. Any path enabling any of these fails closed. | The Flame Architect |
+| 2026-05-26 | **Density promotion thresholds sealed:** ≥10k meaningful relationships, ≥500 provenance chains, contradiction corpus present, canonical ontology coverage. Threshold satisfaction does not auto-promote; promotion requires separate RFC and Flame Architect seal. | The Flame Architect |
 
 **Sealed:** [date of crossing event]
 **Sealer:** The Flame Architect
