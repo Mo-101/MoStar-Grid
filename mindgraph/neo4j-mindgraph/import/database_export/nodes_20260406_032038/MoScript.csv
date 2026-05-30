@@ -1,0 +1,8 @@
+cid,id,labels,name,registeredAt,seal,trigger
+sha256:655be647b8b048e2bd5e81969a41aac34f5779769154302496f6df4d6b55ad4c,mo-border-phantom-001,MoScript,Phantom POE Corridor Detector,2026-03-13T09:35:21.449Z,◉⟁⬡,signal_chain_detected OR entropy_spike OR linguistic_drift
+sha256:655be647b8b048e2bd5e81969a41aac34f5779769154302496f6df4d6b55ad4c,mo-border-phantom-001,MoScript,Phantom POE Corridor Detector,2026-03-13T09:35:21.449Z,◉⟁⬡,signal_chain_detected OR entropy_spike OR linguistic_drift
+sha256:7056804215569ad395568ff38087b5e7bf2542a5660e90534c0a8d39c2fa4cff,mo-fwd-eff-001,MoScript,Forwarder Efficiency Ranker,2026-03-13T09:35:21.553Z,◉⟁⬡,onCalculateResults
+sha256:7056804215569ad395568ff38087b5e7bf2542a5660e90534c0a8d39c2fa4cff,mo-fwd-eff-001,MoScript,Forwarder Efficiency Ranker,2026-03-13T09:35:21.553Z,◉⟁⬡,onCalculateResults
+sha256:6784b54b8a348f971d55e4f069644d50997ce5d489bcabf0dc924cc80ae011c7,mo-cost-saver-007,MoScript,Cost Optimization Oracle,2026-03-13T09:35:21.562Z,◉⟁⬡,onMonthlyTrendUpdate
+sha256:6784b54b8a348f971d55e4f069644d50997ce5d489bcabf0dc924cc80ae011c7,mo-cost-saver-007,MoScript,Cost Optimization Oracle,2026-03-13T09:35:21.562Z,◉⟁⬡,onMonthlyTrendUpdate
+sha256:e867d6a47e06c2a3956cc23e382b455bc87999a7044d3576e0ae31ff364c0b11,mo-signal-ingest-001,MoScript,Live Signal Ingestion Pipeline,2026-03-13T09:35:21.560Z,◉⟁⬡,"cron(""0 * * * *"")"

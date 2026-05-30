@@ -2,21 +2,21 @@
 from __future__ import annotations
 
 import json
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
 from typing import Optional
 
-from grid.config import GRID_ROOT
+from grid.config import APPROVAL_QUEUE_PATH, MOSTAR_CLUSTER_ID
 
 
 class ProposalState(str, Enum):
-    PROPOSED = "proposed"
-    APPROVED = "approved"
-    REJECTED = "rejected"
-    REVISED = "revised"
-    COMMITTED = "committed"
+    PROPOSED = "PROPOSED"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    REVISED = "REVISED"
+    COMMITTED = "COMMITTED"
 
 
 @dataclass
@@ -29,6 +29,7 @@ class ProposalRecord:
     placement: dict
     proposed_mutations: list[dict]
     proposed_at: str
+    cluster_id: str = MOSTAR_CLUSTER_ID
     approved_by: Optional[str] = None
     approved_at: Optional[str] = None
     rejected_reason: Optional[str] = None
@@ -41,13 +42,17 @@ class ProposalRecord:
 
     def to_dict(self) -> dict:
         data = asdict(self)
+        data["proposal_id"] = data.pop("id")
         data["state"] = self.state.value
         return data
 
     @classmethod
     def from_dict(cls, data: dict) -> "ProposalRecord":
         payload = {k: v for k, v in data.items() if not k.startswith("_")}
-        payload["state"] = ProposalState(payload["state"])
+        if "proposal_id" in payload and "id" not in payload:
+            payload["id"] = payload.pop("proposal_id")
+        payload.setdefault("cluster_id", MOSTAR_CLUSTER_ID)
+        payload["state"] = ProposalState(str(payload["state"]).upper())
         return cls(**payload)
 
 
@@ -55,7 +60,7 @@ class ApprovalQueue:
     """Append-only JSONL state store for human approval decisions."""
 
     def __init__(self, path: Path | None = None):
-        self.path = path or GRID_ROOT / "data" / "approval_queue" / "proposals.jsonl"
+        self.path = path or APPROVAL_QUEUE_PATH
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._records: dict[str, ProposalRecord] = {}
         self.load()

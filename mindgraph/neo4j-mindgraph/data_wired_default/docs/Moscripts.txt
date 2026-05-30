@@ -1,0 +1,47 @@
+💾 MoScript Core Structure
+ts
+Copy
+Edit
+type MoScript = {
+  id: string;
+  name: string;
+  trigger: string; // What event/context it responds to
+  inputs: string[];
+  logic: (inputs: Record<string, any>) => any;
+  voiceLine?: (result: any) => string;
+  sass?: boolean;
+};
+🔧 Example 1 — Freight Forwarder Efficiency Ranker
+ts
+Copy
+Edit
+const mo_FWD_EFFICIENCY: MoScript = {
+  id: 'mo-fwd-eff-001',
+  name: 'Forwarder Efficiency Ranker',
+  trigger: 'onCalculateResults',
+  inputs: ['shipmentData'],
+  logic: ({ shipmentData }) => {
+    // Group by forwarder, avg delivery time, rate, on-time %
+    return rankForwarders(shipmentData);
+  },
+  voiceLine: (result) =>
+    `After scouring every shipment, the data speaks: ${result.top.name} leads the pack — part cheetah, part calculator.`,
+  sass: true
+};
+🔧 Example 2 — Cost Drop Opportunity Detector
+ts
+Copy
+Edit
+const mo_COST_ALERT: MoScript = {
+  id: 'mo-cost-saver-007',
+  name: 'Cost Optimization Oracle',
+  trigger: 'onMonthlyTrendUpdate',
+  inputs: ['shipmentData', 'historical'],
+  logic: ({ shipmentData }) => {
+    // Compare last month’s costs per route and suggest changes
+    return detectSavingsRoutes(shipmentData);
+  },
+  voiceLine: (result) =>
+    `Ka-ching! A 20% drop spotted on Kenya–Malawi if you swap to sea. That’s enough for office snacks *and* ego boosts.`,
+  sass: true
+};

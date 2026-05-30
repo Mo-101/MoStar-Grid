@@ -1,0 +1,29 @@
+component_id,component_name,layer_type,technology,description,status,reasoning_speed_seconds,explainability_percent,accuracy_percent,integration_status
+ons-001,Omni-Neuro-Symbolic Engine,hybrid_architecture,Multi-paradigm,Combines symbolic reasoning with neural processing,active,2-5,100,91,integrated
+sym-001,Symbolic Reasoning Layer,symbolic,Neo4j + Rules,Knowledge graph with 197k+ nodes and logical rules,operational,1-2,100,95,active
+neural-001,Neural Processing Layer,neural,GPT-4 + Gemini + Local,Large language models for pattern recognition,operational,2-4,60,88,active
+integration-001,TruthEngine Synthesis,fusion,Custom Python,Neuro-symbolic integration and multi-model mesh,operational,3-6,95,91,active
+kg-001,Knowledge Graph,symbolic_component,Neo4j,197000+ nodes of entities and relationships,operational,0.5,100,98,active
+rules-001,Rule Engine,symbolic_component,First-order logic,If-then rules and constraint satisfaction,operational,0.3,100,96,active
+ontology-001,African Philosophies,symbolic_component,OWL,Ubuntu Ifá and indigenous knowledge ontologies,active,0.2,100,100,active
+llm-001,GPT-4,neural_component,Azure OpenAI,General reasoning and synthesis model,operational,2,50,87,active
+llm-002,Gemini Pro,neural_component,Google,Alternative perspective model,operational,2,50,85,active
+llm-003,Qwen,neural_component,Ollama Local,Sovereignty model (DCX1),operational,1,60,83,active
+llm-004,Mistral,neural_component,Ollama Local,Execution model (DCX2),operational,1,60,84,active
+fusion-001,Neural-Guided Symbolic,integration_method,Hybrid,Neural proposes symbolic validates,active,2,90,89,operational
+fusion-002,Symbolic-Guided Neural,integration_method,Hybrid,Symbolic constrains neural search,active,3,85,87,operational
+fusion-003,Bidirectional Reasoning,integration_method,Hybrid,Bottom-up and top-down iteration,active,4,92,90,operational
+algo-001,Knowledge Graph Embedding,algorithm,GNN + Symbolic,Vector representations with rule constraints,active,3,80,88,development
+algo-002,Abductive Learning,algorithm,Neural + Rules,Pattern recognition with rule generation,active,5,88,86,development
+algo-003,Concept Learning,algorithm,Clustering + Logic,Learn concepts in first-order logic,active,4,93,84,development
+cap-001,Explainable AI,capability,Graph Tracing,All decisions traceable through knowledge graph,operational,1,100,100,active
+cap-002,Few-Shot Learning,capability,Rules + Examples,Generalize from symbolic rules and few examples,active,2,85,82,active
+cap-003,Commonsense Reasoning,capability,Cultural Grounding,Ubuntu and cultural knowledge as commonsense,active,1,95,90,active
+cap-004,Causal Reasoning,capability,Graph + Neural,Distinguish causation from correlation,active,3,90,86,active
+cap-005,Multi-Hop Reasoning,capability,Graph Traversal,Complex queries across relationship paths,operational,2,95,91,active
+app-ons-001,Disease Outbreak Analysis,application,Neuro-Symbolic,Symptom recognition + rule-based diagnosis,operational,4,98,93,active
+app-ons-002,Supply Chain Optimization,application,Neuro-Symbolic,GNN learning + symbolic constraints,operational,5,96,89,active
+metric-ons-001,Graph Nodes,metric,197000+,Symbolic knowledge base size,active,na,na,na,na
+metric-ons-002,Symbolic Rules,metric,1200+,First-order logic rules,active,na,na,na,na
+metric-ons-003,Neural Models,metric,4,GPT-4 Gemini Qwen Mistral,active,na,na,na,na
+metric-ons-004,Hallucination Reduction,metric,67%,Reduction vs pure neural,active,na,na,na,na

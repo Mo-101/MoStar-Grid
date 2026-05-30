@@ -1,0 +1,502 @@
+[
+  {
+    "n": {
+      "identity": 341,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Audit",
+          "Code Analysis",
+          "Protocol Synthesis"
+        ],
+        "name": "Agent-Kairos",
+        "id": "WatcherAgent-001",
+        "manifestationStrength": 0.5,
+        "status": "IDLE"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:341"
+    }
+  },
+  {
+    "n": {
+      "identity": 344,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Oba Kingship",
+        "id": "Watcher-OBA-KINGSHIP",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:344"
+    }
+  },
+  {
+    "n": {
+      "identity": 345,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Ashanti Confederacy",
+        "id": "Watcher-ASHANTI-CONFEDERACY",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:345"
+    }
+  },
+  {
+    "n": {
+      "identity": 346,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Gadaa System",
+        "id": "Watcher-GADAA-SYSTEM",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:346"
+    }
+  },
+  {
+    "n": {
+      "identity": 347,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Mwami System",
+        "id": "Watcher-MWAMI-SYSTEM",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:347"
+    }
+  },
+  {
+    "n": {
+      "identity": 348,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Indaba",
+        "id": "Watcher-INDABA",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:348"
+    }
+  },
+  {
+    "n": {
+      "identity": 349,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Kgotla",
+        "id": "Watcher-KGOTLA",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:349"
+    }
+  },
+  {
+    "n": {
+      "identity": 350,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Palaver System",
+        "id": "Watcher-PALAVER-SYSTEM",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:350"
+    }
+  },
+  {
+    "n": {
+      "identity": 351,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Customary Law",
+        "id": "Watcher-CUSTOMARY-LAW",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:351"
+    }
+  },
+  {
+    "n": {
+      "identity": 352,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Gacaca",
+        "id": "Watcher-GACACA",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:352"
+    }
+  },
+  {
+    "n": {
+      "identity": 353,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Moringa Oleifera",
+        "id": "Watcher-MORINGA-OLEIFERA",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:353"
+    }
+  },
+  {
+    "n": {
+      "identity": 354,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Ogun Leaf",
+        "id": "Watcher-OGUN-LEAF",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:354"
+    }
+  },
+  {
+    "n": {
+      "identity": 355,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Artemisia Afra",
+        "id": "Watcher-ARTEMISIA-AFRA",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:355"
+    }
+  },
+  {
+    "n": {
+      "identity": 356,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Prunus Africana",
+        "id": "Watcher-PRUNUS-AFRICANA",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:356"
+    }
+  },
+  {
+    "n": {
+      "identity": 357,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Steam Bath Therapy",
+        "id": "Watcher-STEAM-BATH-THERAPY",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:357"
+    }
+  },
+  {
+    "n": {
+      "identity": 358,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Traditional Bone Setting",
+        "id": "Watcher-TRADITIONAL-BONE-SETTING",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:358"
+    }
+  },
+  {
+    "n": {
+      "identity": 359,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Sacred Grove",
+        "id": "Watcher-SACRED-GROVE",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:359"
+    }
+  },
+  {
+    "n": {
+      "identity": 360,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Water Rituals",
+        "id": "Watcher-WATER-RITUALS",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:360"
+    }
+  },
+  {
+    "n": {
+      "identity": 361,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Shifting Cultivation",
+        "id": "Watcher-SHIFTING-CULTIVATION",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:361"
+    }
+  },
+  {
+    "n": {
+      "identity": 362,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Contain",
+          "Report"
+        ],
+        "name": "Watcher of Lassa Fever",
+        "id": "Watcher-LASSA-FEVER",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:362"
+    }
+  },
+  {
+    "n": {
+      "identity": 363,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Malaria",
+        "id": "Watcher-MALARIA",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:363"
+    }
+  },
+  {
+    "n": {
+      "identity": 364,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Fever",
+        "id": "Watcher-FEVER",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:364"
+    }
+  },
+  {
+    "n": {
+      "identity": 365,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Rash",
+        "id": "Watcher-RASH",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:365"
+    }
+  },
+  {
+    "n": {
+      "identity": 366,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Cough",
+        "id": "Watcher-COUGH",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:366"
+    }
+  },
+  {
+    "n": {
+      "identity": 367,
+      "labels": [
+        "Agent"
+      ],
+      "properties": {
+        "capabilities": [
+          "Observe",
+          "Report",
+          "Guard"
+        ],
+        "name": "Watcher of Griot/Jeli",
+        "id": "Watcher-GRIOT/JELI",
+        "manifestationStrength": 0.5,
+        "status": "MONITORING"
+      },
+      "elementId": "4:e112701a-d4ab-4aac-b317-4226270075f8:367"
+    }
+  }
+]

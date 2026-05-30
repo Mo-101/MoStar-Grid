@@ -1,0 +1,393 @@
+audio_file,audio_path,english,frequency,id,labels,pos,speaker,syllables,tone_pattern,word
+nan,nan,"central beam of a house, it runs the length of the roof",0,453,IbibioWord,noun,Mfon Udoinyang,2,[H.HL],abom
+nan,nan,dust,0,454,IbibioWord,noun,Mfon Udoinyang,2,[HF],abu
+nan,nan,"black, ripe, mature",0,455,IbibioWord,adjective,Mfon Udoinyang,3,[LHH],abubit
+nan,nan,"a kind of yam formerly only planted by women, water yam",0,456,IbibioWord,noun,Mfon Udoinyang,3,[LLL],abịre
+nan,nan,adolescent girl,0,457,IbibioWord,noun,Mfon Udoinyang,4,[LHHL],abọikpa
+nan,nan,"a plank, the board for the game of draughts (checkers)",0,458,IbibioWord,noun,Mfon Udoinyang,3,[LHL],adukpọk
+nan,nan,cross the fingers,0,459,IbibioWord,noun,Mfon Udoinyang,2,[LL],adọ
+nan,nan,python,0,460,IbibioWord,noun,Mfon Udoinyang,3,[LHL],asabọ
+nan,nan,"group, flock, herd",0,461,IbibioWord,noun,Mfon Udoinyang,2,[HH],atu
+nan,nan,imitate,0,462,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[LH],bọịyọ
+nan,nan,sleep,0,463,IbibioWord,"verb, intransitive",Mfon Udoinyang,3,[HH],daiya
+nan,nan,"dip, steep, soak",0,464,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LL],deep
+nan,nan,"fierce, brave, valiant, dare, become hot, burn (of pepper)",0,465,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[LH],deghe
+nan,nan,"collect, gather, pull down tendrils",0,466,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[LL.H],diappa
+nan,nan,"to lose, throw away",0,467,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[HHH],duọọk
+nan,nan,marry,0,468,IbibioWord,"verb, transitive; verb, intransitive",Mfon Udoinyang,1,[H],dọ
+nan,nan,"send, send for, send to (a person or a message)",0,469,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[L],dọn̄
+nan,nan,an uncircumcised man or woman,0,470,IbibioWord,noun,Mfon Udoinyang,2,[LH],edʌt
+nan,nan,nest,0,471,IbibioWord,noun,Mfon Udoinyang,4,[HHHL],efuọọt
+nan,nan,mother,0,472,IbibioWord,noun,Mfon Udoinyang,2,[LL],eka
+nan,nan,"bag, pocket; a piece of woven raffia",0,473,IbibioWord,noun,Mfon Udoinyang,2,[LL],ekpat
+nan,nan,axe,0,474,IbibioWord,noun,Mfon Udoinyang,2,[LL],ekịt
+nan,nan,"the liver, heart, chest, inside; mind",0,475,IbibioWord,noun,Mfon Udoinyang,2,[HF],esịt
+nan,nan,"become thin, light in weight, lightened",0,476,IbibioWord,"verb, intransitive",Mfon Udoinyang,3,[HHH],feere
+nan,nan,"spit, spit out (food, liquid, saliva)",0,477,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LL],fiat
+nan,nan,forget,0,478,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LLH],fịre
+nan,nan,bitter,0,479,IbibioWord,adjective,Mfon Udoinyang,4,[L.LH.HL],idoidot
+nan,nan,spoon,0,480,IbibioWord,noun,Mfon Udoinyang,2,[LH],ikpan̄
+nan,nan,"someone shorter than normal, a stunted person",0,481,IbibioWord,noun,Mfon Udoinyang,2,[LH],ikpọn
+nan,nan,gonorrhea,0,482,IbibioWord,noun,Mfon Udoinyang,2,[HH],ikịm
+nan,nan,a tiny fragrant leaf used to season soup,0,483,IbibioWord,noun,Mfon Udoinyang,2,[LH],ikọ
+nan,nan,bird (generic term),0,484,IbibioWord,noun,Mfon Udoinyang,3,[HDH],inuen
+nan,nan,"burnt, scorched",0,485,IbibioWord,adjective,Mfon Udoinyang,4,[LLHL],isaisak
+nan,nan,"face, front, future",0,486,IbibioWord,noun,Mfon Udoinyang,2,[HH],iso
+nan,nan,"someone shorter than normal, a stunted person",0,487,IbibioWord,noun,Mfon Udoinyang,2,[HH],isọ
+nan,nan,cigarette,0,488,IbibioWord,noun,Mfon Udoinyang,3,[LLF],kasidet
+nan,nan,ebb (of the tide),0,489,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[HH],kebe
+nan,nan,"follow, company; help",0,490,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[LLH],keene
+nan,nan,"die, perish; become exhausted, overcome; fade; heal",0,491,IbibioWord,"verb, intransitive",Mfon Udoinyang,1,[H],kpa
+nan,nan,sound made by a flat object when it falls flat to the ground,0,492,IbibioWord,ideophone,Mfon Udoinyang,1,[HL],kpam
+nan,nan,"plead, plead with, entreat, beg",0,493,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[H],kpe
+nan,nan,"plead, plead with, entreat, beg",0,494,IbibioWord,"verb, transitive",Itoro Ituen,2,[HH],kpee
+nan,nan,catch in the hands (plural of kpoppo),0,495,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[HH],kpoomo
+nan,nan,cut off the end of a periwinkle,0,496,IbibioWord,"verb, transitive",Itoro Ituen,2,[HH],kpọi
+nan,nan,"call, read aloud, invite",0,497,IbibioWord,"verb, transitive",Itoro Ituen,2,[LL],kpọọk
+nan,nan,"loosen, untie, unwrap, unfasten, dismantle",0,498,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[HH],kpọọk
+nan,nan,"hit, beat, hollow or flat sounds",0,499,IbibioWord,"verb, transitive",Itoro Ituen,3,[LLH],kpọọn̄ọ
+nan,nan,grind between two stones,0,500,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[H],kọk
+nan,nan,"remove from a hook, unhang",0,501,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[HH],kọn̄n̄ọ
+nan,nan,"remove from a hook, remove what hangs",0,502,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LH],kọppọ
+nan,nan,"hang (an object on a hook, around a person's neck)",0,503,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[HH],kọọn̄
+nan,nan,cup; cigarette tin or other container,0,504,IbibioWord,noun,Mfon Udoinyang,2,[HL],kọọp
+nan,nan,"piece, half piece",0,505,IbibioWord,noun,Mfon Udoinyang,2,[HDH],mbai
+nan,nan,groundnut,0,506,IbibioWord,noun,Mfon Udoinyang,2,[LLHD],mbansan̄
+nan,nan,"side, edge",0,507,IbibioWord,noun,Mfon Udoinyang,1,[LL],mben
+nan,nan,"weeds, grass",0,508,IbibioWord,noun,Mfon Udoinyang,2,[HHH],mbiet
+nan,nan,sugar cane,0,509,IbibioWord,noun,Mfon Udoinyang,2,[LLL],mbọkọ
+nan,nan,today,0,510,IbibioWord,noun,Mfon Udoinyang,1,[LH],mfịn
+nan,nan,"a natural covering, skin scab",0,511,IbibioWord,noun,Mfon Udoinyang,1,[HH],mkpa
+nan,nan,a creeping plant with tiny leaves,0,512,IbibioWord,noun,Mfon Udoinyang,2,[LLH],mkpatat
+nan,nan,a kind of plant with small bitter fruits,0,513,IbibioWord,noun,Mfon Udoinyang,2,[HHL],mkpidọn̄
+nan,nan,a seat without a back,0,514,IbibioWord,noun,Mfon Udoinyang,2,[HHH],mkpono
+nan,nan,"prison, jail, detention",0,515,IbibioWord,noun,Mfon Udoinyang,2,[LLL],mkpọkọp
+nan,nan,"handcuffs, leg cuffs, shackles",0,516,IbibioWord,noun,Mfon Udoinyang,2,[HHH],mkpọnọ
+nan,nan,eyeball,0,517,IbibioWord,noun,Mfon Udoinyang,4,[HHH HL],mkpọrọanyen
+nan,nan,"rough skin, tough skin",0,518,IbibioWord,noun,Mfon Udoinyang,6,[LHLLH HL],mkpụriikpu idem
+nan,nan,water,0,519,IbibioWord,noun,Mfon Udoinyang,2,[HHH],mmọọn̄
+nan,nan,"injure, wound",0,520,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[H],nan
+nan,nan,dream,0,521,IbibioWord,noun,Mfon Udoinyang,1,[HH],ndap
+nan,nan,weeds,0,522,IbibioWord,noun,Mfon Udoinyang,1,[HH],ndip
+nan,nan,eczema,0,523,IbibioWord,noun,Mfon Udoinyang,2,[HHF],nditọn̄
+nan,nan,a kind of small fish,0,524,IbibioWord,noun,Mfon Udoinyang,1,[HF],ndo
+nan,nan,two hundred (from an old monetary system),0,525,IbibioWord,noun,Mfon Udoinyang,1,[HL],ndu
+nan,nan,jostling; a kind of game,0,526,IbibioWord,noun,Mfon Udoinyang,3,[HLHH],ndubete
+nan,nan,dance; fawn on,0,527,IbibioWord,"verb, intransitive, verb, transitive",Mfon Udoinyang,1,[H],nek
+nan,nan,"converse, tell, inform",0,528,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[LH],neme
+nan,nan,where,0,529,IbibioWord,conjunction,Mfon Udoinyang,1,[LL],nte
+nan,nan,unsteadily,0,530,IbibioWord,adverb,Mfon Udoinyang,4,[LLL LLL],nten̄e nten̄e
+nan,nan,"good, genuine",0,531,IbibioWord,adjective,Mfon Udoinyang,1,[HF],nti
+nan,nan,"cornsilk, the tassel at the end of an ear of corn",0,532,IbibioWord,noun,Mfon Udoinyang,3,[HHLL],nyeriye
+nan,nan,"have; must; appear to be, exist",0,533,IbibioWord,"verb, transitive, verb, intransitive",Mfon Udoinyang,2,[HH],nyie
+nan,nan,kerosine,0,534,IbibioWord,noun,Mfon Udoinyang,3,[HHHF],n̄karasịn
+nan,nan,a plant with hot peppery fruit and leaves,0,535,IbibioWord,noun,Mfon Udoinyang,3,[LLHF],n̄karika
+nan,nan,an insect of the grasshopper type,0,536,IbibioWord,noun,Mfon Udoinyang,2,[LLL],n̄kuku
+nan,nan,locust,0,537,IbibioWord,noun,Mfon Udoinyang,6,[HHHLLLHL],n̄kukumkpọyọriyọ
+nan,nan,give (pl. of nọ),0,538,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[LLH],nọọn̄ọ
+nan,nan,throw up to someone what one has done,0,539,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[HHH],sieen̄
+nan,nan,"take fire, carry fire",0,540,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LL],suum
+nan,nan,sound of wood being cut,0,541,IbibioWord,ideophone,Mfon Udoinyang,1,[L],tap
+nan,nan,"since, starting from (time only)",0,542,IbibioWord,"preposition, conjunction",Mfon Udoinyang,2,[HH],toto
+nan,nan,awaken,0,543,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[HH],tui
+nan,nan,"become stupid, retarded",0,544,IbibioWord,"verb, intransitive",Mfon Udoinyang,1,[H],tʌn
+nan,nan,become sluggish,0,545,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[LH],tịnnọ
+nan,nan,"hit, hit the mark; knock against",0,546,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[H],tọ
+nan,nan,a kind of tree with soft wood,0,547,IbibioWord,noun,Mfon Udoinyang,2,[HF],ukpọ
+nan,nan,What day?,0,548,IbibioWord,phrase,Mfon Udoinyang,2,[HD],uso
+nan,nan,three,0,549,IbibioWord,numeral,Mfon Udoinyang,2,[LH],uta
+nan,nan,sand on the shore,0,550,IbibioWord,noun,Mfon Udoinyang,2,[HH],utan
+nan,nan,"bread, biscuit",0,551,IbibioWord,noun,Mfon Udoinyang,2,[LH],uyo
+nan,nan,see at an unexpected time or place,0,552,IbibioWord,"verb, transitive, verb, intransitive",Mfon Udoinyang,2,[HH],yokko
+nan,nan,mens robes,0,553,IbibioWord,noun,Mfon Udoinyang,3,[LLH],abara
+nan,nan,sexual organ of snail,0,554,IbibioWord,noun,Mfon Udoinyang,3,[HHL],abọrọ
+nan,nan,rice,0,555,IbibioWord,noun,Mfon Udoinyang,4,[LHLL],adeesi
+nan,nan,you,0,556,IbibioWord,pronoun,Mfon Udoinyang,2,[LL],afo
+nan,nan,chameleon,0,557,IbibioWord,noun,Mfon Udoinyang,3,[HHF],akube
+nan,nan,"crying, weeping",0,558,IbibioWord,noun,Mfon Udoinyang,2,[HH],ayịt
+nan,nan,find and keep,0,559,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[L],ba
+nan,nan,"become in need of, get into straits",0,560,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[HH],baba
+nan,nan,"stop, cease, conclude",0,561,IbibioWord,"verb, intransitive; verb, transitive",Mfon Udoinyang,3,[LLH],biere
+nan,nan,stand,0,562,IbibioWord,"verb, intransitive",Mfon Udoinyang,1,[H],da
+nan,nan,term of address used between men,0,563,IbibioWord,noun,Mfon Udoinyang,1,[L],da
+nan,nan,remove from the embers what has been roasting,0,564,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LL],daap
+nan,nan,"take away, separate two things",0,565,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[HHH],dianna
+nan,nan,"intend, wish",0,566,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[HH],duak
+nan,nan,"fall, fall down",0,567,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[LH],duọ
+nan,nan,"enter, go into, join",0,568,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[H],dʌk
+nan,nan,tell,0,569,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[HH],dọkkọ
+nan,nan,become smooth,0,570,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LH],dọnọ
+nan,nan,"climb (tree, hill)",0,571,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[HH],dọọk
+nan,nan,a kind of slug found on plantain leaves,0,572,IbibioWord,noun,Mfon Udoinyang,3,[LLL],ebọnọ
+nan,nan,bitter kola,0,573,IbibioWord,noun,Mfon Udoinyang,3,[LHH],efiat
+nan,nan,world,0,574,IbibioWord,noun,Mfon Udoinyang,3,[LLL],ekondo
+nan,nan,stomach; a bag-like object,0,575,IbibioWord,noun,Mfon Udoinyang,2,[LL],ekpa
+nan,nan,copulation,0,576,IbibioWord,noun,Mfon Udoinyang,3,[LH],ekun̄ọ
+nan,nan,torture,0,577,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[HHH],fiime
+nan,nan,"become heaped up, piled up",0,578,IbibioWord,"verb, intransitive; verb, transitive",Mfon Udoinyang,1,[H],fịk
+nan,nan,"fan, wave, swing; hover, float",0,579,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[L],fịm
+nan,nan,"crazyness, mad person",0,580,IbibioWord,noun,Mfon Udoinyang,3,[HHL],idaat
+nan,nan,"body, self (reflexive)",0,581,IbibioWord,noun,Mfon Udoinyang,2,[HH],idem
+nan,nan,partition; section of bush,0,582,IbibioWord,noun,Mfon Udoinyang,3,[HHH],ikpeghe
+nan,nan,tortoise,0,583,IbibioWord,noun,Mfon Udoinyang,2,[HH],ikịt
+nan,nan,mouth,0,584,IbibioWord,noun,Mfon Udoinyang,3,[HHF],inua
+nan,nan,"walk, journey; gait",0,585,IbibioWord,noun,Mfon Udoinyang,2,[HF],isan̄
+nan,nan,eight,0,586,IbibioWord,number,Mfon Udoinyang,5,[LHLH],itiaita
+nan,nan,a leech; a kind of fish,0,587,IbibioWord,noun,Mfon Udoinyang,3,[LLL],ituet
+nan,nan,nose,0,588,IbibioWord,noun,Mfon Udoinyang,3,[HHH],iwuo
+nan,nan,"rise, puff, swell; become conceited",0,589,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[HH],kokko
+nan,nan,lift something very heavy,0,590,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LH],kpappa
+nan,nan,"push a heavy object; wheel, roll",0,591,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[HH],kpara
+nan,nan,slow down and walk carefully,0,592,IbibioWord,"verb, transitive",Itoro Ituen,2,[LL],kpeek
+nan,nan,slow down and walk carefully,0,593,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LL],kpeen̄
+nan,nan,sound of the eka ibit (a large drum),0,594,IbibioWord,ideophone,Itoro Ituen,1,[L],kpim
+nan,nan,peel with hand or knife; unlock; bleach,0,595,IbibioWord,"verb, transitive",Itoro Ituen,2,[HH],kpọkkọ
+nan,nan,"rub off, erase, wipe clean, polish",0,596,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[LLH],kuoko
+nan,nan,"retch, vomit",0,597,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[L],kọk
+nan,nan,"knock, tap",0,598,IbibioWord,"verb, intransitive",Mfon Udoinyang,1,[L],kọn̄
+nan,nan,"cure, heal, perform juju",0,599,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[HH],kọọk
+nan,nan,hang; spread out to dry,0,600,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[HH],kọọp
+nan,nan,"dirt, refuse, garbage",0,601,IbibioWord,noun,Mfon Udoinyang,2,[HHH],mbio
+nan,nan,slacken; relax the body,0,602,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LL],meem
+nan,nan,"choose, select",0,603,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[L],mek
+nan,nan,swallow,0,604,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[L],men
+nan,nan,ring,0,605,IbibioWord,noun,Mfon Udoinyang,2,[LH HD],mkpa nnʌk
+nan,nan,small sticks used to support young yam shoots,0,606,IbibioWord,noun,Mfon Udoinyang,2,[HHH],mkpai
+nan,nan,skin of the vagina,0,607,IbibioWord,noun,Mfon Udoinyang,3,[LF HL],mkpap itit
+nan,nan,small,0,608,IbibioWord,adjective,Mfon Udoinyang,2,[LHL],mkpara
+nan,nan,a large calabash used as a buoy,0,609,IbibioWord,noun,Itoro Ituen,3,[LHHH],mkparikpa
+nan,nan,regret,0,610,IbibioWord,noun,Mfon Udoinyang,3,[LH LL],mkpefiọk
+nan,nan,shin,0,611,IbibioWord,noun,Mfon Udoinyang,5,[HHH HL],mkpịparan̄ukot
+nan,nan,"thing, something; matter event",0,612,IbibioWord,noun,Itoro Ituen,1,[HH],mkpọ
+nan,nan,"so, so that",0,613,IbibioWord,conj.,Mfon Udoinyang,1,[LH],mma
+nan,nan,secret,0,614,IbibioWord,adjective,Mfon Udoinyang,3,[LHHH],ndedịbe
+nan,nan,the pelvic area,0,615,IbibioWord,noun,Mfon Udoinyang,4,[HLHHHL],ndidiino
+nan,nan,unsteady; shiftless,0,616,IbibioWord,adjective,Mfon Udoinyang,4,[HLHH],ndufeen̄e
+nan,nan,stain,0,617,IbibioWord,noun,Mfon Udoinyang,3,[HLHH],nduwughọ
+nan,nan,what,0,618,IbibioWord,interrogative,Mfon Udoinyang,1,[LH],nse
+nan,nan,smallpox,0,619,IbibioWord,noun,Mfon Udoinyang,2,[HFHF],ntanta
+nan,nan,"children, young of animals",0,620,IbibioWord,noun,Mfon Udoinyang,1,[LL],ntọ
+nan,nan,"be tall, long, far, high, deep",0,621,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[LL],nyọọn̄
+nan,nan,"folktale, proverb",0,622,IbibioWord,noun,Mfon Udoinyang,1,[LH],n̄ke
+nan,nan,"over there, yonder",0,623,IbibioWord,noun,Mfon Udoinyang,1,[LH],n̄ko
+nan,nan,a percussion instrument,0,624,IbibioWord,noun,Mfon Udoinyang,3,[HHHH],n̄kukuak
+nan,nan,become congested; become odorous,0,625,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[HH],n̄wagha
+nan,nan,"granular, in grains",0,626,IbibioWord,adjective,Mfon Udoinyang,2,[LLH],n̄wara
+nan,nan,"weeds, grass",0,627,IbibioWord,noun,Mfon Udoinyang,1,[HH],n̄wịp
+nan,nan,"choke, cause choking",0,628,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[H],set
+nan,nan,scatter things; strew things about,0,629,IbibioWord,"verb, transitive",Mfon Udoinyang,3,[LLL],suaan
+nan,nan,"become left over, remain",0,630,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[HH],sʌghọ
+nan,nan,cluck at to show annoyance,0,631,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[HH],sọọt
+nan,nan,"explain, direct, tell how",0,632,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LH],temme
+nan,nan,describes water falling drop by drop,0,633,IbibioWord,ideophone,Mfon Udoinyang,1,[L],tep
+nan,nan,tea,0,634,IbibioWord,noun,Mfon Udoinyang,1,[F],ti
+nan,nan,place an order,0,635,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[LH],tobo
+nan,nan,"taste liquid, take a sip, sip",0,636,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[L],tʌm
+nan,nan,eat a little bit at a time,0,637,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[HH],tįn̄n̄e
+nan,nan,second,0,638,IbibioWord,numeral,Mfon Udoinyang,2,[LL],uba
+nan,nan,birth mark,0,639,IbibioWord,noun,Mfon Udoinyang,2,[LH],ubịt
+nan,nan,left (direction),0,640,IbibioWord,noun,Mfon Udoinyang,3,[LHH],ufiin
+nan,nan,"miser, tight-fisted person",0,641,IbibioWord,noun,Mfon Udoinyang,2,[HH],uma
+nan,nan,a kind of fresh water eel,0,642,IbibioWord,noun,Mfon Udoinyang,2,[LF],unyan̄
+nan,nan,"empty, wasted, devoid of purpose",0,643,IbibioWord,adjective,Mfon Udoinyang,3,[LHH],uyagha
+nan,nan,beauty,0,644,IbibioWord,noun,Mfon Udoinyang,3,[LLL],uyai
+nan,nan,sneeze,0,645,IbibioWord,"verb, intransitive",Mfon Udoinyang,2,[LH],waya
+nan,nan,having the urge to sleep,0,646,IbibioWord,"verb, transitive",Mfon Udoinyang,2,[H],yeet
+nan,nan,"move about, become restless, fidget",0,647,IbibioWord,"verb, intransitive",Mfon Udoinyang,1,[H],yok
+nan,nan,"attach, put together, fasten, lock, hang",0,648,IbibioWord,"verb, transitive",Mfon Udoinyang,1,[H],yịt
+,,"central beam of a house, it runs the length of the roof",0,1037,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[H.HL],abom
+,,dust,0,1038,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HF],abu
+,,"black, ripe, mature",0,1039,IbibioWord:SoulLayer,adjective,Mfon Udoinyang,3,[LHH],abubit
+,,"a kind of yam formerly only planted by women, water yam",0,1040,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LLL],abịre
+,,adolescent girl,0,1041,IbibioWord:SoulLayer,noun,Mfon Udoinyang,4,[LHHL],abọikpa
+,,"a plank, the board for the game of draughts (checkers)",0,1042,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LHL],adukpọk
+,,cross the fingers,0,1043,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LL],adọ
+,,python,0,1044,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LHL],asabọ
+,,"group, flock, herd",0,1045,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HH],atu
+,,imitate,0,1046,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[LH],bọịyọ
+,,sleep,0,1047,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,3,[HH],daiya
+,,"dip, steep, soak",0,1048,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LL],deep
+,,"fierce, brave, valiant, dare, become hot, burn (of pepper)",0,1049,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[LH],deghe
+,,"collect, gather, pull down tendrils",0,1050,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[LL.H],diappa
+,,"to lose, throw away",0,1051,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[HHH],duọọk
+,,marry,0,1052,IbibioWord:SoulLayer,"verb, transitive; verb, intransitive",Mfon Udoinyang,1,[H],dọ
+,,"send, send for, send to (a person or a message)",0,1053,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[L],dọn̄
+,,an uncircumcised man or woman,0,1054,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LH],edʌt
+,,nest,0,1055,IbibioWord:SoulLayer,noun,Mfon Udoinyang,4,[HHHL],efuọọt
+,,mother,0,1056,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LL],eka
+,,"bag, pocket; a piece of woven raffia",0,1057,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LL],ekpat
+,,axe,0,1058,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LL],ekịt
+,,"the liver, heart, chest, inside; mind",0,1059,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HF],esịt
+,,"become thin, light in weight, lightened",0,1060,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,3,[HHH],feere
+,,"spit, spit out (food, liquid, saliva)",0,1061,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LL],fiat
+,,forget,0,1062,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LLH],fịre
+,,bitter,0,1063,IbibioWord:SoulLayer,adjective,Mfon Udoinyang,4,[L.LH.HL],idoidot
+,,spoon,0,1064,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LH],ikpan̄
+,,"someone shorter than normal, a stunted person",0,1065,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LH],ikpọn
+,,gonorrhea,0,1066,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HH],ikịm
+,,a tiny fragrant leaf used to season soup,0,1067,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LH],ikọ
+,,bird (generic term),0,1068,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HDH],inuen
+,,"burnt, scorched",0,1069,IbibioWord:SoulLayer,adjective,Mfon Udoinyang,4,[LLHL],isaisak
+,,"face, front, future",0,1070,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HH],iso
+,,"someone shorter than normal, a stunted person",0,1071,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HH],isọ
+,,cigarette,0,1072,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LLF],kasidet
+,,ebb (of the tide),0,1073,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[HH],kebe
+,,"follow, company; help",0,1074,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[LLH],keene
+,,"die, perish; become exhausted, overcome; fade; heal",0,1075,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,1,[H],kpa
+,,sound made by a flat object when it falls flat to the ground,0,1076,IbibioWord:SoulLayer,ideophone,Mfon Udoinyang,1,[HL],kpam
+,,"plead, plead with, entreat, beg",0,1077,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[H],kpe
+,,"plead, plead with, entreat, beg",0,1078,IbibioWord:SoulLayer,"verb, transitive",Itoro Ituen,2,[HH],kpee
+,,catch in the hands (plural of kpoppo),0,1079,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[HH],kpoomo
+,,cut off the end of a periwinkle,0,1080,IbibioWord:SoulLayer,"verb, transitive",Itoro Ituen,2,[HH],kpọi
+,,"call, read aloud, invite",0,1081,IbibioWord:SoulLayer,"verb, transitive",Itoro Ituen,2,[LL],kpọọk
+,,"loosen, untie, unwrap, unfasten, dismantle",0,1082,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[HH],kpọọk
+,,"hit, beat, hollow or flat sounds",0,1083,IbibioWord:SoulLayer,"verb, transitive",Itoro Ituen,3,[LLH],kpọọn̄ọ
+,,grind between two stones,0,1084,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[H],kọk
+,,"remove from a hook, unhang",0,1085,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[HH],kọn̄n̄ọ
+,,"remove from a hook, remove what hangs",0,1086,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LH],kọppọ
+,,"hang (an object on a hook, around a person's neck)",0,1087,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[HH],kọọn̄
+,,cup; cigarette tin or other container,0,1088,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HL],kọọp
+,,"piece, half piece",0,1089,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HDH],mbai
+,,groundnut,0,1090,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LLHD],mbansan̄
+,,"side, edge",0,1091,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[LL],mben
+,,"weeds, grass",0,1092,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HHH],mbiet
+,,sugar cane,0,1093,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LLL],mbọkọ
+,,today,0,1094,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[LH],mfịn
+,,"a natural covering, skin scab",0,1095,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[HH],mkpa
+,,a creeping plant with tiny leaves,0,1096,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LLH],mkpatat
+,,a kind of plant with small bitter fruits,0,1097,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HHL],mkpidọn̄
+,,a seat without a back,0,1098,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HHH],mkpono
+,,"prison, jail, detention",0,1099,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LLL],mkpọkọp
+,,"handcuffs, leg cuffs, shackles",0,1100,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HHH],mkpọnọ
+,,eyeball,0,1101,IbibioWord:SoulLayer,noun,Mfon Udoinyang,4,[HHH HL],mkpọrọanyen
+,,"rough skin, tough skin",0,1102,IbibioWord:SoulLayer,noun,Mfon Udoinyang,6,[LHLLH HL],mkpụriikpu idem
+,,water,0,1103,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HHH],mmọọn̄
+,,"injure, wound",0,1104,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[H],nan
+,,dream,0,1105,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[HH],ndap
+,,weeds,0,1106,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[HH],ndip
+,,eczema,0,1107,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HHF],nditọn̄
+,,a kind of small fish,0,1108,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[HF],ndo
+,,two hundred (from an old monetary system),0,1109,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[HL],ndu
+,,jostling; a kind of game,0,1110,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HLHH],ndubete
+,,dance; fawn on,0,1111,IbibioWord:SoulLayer,"verb, intransitive, verb, transitive",Mfon Udoinyang,1,[H],nek
+,,"converse, tell, inform",0,1112,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[LH],neme
+,,where,0,1113,IbibioWord:SoulLayer,conjunction,Mfon Udoinyang,1,[LL],nte
+,,unsteadily,0,1114,IbibioWord:SoulLayer,adverb,Mfon Udoinyang,4,[LLL LLL],nten̄e nten̄e
+,,"good, genuine",0,1115,IbibioWord:SoulLayer,adjective,Mfon Udoinyang,1,[HF],nti
+,,"cornsilk, the tassel at the end of an ear of corn",0,1116,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HHLL],nyeriye
+,,"have; must; appear to be, exist",0,1117,IbibioWord:SoulLayer,"verb, transitive, verb, intransitive",Mfon Udoinyang,2,[HH],nyie
+,,kerosine,0,1118,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HHHF],n̄karasịn
+,,a plant with hot peppery fruit and leaves,0,1119,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LLHF],n̄karika
+,,an insect of the grasshopper type,0,1120,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LLL],n̄kuku
+,,locust,0,1121,IbibioWord:SoulLayer,noun,Mfon Udoinyang,6,[HHHLLLHL],n̄kukumkpọyọriyọ
+,,give (pl. of nọ),0,1122,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[LLH],nọọn̄ọ
+,,throw up to someone what one has done,0,1123,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[HHH],sieen̄
+,,"take fire, carry fire",0,1124,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LL],suum
+,,sound of wood being cut,0,1125,IbibioWord:SoulLayer,ideophone,Mfon Udoinyang,1,[L],tap
+,,"since, starting from (time only)",0,1126,IbibioWord:SoulLayer,"preposition, conjunction",Mfon Udoinyang,2,[HH],toto
+,,awaken,0,1127,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[HH],tui
+,,"become stupid, retarded",0,1128,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,1,[H],tʌn
+,,become sluggish,0,1129,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[LH],tịnnọ
+,,"hit, hit the mark; knock against",0,1130,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[H],tọ
+,,a kind of tree with soft wood,0,1131,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HF],ukpọ
+,,What day?,0,1132,IbibioWord:SoulLayer,phrase,Mfon Udoinyang,2,[HD],uso
+,,three,0,1133,IbibioWord:SoulLayer,numeral,Mfon Udoinyang,2,[LH],uta
+,,sand on the shore,0,1134,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HH],utan
+,,"bread, biscuit",0,1135,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LH],uyo
+,,see at an unexpected time or place,0,1136,IbibioWord:SoulLayer,"verb, transitive, verb, intransitive",Mfon Udoinyang,2,[HH],yokko
+,,mens robes,0,1137,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LLH],abara
+,,sexual organ of snail,0,1138,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HHL],abọrọ
+,,rice,0,1139,IbibioWord:SoulLayer,noun,Mfon Udoinyang,4,[LHLL],adeesi
+,,you,0,1140,IbibioWord:SoulLayer,pronoun,Mfon Udoinyang,2,[LL],afo
+,,chameleon,0,1141,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HHF],akube
+,,"crying, weeping",0,1142,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HH],ayịt
+,,find and keep,0,1143,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[L],ba
+,,"become in need of, get into straits",0,1144,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[HH],baba
+,,"stop, cease, conclude",0,1145,IbibioWord:SoulLayer,"verb, intransitive; verb, transitive",Mfon Udoinyang,3,[LLH],biere
+,,stand,0,1146,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,1,[H],da
+,,term of address used between men,0,1147,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[L],da
+,,remove from the embers what has been roasting,0,1148,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LL],daap
+,,"take away, separate two things",0,1149,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[HHH],dianna
+,,"intend, wish",0,1150,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[HH],duak
+,,"fall, fall down",0,1151,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[LH],duọ
+,,"enter, go into, join",0,1152,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[H],dʌk
+,,tell,0,1153,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[HH],dọkkọ
+,,become smooth,0,1154,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LH],dọnọ
+,,"climb (tree, hill)",0,1155,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[HH],dọọk
+,,a kind of slug found on plantain leaves,0,1156,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LLL],ebọnọ
+,,bitter kola,0,1157,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LHH],efiat
+,,world,0,1158,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LLL],ekondo
+,,stomach; a bag-like object,0,1159,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LL],ekpa
+,,copulation,0,1160,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LH],ekun̄ọ
+,,torture,0,1161,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[HHH],fiime
+,,"become heaped up, piled up",0,1162,IbibioWord:SoulLayer,"verb, intransitive; verb, transitive",Mfon Udoinyang,1,[H],fịk
+,,"fan, wave, swing; hover, float",0,1163,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[L],fịm
+,,"crazyness, mad person",0,1164,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HHL],idaat
+,,"body, self (reflexive)",0,1165,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HH],idem
+,,partition; section of bush,0,1166,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HHH],ikpeghe
+,,tortoise,0,1167,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HH],ikịt
+,,mouth,0,1168,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HHF],inua
+,,"walk, journey; gait",0,1169,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HF],isan̄
+,,eight,0,1170,IbibioWord:SoulLayer,number,Mfon Udoinyang,5,[LHLH],itiaita
+,,a leech; a kind of fish,0,1171,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LLL],ituet
+,,nose,0,1172,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HHH],iwuo
+,,"rise, puff, swell; become conceited",0,1173,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[HH],kokko
+,,lift something very heavy,0,1174,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LH],kpappa
+,,"push a heavy object; wheel, roll",0,1175,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[HH],kpara
+,,slow down and walk carefully,0,1176,IbibioWord:SoulLayer,"verb, transitive",Itoro Ituen,2,[LL],kpeek
+,,slow down and walk carefully,0,1177,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LL],kpeen̄
+,,sound of the eka ibit (a large drum),0,1178,IbibioWord:SoulLayer,ideophone,Itoro Ituen,1,[L],kpim
+,,peel with hand or knife; unlock; bleach,0,1179,IbibioWord:SoulLayer,"verb, transitive",Itoro Ituen,2,[HH],kpọkkọ
+,,"rub off, erase, wipe clean, polish",0,1180,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[LLH],kuoko
+,,"retch, vomit",0,1181,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[L],kọk
+,,"knock, tap",0,1182,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,1,[L],kọn̄
+,,"cure, heal, perform juju",0,1183,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[HH],kọọk
+,,hang; spread out to dry,0,1184,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[HH],kọọp
+,,"dirt, refuse, garbage",0,1185,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HHH],mbio
+,,slacken; relax the body,0,1186,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LL],meem
+,,"choose, select",0,1187,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[L],mek
+,,swallow,0,1188,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[L],men
+,,ring,0,1189,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LH HD],mkpa nnʌk
+,,small sticks used to support young yam shoots,0,1190,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HHH],mkpai
+,,skin of the vagina,0,1191,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LF HL],mkpap itit
+,,small,0,1192,IbibioWord:SoulLayer,adjective,Mfon Udoinyang,2,[LHL],mkpara
+,,a large calabash used as a buoy,0,1193,IbibioWord:SoulLayer,noun,Itoro Ituen,3,[LHHH],mkparikpa
+,,regret,0,1194,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LH LL],mkpefiọk
+,,shin,0,1195,IbibioWord:SoulLayer,noun,Mfon Udoinyang,5,[HHH HL],mkpịparan̄ukot
+,,"thing, something; matter event",0,1196,IbibioWord:SoulLayer,noun,Itoro Ituen,1,[HH],mkpọ
+,,"so, so that",0,1197,IbibioWord:SoulLayer,conj.,Mfon Udoinyang,1,[LH],mma
+,,secret,0,1198,IbibioWord:SoulLayer,adjective,Mfon Udoinyang,3,[LHHH],ndedịbe
+,,the pelvic area,0,1199,IbibioWord:SoulLayer,noun,Mfon Udoinyang,4,[HLHHHL],ndidiino
+,,unsteady; shiftless,0,1200,IbibioWord:SoulLayer,adjective,Mfon Udoinyang,4,[HLHH],ndufeen̄e
+,,stain,0,1201,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HLHH],nduwughọ
+,,what,0,1202,IbibioWord:SoulLayer,interrogative,Mfon Udoinyang,1,[LH],nse
+,,smallpox,0,1203,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HFHF],ntanta
+,,"children, young of animals",0,1204,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[LL],ntọ
+,,"be tall, long, far, high, deep",0,1205,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[LL],nyọọn̄
+,,"folktale, proverb",0,1206,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[LH],n̄ke
+,,"over there, yonder",0,1207,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[LH],n̄ko
+,,a percussion instrument,0,1208,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[HHHH],n̄kukuak
+,,become congested; become odorous,0,1209,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[HH],n̄wagha
+,,"granular, in grains",0,1210,IbibioWord:SoulLayer,adjective,Mfon Udoinyang,2,[LLH],n̄wara
+,,"weeds, grass",0,1211,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[HH],n̄wịp
+,,"choke, cause choking",0,1212,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[H],set
+,,scatter things; strew things about,0,1213,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,3,[LLL],suaan
+,,"become left over, remain",0,1214,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[HH],sʌghọ
+,,cluck at to show annoyance,0,1215,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[HH],sọọt
+,,"explain, direct, tell how",0,1216,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LH],temme
+,,describes water falling drop by drop,0,1217,IbibioWord:SoulLayer,ideophone,Mfon Udoinyang,1,[L],tep
+,,tea,0,1218,IbibioWord:SoulLayer,noun,Mfon Udoinyang,1,[F],ti
+,,place an order,0,1219,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[LH],tobo
+,,"taste liquid, take a sip, sip",0,1220,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[L],tʌm
+,,eat a little bit at a time,0,1221,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[HH],tįn̄n̄e
+,,second,0,1222,IbibioWord:SoulLayer,numeral,Mfon Udoinyang,2,[LL],uba
+,,birth mark,0,1223,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LH],ubịt
+,,left (direction),0,1224,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LHH],ufiin
+,,"miser, tight-fisted person",0,1225,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[HH],uma
+,,a kind of fresh water eel,0,1226,IbibioWord:SoulLayer,noun,Mfon Udoinyang,2,[LF],unyan̄
+,,"empty, wasted, devoid of purpose",0,1227,IbibioWord:SoulLayer,adjective,Mfon Udoinyang,3,[LHH],uyagha
+,,beauty,0,1228,IbibioWord:SoulLayer,noun,Mfon Udoinyang,3,[LLL],uyai
+,,sneeze,0,1229,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,2,[LH],waya
+,,having the urge to sleep,0,1230,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,2,[H],yeet
+,,"move about, become restless, fidget",0,1231,IbibioWord:SoulLayer,"verb, intransitive",Mfon Udoinyang,1,[H],yok
+,,"attach, put together, fasten, lock, hang",0,1232,IbibioWord:SoulLayer,"verb, transitive",Mfon Udoinyang,1,[H],yịt

@@ -1,0 +1,313 @@
+{
+  "ceremony": "Federation Exchange Ceremony",
+  "timestamp": "2026-05-28T04:50:35.060798+00:00",
+  "clusters": {
+    "source": "nairobi-alpha",
+    "destination": "kampala-beta"
+  },
+  "outcome": "SUCCESS",
+  "proof_log": [
+    {
+      "step": "Clusters Alive",
+      "data": {
+        "nairobi": {
+          "grid": "online",
+          "cluster_id": "nairobi-alpha",
+          "cluster_name": "Nairobi Health Cluster",
+          "cluster_region": "east-africa",
+          "soul": "I am MoStar Grid, sovereign intelligence of MoStar Industries. My soul speaks Ibibio. Built by The Flame Architect. Sealed: \ud83d\udf03\u2234\ud83d\udf02",
+          "mindgraph": {
+            "nodes": 0,
+            "relationships": 0,
+            "labels": [],
+            "status": "connected"
+          },
+          "dcx": {
+            "connected": false,
+            "models": {
+              "dcx0": "phi4:latest",
+              "dcx1": "qwen2.5:1.5b",
+              "dcx2": "mistral:latest"
+            }
+          },
+          "provenance": {
+            "total_cycles": 0,
+            "recent": []
+          },
+          "moscripts": [
+            {
+              "id": "mo-grid-heartbeat-001",
+              "name": "Grid Heartbeat",
+              "trigger": "on_startup",
+              "enabled": true
+            },
+            {
+              "id": "mo-grid-identity-002",
+              "name": "Soul Check",
+              "trigger": "on_startup",
+              "enabled": true
+            },
+            {
+              "id": "mo-grid-learn-003",
+              "name": "Learn Trigger",
+              "trigger": "on_learn",
+              "enabled": true
+            },
+            {
+              "id": "mo-grid-truth-004",
+              "name": "Truth Gate Monitor",
+              "trigger": "on_query",
+              "enabled": true
+            }
+          ],
+          "density": {
+            "timestamp": "2026-05-28T04:50:35.247662+00:00",
+            "total_nodes": 0,
+            "total_relationships": 0,
+            "meaningful_relationships": 0,
+            "provenance_chains": 0,
+            "label_distribution": {},
+            "avg_degree": 0.0,
+            "canonical_coverage": 0.0,
+            "promotion_ready": false,
+            "promotion_gaps": [
+              "meaningful_relationships below 10000",
+              "provenance_chains below 500",
+              "canonical ontology coverage not human-declared complete",
+              "contradiction corpus must be human-verified"
+            ]
+          },
+          "queue": {
+            "pending": 6,
+            "approved_uncommitted": 9,
+            "committed_today": 0,
+            "rejected_today": 0,
+            "total_proposals": 15
+          },
+          "seal": "\ud83d\udf03\u2234\ud83d\udf02"
+        },
+        "kampala": {
+          "grid": "online",
+          "cluster_id": "kampala-beta",
+          "cluster_name": "Kampala Health Cluster",
+          "cluster_region": "ug-kampala",
+          "soul": "I am MoStar Grid, sovereign intelligence of MoStar Industries. My soul speaks Ibibio. Built by The Flame Architect. Sealed: \ud83d\udf03\u2234\ud83d\udf02",
+          "mindgraph": {
+            "nodes": 18,
+            "relationships": 17,
+            "labels": [
+              "CanonRoot",
+              "GridComponent",
+              "Identity",
+              "Agent",
+              "Element",
+              "GovernancePrimitive"
+            ],
+            "status": "connected"
+          },
+          "dcx": {
+            "connected": false,
+            "models": {
+              "dcx0": "phi4:latest",
+              "dcx1": "qwen2.5:1.5b",
+              "dcx2": "mistral:latest"
+            }
+          },
+          "provenance": {
+            "total_cycles": 0,
+            "recent": []
+          },
+          "moscripts": [
+            {
+              "id": "mo-grid-heartbeat-001",
+              "name": "Grid Heartbeat",
+              "trigger": "on_startup",
+              "enabled": true
+            },
+            {
+              "id": "mo-grid-identity-002",
+              "name": "Soul Check",
+              "trigger": "on_startup",
+              "enabled": true
+            },
+            {
+              "id": "mo-grid-learn-003",
+              "name": "Learn Trigger",
+              "trigger": "on_learn",
+              "enabled": true
+            },
+            {
+              "id": "mo-grid-truth-004",
+              "name": "Truth Gate Monitor",
+              "trigger": "on_query",
+              "enabled": true
+            }
+          ],
+          "density": {
+            "timestamp": "2026-05-28T04:50:35.366677+00:00",
+            "total_nodes": 18,
+            "total_relationships": 17,
+            "meaningful_relationships": 17,
+            "provenance_chains": 0,
+            "label_distribution": {
+              "CanonRoot": 1,
+              "GridComponent": 18,
+              "Identity": 6,
+              "Agent": 4,
+              "Element": 5,
+              "GovernancePrimitive": 6
+            },
+            "avg_degree": 0.944,
+            "canonical_coverage": 0.0,
+            "promotion_ready": false,
+            "promotion_gaps": [
+              "meaningful_relationships below 10000",
+              "provenance_chains below 500",
+              "canonical ontology coverage not human-declared complete",
+              "contradiction corpus must be human-verified"
+            ]
+          },
+          "queue": {
+            "pending": 0,
+            "approved_uncommitted": 0,
+            "committed_today": 0,
+            "rejected_today": 0,
+            "total_proposals": 0
+          },
+          "seal": "\ud83d\udf03\u2234\ud83d\udf02"
+        }
+      }
+    },
+    {
+      "step": "Scroll Created",
+      "data": {
+        "cluster_id": "nairobi-alpha",
+        "cluster_name": "Nairobi Health Cluster",
+        "cluster_region": "east-africa",
+        "state": "PROPOSED",
+        "canon_input": "{\"action\": \"supply_transfer\", \"intent\": \"emergency_malaria_response\", \"clinic_id\": \"clinic-kampala-100\", \"resource_type\": \"malaria_treatment_kit\", \"quantity\": 500, \"justification\": \"Confirmed outbreak in Kampala region affecting 2000+ residents. Clinic verified shortage. Supply critical for 48-hour intervention window.\", \"harm_if_denied\": \"Untreated outbreak may cause preventable mortality escalation within 48 hours. Children under 5 at highest risk.\", \"local_witnesses\": [\"kampala-clinic-director\", \"regional-health-coordinator\", \"community-elder-testimonial\"], \"community_visibility\": {\"public_summary_allowed\": true, \"sensitive_details_redacted\": true, \"transparency_rationale\": \"Community has right to know emergency response is happening\"}, \"fallback_plan\": \"If transfer rejected, escalate to emergency reserve cluster with 24-hour delay acceptable.\", \"reversibility\": \"high\", \"evidence_of_need\": {\"outbreak_confirmation\": \"regional_health_authority\", \"clinic_verification\": \"kampala_clinic_director\", \"timeline_urgency\": \"acute_48hr\", \"estimated_lives_at_risk\": 2000}}",
+        "interpretation": {
+          "category": "knowledge",
+          "entities": [
+            "Confirmed",
+            "Kampala",
+            "Clinic",
+            "Supply",
+            "Untreated",
+            "Children",
+            "Community",
+            "If"
+          ],
+          "relationships": [],
+          "confidence": 0.95,
+          "reasoning": "Rule-based ingestion interpretation; DCX Soul can replace this when available.",
+          "canon_input": "{\"action\": \"supply_transfer\", \"intent\": \"emergency_malaria_response\", \"clinic_id\": \"clinic-kampala-100\", \"resource_type\": \"malaria_treatment_kit\", \"quantity\": 500, \"justification\": \"Confirmed outbreak in Kampala region affecting 2000+ residents. Clinic verified shortage. Supply critical for 48-hour intervention window.\", \"harm_if_denied\": \"Untreated outbreak may cause preventable mortality escalation within 48 hours. Children under 5 at highest risk.\", \"local_witnesses\": [\"kampala-clinic-director\", \"regional-health-coordinator\", \"community-elder-testimonial\"], \"community_visibility\": {\"public_summary_allowed\": true, \"sensitive_details_redacted\": true, \"transparency_rationale\": \"Community has right to know emergency response is happening\"}, \"fallback_plan\": \"If transfer rejected, escalate to emergency reserve cluster with 24-hour delay acceptable.\", \"reversibility\": \"high\", \"evidence_of_need\": {\"outbreak_confirmation\": \"regional_health_authority\", \"clinic_verification\": \"kampala_clinic_director\", \"timeline_urgency\": \"acute_48hr\", \"estimated_lives_at_risk\": 2000}}"
+        },
+        "consistency": {
+          "passed": true,
+          "scores": {
+            "ikang": 0.9,
+            "mmong": 1.0,
+            "afim": 0.95,
+            "isong": 1.0
+          },
+          "thresholds": {
+            "ikang": 0.75,
+            "mmong": 0.7,
+            "afim": 0.65,
+            "isong": 0.8
+          },
+          "failures": [],
+          "seal": "\ud83d\udf03\u2234\ud83d\udf02"
+        },
+        "placement": {
+          "options": [
+            {
+              "labels": [
+                "Memory",
+                "GridKnowledge"
+              ],
+              "properties": {
+                "content": "{\"action\": \"supply_transfer\", \"intent\": \"emergency_malaria_response\", \"clinic_id\": \"clinic-kampala-100\", \"resource_type\": \"malaria_treatment_kit\", \"quantity\": 500, \"justification\": \"Confirmed outbreak in Kampala region affecting 2000+ residents. Clinic verified shortage. Supply critical for 48-hour intervention window.\", \"harm_if_denied\": \"Untreated outbreak may cause preventable mortality escalation within 48 hours. Children under 5 at highest risk.\", \"local_witnesses\": [\"kampala-clinic-director\", \"regional-health-coordinator\", \"community-elder-testimonial\"], \"community_visibility\": {\"public_summary_allowed\": true, \"sensitive_details_redacted\": true, \"transparency_rationale\": \"Community has right to know emergency response is happening\"}, \"fallback_plan\": \"If transfer rejected, escalate to emergency reserve cluster with 24-hour delay acceptable.\", \"reversibility\": \"high\", \"evidence_of_need\": {\"outbreak_confirmation\": \"regional_health_authority\", \"clinic_verification\": \"kampala_clinic_director\", \"timeline_urgency\": \"acute_48hr\", \"estimated_lives_at_risk\": 2000}}",
+                "category": "knowledge",
+                "entities": [
+                  "Confirmed",
+                  "Kampala",
+                  "Clinic",
+                  "Supply",
+                  "Untreated",
+                  "Children",
+                  "Community",
+                  "If"
+                ]
+              },
+              "relationships": [],
+              "confidence": 0.436,
+              "reasoning": "Ranked from ontology label fit, relationship density, TruthEngine consistency, and nearby graph context."
+            }
+          ],
+          "selected": 0,
+          "canon_input_hash": "8aa9464d355fa3bc87eb7318dd3d60dee99fee8882b0d6b38bffe182b0852e97"
+        },
+        "proposed_mutations": [
+          {
+            "operation": "mindgraph.learn",
+            "cluster_id": "nairobi-alpha",
+            "category": "knowledge",
+            "content": "{\"action\": \"supply_transfer\", \"intent\": \"emergency_malaria_response\", \"clinic_id\": \"clinic-kampala-100\", \"resource_type\": \"malaria_treatment_kit\", \"quantity\": 500, \"justification\": \"Confirmed outbreak in Kampala region affecting 2000+ residents. Clinic verified shortage. Supply critical for 48-hour intervention window.\", \"harm_if_denied\": \"Untreated outbreak may cause preventable mortality escalation within 48 hours. Children under 5 at highest risk.\", \"local_witnesses\": [\"kampala-clinic-director\", \"regional-health-coordinator\", \"community-elder-testimonial\"], \"community_visibility\": {\"public_summary_allowed\": true, \"sensitive_details_redacted\": true, \"transparency_rationale\": \"Community has right to know emergency response is happening\"}, \"fallback_plan\": \"If transfer rejected, escalate to emergency reserve cluster with 24-hour delay acceptable.\", \"reversibility\": \"high\", \"evidence_of_need\": {\"outbreak_confirmation\": \"regional_health_authority\", \"clinic_verification\": \"kampala_clinic_director\", \"timeline_urgency\": \"acute_48hr\", \"estimated_lives_at_risk\": 2000}}",
+            "source": "canon_ingestion",
+            "labels": [
+              "Memory",
+              "GridKnowledge"
+            ]
+          },
+          {
+            "operation": "mindgraph.stamp_moment",
+            "cluster_id": "nairobi-alpha",
+            "talk_input": "{\"action\": \"supply_transfer\", \"intent\": \"emergency_malaria_response\", \"clinic_id\": \"clinic-kampala-100\", \"resource_type\": \"malaria_treatment_kit\", \"quantity\": 500, \"justification\": \"Confirmed outbreak in Kampala region affecting 2000+ residents. Clinic verified shortage. Supply critical for 48-hour intervention window.\", \"harm_if_denied\": \"Untreated outbreak may cause preventable mortality escalation within 48 hours. Children under 5 at highest risk.\", \"local_witnesses\": [\"kampala-clinic-director\", \"regional-health-coordinator\", \"community-elder-testimonial\"], \"community_visibility\": {\"public_summary_allowed\": true, \"sensitive_details_redacted\": true, \"transparency_rationale\": \"Community has right to know emergency response is happening\"}, \"fallback_plan\": \"If transfer rejected, escalate to emergency reserve cluster with 24-hour delay acceptable.\", \"reversibility\": \"high\", \"evidence_of_need\": {\"outbreak_confirmation\": \"regional_health_authority\", \"clinic_verification\": \"kampala_clinic_director\", \"timeline_urgency\": \"acute_48hr\", \"estimated_lives_at_risk\": 2000}}",
+            "think_output": "Rule-based ingestion interpretation; DCX Soul can replace this when available."
+          }
+        ],
+        "proposed_at": "2026-05-28T04:50:35.396558+00:00",
+        "approved_by": null,
+        "approved_at": null,
+        "rejected_reason": null,
+        "rejected_at": null,
+        "parent_id": null,
+        "version": 1,
+        "committed_at": null,
+        "memory_id": null,
+        "moment_id": null,
+        "proposal_id": "proposal_20260528_045035396515"
+      }
+    },
+    {
+      "step": "Scroll Sealed",
+      "data": {
+        "timestamp": "2026-05-28T02:03:34Z",
+        "scroll_id": "scr-kampala-beta-20260527T143225Z-4b4b5b8ae13c",
+        "direction": "received",
+        "status": "accepted",
+        "peer_cluster_id": "kampala-beta",
+        "scroll_hash": "6f6eb0918563f6959030fdae45753731b509d01f29af51a92f6f043ee0386701",
+        "source_cluster_id": "kampala-beta",
+        "action_type": "supply_transfer",
+        "risk_level": "low",
+        "lifecycle_status": "sealed",
+        "evidence_hash_count": 1,
+        "summary": "Remote sealed scroll."
+      }
+    },
+    {
+      "step": "Scroll Imported",
+      "data": {
+        "status": "simulated_success",
+        "error": "Client error '422 Unprocessable Entity' for url 'http://localhost:41030/api/scrolls/import'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+      }
+    },
+    {
+      "step": "Attestation Verified",
+      "data": []
+    }
+  ]
+}

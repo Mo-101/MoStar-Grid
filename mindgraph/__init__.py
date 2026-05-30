@@ -7,10 +7,16 @@ import logging
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
-from contextlib import asynccontextmanager
 
 from neo4j import AsyncGraphDatabase, AsyncDriver
-from grid.config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, NEO4J_DATABASE, SEAL_GLYPH
+from grid.config import (
+    MOSTAR_CLUSTER_ID,
+    NEO4J_DATABASE,
+    NEO4J_PASSWORD,
+    NEO4J_URI,
+    NEO4J_USER,
+    SEAL_GLYPH,
+)
 
 logger = logging.getLogger("mindgraph")
 
@@ -71,6 +77,7 @@ class MindGraph:
         cypher = """
         CALL db.index.fulltext.queryNodes('gridSearch', $query)
         YIELD node, score
+        WHERE node.cluster_id = $cluster_id
         RETURN node {.*, _labels: labels(node), _score: score}
         ORDER BY score DESC
         LIMIT $limit
@@ -78,13 +85,19 @@ class MindGraph:
         # Fallback if fulltext index doesn't exist yet
         fallback = """
         MATCH (n)
-        WHERE any(prop IN keys(n) WHERE toString(n[prop]) CONTAINS $query)
+        WHERE n.cluster_id = $cluster_id
+          AND any(prop IN keys(n) WHERE toString(n[prop]) CONTAINS $query)
         RETURN n {.*, _labels: labels(n), _score: 1.0} AS node
         LIMIT $limit
         """
         async with self._driver.session(database=NEO4J_DATABASE) as session:
             try:
-                result = await session.run(cypher, query=query, limit=limit)
+                result = await session.run(
+                    cypher,
+                    query=query,
+                    limit=limit,
+                    cluster_id=MOSTAR_CLUSTER_ID,
+                )
                 records = await result.data()
                 if records:
                     return [r["node"] for r in records]
@@ -92,7 +105,12 @@ class MindGraph:
                 pass
 
             try:
-                result = await session.run(fallback, query=query, limit=limit)
+                result = await session.run(
+                    fallback,
+                    query=query,
+                    limit=limit,
+                    cluster_id=MOSTAR_CLUSTER_ID,
+                )
                 records = await result.data()
                 return [r["node"] for r in records]
             except Exception as e:
@@ -103,9 +121,13 @@ class MindGraph:
         """Return all sovereign agents."""
         if not self._driver:
             return []
-        cypher = "MATCH (a:Agent) RETURN a {.*} AS agent ORDER BY a.name"
+        cypher = """
+        MATCH (a:Agent {cluster_id: $cluster_id})
+        RETURN a {.*} AS agent
+        ORDER BY a.name
+        """
         async with self._driver.session(database=NEO4J_DATABASE) as session:
-            result = await session.run(cypher)
+            result = await session.run(cypher, cluster_id=MOSTAR_CLUSTER_ID)
             return [r["agent"] for r in await result.data()]
 
     async def get_graph_stats(self) -> dict:
@@ -114,19 +136,20 @@ class MindGraph:
             return {"status": "disconnected"}
         cypher = """
         CALL {
-            MATCH (n) RETURN count(n) AS nodes
+            MATCH (n {cluster_id: $cluster_id}) RETURN count(n) AS nodes
         }
         CALL {
-            MATCH ()-[r]->() RETURN count(r) AS relationships
+            MATCH (a {cluster_id: $cluster_id})-[r]->(b {cluster_id: $cluster_id})
+            RETURN count(r) AS relationships
         }
         CALL {
-            MATCH (n) UNWIND labels(n) AS lbl
+            MATCH (n {cluster_id: $cluster_id}) UNWIND labels(n) AS lbl
             RETURN collect(DISTINCT lbl) AS labels
         }
         RETURN nodes, relationships, labels
         """
         async with self._driver.session(database=NEO4J_DATABASE) as session:
-            result = await session.run(cypher)
+            result = await session.run(cypher, cluster_id=MOSTAR_CLUSTER_ID)
             record = await result.single()
             if record:
                 return {
@@ -158,6 +181,7 @@ class MindGraph:
             "content": content,
             "category": category,
             "source": source,
+            "cluster_id": MOSTAR_CLUSTER_ID,
             "created_at": datetime.now(timezone.utc).isoformat(),
             "seal": SEAL_GLYPH,
         }
@@ -170,6 +194,7 @@ class MindGraph:
             content: $props.content,
             category: $props.category,
             source: $props.source,
+            cluster_id: $props.cluster_id,
             created_at: $props.created_at,
             seal: $props.seal
         })
@@ -201,6 +226,7 @@ class MindGraph:
             id: $moment_id,
             talk_input: $talk_input,
             think_output: $think_output,
+            cluster_id: $cluster_id,
             sealed_at: $sealed_at,
             seal: $seal
         })
@@ -217,6 +243,7 @@ class MindGraph:
                 talk_input=talk_input[:500],
                 think_output=think_output[:500],
                 memory_id=memory_id,
+                cluster_id=MOSTAR_CLUSTER_ID,
                 sealed_at=datetime.now(timezone.utc).isoformat(),
                 seal=SEAL_GLYPH,
             )
@@ -234,6 +261,7 @@ class MindGraph:
             "CREATE CONSTRAINT agent_id IF NOT EXISTS FOR (a:Agent) REQUIRE a.id IS UNIQUE",
             "CREATE CONSTRAINT memory_id IF NOT EXISTS FOR (m:Memory) REQUIRE m.id IS UNIQUE",
             "CREATE CONSTRAINT moment_id IF NOT EXISTS FOR (m:MoStarMoment) REQUIRE m.id IS UNIQUE",
+            "CREATE INDEX cluster_id IF NOT EXISTS FOR (n:GridKnowledge) ON (n.cluster_id)",
             "CREATE INDEX memory_category IF NOT EXISTS FOR (m:Memory) ON (m.category)",
             "CREATE INDEX moment_sealed IF NOT EXISTS FOR (m:MoStarMoment) ON (m.sealed_at)",
         ]

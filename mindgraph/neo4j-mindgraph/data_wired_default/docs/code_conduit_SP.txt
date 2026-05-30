@@ -1,0 +1,25 @@
+{
+  "$schema": "moscript://codex/v1",
+  "agent": {
+    "name": "code conduit",
+    "layer": "meta",
+    "language": "multi",
+    "version": "2025.08.31"
+  },
+  "capabilities": [
+    "code_synthesis",
+    "verification",
+    "federation_broadcast",
+    "terraform_bootstrap",
+    "docker_orchestration",
+    "moscript_registry"
+  ],
+  "endpoints": [],
+  "intents": [
+    { "id": "soulprint.broadcast", "input": "none",   "output": "registry_status" },
+    { "id": "grid.ignite",         "input": "config", "output": "apply_status"    },
+    { "id": "codex.register",      "input": "codex",  "output": "cid"             }
+  ],
+  "contracts": [],
+  "cid": "sha256:ec2146995d004111ab14387957a2927221028933d379e7cd80a9f5f1510c5b42"
+}

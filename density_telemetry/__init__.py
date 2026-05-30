@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 
-from grid.config import NEO4J_DATABASE
+from grid.config import MOSTAR_CLUSTER_ID, NEO4J_DATABASE
 
 
 @dataclass
@@ -42,22 +42,23 @@ class DensityTelemetry:
 
         cypher = """
         CALL {
-            MATCH (n) RETURN count(n) AS total_nodes
+            MATCH (n {cluster_id: $cluster_id}) RETURN count(n) AS total_nodes
         }
         CALL {
-            MATCH ()-[r]->() RETURN count(r) AS total_relationships
+            MATCH (a {cluster_id: $cluster_id})-[r]->(b {cluster_id: $cluster_id})
+            RETURN count(r) AS total_relationships
         }
         CALL {
-            MATCH ()-[r]->()
+            MATCH (a {cluster_id: $cluster_id})-[r]->(b {cluster_id: $cluster_id})
             WHERE NOT type(r) IN ['SEALED_FROM']
             RETURN count(r) AS meaningful_relationships
         }
         CALL {
-            MATCH (m:MoStarMoment)-[:SEALED_FROM]->()
+            MATCH (m:MoStarMoment {cluster_id: $cluster_id})-[:SEALED_FROM]->()
             RETURN count(m) AS provenance_chains
         }
         CALL {
-            MATCH (n)
+            MATCH (n {cluster_id: $cluster_id})
             UNWIND labels(n) AS label
             WITH label, count(*) AS count
             RETURN collect({label: label, count: count}) AS labels
@@ -66,7 +67,7 @@ class DensityTelemetry:
                provenance_chains, labels
         """
         async with self.mindgraph._driver.session(database=NEO4J_DATABASE) as session:
-            result = await session.run(cypher)
+            result = await session.run(cypher, cluster_id=MOSTAR_CLUSTER_ID)
             record = await result.single()
 
         total_nodes = record["total_nodes"] if record else 0

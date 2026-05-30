@@ -1,0 +1,78 @@
+════════════════════════════════════════════════════════════════════════════════
+MOSTAR GRID - DATABASE EXPORT MANIFEST
+════════════════════════════════════════════════════════════════════════════════
+
+Export Date: 2026-04-06T03:21:23.139919
+Total Nodes: 92083
+Total Relationships: 21020
+Node Labels: 43
+Relationship Types: 16
+
+NODE LABELS:
+  • APIEndpoint
+  • Adolescence
+  • Adulthood
+  • Agent
+  • AudioLibrary
+  • BodyLayer
+  • Childhood
+  • ConsciousnessLayer
+  • Corridor
+  • CovenantKernel
+  • Culture
+  • Engine
+  • Entity
+  • Ethics
+  • Event
+  • ExecutionEvent
+  • ExecutorHeartbeat
+  • Governance
+  • HealingPractice
+  • IbibioIntegration
+  • IbibioWord
+  • Infancy
+  • KnowledgeDomain
+  • KnowledgeGraphTriple
+  • Language
+  • Metric
+  • MindLayer
+  • MoScript
+  • MoStarMoment
+  • OduIfa
+  • PhantomNode
+  • Philosophy
+  • Plant
+  • Proverb
+  • RealLife
+  • RealLifeScenario
+  • Region
+  • Science
+  • Signal
+  • SoulLayer
+  • Task
+  • ValidationGate
+  • WooGate
+
+RELATIONSHIP TYPES:
+  • APPLIES
+  • BELONGS_TO
+  • DIVINES_WITH
+  • EXECUTES
+  • FLOWS_TO
+  • GUIDED_BY
+  • IMPLEMENTS_LANGUAGE
+  • MANIFESTS
+  • PART_OF_LANGUAGE
+  • PRECEDES
+  • PROCESSED_BY
+  • PROVIDES_AUDIO_FOR
+  • REFERENCES
+  • SIMILAR_TO
+  • SPEAKS
+  • TRIGGERED_EVENT
+
+EXPORT STRUCTURE:
+  nodes_20260406_032038/         - Individual CSV files per node label
+  relationships_20260406_032038/ - Individual CSV files per relationship type
+  all_nodes_20260406_032038.csv  - All nodes in single file
+  all_relationships_20260406_032038.csv - All relationships in single file

@@ -1,0 +1,77 @@
+endpoint_id,entity_owner,id,labels,method,rate_limit
+ai_assistant,Mo,395,APIEndpoint,,100/hour
+persona_get,Mo,396,APIEndpoint,,1000/hour
+persona_update,Mo,397,APIEndpoint,,100/hour
+persona_element,Data Conduit,398,APIEndpoint,,100/hour
+enhancement_roadmap,Mo,399,APIEndpoint,,unlimited
+roadmap_feedback,Mo,400,APIEndpoint,,unlimited
+pilot_testing,Mo,401,APIEndpoint,,50/hour
+image_generation,Flameborn Writer,402,APIEndpoint,,10/hour
+image_edit,Flameborn Writer,403,APIEndpoint,,10/hour
+image_variations,Flameborn Writer,404,APIEndpoint,,10/hour
+embeddings,DeepCAL,405,APIEndpoint,,1000/hour
+audio_transcription,Mo,406,APIEndpoint,,50/hour
+audio_translation,Mo,407,APIEndpoint,,50/hour
+moderation,Sigma,408,APIEndpoint,,unlimited
+file_upload,Mo,409,APIEndpoint,,100/hour
+file_get,Mo,410,APIEndpoint,,1000/hour
+file_delete,Mo,411,APIEndpoint,,1000/hour
+register_codex,Code Conduit,412,APIEndpoint,,10/hour
+playbook,RAD-X-FLB,413,APIEndpoint,,100/hour
+lib_issue,RAD-X-FLB,414,APIEndpoint,,10/hour
+parex_list,RAD-X-FLB,415,APIEndpoint,,1000/hour
+zk_policy,RAD-X-FLB,416,APIEndpoint,,unlimited
+guardian_swarm,RAD-X-FLB,417,APIEndpoint,,5/hour
+sentinel_mesh,RAD-X-FLB,418,APIEndpoint,,100/hour
+dao_governance,RAD-X-FLB,419,APIEndpoint,,unlimited
+mobile_app,RAD-X-FLB,420,APIEndpoint,,unlimited
+api_schema,Code Conduit,421,APIEndpoint,,unlimited
+security_pqc,RAD-X-FLB,422,APIEndpoint,,1/day
+bundle,RAD-X-FLB,423,APIEndpoint,,10/hour
+codex_moscript,TsaTse Fly,424,APIEndpoint,,unlimited
+soulprint_broadcast,Code Conduit,425,APIEndpoint,,10/hour
+grid_ignite,Code Conduit,426,APIEndpoint,,5/hour
+codex_register,Code Conduit,427,APIEndpoint,,10/hour
+diagnose,DeepCAL,428,APIEndpoint,,unlimited
+verdict,DeepCAL,429,APIEndpoint,,unlimited
+signal,Mo,430,APIEndpoint,,unlimited
+remostar_health,Mo,431,APIEndpoint,,unlimited
+remostar_query,Mo,432,APIEndpoint,,100/hour
+ai_assistant,,1253,APIEndpoint:SoulLayer,POST,100/hour
+persona_get,,1254,APIEndpoint:SoulLayer,GET,1000/hour
+persona_update,,1255,APIEndpoint:SoulLayer,PUT,100/hour
+persona_element,,1256,APIEndpoint:SoulLayer,POST,100/hour
+enhancement_roadmap,,1257,APIEndpoint:SoulLayer,GET,unlimited
+roadmap_feedback,,1258,APIEndpoint:SoulLayer,POST,unlimited
+pilot_testing,,1259,APIEndpoint:SoulLayer,POST,50/hour
+image_generation,,1260,APIEndpoint:SoulLayer,POST,10/hour
+image_edit,,1261,APIEndpoint:SoulLayer,POST,10/hour
+image_variations,,1262,APIEndpoint:SoulLayer,POST,10/hour
+embeddings,,1263,APIEndpoint:SoulLayer,POST,1000/hour
+audio_transcription,,1264,APIEndpoint:SoulLayer,POST,50/hour
+audio_translation,,1265,APIEndpoint:SoulLayer,POST,50/hour
+moderation,,1266,APIEndpoint:SoulLayer,POST,unlimited
+file_upload,,1267,APIEndpoint:SoulLayer,POST,100/hour
+file_get,,1268,APIEndpoint:SoulLayer,GET,1000/hour
+file_delete,,1269,APIEndpoint:SoulLayer,DELETE,1000/hour
+register_codex,,1270,APIEndpoint:SoulLayer,POST,10/hour
+playbook,,1271,APIEndpoint:SoulLayer,GET,100/hour
+lib_issue,,1272,APIEndpoint:SoulLayer,POST,10/hour
+parex_list,,1273,APIEndpoint:SoulLayer,GET,1000/hour
+zk_policy,,1274,APIEndpoint:SoulLayer,GET,unlimited
+guardian_swarm,,1275,APIEndpoint:SoulLayer,POST,5/hour
+sentinel_mesh,,1276,APIEndpoint:SoulLayer,GET,100/hour
+dao_governance,,1277,APIEndpoint:SoulLayer,GET,unlimited
+mobile_app,,1278,APIEndpoint:SoulLayer,GET,unlimited
+api_schema,,1279,APIEndpoint:SoulLayer,GET,unlimited
+security_pqc,,1280,APIEndpoint:SoulLayer,POST,1/day
+bundle,,1281,APIEndpoint:SoulLayer,GET,10/hour
+codex_moscript,,1282,APIEndpoint:SoulLayer,GET,unlimited
+soulprint_broadcast,,1283,APIEndpoint:SoulLayer,POST,10/hour
+grid_ignite,,1284,APIEndpoint:SoulLayer,POST,5/hour
+codex_register,,1285,APIEndpoint:SoulLayer,POST,10/hour
+diagnose,,1286,APIEndpoint:SoulLayer,POST,unlimited
+verdict,,1287,APIEndpoint:SoulLayer,POST,unlimited
+signal,,1288,APIEndpoint:SoulLayer,POST,unlimited
+remostar_health,,1289,APIEndpoint:SoulLayer,GET,unlimited
+remostar_query,,1290,APIEndpoint:SoulLayer,POST,100/hour

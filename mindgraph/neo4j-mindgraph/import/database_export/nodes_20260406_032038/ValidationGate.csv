@@ -1,0 +1,2 @@
+confidence_threshold,created_at,id,labels,name,truth_threshold,ubuntu_threshold
+0.8,2026-03-08T01:12:14.854000000+00:00,truth-gate-001,ValidationGate,Ubuntu Truth Gate,0.75,0.7

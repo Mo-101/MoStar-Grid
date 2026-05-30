@@ -1,0 +1,41 @@
+component,ibibio_feature,id,implementation_status,integration_id,labels
+Ibibio Dictionary,Core vocabulary database,433,complete,ibibio_dict,IbibioIntegration
+Neo4j Word Nodes,Graph database integration,434,ready,ibibio_neo4j,IbibioIntegration
+Audio Pronunciation,MP3 pronunciation files,435,complete,ibibio_audio,IbibioIntegration
+Text-to-Speech,TTS system integration,436,implemented,ibibio_tts,IbibioIntegration
+Dictionary Parser,JSON parsing and processing,437,complete,ibibio_parser,IbibioIntegration
+REMOSTAR Integration,DCX001 native language,438,planned,ibibio_remostar,IbibioIntegration
+Greeting System,Native language greetings,439,planned,ibibio_greeting,IbibioIntegration
+Response Templates,Native language responses,440,planned,ibibio_response,IbibioIntegration
+Entity Naming,Ibibio names for entities,441,planned,ibibio_entity_names,IbibioIntegration
+Odù Translations,Ifá Odù in Ibibio,442,planned,ibibio_odu_names,IbibioIntegration
+Ibibio Proverbs,Native wisdom sayings,443,planned,ibibio_proverbs,IbibioIntegration
+Voice Commands,Native language commands,444,planned,ibibio_commands,IbibioIntegration
+Error Messages,Native language errors,445,planned,ibibio_error_msgs,IbibioIntegration
+System Logging,Native language logs,446,planned,ibibio_logging,IbibioIntegration
+API Documentation,Native language docs,447,planned,ibibio_api_docs,IbibioIntegration
+Mo Conversations,Native dialogue system,448,planned,ibibio_mo_dialogue,IbibioIntegration
+Woo Scroll Names,Scroll names in native tongue,449,planned,ibibio_woo_scrolls,IbibioIntegration
+Ritual Language,Ceremonial Ibibio phrases,450,planned,ibibio_ritual,IbibioIntegration
+Covenant Language,Covenant declarations in Ibibio,451,planned,ibibio_covenant,IbibioIntegration
+Language Teaching,Ibibio learning module,452,planned,ibibio_teaching,IbibioIntegration
+,,1233,complete,,IbibioIntegration:SoulLayer
+,,1234,ready,,IbibioIntegration:SoulLayer
+,,1235,complete,,IbibioIntegration:SoulLayer
+,,1236,implemented,,IbibioIntegration:SoulLayer
+,,1237,complete,,IbibioIntegration:SoulLayer
+,,1238,planned,,IbibioIntegration:SoulLayer
+,,1239,planned,,IbibioIntegration:SoulLayer
+,,1240,planned,,IbibioIntegration:SoulLayer
+,,1241,planned,,IbibioIntegration:SoulLayer
+,,1242,planned,,IbibioIntegration:SoulLayer
+,,1243,planned,,IbibioIntegration:SoulLayer
+,,1244,planned,,IbibioIntegration:SoulLayer
+,,1245,planned,,IbibioIntegration:SoulLayer
+,,1246,planned,,IbibioIntegration:SoulLayer
+,,1247,planned,,IbibioIntegration:SoulLayer
+,,1248,planned,,IbibioIntegration:SoulLayer
+,,1249,planned,,IbibioIntegration:SoulLayer
+,,1250,planned,,IbibioIntegration:SoulLayer
+,,1251,planned,,IbibioIntegration:SoulLayer
+,,1252,planned,,IbibioIntegration:SoulLayer

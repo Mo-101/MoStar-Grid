@@ -1,0 +1,513 @@
+binary_pattern,divination_use,id,interpretation,labels,name_english,name_yoruba,odu_number,related_themes,ritual_context,symbolic_meaning
+0,,0,Foundation and pure beginnings - divine order manifesting,OduIfa,,,0,,New moon ceremonies,
+1,,1,Transformation through duality - birth and death cycle,OduIfa,,,1,,Eclipse rituals,
+10,,2,Challenges revealing character - obstacles as teachers,OduIfa,,,2,,Initiation rites,
+11,,3,Struggle between opposing forces - choosing sides,OduIfa,,,3,,Dispute resolution,
+100,,4,Manifestation of divine will on earthly plane,OduIfa,,,4,,Harvest festivals,
+101,,5,Order confronting entropy - structure vs randomness,OduIfa,,,5,,Storm preparation,
+110,,6,Metamorphosis and rebirth - shedding old forms,OduIfa,,,6,,Coming-of-age ceremonies,
+111,,7,Abundance through right action - karmic rewards,OduIfa,,,7,,Blessing ceremonies,
+1000,,8,Movement from ignorance to wisdom,OduIfa,,,8,,Dawn ceremonies,
+1001,,9,Deep mysteries and the unknown - ancestral realm,OduIfa,,,9,,Ancestral veneration,
+1010,,10,Hidden obstacles - what cannot yet be seen,OduIfa,,,10,,Divination for dangers,
+1011,,11,Internal conflict - battling inner demons,OduIfa,,,11,,Spiritual warfare,
+1100,,12,Manifestation of hidden things - secrets revealed,OduIfa,,,12,,Truth ceremonies,
+1101,,13,Confusion and disorientation - loss of bearings,OduIfa,,,13,,Protection rituals,
+1110,,14,Transformation in the unseen realm,OduIfa,,,14,,Shadow work,
+1111,,15,Hidden resources - treasures in shadow,OduIfa,,,15,,Treasure seeking,
+10000,,16,Journey toward understanding and clarity,OduIfa,,,16,,Pilgrimage,
+10001,,17,Dangerous journey - navigating peril,OduIfa,,,17,,Protection during travel,
+10010,,18,Choices and crossroads - fork in the road,OduIfa,,,18,,Decision ceremonies,
+10011,,19,Journey through strife - warrior's road,OduIfa,,,19,,Warrior initiation,
+10100,,20,Journey to material success - effort rewarded,OduIfa,,,20,,Trade journeys,
+10101,,21,Unpredictable journey - expect the unexpected,OduIfa,,,21,,Chaos navigation,
+10110,,22,Journey of transformation - becoming,OduIfa,,,22,,Rites of passage,
+10111,,23,Lucky journey - favorable winds,OduIfa,,,23,,Blessing travels,
+11000,,24,Strife moving toward peace,OduIfa,,,24,,Peace ceremonies,
+11001,,25,Hidden warfare - unseen battles,OduIfa,,,25,,Spiritual protection,
+11010,,26,Obstacles blocking progress,OduIfa,,,26,,Obstacle removal,
+11011,,27,Intense struggle - war on all sides,OduIfa,,,27,,Battle preparation,
+11100,,28,争夺物质 - competition for wealth,OduIfa,,,28,,Resource disputes,
+11101,,29,Unpredictable warfare - no rules,OduIfa,,,29,,Chaos warfare,
+11110,,30,Struggle that changes everything,OduIfa,,,30,,Revolutionary rites,
+11111,,31,Gains through struggle - victory spoils,OduIfa,,,31,,Victory ceremonies,
+100000,,32,Divine blessing on material plane,OduIfa,,,32,,Agricultural rites,
+100001,,33,Material loss - resources diminishing,OduIfa,,,33,,Famine preparation,
+100010,,34,Material journey - physical travel,OduIfa,,,34,,Trade routes,
+100011,,35,Property disputes - land battles,OduIfa,,,35,,Land disputes,
+100100,,36,Abundance and fertility - harvest time,OduIfa,,,36,,Harvest festivals,
+100101,,37,Unpredictable material conditions,OduIfa,,,37,,Disaster preparation,
+100110,,38,Material transformation - alchemy,OduIfa,,,38,,Craft ceremonies,
+100111,,39,Material blessings - prosperity,OduIfa,,,39,,Wealth ceremonies,
+101000,,40,Entropy organizing - creating from chaos,OduIfa,,,40,,Creation from chaos,
+101001,,41,Complete confusion - total disorientation,OduIfa,,,41,,Protection from chaos,
+101010,,42,Unpredictable journey - random events,OduIfa,,,42,,Chaos navigation,
+101011,,43,Anarchic warfare - no rules,OduIfa,,,43,,Chaos warfare,
+101100,,44,Economic chaos - market instability,OduIfa,,,44,,Economic protection,
+101101,,45,Maximum entropy - complete randomness,OduIfa,,,45,,Chaos management,
+101110,,46,Change through disorder - creative destruction,OduIfa,,,46,,Revolutionary change,
+101111,,47,Luck in disorder - finding order in chaos,OduIfa,,,47,,Chaos opportunity,
+110000,,48,Transformation toward divinity,OduIfa,,,48,,Spiritual evolution,
+110001,,49,Descent and dissolution - dark night of soul,OduIfa,,,49,,Dark night,
+110010,,50,Transforming journey - becoming different,OduIfa,,,50,,Pilgrimage,
+110011,,51,Struggle creating change,OduIfa,,,51,,Revolutionary rites,
+110100,,52,Physical metamorphosis - changing form,OduIfa,,,52,,Shape-shifting,
+110101,,53,Unpredictable change - random mutation,OduIfa,,,53,,Chaos change,
+110110,,54,Complete metamorphosis - total rebirth,OduIfa,,,54,,Rebirth ceremonies,
+110111,,55,Beneficial transformation - evolution,OduIfa,,,55,,Beneficial change,
+111000,,56,Divine blessings - heavenly gifts,OduIfa,,,56,,Blessing ceremonies,
+111001,,57,Hidden blessings - disguised gifts,OduIfa,,,57,,Hidden blessings,
+111010,,58,Lucky journey - favorable conditions,OduIfa,,,58,,Fortunate travel,
+111011,,59,Gains from struggle - war spoils,OduIfa,,,59,,Victory ceremonies,
+111100,,60,Wealth and prosperity - abundance,OduIfa,,,60,,Wealth ceremonies,
+111101,,61,Luck in chaos - random blessings,OduIfa,,,61,,Chaos blessings,
+111110,,62,Blessings through change,OduIfa,,,62,,Transformative blessings,
+111111,,63,Maximum blessings - ultimate prosperity,OduIfa,,,63,,Ultimate blessings,
+1000000,,64,Military campaign for righteous cause,OduIfa,,,64,,Holy war,
+1000001,,65,Hidden warfare - covert operations,OduIfa,,,65,,Espionage,
+1000010,,66,Military campaign - journey to battle,OduIfa,,,66,,Military campaign,
+1000011,,67,Combat and warfare - direct confrontation,OduIfa,,,67,,Battle,
+1000100,,68,Fighting for material gains,OduIfa,,,68,,Resource warfare,
+1000101,,69,Guerrilla warfare - irregular combat,OduIfa,,,69,,Guerrilla war,
+1000110,,70,Combat evolution - martial growth,OduIfa,,,70,,Martial evolution,
+1000111,,71,Victory and spoils - successful campaign,OduIfa,,,71,,Victory,
+1001000,,72,Progress toward enlightenment,OduIfa,,,72,,Progress ceremonies,
+1001001,,73,Stagnation and delay - stuck in time,OduIfa,,,73,,Breaking stagnation,
+1001010,,74,Journey through time - temporal voyage,OduIfa,,,74,,Time travel,
+1001011,,75,Battles across time - historical conflicts,OduIfa,,,75,,Historical warfare,
+1001100,,76,Historical wealth - inherited resources,OduIfa,,,76,,Inheritance,
+1001101,,77,Unpredictable temporal flow - time distortions,OduIfa,,,77,,Time chaos,
+1001110,,78,Historical change - evolution over time,OduIfa,,,78,,Historical change,
+1001111,,79,Patience rewarded - waiting pays off,OduIfa,,,79,,Patience rewards,
+1010000,,80,Connections leading to understanding,OduIfa,,,80,,Network building,
+1010001,,81,Hidden connections - occult networks,OduIfa,,,81,,Secret societies,
+1010010,,82,Journey through networks - social travel,OduIfa,,,82,,Social navigation,
+1010011,,83,Conflicting alliances - network warfare,OduIfa,,,83,,Alliance warfare,
+1010100,,84,Economic networks - trade connections,OduIfa,,,84,,Trade networks,
+1010101,,85,Unpredictable connections - random networks,OduIfa,,,85,,Chaos networks,
+1010110,,86,Network evolution - changing connections,OduIfa,,,86,,Network evolution,
+1010111,,87,Beneficial connections - lucky networks,OduIfa,,,87,,Beneficial networks,
+1011000,,88,Progression toward enlightenment,OduIfa,,,88,,Flow ceremonies,
+1011001,,89,Hidden currents - occult flows,OduIfa,,,89,,Hidden flows,
+1011010,,90,Flowing journey - liquid travel,OduIfa,,,90,,Fluid journey,
+1011011,,91,Conflicting currents - opposing flows,OduIfa,,,91,,Current conflict,
+1011100,,92,Economic flow - wealth circulation,OduIfa,,,92,,Economic flow,
+1011101,,93,Turbulent currents - chaotic flows,OduIfa,,,93,,Chaos currents,
+1011110,,94,Evolutionary currents - changing flows,OduIfa,,,94,,Flow transformation,
+1011111,,95,Beneficial currents - lucky flows,OduIfa,,,95,,Beneficial flow,
+1100000,,96,Passionate pursuit of enlightenment,OduIfa,,,96,,Fire ceremonies,
+1100001,,97,Hidden fire - occult passion,OduIfa,,,97,,Hidden fire,
+1100010,,98,Passionate journey - burning desire,OduIfa,,,98,,Passionate journey,
+1100011,,99,Passionate warfare - burning conflict,OduIfa,,,99,,Passionate warfare,
+1100100,,100,Passionate acquisition - burning desire for wealth,OduIfa,,,100,,Passionate acquisition,
+1100101,,101,Unpredictable passion - wild fire,OduIfa,,,101,,Chaos fire,
+1100110,,102,Passionate transformation - burning change,OduIfa,,,102,,Fire transformation,
+1100111,,103,Lucky passion - beneficial desire,OduIfa,,,103,,Fortunate passion,
+1101000,,104,Stress leading to enlightenment,OduIfa,,,104,,Pressure ceremonies,
+1101001,,105,Hidden stress - occult pressure,OduIfa,,,105,,Hidden pressure,
+1101010,,106,Stressful journey - pressure travel,OduIfa,,,106,,Pressure journey,
+1101011,,107,Intense warfare - pressure warfare,OduIfa,,,107,,Pressure warfare,
+1101100,,108,Economic stress - financial pressure,OduIfa,,,108,,Economic pressure,
+1101101,,109,Unpredictable stress - chaos pressure,OduIfa,,,109,,Chaos pressure,
+1101110,,110,Stress-induced change - pressure transformation,OduIfa,,,110,,Pressure transformation,
+1101111,,111,Beneficial stress - lucky pressure,OduIfa,,,111,,Fortunate pressure,
+1110000,,112,Triumph leading to enlightenment,OduIfa,,,112,,Victory ceremonies,
+1110001,,113,Hidden triumph - occult victory,OduIfa,,,113,,Hidden victory,
+1110010,,114,Triumphant journey - winning path,OduIfa,,,114,,Victory journey,
+1110011,,115,Winning warfare - battle triumph,OduIfa,,,115,,Battle victory,
+1110100,,116,Economic triumph - financial success,OduIfa,,,116,,Economic victory,
+1110101,,117,Unexpected triumph - chaos victory,OduIfa,,,117,,Chaos victory,
+1110110,,118,Evolutionary triumph - victory transformation,OduIfa,,,118,,Victory transformation,
+1110111,,119,Lucky triumph - maximum victory,OduIfa,,,119,,Ultimate victory,
+1111000,,120,Spiritual ascension - divine connection,OduIfa,,,120,,Ascension ceremonies,
+1111001,,121,Occult spirituality - dark mysticism,OduIfa,,,121,,Dark mysticism,
+1111010,,122,Spiritual journey - quest for meaning,OduIfa,,,122,,Spiritual quest,
+1111011,,123,Spiritual warfare - fighting evil,OduIfa,,,123,,Spiritual warfare,
+1111100,,124,Earthly spirituality - grounded mysticism,OduIfa,,,124,,Grounded spirituality,
+1111101,,125,Unpredictable spirituality - wild mysticism,OduIfa,,,125,,Chaos spirituality,
+1111110,,126,Spiritual evolution - mystical growth,OduIfa,,,126,,Spiritual evolution,
+1111111,,127,Ultimate spirituality - pure mysticism,OduIfa,,,127,,Ultimate mysticism,
+10000000,,128,Divine endings - sacred completion,OduIfa,,,128,,Closing ceremonies,
+10000001,,129,Occult endings - mystery completion,OduIfa,,,129,,Occult closure,
+10000010,,130,Journey ending - destination reached,OduIfa,,,130,,Journey completion,
+10000011,,131,War ending - peace achieved,OduIfa,,,131,,Peace treaties,
+10000100,,132,Material completion - harvest complete,OduIfa,,,132,,Harvest end,
+10000101,,133,Order from chaos - entropy resolved,OduIfa,,,133,,Order restoration,
+10000110,,134,Transformation complete - new form stabilized,OduIfa,,,134,,Form stabilization,
+10000111,,135,Prosperity cycle complete - abundance secured,OduIfa,,,135,,Prosperity end,
+10001000,,136,Combat ending - peace for warrior,OduIfa,,,136,,Warrior rest,
+10001001,,137,Historical cycle complete - era ending,OduIfa,,,137,,Era end,
+10001010,,138,Network completion - connections secured,OduIfa,,,138,,Network secured,
+10001011,,139,Current ending - flow stabilized,OduIfa,,,139,,Flow stabilization,
+10001100,,140,Passion cooling - desire satisfied,OduIfa,,,140,,Passion satisfied,
+10001101,,141,Stress relieved - burden lifted,OduIfa,,,141,,Stress relief,
+10001110,,142,Triumph complete - victory secured,OduIfa,,,142,,Victory secured,
+10001111,,143,Spiritual completion - enlightenment achieved,OduIfa,,,143,,Enlightenment achieved,
+10010000,,144,Divine passion - sacred fire,OduIfa,,,144,,Sacred fire,
+10010001,,145,Occult fire - hidden passion,OduIfa,,,145,,Occult fire,
+10010010,,146,Passionate journey - fiery quest,OduIfa,,,146,,Fiery quest,
+10010011,,147,Intense warfare - burning battles,OduIfa,,,147,,Burning battles,
+10010100,,148,Material passion - fiery acquisition,OduIfa,,,148,,Fiery acquisition,
+10010101,,149,Wild fire - chaotic passion,OduIfa,,,149,,Wild fire,
+10010110,,150,Passionate transformation - burning evolution,OduIfa,,,150,,Burning evolution,
+10010111,,151,Lucky passion - fortunate fire,OduIfa,,,151,,Fortunate fire,
+10011000,,152,Passionate warfare - burning combat,OduIfa,,,152,,Burning combat,
+10011001,,153,Urgent time - burning deadlines,OduIfa,,,153,,Burning deadlines,
+10011010,,154,Passionate connections - burning networks,OduIfa,,,154,,Burning networks,
+10011011,,155,Passionate currents - burning flows,OduIfa,,,155,,Burning flows,
+10011100,,156,Maximum passion - burning intensity,OduIfa,,,156,,Maximum intensity,
+10011101,,157,Intense stress - burning pressure,OduIfa,,,157,,Burning pressure,
+10011110,,158,Passionate triumph - burning victory,OduIfa,,,158,,Burning victory,
+10011111,,159,Ecstatic spirituality - burning faith,OduIfa,,,159,,Burning faith,
+10100000,,160,Divine pressure - sacred burden,OduIfa,,,160,,Sacred burden,
+10100001,,161,Hidden stress - occult pressure,OduIfa,,,161,,Occult pressure,
+10100010,,162,Difficult journey - pressured path,OduIfa,,,162,,Pressured path,
+10100011,,163,Pressured warfare - stressed combat,OduIfa,,,163,,Stressed combat,
+10100100,,164,Economic pressure - material stress,OduIfa,,,164,,Economic stress,
+10100101,,165,Chaotic pressure - random stress,OduIfa,,,165,,Chaotic stress,
+10100110,,166,Transformation stress - evolutionary pressure,OduIfa,,,166,,Evolution pressure,
+10100111,,167,Lucky pressure - beneficial stress,OduIfa,,,167,,Beneficial stress,
+10101000,,168,Combat pressure - battle stress,OduIfa,,,168,,Battle stress,
+10101001,,169,Deadline pressure - temporal stress,OduIfa,,,169,,Deadline stress,
+10101010,,170,Network pressure - connection stress,OduIfa,,,170,,Connection stress,
+10101011,,171,Current pressure - flow stress,OduIfa,,,171,,Flow stress,
+10101100,,172,Passionate pressure - burning stress,OduIfa,,,172,,Burning stress,
+10101101,,173,Maximum stress - extreme burden,OduIfa,,,173,,Maximum stress,
+10101110,,174,Triumphant pressure - winning stress,OduIfa,,,174,,Winning stress,
+10101111,,175,Spiritual pressure - mystical stress,OduIfa,,,175,,Mystical stress,
+10110000,,176,Divine victory - sacred success,OduIfa,,,176,,Sacred success,
+10110001,,177,Occult victory - hidden success,OduIfa,,,177,,Occult success,
+10110010,,178,Journey victory - quest success,OduIfa,,,178,,Quest success,
+10110011,,179,Battle victory - war success,OduIfa,,,179,,War success,
+10110100,,180,Material victory - economic success,OduIfa,,,180,,Economic success,
+10110101,,181,Unexpected victory - chaos success,OduIfa,,,181,,Chaos success,
+10110110,,182,Transformation victory - evolutionary success,OduIfa,,,182,,Evolution success,
+10110111,,183,Lucky victory - fortunate success,OduIfa,,,183,,Fortunate success,
+10111000,,184,Combat victory - military success,OduIfa,,,184,,Military success,
+10111001,,185,Historical victory - temporal success,OduIfa,,,185,,Historical success,
+10111010,,186,Network victory - connection success,OduIfa,,,186,,Connection success,
+10111011,,187,Current victory - flow success,OduIfa,,,187,,Flow success,
+10111100,,188,Passionate victory - burning success,OduIfa,,,188,,Burning success,
+10111101,,189,Stressed victory - burdened success,OduIfa,,,189,,Stressed success,
+10111110,,190,Maximum triumph - ultimate success,OduIfa,,,190,,Ultimate success,
+10111111,,191,Spiritual victory - mystical success,OduIfa,,,191,,Mystical success,
+11000000,,192,Divine spirituality - sacred mysticism,OduIfa,,,192,,Sacred mysticism,
+11000001,,193,Occult spirituality - hidden mysticism,OduIfa,,,193,,Occult mysticism,
+11000010,,194,Spiritual journey - mystical quest,OduIfa,,,194,,Mystical quest,
+11000011,,195,Spiritual warfare - holy combat,OduIfa,,,195,,Holy combat,
+11000100,,196,Grounded spirituality - material mysticism,OduIfa,,,196,,Material mysticism,
+11000101,,197,Ecstatic spirituality - wild mysticism,OduIfa,,,197,,Wild mysticism,
+11000110,,198,Spiritual evolution - mystical transformation,OduIfa,,,198,,Mystical evolution,
+11000111,,199,Lucky spirituality - fortunate mysticism,OduIfa,,,199,,Fortunate mysticism,
+11001000,,200,Spiritual warfare - holy combat,OduIfa,,,200,,Holy combat,
+11001001,,201,Historical spirituality - temporal mysticism,OduIfa,,,201,,Temporal mysticism,
+11001010,,202,Spiritual networks - mystical connections,OduIfa,,,202,,Mystical connections,
+11001011,,203,Spiritual currents - mystical flows,OduIfa,,,203,,Mystical flows,
+11001100,,204,Passionate spirituality - burning faith,OduIfa,,,204,,Burning faith,
+11001101,,205,Stressed spirituality - burdened faith,OduIfa,,,205,,Burdened faith,
+11001110,,206,Triumphant spirituality - victorious faith,OduIfa,,,206,,Victorious faith,
+11001111,,207,Ultimate spirituality - complete mysticism,OduIfa,,,207,,Complete mysticism,
+11010000,,208,Divine warfare - holy combat,OduIfa,,,208,,Holy warfare,
+11010001,,209,Occult warfare - hidden combat,OduIfa,,,209,,Occult combat,
+11010010,,210,Journey warfare - quest combat,OduIfa,,,210,,Quest combat,
+11010011,,211,Maximum warfare - ultimate combat,OduIfa,,,211,,Ultimate warfare,
+11010100,,212,Material warfare - economic combat,OduIfa,,,212,,Economic warfare,
+11010101,,213,Chaotic warfare - random combat,OduIfa,,,213,,Chaotic combat,
+11010110,,214,Transformative warfare - evolutionary combat,OduIfa,,,214,,Evolution warfare,
+11010111,,215,Lucky warfare - fortunate combat,OduIfa,,,215,,Fortunate combat,
+11011000,,216,Maximum combat - ultimate warfare,OduIfa,,,216,,Ultimate combat,
+11011001,,217,Historical warfare - temporal combat,OduIfa,,,217,,Temporal warfare,
+11011010,,218,Network warfare - connection combat,OduIfa,,,218,,Network combat,
+11011011,,219,Current warfare - flow combat,OduIfa,,,219,,Flow combat,
+11011100,,220,Passionate warfare - burning combat,OduIfa,,,220,,Burning combat,
+11011101,,221,Stressed warfare - burdened combat,OduIfa,,,221,,Stressed combat,
+11011110,,222,Triumphant warfare - victorious combat,OduIfa,,,222,,Victorious combat,
+11011111,,223,Spiritual warfare - mystical combat,OduIfa,,,223,,Mystical combat,
+11100000,,224,Divine networks - sacred connections,OduIfa,,,224,,Sacred connections,
+11100001,,225,Occult networks - hidden connections,OduIfa,,,225,,Occult connections,
+11100010,,226,Journey networks - quest connections,OduIfa,,,226,,Quest connections,
+11100011,,227,War alliances - battle networks,OduIfa,,,227,,War alliances,
+11100100,,228,Economic networks - material connections,OduIfa,,,228,,Economic connections,
+11100101,,229,Chaotic networks - random connections,OduIfa,,,229,,Chaotic connections,
+11100110,,230,Transformative networks - evolutionary connections,OduIfa,,,230,,Evolution connections,
+11100111,,231,Lucky networks - fortunate connections,OduIfa,,,231,,Fortunate connections,
+11101000,,232,Military alliances - combat networks,OduIfa,,,232,,Military alliances,
+11101001,,233,Historical networks - temporal connections,OduIfa,,,233,,Temporal connections,
+11101010,,234,Maximum networks - ultimate connections,OduIfa,,,234,,Ultimate connections,
+11101011,,235,Current networks - flow connections,OduIfa,,,235,,Flow connections,
+11101100,,236,Passionate networks - burning connections,OduIfa,,,236,,Burning connections,
+11101101,,237,Stressed networks - burdened connections,OduIfa,,,237,,Stressed connections,
+11101110,,238,Triumphant networks - victorious connections,OduIfa,,,238,,Victorious connections,
+11101111,,239,Spiritual networks - mystical connections,OduIfa,,,239,,Mystical connections,
+11110000,,240,Divine currents - sacred flows,OduIfa,,,240,,Sacred flows,
+11110001,,241,Occult currents - hidden flows,OduIfa,,,241,,Occult flows,
+11110010,,242,Journey currents - quest flows,OduIfa,,,242,,Quest flows,
+11110011,,243,War currents - battle flows,OduIfa,,,243,,War flows,
+11110100,,244,Economic currents - material flows,OduIfa,,,244,,Economic flows,
+11110101,,245,Chaotic currents - random flows,OduIfa,,,245,,Chaotic flows,
+11110110,,246,Transformative currents - evolutionary flows,OduIfa,,,246,,Evolution flows,
+11110111,,247,Lucky currents - fortunate flows,OduIfa,,,247,,Fortunate flows,
+11111000,,248,Military currents - combat flows,OduIfa,,,248,,Military flows,
+11111001,,249,Historical currents - temporal flows,OduIfa,,,249,,Temporal flows,
+11111010,,250,Network currents - connection flows,OduIfa,,,250,,Connection flows,
+11111011,,251,Maximum currents - ultimate flows,OduIfa,,,251,,Ultimate flows,
+11111100,,252,Passionate currents - burning flows,OduIfa,,,252,,Burning flows,
+11111101,,253,Stressed currents - burdened flows,OduIfa,,,253,,Stressed flows,
+11111110,,254,Triumphant currents - victorious flows,OduIfa,,,254,,Victorious flows,
+11111111,,255,Ultimate ending - absolute completion,OduIfa,,,255,,Absolute completion,
+00000000,Questions of origin and destiny,654,Foundation and pure beginnings - divine order manifesting,OduIfa:SoulLayer,Double Light,Eji Ogbe,0,"['creation', 'order', 'divinity']",New moon ceremonies,Purity and infinite potential
+00000001,Life transitions and mortality,655,Transformation through duality - birth and death cycle,OduIfa:SoulLayer,Light Meets Darkness,Ogbe-Oyeku,1,"['duality', 'transformation', 'cycles']",Eclipse rituals,Change and necessary transition
+00000010,Overcoming difficulties,656,Challenges revealing character - obstacles as teachers,OduIfa:SoulLayer,Light Tests Path,Ogbe-Iwori,2,"['testing', 'growth', 'character']",Initiation rites,Strength through adversity
+00000011,Disputes and decisions,657,Struggle between opposing forces - choosing sides,OduIfa:SoulLayer,Light In Conflict,Ogbe-Odi,3,"['conflict', 'choice', 'balance']",Dispute resolution,Conflict and choice
+00000100,Material success questions,658,Manifestation of divine will on earthly plane,OduIfa:SoulLayer,Light Awakens Earth,Ogbe-Irosun,4,"['manifestation', 'abundance', 'will']",Harvest festivals,Divine will made manifest
+00000101,Unpredictable situations,659,Order confronting entropy - structure vs randomness,OduIfa:SoulLayer,Light Faces Chaos,Ogbe-Owonrin,5,"['chaos', 'uncertainty', 'adaptation']",Storm preparation,Chaos and uncertainty
+00000110,Personal evolution,660,Metamorphosis and rebirth - shedding old forms,OduIfa:SoulLayer,Light Transforms,Ogbe-Obara,6,"['transformation', 'renewal', 'growth']",Coming-of-age ceremonies,Transformation and renewal
+00000111,Wealth and success inquiries,661,Abundance through right action - karmic rewards,OduIfa:SoulLayer,Light Brings Fortune,Ogbe-Okonron,7,"['prosperity', 'karma', 'reward']",Blessing ceremonies,Good fortune and prosperity
+00001000,Seeking knowledge,662,Movement from ignorance to wisdom,OduIfa:SoulLayer,Darkness Seeks Light,Oyeku-Ogbe,8,"['ignorance', 'wisdom', 'seeking']",Dawn ceremonies,Enlightenment journey
+00001001,Communication with dead,663,Deep mysteries and the unknown - ancestral realm,OduIfa:SoulLayer,Double Darkness,Oyeku-Meji,9,"['mystery', 'ancestors', 'occult']",Ancestral veneration,Mystery and the occult
+00001010,Uncovering hidden issues,664,Hidden obstacles - what cannot yet be seen,OduIfa:SoulLayer,Darkness On Path,Oyeku-Iwori,10,"['hidden', 'danger', 'revelation']",Divination for dangers,Hidden threats
+00001011,Psychological challenges,665,Internal conflict - battling inner demons,OduIfa:SoulLayer,Darkness In Strife,Oyeku-Odi,11,"['internal', 'conflict', 'demons']",Spiritual warfare,Internal struggle
+00001100,Uncovering truth,666,Manifestation of hidden things - secrets revealed,OduIfa:SoulLayer,Darkness Grounds,Oyeku-Irosun,12,"['secrets', 'revelation', 'truth']",Truth ceremonies,Revelation of secrets
+00001101,Unclear situations,667,Confusion and disorientation - loss of bearings,OduIfa:SoulLayer,Darkness Churns,Oyeku-Owonrin,13,"['confusion', 'misdirection', 'protection']",Protection rituals,Confusion and misdirection
+00001110,Deep spiritual change,668,Transformation in the unseen realm,OduIfa:SoulLayer,Darkness Changes Form,Oyeku-Obara,14,"['shadow', 'occult', 'transformation']",Shadow work,Occult transformation
+00001111,Finding hidden resources,669,Hidden resources - treasures in shadow,OduIfa:SoulLayer,Darkness Conceals Wealth,Oyeku-Okonron,15,"['hidden', 'resources', 'treasure']",Treasure seeking,Hidden abundance
+00010000,Spiritual journey questions,670,Journey toward understanding and clarity,OduIfa:SoulLayer,Path To Light,Iwori-Ogbe,16,"['journey', 'quest', 'enlightenment']",Pilgrimage,Quest for enlightenment
+00010001,Travel and danger,671,Dangerous journey - navigating peril,OduIfa:SoulLayer,Path Through Shadow,Iwori-Oyeku,17,"['danger', 'travel', 'protection']",Protection during travel,Perilous journey
+00010010,Major life decisions,672,Choices and crossroads - fork in the road,OduIfa:SoulLayer,Double Path,Iwori-Meji,18,"['choice', 'crossroads', 'decision']",Decision ceremonies,Critical choice point
+00010011,Martial challenges,673,Journey through strife - warrior's road,OduIfa:SoulLayer,Path Of Conflict,Iwori-Odi,19,"['warrior', 'combat', 'strife']",Warrior initiation,Combative path
+00010100,Career and work path,674,Journey to material success - effort rewarded,OduIfa:SoulLayer,Path Of Manifestation,Iwori-Irosun,20,"['career', 'effort', 'success']",Trade journeys,Productive journey
+00010101,Unpredictable situations,675,Unpredictable journey - expect the unexpected,OduIfa:SoulLayer,Path Of Chaos,Iwori-Owonrin,21,"['chaos', 'uncertainty', 'adaptation']",Chaos navigation,Uncertain path
+00010110,Personal evolution path,676,Journey of transformation - becoming,OduIfa:SoulLayer,Path Of Change,Iwori-Obara,22,"['transformation', 'passage', 'becoming']",Rites of passage,Transformative journey
+00010111,Profitable ventures,677,Lucky journey - favorable winds,OduIfa:SoulLayer,Path Of Fortune,Iwori-Okonron,23,"['fortune', 'luck', 'profit']",Blessing travels,Fortunate path
+00011000,Ending disputes,678,Strife moving toward peace,OduIfa:SoulLayer,Conflict Seeks Resolution,Odi-Ogbe,24,"['peace', 'resolution', 'ending']",Peace ceremonies,Conflict resolution
+00011001,Hidden enemies,679,Hidden warfare - unseen battles,OduIfa:SoulLayer,Conflict In Darkness,Odi-Oyeku,25,"['hidden', 'enemies', 'warfare']",Spiritual protection,Occult conflict
+00011010,Removing impediments,680,Obstacles blocking progress,OduIfa:SoulLayer,Conflict On Path,Odi-Iwori,26,"['obstacles', 'barriers', 'removal']",Obstacle removal,Barriers and blocks
+00011011,Overwhelming conflict,681,Intense struggle - war on all sides,OduIfa:SoulLayer,Double Conflict,Odi-Meji,27,"['war', 'struggle', 'intensity']",Battle preparation,Total war
+00011100,Property disputes,682,争夺物质 - competition for wealth,OduIfa:SoulLayer,Conflict Over Resources,Odi-Irosun,28,"['competition', 'resources', 'property']",Resource disputes,Material competition
+00011101,Lawless situations,683,Unpredictable warfare - no rules,OduIfa:SoulLayer,Chaotic Conflict,Odi-Owonrin,29,"['anarchy', 'chaos', 'lawlessness']",Chaos warfare,Anarchic strife
+00011110,Major upheaval,684,Struggle that changes everything,OduIfa:SoulLayer,Transformative Conflict,Odi-Obara,30,"['revolution', 'upheaval', 'change']",Revolutionary rites,Revolutionary change
+00011111,Winning disputes,685,Gains through struggle - victory spoils,OduIfa:SoulLayer,Profitable Conflict,Odi-Okonron,31,"['victory', 'gains', 'winning']",Victory ceremonies,Victorious conflict
+00100000,Prosperity questions,686,Divine blessing on material plane,OduIfa:SoulLayer,Earth Receives Light,Irosun-Ogbe,32,"['blessing', 'prosperity', 'divine']",Agricultural rites,Divine material blessing
+00100001,Financial difficulties,687,Material loss - resources diminishing,OduIfa:SoulLayer,Earth In Shadow,Irosun-Oyeku,33,"['loss', 'decline', 'famine']",Famine preparation,Material decline
+00100010,Business travel,688,Material journey - physical travel,OduIfa:SoulLayer,Earth On Path,Irosun-Iwori,34,"['trade', 'business', 'travel']",Trade routes,Material journey
+00100011,Property rights,689,Property disputes - land battles,OduIfa:SoulLayer,Earth In Conflict,Irosun-Odi,35,"['property', 'land', 'territory']",Land disputes,Territorial conflict
+00100100,Wealth accumulation,690,Abundance and fertility - harvest time,OduIfa:SoulLayer,Double Earth,Irosun-Meji,36,"['abundance', 'fertility', 'wealth']",Harvest festivals,Material abundance
+00100101,Economic instability,691,Unpredictable material conditions,OduIfa:SoulLayer,Chaotic Earth,Irosun-Owonrin,37,"['uncertainty', 'disaster', 'instability']",Disaster preparation,Material uncertainty
+00100110,Career changes,692,Material transformation - alchemy,OduIfa:SoulLayer,Transforming Earth,Irosun-Obara,38,"['alchemy', 'craft', 'change']",Craft ceremonies,Material transformation
+00100111,Business success,693,Material blessings - prosperity,OduIfa:SoulLayer,Fortunate Earth,Irosun-Okonron,39,"['fortune', 'wealth', 'success']",Wealth ceremonies,Material fortune
+00101000,Creating structure,694,Entropy organizing - creating from chaos,OduIfa:SoulLayer,Chaos Meets Order,Owonrin-Ogbe,40,"['creation', 'order', 'emergence']",Creation from chaos,Emergent order
+00101001,Crisis situations,695,Complete confusion - total disorientation,OduIfa:SoulLayer,Chaos In Darkness,Owonrin-Oyeku,41,"['confusion', 'crisis', 'disorientation']",Protection from chaos,Utter confusion
+00101010,Unexpected events,696,Unpredictable journey - random events,OduIfa:SoulLayer,Chaos On Path,Owonrin-Iwori,42,"['random', 'unexpected', 'chaos']",Chaos navigation,Random journey
+00101011,Anarchic situations,697,Anarchic warfare - no rules,OduIfa:SoulLayer,Chaotic Conflict,Owonrin-Odi,43,"['anarchy', 'chaos', 'lawlessness']",Chaos warfare,Lawless strife
+00101100,Financial crises,698,Economic chaos - market instability,OduIfa:SoulLayer,Chaotic Material,Owonrin-Irosun,44,"['chaos', 'economy', 'crisis']",Economic protection,Material chaos
+00101101,Overwhelming randomness,699,Maximum entropy - complete randomness,OduIfa:SoulLayer,Double Chaos,Owonrin-Meji,45,"['chaos', 'entropy', 'randomness']",Chaos management,Total chaos
+00101110,Disruptive innovation,700,Change through disorder - creative destruction,OduIfa:SoulLayer,Chaos Transforms,Owonrin-Obara,46,"['disruption', 'innovation', 'destruction']",Revolutionary change,Transformative chaos
+00101111,Unexpected blessings,701,Luck in disorder - finding order in chaos,OduIfa:SoulLayer,Fortunate Chaos,Owonrin-Okonron,47,"['opportunity', 'luck', 'chaos']",Chaos opportunity,Opportunistic chaos
+00110000,Spiritual advancement,702,Transformation toward divinity,OduIfa:SoulLayer,Change Toward Light,Obara-Ogbe,48,"['evolution', 'advancement', 'divinity']",Spiritual evolution,Upward transformation
+00110001,Spiritual crisis,703,Descent and dissolution - dark night of soul,OduIfa:SoulLayer,Change Into Shadow,Obara-Oyeku,49,"['descent', 'crisis', 'dissolution']",Dark night,Downward transformation
+00110010,Personal evolution,704,Transforming journey - becoming different,OduIfa:SoulLayer,Change On Path,Obara-Iwori,50,"['evolution', 'journey', 'becoming']",Pilgrimage,Journey of change
+00110011,Major upheaval,705,Struggle creating change,OduIfa:SoulLayer,Transformative Conflict,Obara-Odi,51,"['revolution', 'upheaval', 'transformation']",Revolutionary rites,Revolutionary transformation
+00110100,Career transformation,706,Physical metamorphosis - changing form,OduIfa:SoulLayer,Material Transformation,Obara-Irosun,52,"['metamorphosis', 'change', 'career']",Shape-shifting,Material change
+00110101,Unexpected changes,707,Unpredictable change - random mutation,OduIfa:SoulLayer,Chaotic Transformation,Obara-Owonrin,53,"['random', 'mutation', 'unexpected']",Chaos change,Random transformation
+00110110,Complete life change,708,Complete metamorphosis - total rebirth,OduIfa:SoulLayer,Double Transformation,Obara-Meji,54,"['rebirth', 'metamorphosis', 'total']",Rebirth ceremonies,Total transformation
+00110111,Beneficial evolution,709,Beneficial transformation - evolution,OduIfa:SoulLayer,Fortunate Change,Obara-Okonron,55,"['beneficial', 'positive', 'evolution']",Beneficial change,Positive transformation
+00111000,Spiritual blessings,710,Divine blessings - heavenly gifts,OduIfa:SoulLayer,Fortune From Light,Okonron-Ogbe,56,"['blessings', 'divine', 'gifts']",Blessing ceremonies,Divine fortune
+00111001,Unexpected benefits,711,Hidden blessings - disguised gifts,OduIfa:SoulLayer,Fortune In Shadow,Okonron-Oyeku,57,"['hidden', 'occult', 'unexpected']",Hidden blessings,Occult fortune
+00111010,Successful ventures,712,Lucky journey - favorable conditions,OduIfa:SoulLayer,Fortune On Path,Okonron-Iwori,58,"['luck', 'success', 'favorable']",Fortunate travel,Lucky journey
+00111011,Winning battles,713,Gains from struggle - war spoils,OduIfa:SoulLayer,Fortune Through Conflict,Okonron-Odi,59,"['victory', 'gains', 'winning']",Victory ceremonies,Victorious fortune
+00111100,Financial success,714,Wealth and prosperity - abundance,OduIfa:SoulLayer,Material Fortune,Okonron-Irosun,60,"['wealth', 'prosperity', 'abundance']",Wealth ceremonies,Material abundance
+00111101,Unexpected luck,715,Luck in chaos - random blessings,OduIfa:SoulLayer,Chaotic Fortune,Okonron-Owonrin,61,"['chaos', 'luck', 'random']",Chaos blessings,Random fortune
+00111110,Growing prosperity,716,Blessings through change,OduIfa:SoulLayer,Transformative Fortune,Okonron-Obara,62,"['growth', 'evolution', 'prosperity']",Transformative blessings,Evolving fortune
+00111111,Complete success,717,Maximum blessings - ultimate prosperity,OduIfa:SoulLayer,Double Fortune,Okonron-Meji,63,"['ultimate', 'total', 'complete']",Ultimate blessings,Total fortune
+01000000,Fighting for justice,718,Military campaign for righteous cause,OduIfa:SoulLayer,Warrior Seeks Light,Ogunda-Ogbe,64,"['justice', 'war', 'righteousness']",Holy war,Sacred warfare
+01000001,Secret conflicts,719,Hidden warfare - covert operations,OduIfa:SoulLayer,Warrior In Darkness,Ogunda-Oyeku,65,"['covert', 'secret', 'espionage']",Espionage,Covert warfare
+01000010,Strategic movement,720,Military campaign - journey to battle,OduIfa:SoulLayer,Warrior On Path,Ogunda-Iwori,66,"['campaign', 'strategy', 'movement']",Military campaign,Warrior journey
+01000011,Active warfare,721,Combat and warfare - direct confrontation,OduIfa:SoulLayer,Warrior In Conflict,Ogunda-Odi,67,"['combat', 'warfare', 'battle']",Battle,Direct combat
+01000100,Economic warfare,722,Fighting for material gains,OduIfa:SoulLayer,Warrior Seeks Resources,Ogunda-Irosun,68,"['resources', 'conquest', 'economics']",Resource warfare,Material conquest
+01000101,Irregular combat,723,Guerrilla warfare - irregular combat,OduIfa:SoulLayer,Warrior In Chaos,Ogunda-Owonrin,69,"['guerrilla', 'irregular', 'chaos']",Guerrilla war,Chaotic warfare
+01000110,Military advancement,724,Combat evolution - martial growth,OduIfa:SoulLayer,Warrior Transforms,Ogunda-Obara,70,"['evolution', 'martial', 'advancement']",Martial evolution,Warrior transformation
+01000111,Military victory,725,Victory and spoils - successful campaign,OduIfa:SoulLayer,Warrior Finds Fortune,Ogunda-Okonron,71,"['victory', 'success', 'spoils']",Victory,Successful warfare
+01001000,Forward movement,726,Progress toward enlightenment,OduIfa:SoulLayer,Time Moves To Light,Osa-Ogbe,72,"['progress', 'advancement', 'forward']",Progress ceremonies,Temporal advancement
+01001001,Delays and blockages,727,Stagnation and delay - stuck in time,OduIfa:SoulLayer,Time In Darkness,Osa-Oyeku,73,"['stagnation', 'delay', 'stuck']",Breaking stagnation,Temporal stasis
+01001010,Historical inquiries,728,Journey through time - temporal voyage,OduIfa:SoulLayer,Time On Path,Osa-Iwori,74,"['time', 'history', 'journey']",Time travel,Temporal journey
+01001011,Legacy disputes,729,Battles across time - historical conflicts,OduIfa:SoulLayer,Time In Conflict,Osa-Odi,75,"['history', 'legacy', 'temporal']",Historical warfare,Temporal conflict
+01001100,Ancestral wealth,730,Historical wealth - inherited resources,OduIfa:SoulLayer,Time Manifests Material,Osa-Irosun,76,"['inheritance', 'ancestors', 'legacy']",Inheritance,Historical resources
+01001101,Schedule disruptions,731,Unpredictable temporal flow - time distortions,OduIfa:SoulLayer,Chaotic Time,Osa-Owonrin,77,"['chaos', 'time', 'disruption']",Time chaos,Temporal chaos
+01001110,Evolutionary change,732,Historical change - evolution over time,OduIfa:SoulLayer,Time Transforms,Osa-Obara,78,"['evolution', 'history', 'change']",Historical change,Temporal transformation
+01001111,Long-term gains,733,Patience rewarded - waiting pays off,OduIfa:SoulLayer,Time Brings Fortune,Osa-Okonron,79,"['patience', 'waiting', 'gains']",Patience rewards,Temporal fortune
+01010000,Building relationships,734,Connections leading to understanding,OduIfa:SoulLayer,Web Toward Light,Ika-Ogbe,80,"['connection', 'network', 'understanding']",Network building,Connective enlightenment
+01010001,Hidden alliances,735,Hidden connections - occult networks,OduIfa:SoulLayer,Web In Darkness,Ika-Oyeku,81,"['secret', 'occult', 'hidden']",Secret societies,Occult networks
+01010010,Social climbing,736,Journey through networks - social travel,OduIfa:SoulLayer,Web On Path,Ika-Iwori,82,"['network', 'social', 'navigation']",Social navigation,Network journey
+01010011,Political struggles,737,Conflicting alliances - network warfare,OduIfa:SoulLayer,Web In Conflict,Ika-Odi,83,"['alliance', 'politics', 'conflict']",Alliance warfare,Network conflict
+01010100,Business networks,738,Economic networks - trade connections,OduIfa:SoulLayer,Web Of Resources,Ika-Irosun,84,"['trade', 'economics', 'business']",Trade networks,Economic connections
+01010101,Unexpected contacts,739,Unpredictable connections - random networks,OduIfa:SoulLayer,Chaotic Web,Ika-Owonrin,85,"['chaos', 'random', 'unexpected']",Chaos networks,Random connections
+01010110,Evolving relationships,740,Network evolution - changing connections,OduIfa:SoulLayer,Web Transforms,Ika-Obara,86,"['evolution', 'transformation', 'relationships']",Network evolution,Transforming connections
+01010111,Profitable alliances,741,Beneficial connections - lucky networks,OduIfa:SoulLayer,Fortunate Web,Ika-Okonron,87,"['beneficial', 'profitable', 'alliances']",Beneficial networks,Fortunate connections
+01011000,Smooth advancement,742,Progression toward enlightenment,OduIfa:SoulLayer,Flow To Light,Oturupon-Ogbe,88,"['flow', 'progression', 'smooth']",Flow ceremonies,Progressive flow
+01011001,Subterranean movements,743,Hidden currents - occult flows,OduIfa:SoulLayer,Flow In Darkness,Oturupon-Oyeku,89,"['hidden', 'occult', 'subterranean']",Hidden flows,Occult currents
+01011010,River journeys,744,Flowing journey - liquid travel,OduIfa:SoulLayer,Flow On Path,Oturupon-Iwori,90,"['fluid', 'river', 'flow']",Fluid journey,Flowing path
+01011011,Contradictory forces,745,Conflicting currents - opposing flows,OduIfa:SoulLayer,Flow In Conflict,Oturupon-Odi,91,"['opposing', 'contradiction', 'conflict']",Current conflict,Opposing flows
+01011100,Money movement,746,Economic flow - wealth circulation,OduIfa:SoulLayer,Material Flow,Oturupon-Irosun,92,"['circulation', 'money', 'economics']",Economic flow,Material circulation
+01011101,Unstable conditions,747,Turbulent currents - chaotic flows,OduIfa:SoulLayer,Chaotic Flow,Oturupon-Owonrin,93,"['chaos', 'turbulent', 'unstable']",Chaos currents,Turbulent flow
+01011110,Evolving patterns,748,Evolutionary currents - changing flows,OduIfa:SoulLayer,Transforming Flow,Oturupon-Obara,94,"['evolution', 'transformation', 'patterns']",Flow transformation,Transforming currents
+01011111,Favorable conditions,749,Beneficial currents - lucky flows,OduIfa:SoulLayer,Fortunate Flow,Oturupon-Okonron,95,"['beneficial', 'favorable', 'fortune']",Beneficial flow,Fortunate currents
+01100000,Intense spiritual seeking,750,Passionate pursuit of enlightenment,OduIfa:SoulLayer,Fire Toward Light,Otura-Ogbe,96,"['passion', 'intensity', 'seeking']",Fire ceremonies,Passionate enlightenment
+01100001,Secret desires,751,Hidden fire - occult passion,OduIfa:SoulLayer,Fire In Darkness,Otura-Oyeku,97,"['hidden', 'passion', 'secret']",Hidden fire,Occult passion
+01100010,Intense quest,752,Passionate journey - burning desire,OduIfa:SoulLayer,Fire On Path,Otura-Iwori,98,"['passion', 'desire', 'quest']",Passionate journey,Fiery path
+01100011,Intense battles,753,Passionate warfare - burning conflict,OduIfa:SoulLayer,Fire In Conflict,Otura-Odi,99,"['passion', 'intensity', 'warfare']",Passionate warfare,Fiery conflict
+01100100,Intense ambition,754,Passionate acquisition - burning desire for wealth,OduIfa:SoulLayer,Material Fire,Otura-Irosun,100,"['passion', 'ambition', 'wealth']",Passionate acquisition,Fiery materialism
+01100101,Uncontrolled desire,755,Unpredictable passion - wild fire,OduIfa:SoulLayer,Chaotic Fire,Otura-Owonrin,101,"['chaos', 'wild', 'uncontrolled']",Chaos fire,Wild passion
+01100110,Intense evolution,756,Passionate transformation - burning change,OduIfa:SoulLayer,Transforming Fire,Otura-Obara,102,"['transformation', 'passion', 'evolution']",Fire transformation,Transformative passion
+01100111,Beneficial intensity,757,Lucky passion - beneficial desire,OduIfa:SoulLayer,Fortunate Fire,Otura-Okonron,103,"['fortune', 'passion', 'beneficial']",Fortunate passion,Lucky fire
+01101000,Growth through stress,758,Stress leading to enlightenment,OduIfa:SoulLayer,Pressure Toward Light,Irete-Ogbe,104,"['pressure', 'stress', 'growth']",Pressure ceremonies,Pressurized enlightenment
+01101001,Secret burdens,759,Hidden stress - occult pressure,OduIfa:SoulLayer,Pressure In Darkness,Irete-Oyeku,105,"['hidden', 'stress', 'secret']",Hidden pressure,Occult stress
+01101010,Difficult journey,760,Stressful journey - pressure travel,OduIfa:SoulLayer,Pressure On Path,Irete-Iwori,106,"['pressure', 'stress', 'difficulty']",Pressure journey,Stressful path
+01101011,High-stress battles,761,Intense warfare - pressure warfare,OduIfa:SoulLayer,Pressure In Conflict,Irete-Odi,107,"['pressure', 'intensity', 'warfare']",Pressure warfare,Intense conflict
+01101100,Material burdens,762,Economic stress - financial pressure,OduIfa:SoulLayer,Material Pressure,Irete-Irosun,108,"['pressure', 'stress', 'economics']",Economic pressure,Financial stress
+01101101,Unexpected burdens,763,Unpredictable stress - chaos pressure,OduIfa:SoulLayer,Chaotic Pressure,Irete-Owonrin,109,"['chaos', 'stress', 'unexpected']",Chaos pressure,Random stress
+01101110,Change through burden,764,Stress-induced change - pressure transformation,OduIfa:SoulLayer,Transforming Pressure,Irete-Obara,110,"['transformation', 'stress', 'change']",Pressure transformation,Stress evolution
+01101111,Productive burden,765,Beneficial stress - lucky pressure,OduIfa:SoulLayer,Fortunate Pressure,Irete-Okonron,111,"['fortune', 'stress', 'productive']",Fortunate pressure,Beneficial stress
+01110000,Winning spiritually,766,Triumph leading to enlightenment,OduIfa:SoulLayer,Victory Toward Light,Ose-Ogbe,112,"['victory', 'triumph', 'spiritual']",Victory ceremonies,Victorious enlightenment
+01110001,Secret wins,767,Hidden triumph - occult victory,OduIfa:SoulLayer,Victory In Darkness,Ose-Oyeku,113,"['hidden', 'triumph', 'secret']",Hidden victory,Occult triumph
+01110010,Successful quest,768,Triumphant journey - winning path,OduIfa:SoulLayer,Victory On Path,Ose-Iwori,114,"['victory', 'success', 'quest']",Victory journey,Triumphant path
+01110011,Military success,769,Winning warfare - battle triumph,OduIfa:SoulLayer,Victory In Conflict,Ose-Odi,115,"['victory', 'warfare', 'success']",Battle victory,Triumphant warfare
+01110100,Business success,770,Economic triumph - financial success,OduIfa:SoulLayer,Material Victory,Ose-Irosun,116,"['victory', 'success', 'business']",Economic victory,Material triumph
+01110101,Unexpected wins,771,Unexpected triumph - chaos victory,OduIfa:SoulLayer,Chaotic Victory,Ose-Owonrin,117,"['chaos', 'unexpected', 'triumph']",Chaos victory,Random triumph
+01110110,Winning change,772,Evolutionary triumph - victory transformation,OduIfa:SoulLayer,Transforming Victory,Ose-Obara,118,"['victory', 'evolution', 'transformation']",Victory transformation,Triumphant evolution
+01110111,Total success,773,Lucky triumph - maximum victory,OduIfa:SoulLayer,Fortunate Victory,Ose-Okonron,119,"['ultimate', 'complete', 'total']",Ultimate victory,Complete triumph
+01111000,Divine communion,774,Spiritual ascension - divine connection,OduIfa:SoulLayer,Spirit To Light,Ofun-Ogbe,120,"['spirit', 'ascension', 'divine']",Ascension ceremonies,Spiritual enlightenment
+01111001,Shadow spirituality,775,Occult spirituality - dark mysticism,OduIfa:SoulLayer,Spirit In Darkness,Ofun-Oyeku,121,"['occult', 'mysticism', 'shadow']",Dark mysticism,Occult spirit
+01111010,Seeking divinity,776,Spiritual journey - quest for meaning,OduIfa:SoulLayer,Spirit On Path,Ofun-Iwori,122,"['spiritual', 'quest', 'mystical']",Spiritual quest,Mystical journey
+01111011,Battling demons,777,Spiritual warfare - fighting evil,OduIfa:SoulLayer,Spirit In Conflict,Ofun-Odi,123,"['spiritual', 'warfare', 'demons']",Spiritual warfare,Holy conflict
+01111100,Practical faith,778,Earthly spirituality - grounded mysticism,OduIfa:SoulLayer,Material Spirit,Ofun-Irosun,124,"['grounded', 'practical', 'faith']",Grounded spirituality,Material mysticism
+01111101,Ecstatic faith,779,Unpredictable spirituality - wild mysticism,OduIfa:SoulLayer,Chaotic Spirit,Ofun-Owonrin,125,"['chaos', 'ecstatic', 'wild']",Chaos spirituality,Wild mysticism
+01111110,Evolving faith,780,Spiritual evolution - mystical growth,OduIfa:SoulLayer,Transforming Spirit,Ofun-Obara,126,"['evolution', 'transformation', 'mystical']",Spiritual evolution,Mystical transformation
+01111111,Total enlightenment,781,Ultimate spirituality - pure mysticism,OduIfa:SoulLayer,Double Spirit,Ofun-Meji,127,"['ultimate', 'complete', 'total']",Ultimate mysticism,Complete spirit
+10000000,Sacred endings,782,Divine endings - sacred completion,OduIfa:SoulLayer,Light Closes,Ogbe-Sa,128,"['divine', 'closure', 'endings']",Closing ceremonies,Divine closure
+10000001,Hidden conclusions,783,Occult endings - mystery completion,OduIfa:SoulLayer,Darkness Closes,Oyeku-Sa,129,"['occult', 'mystery', 'hidden']",Occult closure,Mysterious endings
+10000010,Arrival ceremonies,784,Journey ending - destination reached,OduIfa:SoulLayer,Path Closes,Iwori-Sa,130,"['journey', 'arrival', 'completion']",Journey completion,Path conclusion
+10000011,Battle conclusions,785,War ending - peace achieved,OduIfa:SoulLayer,Conflict Closes,Odi-Sa,131,"['peace', 'resolution', 'war']",Peace treaties,Conflict resolution
+10000100,Economic cycle end,786,Material completion - harvest complete,OduIfa:SoulLayer,Earth Closes,Irosun-Sa,132,"['harvest', 'material', 'cycle']",Harvest end,Material closure
+10000101,Stabilization,787,Order from chaos - entropy resolved,OduIfa:SoulLayer,Chaos Closes,Owonrin-Sa,133,"['order', 'stabilization', 'resolution']",Order restoration,Chaos resolution
+10000110,Evolution complete,788,Transformation complete - new form stabilized,OduIfa:SoulLayer,Change Closes,Obara-Sa,134,"['stabilization', 'evolution', 'complete']",Form stabilization,Transformation end
+10000111,Wealth established,789,Prosperity cycle complete - abundance secured,OduIfa:SoulLayer,Fortune Closes,Okonron-Sa,135,"['prosperity', 'wealth', 'secured']",Prosperity end,Fortune secured
+10001000,Battle end,790,Combat ending - peace for warrior,OduIfa:SoulLayer,Warrior Rests,Ogunda-Sa,136,"['peace', 'rest', 'conclusion']",Warrior rest,Combat conclusion
+10001001,Time completion,791,Historical cycle complete - era ending,OduIfa:SoulLayer,Time Closes,Osa-Sa,137,"['era', 'history', 'completion']",Era end,Historical closure
+10001010,Alliance finalized,792,Network completion - connections secured,OduIfa:SoulLayer,Web Closes,Ika-Sa,138,"['network', 'alliance', 'finalized']",Network secured,Connection completion
+10001011,Stream conclusion,793,Current ending - flow stabilized,OduIfa:SoulLayer,Flow Closes,Oturupon-Sa,139,"['stabilization', 'flow', 'conclusion']",Flow stabilization,Current completion
+10001100,Desire fulfilled,794,Passion cooling - desire satisfied,OduIfa:SoulLayer,Fire Closes,Otura-Sa,140,"['passion', 'fulfillment', 'satisfied']",Passion satisfied,Fire conclusion
+10001101,Burden ended,795,Stress relieved - burden lifted,OduIfa:SoulLayer,Pressure Closes,Irete-Sa,141,"['relief', 'released', 'ended']",Stress relief,Pressure released
+10001110,Success established,796,Triumph complete - victory secured,OduIfa:SoulLayer,Victory Closes,Ose-Sa,142,"['victory', 'success', 'secured']",Victory secured,Triumph complete
+10001111,Mystical completion,797,Spiritual completion - enlightenment achieved,OduIfa:SoulLayer,Spirit Closes,Ofun-Sa,143,"['enlightenment', 'fulfillment', 'mystical']",Enlightenment achieved,Spiritual fulfillment
+10010000,Holy passion,798,Divine passion - sacred fire,OduIfa:SoulLayer,Light Burns,Ogbe-Tura,144,"['divine', 'passion', 'sacred']",Sacred fire,Divine intensity
+10010001,Secret desire,799,Occult fire - hidden passion,OduIfa:SoulLayer,Darkness Burns,Oyeku-Tura,145,"['occult', 'passion', 'secret']",Occult fire,Hidden intensity
+10010010,Burning journey,800,Passionate journey - fiery quest,OduIfa:SoulLayer,Path Burns,Iwori-Tura,146,"['passion', 'quest', 'burning']",Fiery quest,Passionate path
+10010011,Passionate conflict,801,Intense warfare - burning battles,OduIfa:SoulLayer,Conflict Burns,Odi-Tura,147,"['intensity', 'warfare', 'passion']",Burning battles,Intense warfare
+10010100,Burning ambition,802,Material passion - fiery acquisition,OduIfa:SoulLayer,Earth Burns,Irosun-Tura,148,"['passion', 'ambition', 'intensity']",Fiery acquisition,Material intensity
+10010101,Uncontrolled desire,803,Wild fire - chaotic passion,OduIfa:SoulLayer,Chaos Burns,Owonrin-Tura,149,"['chaos', 'wild', 'uncontrolled']",Wild fire,Chaotic intensity
+10010110,Passionate change,804,Passionate transformation - burning evolution,OduIfa:SoulLayer,Change Burns,Obara-Tura,150,"['passion', 'transformation', 'intensity']",Burning evolution,Intense transformation
+10010111,Beneficial passion,805,Lucky passion - fortunate fire,OduIfa:SoulLayer,Fortune Burns,Okonron-Tura,151,"['fortune', 'passion', 'beneficial']",Fortunate fire,Lucky intensity
+10011000,Passionate battle,806,Passionate warfare - burning combat,OduIfa:SoulLayer,Warrior Burns,Ogunda-Tura,152,"['passion', 'intensity', 'warfare']",Burning combat,Intense warfare
+10011001,Passionate history,807,Urgent time - burning deadlines,OduIfa:SoulLayer,Time Burns,Osa-Tura,153,"['urgency', 'deadlines', 'passion']",Burning deadlines,Urgent time
+10011010,Passionate alliances,808,Passionate connections - burning networks,OduIfa:SoulLayer,Web Burns,Ika-Tura,154,"['passion', 'intensity', 'connections']",Burning networks,Intense connections
+10011011,Passionate streams,809,Passionate currents - burning flows,OduIfa:SoulLayer,Flow Burns,Oturupon-Tura,155,"['passion', 'intensity', 'flow']",Burning flows,Intense currents
+10011100,Complete passion,810,Maximum passion - burning intensity,OduIfa:SoulLayer,Double Fire,Otura-Meji,156,"['ultimate', 'complete', 'maximum']",Maximum intensity,Ultimate fire
+10011101,Passionate burden,811,Intense stress - burning pressure,OduIfa:SoulLayer,Pressure Burns,Irete-Tura,157,"['intensity', 'stress', 'pressure']",Burning pressure,Extreme stress
+10011110,Passionate success,812,Passionate triumph - burning victory,OduIfa:SoulLayer,Victory Burns,Ose-Tura,158,"['passion', 'intensity', 'victory']",Burning victory,Intense triumph
+10011111,Passionate spirit,813,Ecstatic spirituality - burning faith,OduIfa:SoulLayer,Spirit Burns,Ofun-Tura,159,"['ecstatic', 'intensity', 'passion']",Burning faith,Intense mysticism
+10100000,Holy pressure,814,Divine pressure - sacred burden,OduIfa:SoulLayer,Light Presses,Ogbe-Rete,160,"['divine', 'pressure', 'burden']",Sacred burden,Divine stress
+10100001,Secret stress,815,Hidden stress - occult pressure,OduIfa:SoulLayer,Darkness Presses,Oyeku-Rete,161,"['occult', 'pressure', 'hidden']",Occult pressure,Hidden burden
+10100010,Burdened quest,816,Difficult journey - pressured path,OduIfa:SoulLayer,Path Presses,Iwori-Rete,162,"['pressure', 'stress', 'burden']",Pressured path,Stressful journey
+10100011,Burdened battles,817,Pressured warfare - stressed combat,OduIfa:SoulLayer,Conflict Presses,Odi-Rete,163,"['pressure', 'stress', 'warfare']",Stressed combat,Pressured warfare
+10100100,Financial burden,818,Economic pressure - material stress,OduIfa:SoulLayer,Earth Presses,Irosun-Rete,164,"['pressure', 'stress', 'economics']",Economic stress,Material pressure
+10100101,Unpredictable burden,819,Chaotic pressure - random stress,OduIfa:SoulLayer,Chaos Presses,Owonrin-Rete,165,"['chaos', 'pressure', 'random']",Chaotic stress,Random pressure
+10100110,Change burden,820,Transformation stress - evolutionary pressure,OduIfa:SoulLayer,Change Presses,Obara-Rete,166,"['transformation', 'pressure', 'stress']",Evolution pressure,Transformative stress
+10100111,Productive burden,821,Lucky pressure - beneficial stress,OduIfa:SoulLayer,Fortune Presses,Okonron-Rete,167,"['fortune', 'pressure', 'beneficial']",Beneficial stress,Fortunate pressure
+10101000,Warrior burden,822,Combat pressure - battle stress,OduIfa:SoulLayer,Warrior Presses,Ogunda-Rete,168,"['pressure', 'stress', 'combat']",Battle stress,Combat pressure
+10101001,Urgent burden,823,Deadline pressure - temporal stress,OduIfa:SoulLayer,Time Presses,Osa-Rete,169,"['pressure', 'urgency', 'deadline']",Deadline stress,Time pressure
+10101010,Alliance burden,824,Network pressure - connection stress,OduIfa:SoulLayer,Web Presses,Ika-Rete,170,"['pressure', 'stress', 'network']",Connection stress,Network pressure
+10101011,Stream burden,825,Current pressure - flow stress,OduIfa:SoulLayer,Flow Presses,Oturupon-Rete,171,"['pressure', 'stress', 'flow']",Flow stress,Current pressure
+10101100,Passionate burden,826,Passionate pressure - burning stress,OduIfa:SoulLayer,Fire Presses,Otura-Rete,172,"['passion', 'intensity', 'pressure']",Burning stress,Intense pressure
+10101101,Complete burden,827,Maximum stress - extreme burden,OduIfa:SoulLayer,Double Pressure,Irete-Meji,173,"['ultimate', 'maximum', 'extreme']",Maximum stress,Ultimate pressure
+10101110,Success burden,828,Triumphant pressure - winning stress,OduIfa:SoulLayer,Victory Presses,Ose-Rete,174,"['victory', 'pressure', 'success']",Winning stress,Victorious pressure
+10101111,Holy burden,829,Spiritual pressure - mystical stress,OduIfa:SoulLayer,Spirit Presses,Ofun-Rete,175,"['spiritual', 'pressure', 'mystical']",Mystical stress,Spiritual pressure
+10110000,Holy victory,830,Divine victory - sacred success,OduIfa:SoulLayer,Light Triumphs,Ogbe-Se,176,"['divine', 'victory', 'sacred']",Sacred success,Divine triumph
+10110001,Secret victory,831,Occult victory - hidden success,OduIfa:SoulLayer,Darkness Triumphs,Oyeku-Se,177,"['occult', 'victory', 'hidden']",Occult success,Hidden triumph
+10110010,Journey victory,832,Journey victory - quest success,OduIfa:SoulLayer,Path Triumphs,Iwori-Se,178,"['journey', 'success', 'quest']",Quest success,Path triumph
+10110011,Battle victory,833,Battle victory - war success,OduIfa:SoulLayer,Conflict Triumphs,Odi-Se,179,"['war', 'victory', 'combat']",War success,Combat triumph
+10110100,Business victory,834,Material victory - economic success,OduIfa:SoulLayer,Earth Triumphs,Irosun-Se,180,"['economics', 'victory', 'business']",Economic success,Material triumph
+10110101,Unexpected victory,835,Unexpected victory - chaos success,OduIfa:SoulLayer,Chaos Triumphs,Owonrin-Se,181,"['chaos', 'victory', 'unexpected']",Chaos success,Random triumph
+10110110,Change victory,836,Transformation victory - evolutionary success,OduIfa:SoulLayer,Change Triumphs,Obara-Se,182,"['evolution', 'victory', 'transformation']",Evolution success,Transformative triumph
+10110111,Maximum victory,837,Lucky victory - fortunate success,OduIfa:SoulLayer,Fortune Triumphs,Okonron-Se,183,"['fortune', 'victory', 'lucky']",Fortunate success,Lucky triumph
+10111000,Battle victory,838,Combat victory - military success,OduIfa:SoulLayer,Warrior Triumphs,Ogunda-Se,184,"['military', 'victory', 'warrior']",Military success,Warrior triumph
+10111001,Era victory,839,Historical victory - temporal success,OduIfa:SoulLayer,Time Triumphs,Osa-Se,185,"['history', 'victory', 'temporal']",Historical success,Time triumph
+10111010,Network victory,840,Network victory - connection success,OduIfa:SoulLayer,Web Triumphs,Ika-Se,186,"['network', 'victory', 'alliance']",Connection success,Alliance triumph
+10111011,Current victory,841,Current victory - flow success,OduIfa:SoulLayer,Flow Triumphs,Oturupon-Se,187,"['flow', 'victory', 'stream']",Flow success,Stream triumph
+10111100,Passionate victory,842,Passionate victory - burning success,OduIfa:SoulLayer,Fire Triumphs,Otura-Se,188,"['passion', 'victory', 'intensity']",Burning success,Intense triumph
+10111101,Burden victory,843,Stressed victory - burdened success,OduIfa:SoulLayer,Pressure Triumphs,Irete-Se,189,"['pressure', 'victory', 'burden']",Stressed success,Pressured triumph
+10111110,Total victory,844,Maximum triumph - ultimate success,OduIfa:SoulLayer,Double Victory,Ose-Meji,190,"['ultimate', 'complete', 'total']",Ultimate success,Complete triumph
+10111111,Holy victory,845,Spiritual victory - mystical success,OduIfa:SoulLayer,Spirit Triumphs,Ofun-Se,191,"['spiritual', 'victory', 'mystical']",Mystical success,Spiritual triumph
+11000000,Holy faith,846,Divine spirituality - sacred mysticism,OduIfa:SoulLayer,Light Spiritualizes,Ogbe-Fun,192,"['divine', 'spiritual', 'sacred']",Sacred mysticism,Divine spirituality
+11000001,Secret faith,847,Occult spirituality - hidden mysticism,OduIfa:SoulLayer,Darkness Spiritualizes,Oyeku-Fun,193,"['occult', 'spiritual', 'hidden']",Occult mysticism,Hidden spirituality
+11000010,Holy journey,848,Spiritual journey - mystical quest,OduIfa:SoulLayer,Path Spiritualizes,Iwori-Fun,194,"['spiritual', 'mystical', 'quest']",Mystical quest,Spiritual path
+11000011,Faith battles,849,Spiritual warfare - holy combat,OduIfa:SoulLayer,Conflict Spiritualizes,Odi-Fun,195,"['spiritual', 'warfare', 'holy']",Holy combat,Spiritual warfare
+11000100,Earthly spirituality,850,Grounded spirituality - material mysticism,OduIfa:SoulLayer,Earth Spiritualizes,Irosun-Fun,196,"['grounded', 'material', 'spiritual']",Material mysticism,Grounded faith
+11000101,Ecstatic spirituality,851,Ecstatic spirituality - wild mysticism,OduIfa:SoulLayer,Chaos Spiritualizes,Owonrin-Fun,197,"['chaos', 'ecstatic', 'spiritual']",Wild mysticism,Chaotic faith
+11000110,Faith evolution,852,Spiritual evolution - mystical transformation,OduIfa:SoulLayer,Change Spiritualizes,Obara-Fun,198,"['spiritual', 'transformation', 'mystical']",Mystical evolution,Spiritual transformation
+11000111,Blessed spirituality,853,Lucky spirituality - fortunate mysticism,OduIfa:SoulLayer,Fortune Spiritualizes,Okonron-Fun,199,"['fortune', 'spiritual', 'blessed']",Fortunate mysticism,Lucky faith
+11001000,Sacred warfare,854,Spiritual warfare - holy combat,OduIfa:SoulLayer,Warrior Spiritualizes,Ogunda-Fun,200,"['spiritual', 'warfare', 'sacred']",Holy combat,Warrior spirituality
+11001001,Era spirituality,855,Historical spirituality - temporal mysticism,OduIfa:SoulLayer,Time Spiritualizes,Osa-Fun,201,"['temporal', 'spiritual', 'history']",Temporal mysticism,Historical faith
+11001010,Holy networks,856,Spiritual networks - mystical connections,OduIfa:SoulLayer,Web Spiritualizes,Ika-Fun,202,"['spiritual', 'mystical', 'network']",Mystical connections,Spiritual alliances
+11001011,Holy currents,857,Spiritual currents - mystical flows,OduIfa:SoulLayer,Flow Spiritualizes,Oturupon-Fun,203,"['spiritual', 'mystical', 'flow']",Mystical flows,Spiritual streams
+11001100,Passionate spirituality,858,Passionate spirituality - burning faith,OduIfa:SoulLayer,Fire Spiritualizes,Otura-Fun,204,"['passion', 'spiritual', 'intensity']",Burning faith,Intense mysticism
+11001101,Stressed spirituality,859,Stressed spirituality - burdened faith,OduIfa:SoulLayer,Pressure Spiritualizes,Irete-Fun,205,"['pressure', 'spiritual', 'burden']",Burdened faith,Pressured mysticism
+11001110,Victory spirituality,860,Triumphant spirituality - victorious faith,OduIfa:SoulLayer,Victory Spiritualizes,Ose-Fun,206,"['victory', 'spiritual', 'triumph']",Victorious faith,Triumphant mysticism
+11001111,Total enlightenment,861,Ultimate spirituality - complete mysticism,OduIfa:SoulLayer,Double Spirit,Ofun-Meji,207,"['ultimate', 'complete', 'total']",Complete mysticism,Ultimate spirituality
+11010000,Divine battles,862,Divine warfare - holy combat,OduIfa:SoulLayer,Light Wars,Ogbe-Gunda,208,"['divine', 'warfare', 'holy']",Holy warfare,Sacred combat
+11010001,Secret battles,863,Occult warfare - hidden combat,OduIfa:SoulLayer,Darkness Wars,Oyeku-Gunda,209,"['occult', 'warfare', 'hidden']",Occult combat,Hidden warfare
+11010010,Journey battles,864,Journey warfare - quest combat,OduIfa:SoulLayer,Path Wars,Iwori-Gunda,210,"['journey', 'warfare', 'quest']",Quest combat,Path warfare
+11010011,Total battles,865,Maximum warfare - ultimate combat,OduIfa:SoulLayer,Double Conflict,Odi-Gunda,211,"['ultimate', 'complete', 'total']",Ultimate warfare,Complete combat
+11010100,Resource battles,866,Material warfare - economic combat,OduIfa:SoulLayer,Earth Wars,Irosun-Gunda,212,"['economics', 'warfare', 'resources']",Economic warfare,Material combat
+11010101,Unpredictable battles,867,Chaotic warfare - random combat,OduIfa:SoulLayer,Chaos Wars,Owonrin-Gunda,213,"['chaos', 'warfare', 'random']",Chaotic combat,Random warfare
+11010110,Revolutionary battles,868,Transformative warfare - evolutionary combat,OduIfa:SoulLayer,Change Wars,Obara-Gunda,214,"['evolution', 'warfare', 'revolutionary']",Evolution warfare,Transformative combat
+11010111,Profitable battles,869,Lucky warfare - fortunate combat,OduIfa:SoulLayer,Fortune Wars,Okonron-Gunda,215,"['fortune', 'warfare', 'profitable']",Fortunate combat,Lucky warfare
+11011000,Total battle,870,Maximum combat - ultimate warfare,OduIfa:SoulLayer,Double Warrior,Ogunda-Meji,216,"['ultimate', 'complete', 'total']",Ultimate combat,Complete warfare
+11011001,Era battles,871,Historical warfare - temporal combat,OduIfa:SoulLayer,Time Wars,Osa-Gunda,217,"['temporal', 'warfare', 'history']",Temporal warfare,Historical combat
+11011010,Connection battles,872,Network warfare - connection combat,OduIfa:SoulLayer,Web Wars,Ika-Gunda,218,"['network', 'warfare', 'alliance']",Network combat,Alliance warfare
+11011011,Current battles,873,Current warfare - flow combat,OduIfa:SoulLayer,Flow Wars,Oturupon-Gunda,219,"['flow', 'warfare', 'stream']",Flow combat,Stream warfare
+11011100,Passionate battles,874,Passionate warfare - burning combat,OduIfa:SoulLayer,Fire Wars,Otura-Gunda,220,"['passion', 'warfare', 'intensity']",Burning combat,Intense warfare
+11011101,Burden battles,875,Stressed warfare - burdened combat,OduIfa:SoulLayer,Pressure Wars,Irete-Gunda,221,"['pressure', 'warfare', 'burden']",Stressed combat,Pressured warfare
+11011110,Winning battles,876,Triumphant warfare - victorious combat,OduIfa:SoulLayer,Victory Wars,Ose-Gunda,222,"['victory', 'warfare', 'winning']",Victorious combat,Triumphant warfare
+11011111,Holy battles,877,Spiritual warfare - mystical combat,OduIfa:SoulLayer,Spirit Wars,Ofun-Gunda,223,"['spiritual', 'warfare', 'holy']",Mystical combat,Spiritual warfare
+11100000,Holy networks,878,Divine networks - sacred connections,OduIfa:SoulLayer,Light Connects,Ogbe-Ka,224,"['divine', 'connections', 'sacred']",Sacred connections,Divine alliances
+11100001,Secret networks,879,Occult networks - hidden connections,OduIfa:SoulLayer,Darkness Connects,Oyeku-Ka,225,"['occult', 'connections', 'hidden']",Occult connections,Hidden alliances
+11100010,Journey networks,880,Journey networks - quest connections,OduIfa:SoulLayer,Path Connects,Iwori-Ka,226,"['journey', 'connections', 'quest']",Quest connections,Path alliances
+11100011,Battle networks,881,War alliances - battle networks,OduIfa:SoulLayer,Conflict Connects,Odi-Ka,227,"['war', 'alliances', 'combat']",War alliances,Combat connections
+11100100,Resource networks,882,Economic networks - material connections,OduIfa:SoulLayer,Earth Connects,Irosun-Ka,228,"['economics', 'connections', 'resources']",Economic connections,Material alliances
+11100101,Unpredictable networks,883,Chaotic networks - random connections,OduIfa:SoulLayer,Chaos Connects,Owonrin-Ka,229,"['chaos', 'connections', 'random']",Chaotic connections,Random alliances
+11100110,Revolutionary networks,884,Transformative networks - evolutionary connections,OduIfa:SoulLayer,Change Connects,Obara-Ka,230,"['evolution', 'connections', 'revolutionary']",Evolution connections,Transformative alliances
+11100111,Profitable networks,885,Lucky networks - fortunate connections,OduIfa:SoulLayer,Fortune Connects,Okonron-Ka,231,"['fortune', 'connections', 'profitable']",Fortunate connections,Lucky alliances
+11101000,Combat networks,886,Military alliances - combat networks,OduIfa:SoulLayer,Warrior Connects,Ogunda-Ka,232,"['military', 'alliances', 'combat']",Military alliances,Warrior connections
+11101001,Era networks,887,Historical networks - temporal connections,OduIfa:SoulLayer,Time Connects,Osa-Ka,233,"['temporal', 'connections', 'history']",Temporal connections,Historical alliances
+11101010,Total networks,888,Maximum networks - ultimate connections,OduIfa:SoulLayer,Double Web,Ika-Meji,234,"['ultimate', 'complete', 'total']",Ultimate connections,Complete alliances
+11101011,Current networks,889,Current networks - flow connections,OduIfa:SoulLayer,Flow Connects,Oturupon-Ka,235,"['flow', 'connections', 'stream']",Flow connections,Stream alliances
+11101100,Passionate networks,890,Passionate networks - burning connections,OduIfa:SoulLayer,Fire Connects,Otura-Ka,236,"['passion', 'connections', 'intensity']",Burning connections,Intense alliances
+11101101,Burden networks,891,Stressed networks - burdened connections,OduIfa:SoulLayer,Pressure Connects,Irete-Ka,237,"['pressure', 'connections', 'burden']",Stressed connections,Pressured alliances
+11101110,Winning networks,892,Triumphant networks - victorious connections,OduIfa:SoulLayer,Victory Connects,Ose-Ka,238,"['victory', 'connections', 'winning']",Victorious connections,Triumphant alliances
+11101111,Holy networks,893,Spiritual networks - mystical connections,OduIfa:SoulLayer,Spirit Connects,Ofun-Ka,239,"['spiritual', 'connections', 'mystical']",Mystical connections,Spiritual alliances
+11110000,Holy currents,894,Divine currents - sacred flows,OduIfa:SoulLayer,Light Flows,Ogbe-Turupon,240,"['divine', 'flows', 'sacred']",Sacred flows,Divine streams
+11110001,Secret currents,895,Occult currents - hidden flows,OduIfa:SoulLayer,Darkness Flows,Oyeku-Turupon,241,"['occult', 'flows', 'hidden']",Occult flows,Hidden streams
+11110010,Journey currents,896,Journey currents - quest flows,OduIfa:SoulLayer,Path Flows,Iwori-Turupon,242,"['journey', 'flows', 'quest']",Quest flows,Path streams
+11110011,Battle currents,897,War currents - battle flows,OduIfa:SoulLayer,Conflict Flows,Odi-Turupon,243,"['war', 'flows', 'combat']",War flows,Combat streams
+11110100,Resource currents,898,Economic currents - material flows,OduIfa:SoulLayer,Earth Flows,Irosun-Turupon,244,"['economics', 'flows', 'resources']",Economic flows,Material streams
+11110101,Unpredictable currents,899,Chaotic currents - random flows,OduIfa:SoulLayer,Chaos Flows,Owonrin-Turupon,245,"['chaos', 'flows', 'random']",Chaotic flows,Random streams
+11110110,Revolutionary currents,900,Transformative currents - evolutionary flows,OduIfa:SoulLayer,Change Flows,Obara-Turupon,246,"['evolution', 'flows', 'revolutionary']",Evolution flows,Transformative streams
+11110111,Profitable currents,901,Lucky currents - fortunate flows,OduIfa:SoulLayer,Fortune Flows,Okonron-Turupon,247,"['fortune', 'flows', 'profitable']",Fortunate flows,Lucky streams
+11111000,Combat currents,902,Military currents - combat flows,OduIfa:SoulLayer,Warrior Flows,Ogunda-Turupon,248,"['military', 'flows', 'combat']",Military flows,Warrior streams
+11111001,Era currents,903,Historical currents - temporal flows,OduIfa:SoulLayer,Time Flows,Osa-Turupon,249,"['temporal', 'flows', 'history']",Temporal flows,Historical streams
+11111010,Network currents,904,Network currents - connection flows,OduIfa:SoulLayer,Web Flows,Ika-Turupon,250,"['network', 'flows', 'alliance']",Connection flows,Alliance streams
+11111011,Total currents,905,Maximum currents - ultimate flows,OduIfa:SoulLayer,Double Flow,Oturupon-Meji,251,"['ultimate', 'complete', 'total']",Ultimate flows,Complete streams
+11111100,Passionate currents,906,Passionate currents - burning flows,OduIfa:SoulLayer,Fire Flows,Otura-Turupon,252,"['passion', 'flows', 'intensity']",Burning flows,Intense streams
+11111101,Burden currents,907,Stressed currents - burdened flows,OduIfa:SoulLayer,Pressure Flows,Irete-Turupon,253,"['pressure', 'flows', 'burden']",Stressed flows,Pressured streams
+11111110,Winning currents,908,Triumphant currents - victorious flows,OduIfa:SoulLayer,Victory Flows,Ose-Turupon,254,"['victory', 'flows', 'winning']",Victorious flows,Triumphant streams
+11111111,Total ending,909,Ultimate ending - absolute completion,OduIfa:SoulLayer,Complete Closure,Ofun-Sa,255,"['ultimate', 'complete', 'absolute']",Absolute completion,Complete closure

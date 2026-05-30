@@ -1,0 +1,57 @@
+dispute_resolution,id,labels,name,region,strengths,weaknesses
+Public truth-telling|restitution|community service|reconciliation,283,Governance,,East Africa,Face-to-face justice|cost-effective|community healing|restorative focus,Potential for mob justice|emotional re-traumatization|unequal power dynamics
+Dialogue circles|restorative justice|community reintegration,284,Governance,,Southern Africa,Community ownership|relationship restoration|inclusive participation,Time-intensive|requires community cohesion|modern legal system tension
+Peer pressure|age-mate arbitration|community sanctions,285,Governance,,West Africa,Social cohesion|distributed power|peer accountability,Gender exclusion|rigid age hierarchies|urbanization challenges
+Family mediation|clan arbitration|elder judgment,286,Governance,,East Africa,Kinship-based legitimacy|cultural continuity|accessible justice,Patriarchal bias|exclusion of outsiders|limited gender representation
+Elder mediation|wisdom application|moral guidance,287,Governance,,Pan-African,Wisdom-based authority|cultural legitimacy|moral grounding,Gerontocracy|slow adaptation|gender imbalance
+Royal judgment|council advice|customary law application,288,Governance,,Southern Africa,Clear authority|cultural continuity|swift decisions,Authoritarian potential|hereditary bias|gender exclusion
+Public deliberation|consensus building|community accountability,289,Governance,,Southern Africa,Participatory democracy|transparent process|community ownership,Time-consuming|requires attendance|limited enforceability
+Talk until resolution|no one leaves until agreement|public witnessing,290,Governance,,West Africa,Thorough deliberation|sacred space|community witnessing,Extremely time-consuming|requires physical gathering|male-dominated
+Ofo oath|spiritual sanctions|community judgment,291,Governance,,West Africa,Spiritual enforcement|community respect|cultural legitimacy,Exclusivity|cost of title|spiritual coercion concerns
+Royal judgment|council deliberation|spiritual consultation,292,Governance,,West Africa,Spiritual legitimacy|cultural unity|historical continuity,Hereditary monarchy|spiritual coercion|limited representation
+Elder councils|moral judgment|age-based hierarchy,293,Governance,,Pan-African,Wisdom application|cultural continuity|moral authority,Age bias|slow adaptation|gender imbalance
+Public debate|chief judgment|community input,294,Governance,,Southern Africa,Transparent process|community participation|accessible justice,Chief's final say|male-dominated|time-intensive
+Neighbor mediation|cluster arbitration|community policing,295,Governance,,East Africa,Local knowledge|quick response|community ownership,Surveillance concerns|neighbor pressure|privacy issues
+Peer pressure|group sanctions|internal arbitration,296,Governance,,West Africa,Peer accountability|collective action|social cohesion,Age exclusivity|group pressure|limited authority
+Ritual confession|drinking bitter root|compensation|spiritual cleansing,297,Governance,,East Africa,Spiritual healing|community reintegration|symbolic power,Spiritual coercion|gender bias|LRA atrocity scale
+Public debate|collective judgment|transparent process,298,Governance,,East Africa,Participatory democracy|transparent|accessible,Time-intensive|requires quorum|male-dominated
+Mediation circles|truth-telling|restorative settlements,299,Governance,,East Africa,Moral authority|community respect|restorative focus,Exclusivity|gender bias|ethnic tension exploitation
+Mediation process|binding agreements|appeal option,300,Governance,,East Africa,Accessible justice|cost-effective|culturally grounded,Binding authority|potential bias|limited appeal
+Royal courts|customary law|council advice,301,Governance,,Southern Africa,Cultural continuity|clear authority|customary legitimacy,Absolute monarchy|limited representation|gender exclusion
+Elder mediation|blood compensation|peace agreements,302,Governance,,East Africa,Portable justice|clan legitimacy|flexible adaptation,Clan warfare|blood feud|gender exclusion
+Negotiation|influence|resource leverage,303,Governance,,North Africa,Elite expertise|resource mobilization|diplomatic skill,Plutocracy|exclusivity|limited representation
+Internal mediation|family honor|elder guidance,304,Governance,,Pan-African,Family cohesion|confidential|culturally appropriate,Family pressure|patriarchal bias|limited external recourse
+Quranic principles|scholarly interpretation|community consensus,305,Governance,,East Africa,Religious legitimacy|scholarly guidance|consultative process,Religious dogma|limited pluralism|gender restrictions
+Local arbitration|customary sanctions|appeal to higher courts,306,Governance,,Central Africa,Accessible justice|local knowledge|culturally grounded,Colonial legacy|limited training|corruption concerns
+Game-based learning|strategic thinking|conflict simulation,307,Governance,,East Africa,Engaging pedagogy|transferable skills|cultural transmission,Limited direct application|game abstraction|access inequality
+Artistic standards|apprentice discipline|cultural disputes,308,Governance,,East Africa,Cultural expertise|artistic standards|tradition preservation,Artistic exclusivity|limited jurisdiction|cultural rigidity
+Royal courts|customary law|council deliberation,309,Governance,,Southern Africa,Historical legitimacy|cultural cohesion|ceremonial importance,Hereditary bias|limited representation|autonomy tensions
+Internal mediation|lineage judgment|collective responsibility,310,Governance,,West Africa,Strong social cohesion|land security|family support,Patriarchal structure|limited mobility|family pressure
+Public truth-telling|restitution|community service|reconciliation,937,Governance:SoulLayer,Gacaca Courts,East Africa,Face-to-face justice|cost-effective|community healing|restorative focus,
+Dialogue circles|restorative justice|community reintegration,938,Governance:SoulLayer,Ubuntu Councils,Southern Africa,Community ownership|relationship restoration|inclusive participation,
+Peer pressure|age-mate arbitration|community sanctions,939,Governance:SoulLayer,Age-Grade Systems,West Africa,Social cohesion|distributed power|peer accountability,
+Family mediation|clan arbitration|elder judgment,940,Governance:SoulLayer,Clan Assemblies,East Africa,Kinship-based legitimacy|cultural continuity|accessible justice,
+Elder mediation|wisdom application|moral guidance,941,Governance:SoulLayer,Council of Elders,Pan-African,Wisdom-based authority|cultural legitimacy|moral grounding,
+Royal judgment|council advice|customary law application,942,Governance:SoulLayer,Inkosi System,Southern Africa,Clear authority|cultural continuity|swift decisions,
+Public deliberation|consensus building|community accountability,943,Governance:SoulLayer,Dare Council,Southern Africa,Participatory democracy|transparent process|community ownership,
+Talk until resolution|no one leaves until agreement|public witnessing,944,Governance:SoulLayer,Palaver Trees,West Africa,Thorough deliberation|sacred space|community witnessing,
+Ofo oath|spiritual sanctions|community judgment,945,Governance:SoulLayer,Ofo Title Society,West Africa,Spiritual enforcement|community respect|cultural legitimacy,
+Royal judgment|council deliberation|spiritual consultation,946,Governance:SoulLayer,Ashanti Golden Stool,West Africa,Spiritual legitimacy|cultural unity|historical continuity,
+Elder councils|moral judgment|age-based hierarchy,947,Governance:SoulLayer,Gerontocracy,Pan-African,Wisdom application|cultural continuity|moral authority,
+Public debate|chief judgment|community input,948,Governance:SoulLayer,Lekgotla,Southern Africa,Transparent process|community participation|accessible justice,
+Neighbor mediation|cluster arbitration|community policing,949,Governance:SoulLayer,Nyumba Kumi,East Africa,Local knowledge|quick response|community ownership,
+Peer pressure|group sanctions|internal arbitration,950,Governance:SoulLayer,Egbe,West Africa,Peer accountability|collective action|social cohesion,
+Ritual confession|drinking bitter root|compensation|spiritual cleansing,951,Governance:SoulLayer,Mato Oput,East Africa,Spiritual healing|community reintegration|symbolic power,
+Public debate|collective judgment|transparent process,952,Governance:SoulLayer,Baraza,East Africa,Participatory democracy|transparent|accessible,
+Mediation circles|truth-telling|restorative settlements,953,Governance:SoulLayer,Bashingantahe,East Africa,Moral authority|community respect|restorative focus,
+Mediation process|binding agreements|appeal option,954,Governance:SoulLayer,Abunzi Committees,East Africa,Accessible justice|cost-effective|culturally grounded,
+Royal courts|customary law|council advice,955,Governance:SoulLayer,Kuper System,Southern Africa,Cultural continuity|clear authority|customary legitimacy,
+Elder mediation|blood compensation|peace agreements,956,Governance:SoulLayer,Xeer System,East Africa,Portable justice|clan legitimacy|flexible adaptation,
+Negotiation|influence|resource leverage,957,Governance:SoulLayer,Council of Notables,North Africa,Elite expertise|resource mobilization|diplomatic skill,
+Internal mediation|family honor|elder guidance,958,Governance:SoulLayer,Jamaa (Family Councils),Pan-African,Family cohesion|confidential|culturally appropriate,
+Quranic principles|scholarly interpretation|community consensus,959,Governance:SoulLayer,Shura Councils,East Africa,Religious legitimacy|scholarly guidance|consultative process,
+Local arbitration|customary sanctions|appeal to higher courts,960,Governance:SoulLayer,Umutwe Courts,Central Africa,Accessible justice|local knowledge|culturally grounded,
+Game-based learning|strategic thinking|conflict simulation,961,Governance:SoulLayer,Igisoro Games,East Africa,Engaging pedagogy|transferable skills|cultural transmission,
+Artistic standards|apprentice discipline|cultural disputes,962,Governance:SoulLayer,Mgombeza Council,East Africa,Cultural expertise|artistic standards|tradition preservation,
+Royal courts|customary law|council deliberation,963,Governance:SoulLayer,Bulozi Monarchy,Southern Africa,Historical legitimacy|cultural cohesion|ceremonial importance,
+Internal mediation|lineage judgment|collective responsibility,964,Governance:SoulLayer,Mbari Councils,West Africa,Strong social cohesion|land security|family support,

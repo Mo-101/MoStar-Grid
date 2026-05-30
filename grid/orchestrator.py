@@ -17,10 +17,11 @@ from woo import WooGate, WooInterpreter
 from moscript import MoScriptEngine
 from provenance import ProvenanceLog
 from soul import SoulPrint
-from grid.config import SEAL_GLYPH
+from grid.config import MOSTAR_CLUSTER_ID, SEAL_GLYPH, cluster_metadata, ensure_cluster_dirs
 from approval_queue import ApprovalQueue, ProposalRecord, ProposalState, new_proposal_id
 from decision_engine import DecisionEngine
 from density_telemetry import DensityTelemetry
+from federation.scrolls import SCROLL_VERSION
 
 logger = logging.getLogger("orchestrator")
 
@@ -51,11 +52,13 @@ class GridResponse:
 @dataclass
 class CommitResult:
     proposal_id: str
+    cluster_id: str
     state: str
     memory_id: str
     moment_id: str
     committed_at: str
     seal: str
+    scroll_version: str = SCROLL_VERSION
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -96,6 +99,7 @@ class GridOrchestrator:
     async def boot(self):
         """Initialize all subsystems."""
         logger.info("Grid booting...")
+        ensure_cluster_dirs()
 
         # Connect MindGraph
         try:
@@ -123,6 +127,7 @@ class GridOrchestrator:
                      self.mindgraph.connected, self.dcx.connected, SEAL_GLYPH)
         return {
             "status": "online",
+            **cluster_metadata(),
             "mindgraph": self.mindgraph.connected,
             "dcx": self.dcx.connected,
             "soul": self.soul.declare(),
@@ -288,6 +293,7 @@ class GridOrchestrator:
             proposed_mutations=[
                 {
                     "operation": "mindgraph.learn",
+                    "cluster_id": MOSTAR_CLUSTER_ID,
                     "category": selected.properties.get("category", "canon"),
                     "content": canon_input,
                     "source": "canon_ingestion",
@@ -295,6 +301,7 @@ class GridOrchestrator:
                 },
                 {
                     "operation": "mindgraph.stamp_moment",
+                    "cluster_id": MOSTAR_CLUSTER_ID,
                     "talk_input": canon_input,
                     "think_output": interpretation.reasoning,
                 },
@@ -355,7 +362,11 @@ class GridOrchestrator:
                 category=proposal.interpretation.get("category", "canon"),
                 content=proposal.canon_input,
                 source="canon_ingestion",
-                metadata={"proposal_id": proposal.id, "approved_by": proposal.approved_by},
+                metadata={
+                    "proposal_id": proposal.id,
+                    "approved_by": proposal.approved_by,
+                    "cluster_id": MOSTAR_CLUSTER_ID,
+                },
                 _commit_token=token,
             )
             moment_id = await self.mindgraph.stamp_moment(
@@ -384,6 +395,7 @@ class GridOrchestrator:
         )
         return CommitResult(
             proposal_id=proposal.id,
+            cluster_id=MOSTAR_CLUSTER_ID,
             state=proposal.state.value,
             memory_id=memory_id,
             moment_id=moment_id,
@@ -409,6 +421,7 @@ class GridOrchestrator:
         queue_stats = await self.approval_queue.stats()
         return {
             "grid": "online" if self._ready else "offline",
+            **cluster_metadata(),
             "soul": self.soul.declare(),
             "mindgraph": graph_stats,
             "dcx": {

@@ -1,0 +1,66 @@
+{
+  "moments": [
+    {
+      "id": "MM_372cf7516e",
+      "label": "Moment",
+      "date": "2026-01-04",
+      "kind": "milestone",
+      "title": "Kickoff: MoStar Grid mind graph design",
+      "narrative": "Established scope to model MoStar moments; requested full memory; constraints noted (no cross-session memory).",
+      "confidence": "High",
+      "impact": "3",
+      "tags": "setup|neo4j|design",
+      "actors": "user|TsaTse Fly",
+      "projects": "MoStar Grid",
+      "refs": "",
+      "files": "",
+      "metadata": "source=session"
+    },
+    {
+      "id": "MM_cc0de9e904",
+      "label": "Moment",
+      "date": "2026-01-04",
+      "kind": "build",
+      "title": "Delivered bootstrap pack (Python registry + Neo4j Cypher)",
+      "narrative": "Provided Mostar_Moment.py and neo4j schema/import pack via canvas.",
+      "confidence": "High",
+      "impact": "4",
+      "tags": "build|python|cypher",
+      "actors": "user|TsaTse Fly",
+      "projects": "MoStar Grid",
+      "refs": "",
+      "files": "",
+      "metadata": "delivery=canvas"
+    },
+    {
+      "id": "MM_712c62f754",
+      "label": "Moment",
+      "date": "2026-01-04",
+      "kind": "ingest",
+      "title": "Imported DCP corpus (PDFs)",
+      "narrative": "Ingested 7 DCP PDFs into workspace for potential linkage to health-sovereignty tracks.",
+      "confidence": "Medium",
+      "impact": "2",
+      "tags": "assets|health|DCP",
+      "actors": "user",
+      "projects": "MoStar Grid",
+      "refs": "",
+      "files": "dcp-cholera.pdf|dcp-ebola.pdf|dcp-lassafever.pdf|dcp-marburg.pdf|dcp-sars.pdf|dcp-yellowfever.pdf|mpox-dcp-v3.2.pdf",
+      "metadata": "zip=DCP.zip"
+    }
+  ],
+  "relations": [
+    {
+      "src": "MM_372cf7516e",
+      "rel": "PRECEDES",
+      "dst": "MM_cc0de9e904",
+      "props": "why=deliver_bootstrap"
+    },
+    {
+      "src": "MM_cc0de9e904",
+      "rel": "RELATES_TO",
+      "dst": "MM_712c62f754",
+      "props": "note=assets_available"
+    }
+  ]
+}

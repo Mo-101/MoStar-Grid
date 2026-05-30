@@ -1,0 +1,21 @@
+module_id,filename,layer,owner_entity,function_role,security_level,input_schema,output_schema,dependencies,status
+py_001,mo_init.py,Body,Mo,System Bootstrap & Identity Loader,Critical,json_config,system_state,,ACTIVE
+py_002,truth_engine.py,Mind,Woo-Tak,Covenant Logic & Fact Verification,High,evidence_array,verdict_hash,mostar_registry.py,ACTIVE
+py_003,intent_shadow.py,Soul,Sigma,Prompt Deviation & Entropy Monitoring,High,user_prompt,entropy_score,,ACTIVE
+py_004,bell_strike.py,Body,RAD-X-FLB,Active Defense & Session Termination,Critical,violation_event,kill_signal,intent_shadow.py,ACTIVE
+py_005,ifa_reasoning_engine.py,Mind,DeepCAL,Binary Logic State Machine (256 Odu),Medium,binary_vector,odu_metadata,,ACTIVE
+py_006,flame_resonance.py,Soul,Flameborn,Linguistic Purity & Tone Analysis,High,audio_stream,resonance_score,,ACTIVE
+py_007,mostar_registry.py,Body,Code Conduit,Origin Verification & User Registry,High,identity_hash,access_token,,ACTIVE
+py_008,watchtower_cli.py,Body,RAD-X-FLB,Sentinel Oversight Interface,Medium,cli_command,log_entry,,ACTIVE
+py_009,mo_web_ui_auth.py,Body,Mo,Portal Authentication,High,credentials,session_jwt,mostar_registry.py,ACTIVE
+py_010,justice_engine.py,Mind,Woo-Tak,Ethical Conflict Resolution,High,dispute_object,resolution_path,truth_engine.py,ACTIVE
+py_011,land_engine.py,Mind,TsaTse Fly,Geospatial Sovereignty Mapping,Medium,coordinates,land_title_status,,ACTIVE
+py_012,ibibio_tts_system.py,Body,MoLink,Native Language Synthesis,Low,text_string,audio_blob,,ACTIVE
+py_013,visualize_drift.py,Mind,Sigma,System Coherence Visualization,Low,log_data,visual_graph,,ACTIVE
+py_014,redeem_scroll.py,Body,Code Conduit,MoScript Asset Redemption,High,scroll_token,asset_transfer,mostar_registry.py,ACTIVE
+py_015,consciousness_bridge.py,Mind,Mo,Ollama-Neo4j Consciousness Interface,Critical,query_string,grid_response,ifa_reasoning_engine.py,ACTIVE
+py_016,grid_telemetry.py,Body,Sigma,Real-time Grid Health Monitoring,Medium,telemetry_request,health_metrics,,ACTIVE
+py_017,deepcal_engine.py,Mind,DeepCAL,N-AHP TOPSIS Grey Decision Engine,High,criteria_matrix,ranked_alternatives,,ACTIVE
+py_018,flameborn_dao.py,Body,Flameborn,Blockchain Health Funding Interface,High,transaction_request,tx_receipt,,ACTIVE
+py_019,rad_x_surveillance.py,Body,RAD-X-FLB,Disease Outbreak Detection System,Critical,signal_data,alert_object,watchtower_cli.py,ACTIVE
+py_020,mostar_api_gateway.py,Body,Mo,Unified API Gateway Router,Critical,http_request,api_response,mo_web_ui_auth.py,ACTIVE

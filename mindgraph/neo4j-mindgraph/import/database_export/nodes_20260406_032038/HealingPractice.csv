@@ -1,0 +1,57 @@
+id,labels,name,related_plants,spiritual_component
+311,HealingPractice,,Shea butter|local herbs for inflammation|binding materials,Spiritual invocation|ancestral guidance|protective prayers
+312,HealingPractice,,Kola nuts|palm wine|ritual plants|prescribed herbal remedies,Complete spiritual system|Orisha invocation|ancestral communication
+313,HealingPractice,,Impepho (incense)|muti (medicine)|ubulawu (dream herbs)|cleansing plants,Ancestral possession|spiritual communication|ritual trance
+314,HealingPractice,,Artemisia (malaria)|Aloe (wounds)|Moringa (nutrition)|Neem (infections),Plant spirits|prayer over medicine|spiritual potency
+315,HealingPractice,,Olive oil|black seed oil|antiseptic herbs,Quranic verses|prophetic tradition|spiritual cleansing
+316,HealingPractice,,Ritual plants|hallucinogens|cleansing herbs|offerings,Spirit invocation|possession states|ritual transformation
+317,HealingPractice,,Eucalyptus|medicinal leaves|aromatic plants,Prayer|spiritual purification|community blessing
+318,HealingPractice,,Antiseptic plants|pain relief herbs|healing salves,Spiritual protection|ancestral connection|identity marking
+319,HealingPractice,,Eucalyptus oil|healing herbs|antiseptic plants,Prayer|spiritual invocation|holy water blessing
+320,HealingPractice,,Argan oil|black soap|rose water|orange blossom,Spiritual purification|prayer|ritual cleansing
+321,HealingPractice,,Shea butter|coconut oil|palm oil|herbal oils,Blessing through touch|life force activation
+322,HealingPractice,,Ubulawu (dream herbs in Southern Africa)|ritual plants,Dream as spirit realm|ancestral messages|prophetic revelation
+323,HealingPractice,,Castor oil plant|aloe|bitter herbs|cleansing plants,Prayer before cleansing|spiritual purification|bodily temple concept
+324,HealingPractice,,Oxytocic herbs|pain relief plants|postpartum recovery herbs,Ancestral blessing|spiritual protection|birth prayers
+325,HealingPractice,,Purification plants|protective herbs|blessing leaves,Prayer during bathing|spiritual invocation|protective rituals
+326,HealingPractice,,Beeswax|herbal infusions|cotton,Spiritual cleansing|prayer|protective blessing
+327,HealingPractice,,Neem|salt|herbal rinses,Morning prayer|cleanliness blessing|purification ritual
+328,HealingPractice,,Impepho (Southern Africa)|frankincense|myrrh|medicinal plants,Prayer smoke|spiritual protection|cleansing ritual
+329,HealingPractice,,Ritual plants|cleansing herbs|blessing leaves,Ancestral communion|spirit appeasement|divine communication
+330,HealingPractice,,Antiseptic plants|healing herbs,Spiritual protection|identity blessing|rite passage
+331,HealingPractice,,Antiseptic plants|pain relief herbs|healing applications,Transformation ritual|maturity blessing|identity ceremony
+332,HealingPractice,,Preservation herbs|protective plants,Ancestral connection|spiritual protection|life essence preservation
+333,HealingPractice,,Stimulating plants|ritual herbs,Trance states|spiritual possession|ancestral communion
+334,HealingPractice,,Ritual plants|consciousness-altering herbs,Trance induction|spiritual invocation|healing vibrations
+335,HealingPractice,,Breaking fast herbs|gentle foods|digestive aids,Prayer focus|spiritual clarity|divine connection
+336,HealingPractice,,Purification herbs|protective plants|blessing leaves,Prayer during washing|spiritual invocation|protective blessing
+337,HealingPractice,,Anointing oils|blessed water,Holy Spirit invocation|prayer|spiritual healing
+338,HealingPractice,,Frankincense|myrrh|rose|lavender|eucalyptus,Prayer with incense|spiritual purification|meditation enhancement
+965,HealingPractice:SoulLayer,Bone-Setting,,Spiritual invocation|ancestral guidance|protective prayers
+966,HealingPractice:SoulLayer,Ifá Divination,,Complete spiritual system|Orisha invocation|ancestral communication
+967,HealingPractice:SoulLayer,Sangoma Practice,,Ancestral possession|spiritual communication|ritual trance
+968,HealingPractice:SoulLayer,Traditional Herbalism,,Plant spirits|prayer over medicine|spiritual potency
+969,HealingPractice:SoulLayer,Cupping (Hijama),,Quranic verses|prophetic tradition|spiritual cleansing
+970,HealingPractice:SoulLayer,Spirit Possession Healing,,Spirit invocation|possession states|ritual transformation
+971,HealingPractice:SoulLayer,Sweat Lodge Therapy,,Prayer|spiritual purification|community blessing
+972,HealingPractice:SoulLayer,Scarification Healing,,Spiritual protection|ancestral connection|identity marking
+973,HealingPractice:SoulLayer,Fire Cupping,,Prayer|spiritual invocation|holy water blessing
+974,HealingPractice:SoulLayer,Hydrotherapy,,Spiritual purification|prayer|ritual cleansing
+975,HealingPractice:SoulLayer,Massage Therapy,,Blessing through touch|life force activation
+976,HealingPractice:SoulLayer,Dream Interpretation,,Dream as spirit realm|ancestral messages|prophetic revelation
+977,HealingPractice:SoulLayer,Colon Cleansing,,Prayer before cleansing|spiritual purification|bodily temple concept
+978,HealingPractice:SoulLayer,Midwifery,,Ancestral blessing|spiritual protection|birth prayers
+979,HealingPractice:SoulLayer,Spiritual Bathing,,Prayer during bathing|spiritual invocation|protective rituals
+980,HealingPractice:SoulLayer,Ear Candling,,Spiritual cleansing|prayer|protective blessing
+981,HealingPractice:SoulLayer,Tongue Scraping,,Morning prayer|cleanliness blessing|purification ritual
+982,HealingPractice:SoulLayer,Smoke Inhalation,,Prayer smoke|spiritual protection|cleansing ritual
+983,HealingPractice:SoulLayer,Ritual Sacrifice,,Ancestral communion|spirit appeasement|divine communication
+984,HealingPractice:SoulLayer,Ear Piercing,,Spiritual protection|identity blessing|rite passage
+985,HealingPractice:SoulLayer,Teeth Modification,,Transformation ritual|maturity blessing|identity ceremony
+986,HealingPractice:SoulLayer,Cord Blood Preservation,,Ancestral connection|spiritual protection|life essence preservation
+987,HealingPractice:SoulLayer,Dance Healing,,Trance states|spiritual possession|ancestral communion
+988,HealingPractice:SoulLayer,Music Healing,,Trance induction|spiritual invocation|healing vibrations
+989,HealingPractice:SoulLayer,Fasting Therapy,,Prayer focus|spiritual clarity|divine connection
+990,HealingPractice:SoulLayer,Ritual Washing,,Prayer during washing|spiritual invocation|protective blessing
+991,HealingPractice:SoulLayer,Laying On of Hands,,Holy Spirit invocation|prayer|spiritual healing
+992,HealingPractice:SoulLayer,Aromatherapy,,Prayer with incense|spiritual purification|meditation enhancement

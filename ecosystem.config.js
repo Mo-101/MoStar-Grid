@@ -10,8 +10,9 @@ module.exports = {
       cwd: "/home/idona/MoStar/_apps/grid",
       env: {
         PYTHONPATH: "/home/idona/MoStar/_apps/grid",
-        NEO4J_URI: "bolt://localhost:7687",
+        NEO4J_URI: "bolt://localhost:47687",
         NEO4J_USER: "neo4j",
+        NEO4J_PASSWORD: "Mogrid101",
         NEO4J_DATABASE: "neo4j",
         OLLAMA_BASE_URL: "http://localhost:11434",
         GRID_PORT: "41010",
@@ -22,5 +23,17 @@ module.exports = {
       max_restarts: 5,
       restart_delay: 3000,
     },
+    {
+      name: "mostar-mcp-gateway",
+      script: ".venv/bin/python",
+      args: "-m uvicorn mcp_gateway.api:app --host 0.0.0.0 --port 41020",
+      cwd: "/home/idona/MoStar/_apps/grid",
+      env: {
+        PYTHONPATH: "/home/idona/MoStar/_apps/grid",
+      },
+      watch: false,
+      max_restarts: 5,
+      restart_delay: 3000,
+    }
   ],
 };

@@ -1,0 +1,6 @@
+countries,id,labels,name
+"['Nigeria', 'Ghana', 'Senegal', 'Mali']",377,Region,West Africa
+"['Kenya', 'Tanzania', 'Ethiopia', 'Uganda']",378,Region,East Africa
+"['South Africa', 'Zimbabwe', 'Botswana']",379,Region,Southern Africa
+"['Congo', 'Cameroon', 'Gabon']",380,Region,Central Africa
+"['Egypt', 'Morocco', 'Algeria']",381,Region,North Africa

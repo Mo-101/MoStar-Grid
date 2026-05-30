@@ -1,0 +1,443 @@
+# Create deliverables for the "ground-truth kit"
+from pathlib import Path
+from textwrap import dedent
+import pandas as pd
+
+base = Path("/mnt/data")
+base.mkdir(exist_ok=True)
+
+# 1) Postgres (Neon) schema
+schema_sql = dedent("""
+-- Counter-Outbreak Kit v1 — Neon/Postgres schema (no PostGIS required)
+-- Use UUIDs client-side or let DB generate with gen_random_uuid() if extension available.
+
+CREATE TABLE IF NOT EXISTS corridors (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT
+);
+
+CREATE TABLE IF NOT EXISTS locations (
+  id TEXT PRIMARY KEY,
+  corridor_id TEXT REFERENCES corridors(id) ON DELETE SET NULL,
+  name TEXT NOT NULL,
+  type TEXT CHECK (type IN ('river_landing','border_post','clinic','mine','cave','market','radio_station','other')) NOT NULL,
+  lat DOUBLE PRECISION NOT NULL,
+  lng DOUBLE PRECISION NOT NULL,
+  admin1 TEXT,
+  admin2 TEXT,
+  notes TEXT
+);
+
+-- 1. River & road ledgers
+CREATE TABLE IF NOT EXISTS boat_counts (
+  id TEXT PRIMARY KEY,
+  location_id TEXT REFERENCES locations(id) ON DELETE CASCADE,
+  observed_on DATE NOT NULL,
+  enumerator_id TEXT,
+  pirogue_small INTEGER DEFAULT 0 CHECK (pirogue_small >= 0),
+  pirogue_large INTEGER DEFAULT 0 CHECK (pirogue_large >= 0),
+  ferry INTEGER DEFAULT 0 CHECK (ferry >= 0),
+  trucks INTEGER DEFAULT 0 CHECK (trucks >= 0),
+  passengers_est INTEGER DEFAULT 0 CHECK (passengers_est >= 0),
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 2. Funeral & pharmacy proxies
+CREATE TABLE IF NOT EXISTS funeral_proxies (
+  id TEXT PRIMARY KEY,
+  location_id TEXT REFERENCES locations(id) ON DELETE CASCADE,
+  observed_on DATE NOT NULL,
+  undertaker_burials INTEGER DEFAULT 0 CHECK (undertaker_burials >= 0),
+  shroud_sales INTEGER DEFAULT 0 CHECK (shroud_sales >= 0),
+  chlorine_liters NUMERIC(10,2) DEFAULT 0,
+  body_transport_cases INTEGER DEFAULT 0 CHECK (body_transport_cases >= 0),
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 3. Clinic uptime / readiness
+CREATE TABLE IF NOT EXISTS clinic_uptime (
+  id TEXT PRIMARY KEY,
+  facility_id TEXT REFERENCES locations(id) ON DELETE CASCADE,
+  observed_on DATE NOT NULL,
+  hours_open NUMERIC(4,1) CHECK (hours_open >= 0 AND hours_open <= 24),
+  staff_present INTEGER DEFAULT 0 CHECK (staff_present >= 0),
+  generator_hours NUMERIC(4,1) DEFAULT 0,
+  stockout_gloves BOOLEAN DEFAULT FALSE,
+  stockout_chlorine BOOLEAN DEFAULT FALSE,
+  stockout_body_bags BOOLEAN DEFAULT FALSE,
+  ppe_kits INTEGER DEFAULT 0 CHECK (ppe_kits >= 0),
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 4. Rumor/social signals (ethically handled, no personal names)
+CREATE TABLE IF NOT EXISTS rumor_events (
+  id TEXT PRIMARY KEY,
+  location_id TEXT REFERENCES locations(id) ON DELETE SET NULL,
+  reported_at TIMESTAMPTZ NOT NULL,
+  language TEXT,
+  keyword TEXT,
+  source TEXT CHECK (source IN ('radio','whatsapp','sms','community_meeting','other')),
+  credibility SMALLINT CHECK (credibility BETWEEN 0 AND 3),
+  description TEXT,
+  media_url TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 5. Cave/mine risk register
+CREATE TABLE IF NOT EXISTS cave_mine_risk (
+  id TEXT PRIMARY KEY,
+  site_id TEXT REFERENCES locations(id) ON DELETE CASCADE,
+  observed_on DATE NOT NULL,
+  rousettus_present BOOLEAN,
+  ppe_available BOOLEAN,
+  workers_on_shift INTEGER DEFAULT 0 CHECK (workers_on_shift >= 0),
+  exposure_incidents INTEGER DEFAULT 0 CHECK (exposure_incidents >= 0),
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 6. Sensor tiles (gridded or point aggregates from remote sensing workflows)
+CREATE TABLE IF NOT EXISTS sensor_observations (
+  id TEXT PRIMARY KEY,
+  obs_type TEXT CHECK (obs_type IN ('S1_WPI','S2_NDWI_FREQ','HAND0_5M','VIIRS_NTL','GLAD_CLEARINGS','ALTIM_LAKE_OUTLET')) NOT NULL,
+  observed_on DATE NOT NULL,
+  value NUMERIC,
+  lat DOUBLE PRECISION NOT NULL,
+  lng DOUBLE PRECISION NOT NULL,
+  window_km NUMERIC DEFAULT 1.0,
+  source TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 7. Alerts synthesized from simple thresholds (can be written by app logic)
+CREATE TABLE IF NOT EXISTS alerts (
+  id TEXT PRIMARY KEY,
+  location_id TEXT REFERENCES locations(id) ON DELETE SET NULL,
+  corridor_id TEXT REFERENCES corridors(id) ON DELETE SET NULL,
+  alert_on DATE NOT NULL,
+  alert_type TEXT CHECK (alert_type IN ('river_movement','funeral_pressure','clinic_gap','edge_activity','rumor_heat','cave_exposure')) NOT NULL,
+  severity SMALLINT CHECK (severity BETWEEN 1 AND 5) NOT NULL,
+  rationale TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Helpful indexes
+CREATE INDEX IF NOT EXISTS idx_boat_counts_date ON boat_counts (observed_on);
+CREATE INDEX IF NOT EXISTS idx_funeral_date ON funeral_proxies (observed_on);
+CREATE INDEX IF NOT EXISTS idx_clinic_date ON clinic_uptime (observed_on);
+CREATE INDEX IF NOT EXISTS idx_rumor_reported_at ON rumor_events (reported_at);
+CREATE INDEX IF NOT EXISTS idx_sensor_obs_date ON sensor_observations (observed_on);
+CREATE INDEX IF NOT EXISTS idx_alerts_date ON alerts (alert_on);
+
+-- Materialized daily corridor metrics (refresh via external cron)
+CREATE MATERIALIZED VIEW IF NOT EXISTS corridor_daily_metrics AS
+SELECT
+  l.corridor_id,
+  d::date AS day,
+  COALESCE(SUM(b.pirogue_small + b.pirogue_large*2 + b.ferry*10 + b.trucks*4),0) AS river_movement_raw,
+  COALESCE(SUM(f.undertaker_burials + f.shroud_sales*0.3 + f.body_transport_cases*2),0) AS funeral_pressure_raw,
+  AVG(CASE WHEN c.hours_open IS NOT NULL THEN c.hours_open/24.0 ELSE NULL END) AS clinic_uptime_ratio,
+  COALESCE(SUM(CASE WHEN r.credibility >= 2 THEN 1 ELSE 0 END),0) AS rumor_heat_raw
+FROM generate_series((now() - interval '60 days')::date, now()::date, interval '1 day') d
+CROSS JOIN LATERAL (SELECT id, corridor_id FROM locations) l
+LEFT JOIN boat_counts b ON b.location_id = l.id AND b.observed_on = d
+LEFT JOIN funeral_proxies f ON f.location_id = l.id AND f.observed_on = d
+LEFT JOIN clinic_uptime c ON c.facility_id = l.id AND c.observed_on = d
+LEFT JOIN rumor_events r ON r.location_id = l.id AND r.reported_at::date = d
+GROUP BY l.corridor_id, day;
+
+-- Simple normalized view (min-max over last 60 days) for quick dashboards
+CREATE MATERIALIZED VIEW IF NOT EXISTS corridor_daily_index AS
+WITH raw AS (
+  SELECT * FROM corridor_daily_metrics
+),
+bounds AS (
+  SELECT
+    corridor_id,
+    MIN(river_movement_raw) AS rm_min, MAX(river_movement_raw) AS rm_max,
+    MIN(funeral_pressure_raw) AS fp_min, MAX(funeral_pressure_raw) AS fp_max,
+    MIN(rumor_heat_raw) AS rh_min, MAX(rumor_heat_raw) AS rh_max
+  FROM raw GROUP BY corridor_id
+)
+SELECT
+  r.corridor_id,
+  r.day,
+  CASE WHEN b.rm_max > b.rm_min THEN (r.river_movement_raw - b.rm_min)/(b.rm_max - b.rm_min) ELSE 0 END AS river_movement_index,
+  CASE WHEN b.fp_max > b.fp_min THEN (r.funeral_pressure_raw - b.fp_min)/(b.fp_max - b.fp_min) ELSE 0 END AS funeral_pressure_index,
+  r.clinic_uptime_ratio,
+  CASE WHEN b.rh_max > b.rh_min THEN (r.rumor_heat_raw - b.rh_min)/(b.rh_max - b.rh_min) ELSE 0 END AS rumor_heat_index
+FROM raw r
+JOIN bounds b ON b.corridor_id = r.corridor_id;
+
+-- Notes:
+-- - Refresh with: REFRESH MATERIALIZED VIEW CONCURRENTLY corridor_daily_metrics; then corridor_daily_index.
+-- - For Neon: schedule refresh from your app/cron (Neon doesn't run background workers).
+""").strip()
+
+(schema_path := base / "counter_outbreak_schema.sql").write_text(schema_sql, encoding="utf-8")
+
+
+# 2) XLSForm for field data collection (ODK/KoBo)
+# Construct basic survey/choices/settings sheets
+survey_rows = [
+    # type, name, label, required, relevant, hint
+    ("begin_group", "meta", "Enumerator & Context", "", "", ""),
+    ("text", "enumerator_id", "Enumerator ID", "yes", "", "Your unique code"),
+    ("select_one corridor", "corridor_id", "Corridor", "yes", "", ""),
+    ("end_group", "meta", "", "", "", ""),
+
+    ("begin_group", "river_count", "River/Landing Counts (boats/people)", "", "", ""),
+    ("geopoint", "geo", "Location (GPS)", "yes", "", ""),
+    ("text", "location_id", "Location ID (landing/post)", "yes", "", "e.g., KAS-KASU-001"),
+    ("date", "observed_on", "Observation Date", "yes", "", ""),
+    ("integer", "pirogue_small", "Small pirogues", "yes", "", ""),
+    ("integer", "pirogue_large", "Large pirogues", "yes", "", ""),
+    ("integer", "ferry", "Ferry trips", "no", "", ""),
+    ("integer", "trucks", "Trucks transported", "no", "", ""),
+    ("integer", "passengers_est", "Passengers (estimate)", "no", "", ""),
+    ("image", "photo", "Photo (optional)", "no", "", ""),
+    ("end_group", "river_count", "", "", "", ""),
+
+    ("begin_group", "funeral_pharmacy", "Funeral & Pharmacy Proxies", "", "", ""),
+    ("text", "location2_id", "Location ID (undertaker/pharmacy)", "no", "", ""),
+    ("date", "observed_on2", "Observation Date", "no", "", ""),
+    ("integer", "undertaker_burials", "Burials handled (last 7 days)", "no", "", ""),
+    ("integer", "shroud_sales", "Shrouds/sheets sold (last 7 days)", "no", "", ""),
+    ("decimal", "chlorine_liters", "Chlorine liters sold (last 7 days)", "no", "", ""),
+    ("integer", "body_transport_cases", "Bodies transported (last 7 days)", "no", "", ""),
+    ("end_group", "funeral_pharmacy", "", "", "", ""),
+
+    ("begin_group", "clinic_uptime", "Clinic Uptime / Readiness", "", "", ""),
+    ("text", "facility_id", "Facility ID", "no", "", ""),
+    ("date", "observed_on3", "Observation Date", "no", "", ""),
+    ("decimal", "hours_open", "Hours open (last 24h)", "no", "", ""),
+    ("integer", "staff_present", "Staff present (headcount)", "no", "", ""),
+    ("decimal", "generator_hours", "Generator hours (last 24h)", "no", "", ""),
+    ("select_one yesno", "stockout_gloves", "Stockout: gloves", "no", "", ""),
+    ("select_one yesno", "stockout_chlorine", "Stockout: chlorine", "no", "", ""),
+    ("select_one yesno", "stockout_body_bags", "Stockout: body bags", "no", "", ""),
+    ("integer", "ppe_kits", "PPE kits available", "no", "", ""),
+    ("end_group", "clinic_uptime", "", "", "", ""),
+
+    ("begin_group", "rumor", "Rumor / Social Signal", "", "", ""),
+    ("text", "rumor_location_id", "Location ID (radio/market)", "no", "", ""),
+    ("datetime", "reported_at", "Reported at", "no", "", ""),
+    ("select_one language", "language", "Language", "no", "", ""),
+    ("text", "keyword", "Keyword / phrase", "no", "", ""),
+    ("select_one source", "source", "Source", "no", "", ""),
+    ("select_one cred", "credibility", "Credibility (0=low,3=high)", "no", "", ""),
+    ("text", "description", "Short description", "no", "", ""),
+    ("audio", "audio", "Optional audio note", "no", "", ""),
+    ("end_group", "rumor", "", "", "", ""),
+
+    ("begin_group", "cave_mine", "Cave/Mine Risk", "", "", ""),
+    ("text", "site_id", "Site ID", "no", "", ""),
+    ("date", "observed_on4", "Observation Date", "no", "", ""),
+    ("select_one yesno", "rousettus_present", "Rousettus bats present?", "no", "", ""),
+    ("select_one yesno", "ppe_available", "PPE available?", "no", "", ""),
+    ("integer", "workers_on_shift", "Workers on shift", "no", "", ""),
+    ("integer", "exposure_incidents", "Exposure incidents (last 7 days)", "no", "", ""),
+    ("end_group", "cave_mine", "", "", "", ""),
+
+    ("note", "submit_hint", "Submit when you have network; otherwise it will queue.", "", "", "")
+]
+
+survey = pd.DataFrame(survey_rows, columns=["type","name","label","required","relevant","hint"])
+
+choices_rows = [
+    ("corridor","KASUMB-KOLWEZI","Kasumbalesa ↔ Kolwezi"),
+    ("corridor","GOMA-BUKAVU-UVIRA","Goma ↔ Bukavu ↔ Uvira"),
+    ("yesno","yes","Yes"),
+    ("yesno","no","No"),
+    ("language","sw","Swahili"),
+    ("language","ln","Lingala"),
+    ("language","rn","Kinyarwanda"),
+    ("language","fr","French"),
+    ("source","radio","Community radio"),
+    ("source","whatsapp","WhatsApp"),
+    ("source","sms","SMS/USSD"),
+    ("source","community_meeting","Community meeting"),
+    ("source","other","Other"),
+    ("cred","0","0"),
+    ("cred","1","1"),
+    ("cred","2","2"),
+    ("cred","3","3")
+]
+choices = pd.DataFrame(choices_rows, columns=["list_name","name","label"])
+
+settings = pd.DataFrame(
+    [
+        ("form_title","Counter-Outbreak Field Kit v1"),
+        ("form_id","counter_outbreak_v1"),
+        ("version","2025-08-30"),
+        ("submission_url",""),  # Fill with your ODK Central/KoBo endpoint
+    ],
+    columns=["setting","value"]
+)
+
+with pd.ExcelWriter(base / "field_forms.xlsx", engine="xlsxwriter") as writer:
+    survey.to_excel(writer, sheet_name="survey", index=False)
+    choices.to_excel(writer, sheet_name="choices", index=False)
+    settings.to_excel(writer, sheet_name="settings", index=False)
+
+# 3) Google Earth Engine script for WPI + HAND
+gee_js = dedent("""
+// GEE: Wetness Persistence Index (S1 + S2) + HAND mask, export as image
+// Area: Modify 'aoi' to your corridor polygon.
+
+var aoi = /* draw or import */ ee.Geometry.Rectangle([24.5, -12.7, 30.0, -7.0]); // example: Kasumbalesa–Kolwezi
+
+// Sentinel-1 C-band VV monthly medians
+function s1Monthly() {
+  var s1 = ee.ImageCollection('COPERNICUS/S1_GRD')
+    .filterBounds(aoi)
+    .filter(ee.Filter.eq('instrumentMode','IW'))
+    .filter(ee.Filter.eq('orbitProperties_pass','ASCENDING'))
+    .filter(ee.Filter.eq('transmitterReceiverPolarisation', ['VV','VH']))
+    .select('VV');
+  var months = ee.List.sequence(0, 107); // ~9 years monthly
+  var start = ee.Date('2016-01-01');
+  var col = ee.ImageCollection(months.map(function(m){
+    var begin = start.advance(m,'month');
+    var end = begin.advance(1,'month');
+    var img = s1.filterDate(begin, end).median().set('month', begin.format('YYYY-MM'));
+    return img;
+  }));
+  return col;
+}
+
+var s1 = s1Monthly();
+var vvThresh = -13; // dB threshold for very wet/low backscatter
+var s1WetFreq = s1.map(function(img){
+  return img.lt(vvThresh).rename('wet');
+}).mean().rename('S1_WPI'); // 0..1 fraction of months "wet"
+
+// Sentinel-2 NDWI frequency (cloud-masked)
+function maskS2clouds(image) {
+  var qa = image.select('QA60');
+  var cloudBitMask = 1 << 10;
+  var cirrusBitMask = 1 << 11;
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+               .and(qa.bitwiseAnd(cirrusBitMask).eq(0));
+  return image.updateMask(mask).divide(10000);
+}
+var s2 = ee.ImageCollection('COPERNICUS/S2_SR')
+  .filterBounds(aoi)
+  .filterDate('2016-01-01', ee.Date(Date.now()))
+  .map(maskS2clouds);
+
+var ndwi = s2.map(function(img){
+  var nd = img.normalizedDifference(['B3','B8']).rename('NDWI');
+  return nd.updateMask(nd).copyProperties(img, img.propertyNames());
+});
+
+var months = ee.List.sequence(0, 107);
+var start = ee.Date('2016-01-01');
+var s2Monthly = ee.ImageCollection(months.map(function(m){
+  var begin = start.advance(m,'month');
+  var end = begin.advance(1,'month');
+  return ndwi.filterDate(begin, end).median().set('month', begin.format('YYYY-MM'));
+}));
+
+var ndwiThresh = 0.2;
+var s2WetFreq = s2Monthly.map(function(img){ return img.gt(ndwiThresh); }).mean().rename('S2_NDWI_FREQ');
+
+// HAND: use MERIT DEM + HAND (approx via slope/flow acc proxy if HAND asset unavailable)
+var dem = ee.Image('USGS/SRTMGL1_003').clip(aoi);
+var filled = ee.Terrain.fillMinima(dem);
+var slope = ee.Terrain.slope(filled);
+var handApprox = slope.lt(2).and(filled.subtract(filled.focal_min(3)).lt(5)).rename('HAND0_5M'); // proxy
+
+// Combine to Wetness Persistence Index
+var wpi = s1WetFreq.multiply(0.6).add(s2WetFreq.multiply(0.4)).rename('WPI');
+
+var out = wpi.addBands([s1WetFreq, s2WetFreq, handApprox]).clip(aoi);
+
+Map.centerObject(aoi, 8);
+Map.addLayer(out.select('WPI'), {min:0, max:1}, 'Wetness Persistence Index');
+Map.addLayer(handApprox, {min:0, max:1}, 'HAND proxy');
+
+// Export
+Export.image.toDrive({
+  image: out,
+  description: 'WPI_HAND_export',
+  region: aoi,
+  scale: 30,
+  maxPixels: 1e13
+});
+""").strip()
+
+(base / "gee_wpi_hand.js").write_text(gee_js, encoding="utf-8")
+
+
+# 4) Minimal FastAPI ingestion service
+fastapi_code = dedent("""
+# ingest_fastapi.py — Minimal ingestion API for Neon/Postgres
+# pip install fastapi uvicorn psycopg[binary] pydantic
+import os
+from typing import Optional
+from fastapi import FastAPI, Header, HTTPException
+from pydantic import BaseModel, Field
+import psycopg
+
+DATABASE_URL = os.getenv("DATABASE_URL")  # e.g., postgresql://user:pass@ep-...neon.tech/db
+
+app = FastAPI(title="Counter-Outbreak Ingest API")
+
+def get_conn():
+    if not DATABASE_URL:
+        raise RuntimeError("Set DATABASE_URL env var for Neon/Postgres")
+    return psycopg.connect(DATABASE_URL, autocommit=True)
+
+def check_token(auth: Optional[str]):
+    token = (auth or "").replace("Bearer ","").strip()
+    expected = os.getenv("INGEST_TOKEN")
+    if not expected or token != expected:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+class BoatCount(BaseModel):
+    id: str
+    location_id: str
+    observed_on: str
+    enumerator_id: Optional[str] = None
+    pirogue_small: int = 0
+    pirogue_large: int = 0
+    ferry: int = 0
+    trucks: int = 0
+    passengers_est: int = 0
+    notes: Optional[str] = None
+
+@app.post("/ingest/boat_counts")
+def ingest_boat_counts(item: BoatCount, authorization: Optional[str] = Header(None)):
+    check_token(authorization)
+    with get_conn() as con:
+        con.execute("""
+            INSERT INTO boat_counts (id, location_id, observed_on, enumerator_id, pirogue_small, pirogue_large, ferry, trucks, passengers_est, notes)
+            VALUES (%(id)s, %(location_id)s, %(observed_on)s, %(enumerator_id)s, %(pirogue_small)s, %(pirogue_large)s, %(ferry)s, %(trucks)s, %(passengers_est)s, %(notes)s)
+            ON CONFLICT (id) DO UPDATE SET
+              location_id=EXCLUDED.location_id,
+              observed_on=EXCLUDED.observed_on,
+              enumerator_id=EXCLUDED.enumerator_id,
+              pirogue_small=EXCLUDED.pirogue_small,
+              pirogue_large=EXCLUDED.pirogue_large,
+              ferry=EXCLUDED.ferry,
+              trucks=EXCLUDED.trucks,
+              passengers_est=EXCLUDED.passengers_est,
+              notes=EXCLUDED.notes
+        """, item.model_dump())
+    return {"ok": True}
+
+# Repeat similar endpoints for other tables as needed...
+""").strip()
+
+(base / "ingest_fastapi.py").write_text(fastapi_code, encoding="utf-8")
+
+print("Files created:")
+print(" - /mnt/data/counter_outbreak_schema.sql")
+print(" - /mnt/data/field_forms.xlsx")
+print(" - /mnt/data/gee_wpi_hand.js")
+print(" - /mnt/data/ingest_fastapi.py")

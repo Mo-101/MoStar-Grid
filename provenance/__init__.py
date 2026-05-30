@@ -8,17 +8,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from dataclasses import dataclass, asdict
 
-from grid.config import GRID_ROOT, SEAL_GLYPH
+from grid.config import MOSTAR_CLUSTER_ID, PROVENANCE_PATH, SEAL_GLYPH
 
 logger = logging.getLogger("provenance")
-
-PROVENANCE_DIR = GRID_ROOT / "data" / "provenance"
-PROVENANCE_DIR.mkdir(parents=True, exist_ok=True)
 
 
 @dataclass
 class ProvenanceRecord:
     cycle_id: str
+    cluster_id: str
     timestamp: str
     talk_input: str
     dcx_layer: str
@@ -37,11 +35,13 @@ class ProvenanceLog:
     """Append-only audit log for Grid intelligence cycles."""
 
     def __init__(self):
-        self._log_file = PROVENANCE_DIR / f"provenance_{datetime.now(timezone.utc).strftime('%Y%m%d')}.jsonl"
+        self._log_file = PROVENANCE_PATH
+        self._log_file.parent.mkdir(parents=True, exist_ok=True)
         self._records: list[ProvenanceRecord] = []
 
     def record(self, **kwargs) -> ProvenanceRecord:
         rec = ProvenanceRecord(
+            cluster_id=MOSTAR_CLUSTER_ID,
             timestamp=datetime.now(timezone.utc).isoformat(),
             seal=SEAL_GLYPH,
             **kwargs,
@@ -59,6 +59,7 @@ class ProvenanceLog:
     def record_event(self, event_type: str, payload: dict) -> dict:
         event = {
             "event_type": event_type,
+            "cluster_id": MOSTAR_CLUSTER_ID,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "seal": SEAL_GLYPH,
             **payload,
