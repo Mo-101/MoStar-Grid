@@ -12,7 +12,7 @@ module.exports = {
         PYTHONPATH: "/home/idona/MoStar/_apps/grid",
         NEO4J_URI: "bolt://localhost:47687",
         NEO4J_USER: "neo4j",
-        NEO4J_PASSWORD: "Mogrid101",
+        NEO4J_PASSWORD: "<REDACTED>",
         NEO4J_DATABASE: "neo4j",
         OLLAMA_BASE_URL: "http://localhost:11434",
         GRID_PORT: "41010",

@@ -1,0 +1,5 @@
+{
+  "cluster_id": "kampala-beta",
+  "private_key": "<REDACTED_PRIVATE_KEY>",
+  "public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEACehrJFCEznroaYzR14c0vgcNk2CQn1mR0CyTS56WqgU=\n-----END PUBLIC KEY-----\n"
+}

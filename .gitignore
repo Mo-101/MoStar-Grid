@@ -53,3 +53,14 @@ tmp/
 
 # === Allow explicit overrides ===
 !docs/data/*.json
+
+# Runtime/generated Grid audio
+grid/.tmp/audio/
+.tmp/audio/
+
+# Local scratch audit scripts
+scratch/
+
+# Private local key material
+config/*-keys.json
+!config/*-keys.example.json

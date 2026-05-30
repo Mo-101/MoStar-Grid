@@ -31,7 +31,7 @@ docker run -d \
   --name mostar-neo4j \
   -p 47474:7474 \
   -p 47687:7687 \
-  -e NEO4J_AUTH=neo4j/Mogrid101 \
+  -e NEO4J_AUTH=neo4j/<REDACTED> \
   -e NEO4J_PLUGINS='["apoc"]' \
   -v mostar_neo4j_data:/data \
   -v mostar_neo4j_logs:/logs \
@@ -43,14 +43,14 @@ Then set:
 ```env
 NEO4J_URI=bolt://localhost:47687
 NEO4J_USER=neo4j
-NEO4J_PASSWORD=Mogrid101
+NEO4J_PASSWORD=<REDACTED>
 NEO4J_HTTP_URL=http://localhost:47474
 ```
 
 Verify Bolt:
 
 ```bash
-docker exec mostar-neo4j cypher-shell -u neo4j -p 'Mogrid101' "RETURN 1 AS ok"
+docker exec mostar-neo4j cypher-shell -u neo4j -p '<REDACTED>' "RETURN 1 AS ok"
 ```
 
 ## 3. Run Constitutional Bootstrap

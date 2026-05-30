@@ -112,3 +112,23 @@ async def telemetry_watcher(orchestrator):
             
         # Poll every 30 seconds
         await asyncio.sleep(30)
+
+async def executor_watcher(orchestrator):
+    """Simulates the executor loop heartbeat while think() is disabled."""
+    logger.info("ExecutorWatcher started.")
+    while True:
+        try:
+            if orchestrator.mindgraph.connected:
+                async with orchestrator.mindgraph._driver.session(database="neo4j") as session:
+                    await session.run("""
+                        CREATE (h:ExecutorHeartbeat {
+                            id: randomUUID(),
+                            created_at: datetime(),
+                            status: 'ALIVE'
+                        })
+                    """)
+                # Cycles are tied to provenance records
+        except Exception as e:
+            logger.error(f"ExecutorWatcher error: {e}")
+            
+        await asyncio.sleep(60)

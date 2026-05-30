@@ -178,20 +178,20 @@ const Dashboard = ({ role = "architect" }: DashboardProps) => {
 
     setTimeout(() => {
       document.body.setAttribute("data-voice-state", "thinking");
-      fetch("/api/briefing")
+      fetch("/api/briefing?write_log=true")
         .then((r) => r.json())
         .then((data) => {
           const speech = data.message || data.text || data.speech || "MoStar Grid is awake.";
           audioPresence.dipHumForVoice();
           document.body.setAttribute("data-voice-state", "speaking");
-          speak(speech, "reflective").then(() => {
+          speak(speech, "alert").then(() => {
             document.body.setAttribute("data-voice-state", "idle");
             audioPresence.restoreHum();
           });
         })
         .catch(() => {
           document.body.setAttribute("data-voice-state", "speaking");
-          speak("MoStar Grid is awake.", "reflective").then(() => {
+          speak("MoStar Grid is awake.", "alert").then(() => {
             document.body.setAttribute("data-voice-state", "idle");
           });
         });

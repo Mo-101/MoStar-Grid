@@ -94,13 +94,16 @@ async function speakSovereign(text: string, mood: Mood): Promise<void> {
 
     audio.onended = () => {
       currentAudio = null;
+      window.dispatchEvent(new Event("woo-speaking-end"));
       resolve();
     };
     audio.onerror = () => {
       currentAudio = null;
+      window.dispatchEvent(new Event("woo-speaking-end"));
       reject(new Error('Audio playback failed'));
     };
 
+    window.dispatchEvent(new Event("woo-speaking-start"));
     audio.play().catch(reject);
   });
 }
@@ -127,9 +130,16 @@ function speakFallback(text: string): Promise<void> {
     utterance.rate = 0.85;
     utterance.pitch = 0.9;
     utterance.volume = 0.95;
-    utterance.onend = () => resolve();
-    utterance.onerror = () => resolve();
+    utterance.onend = () => {
+      window.dispatchEvent(new Event("woo-speaking-end"));
+      resolve();
+    };
+    utterance.onerror = () => {
+      window.dispatchEvent(new Event("woo-speaking-end"));
+      resolve();
+    };
 
+    window.dispatchEvent(new Event("woo-speaking-start"));
     window.speechSynthesis.speak(utterance);
   });
 }
@@ -139,6 +149,7 @@ function speakFallback(text: string): Promise<void> {
 // ─────────────────────────────────────────────────────────────────────────
 
 export async function speak(text: string, mood: Mood = 'ceremonial'): Promise<void> {
+  stopVoice(); // Interrupt any ongoing speech immediately
   const cleaned = text.replace(/[🜂🜄🜁🜃∴]/g, '').trim();
   if (!cleaned) return;
 

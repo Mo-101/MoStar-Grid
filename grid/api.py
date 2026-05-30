@@ -33,7 +33,7 @@ from grid.orchestrator import CommitFailedError, CommitForbiddenError, GridOrche
 from grid.telemetry import ClusterTelemetry
 from dcx import DCXLayer
 from grid.events import event_bus, GridEvent
-from grid.watchers import world_signal_watcher, telemetry_watcher, mood_engine
+from grid.watchers import world_signal_watcher, telemetry_watcher, mood_engine, executor_watcher
 from grid.memory import (
     MemoryLayer,
     get_recent_memory,
@@ -77,6 +77,7 @@ async def lifespan(app: FastAPI):
     asyncio.create_task(world_signal_watcher())
     asyncio.create_task(telemetry_watcher(orchestrator))
     asyncio.create_task(autonomous_announcer(app.state.memory_layer))
+    asyncio.create_task(executor_watcher(orchestrator))
     
     yield
     await orchestrator.shutdown()
@@ -342,6 +343,18 @@ async def memory_recent(limit: int = 10):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/api/memory/foundational")
+async def memory_foundational():
+    try:
+        driver = orchestrator.mindgraph._driver
+        async with driver.session(database="neo4j") as session:
+            result = await session.run("MATCH (fm:FoundationalMemory) RETURN fm")
+            records = await result.data()
+            return {"results": [r["fm"] for r in records], "seal": "🜃∴🜂"}
+    except Exception as e:
+        logger.error(f"Failed to fetch foundational memory: {e}")
+        return {"error": str(e)}
+
 @app.get("/api/memory/recall")
 async def memory_recall(event_type: str, hours: int = 24):
     try:
@@ -352,7 +365,7 @@ async def memory_recall(event_type: str, hours: int = 24):
 
 
 @app.get("/api/briefing")
-async def get_autonomous_briefing():
+async def get_autonomous_briefing(write_log: bool = False):
     try:
         driver = orchestrator.mindgraph._driver
         
@@ -362,7 +375,7 @@ async def get_autonomous_briefing():
         
         # 2. Build the deterministic aware briefing narrative
         # build_aware_briefing logs to Neo4j internally when write_log=True
-        briefing_data = await build_aware_briefing(driver, write_log=True)
+        briefing_data = await build_aware_briefing(driver, write_log=write_log)
         briefing_text = briefing_data["message"]
         facts = briefing_data["facts"]
 
@@ -374,19 +387,20 @@ async def get_autonomous_briefing():
         audio_url = f"/api/audio/{audio_path.name}" if audio_path else None
         
         # 4. Log briefing event and woo utterance in Neo4j to keep graph data rich
-        memory_layer = app.state.memory_layer
-        briefing_event = GridEvent(
-            type="dashboard_awaken",
-            severity="low",
-            mood=mood,
-            source="briefing",
-            text="Grid Awaken Sequence Initiated",
-            payload={"facts": facts, "message": briefing_text}
-        )
-        await memory_layer.log_event(briefing_event)
-        await memory_layer.log_briefing(briefing_event, telemetry, news)
-        if audio_url:
-            await memory_layer.log_woo_utterance(briefing_event, audio_url)
+        if write_log:
+            memory_layer = app.state.memory_layer
+            briefing_event = GridEvent(
+                type="dashboard_awaken",
+                severity="low",
+                mood=mood,
+                source="briefing",
+                text="Grid Awaken Sequence Initiated",
+                payload={"facts": facts, "message": briefing_text}
+            )
+            await memory_layer.log_event(briefing_event)
+            await memory_layer.log_briefing(briefing_event, telemetry, news)
+            if audio_url:
+                await memory_layer.log_woo_utterance(briefing_event, audio_url)
 
         return {
             "ok": True,

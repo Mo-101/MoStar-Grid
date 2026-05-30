@@ -14,10 +14,7 @@ export const RadioEmitter = ({ gridPulse }: RadioEmitterProps) => {
     window.addEventListener("woo-speaking-start", handleStart);
     window.addEventListener("woo-speaking-end", handleEnd);
 
-    // Initial check in case it's already speaking when mounted
-    if (window.speechSynthesis && window.speechSynthesis.speaking) {
-      setIsSpeaking(true);
-    }
+    // We rely solely on events now.
 
     return () => {
       window.removeEventListener("woo-speaking-start", handleStart);
