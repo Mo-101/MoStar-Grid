@@ -32,8 +32,7 @@ export function GridMap({ signals, onMapLoad }: GridMapProps) {
       zoom: 3.5,
       pitch: 45,
       bearing: -10,
-      antialias: true,
-      
+      collectResourceTiming: true,
     });
 
     map.current.on('load', () => {
@@ -46,11 +45,10 @@ export function GridMap({ signals, onMapLoad }: GridMapProps) {
       signals.forEach((signal) => {
         // Create marker element
         const el = document.createElement('div');
-        el.className = `w-5 h-5 rounded-full border-2 cursor-pointer transition-all ${
-          signal.type === 'disease'
+        el.className = `w-5 h-5 rounded-full border-2 cursor-pointer transition-all ${signal.type === 'disease'
             ? 'bg-alert/20 border-alert pulse-glow-alert'
             : 'bg-primary/20 border-primary pulse-glow'
-        }`;
+          }`;
 
         // Add marker to map
         const marker = new maplibregl.Marker({ element: el })
