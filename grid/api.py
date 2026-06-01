@@ -15,7 +15,7 @@ import feedparser
 from pathlib import Path
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Request
+from fastapi import APIRouter, FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -28,7 +28,7 @@ import httpx
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from grid.config import GRID_HOST, GRID_PORT, SEAL_GLYPH, cluster_metadata
+from grid.config import GRID_HOST, GRID_PORT, MOSTAR_CLUSTER_ID, SEAL_GLYPH, cluster_metadata
 from grid.orchestrator import CommitFailedError, CommitForbiddenError, GridOrchestrator
 from grid.telemetry import ClusterTelemetry
 from dcx import DCXLayer
@@ -250,6 +250,11 @@ async def health():
         "dcx": orchestrator.dcx.connected,
         "cycles": orchestrator.provenance.total_cycles,
         "seal": SEAL_GLYPH,
+        "mcp": {
+            "online": True,
+            "scopes": ["propose", "approve", "commit"],
+        },
+        "phase": "4.0a",
     })
 
 
@@ -373,19 +378,62 @@ async def get_autonomous_briefing(write_log: bool = False):
         telemetry = await orchestrator.status()
         news = await fetch_world_signals()
         
-        # 2. Build the deterministic aware briefing narrative
-        # build_aware_briefing logs to Neo4j internally when write_log=True
-        briefing_data = await build_aware_briefing(driver, write_log=write_log)
-        briefing_text = briefing_data["message"]
+        # 2. Build facts and compute continuity
+        briefing_data = await build_aware_briefing(driver, write_log=False)
         facts = briefing_data["facts"]
+
+        # Fetch external weather and flight data (no simulation fallbacks)
+        from grid.external_data import fetch_weather_data, fetch_flight_data
+        weather = await fetch_weather_data()
+        flights = await fetch_flight_data()
 
         # Get mood (reflective)
         mood = "reflective"
 
-        # 3. Synthesize voice for the briefing text with reflective mood
-        audio_path = await synthesize_woo_voice(briefing_text, mood=mood)
-        audio_url = f"/api/audio/{audio_path.name}" if audio_path else None
-        
+        # 3. Route to DCX2 (Body) to generate the narrative
+        weather_summary = (
+            ", ".join(
+                f"{city}: {data.get('temp')}C {data.get('description')}"
+                for city, data in weather["data"].items()
+            )
+            if weather["live"] and weather["data"] else "unavailable"
+        )
+        flight_summary = (
+            "live" if flights["live"] else flights["status"]
+        )
+        prompt_user = (
+            "Write three concise operational briefing sentences using only these facts: "
+            f"local Neo4j bolt://localhost:47687; nodes {facts['current_nodes']} "
+            f"growth {facts.get('node_growth', 0)}; relationships {facts['current_relationships']} "
+            f"growth {facts.get('relationship_growth', 0)}; events {facts['current_events']} "
+            f"delta {facts.get('event_pressure_delta', 0)}; weather {weather['status']} "
+            f"{weather_summary}; flights {flight_summary}. State unavailable providers clearly."
+        )
+
+        fallback_briefing = (
+            f"MoStar Grid is online on local Neo4j at bolt://localhost:47687 with "
+            f"{facts['current_nodes']} nodes, {facts['current_relationships']} relationships, "
+            f"and {facts['current_events']} current events. "
+            f"Weather is {weather['status']}: {weather_summary}. "
+            f"Flights are {flight_summary}; unavailable providers are not simulated."
+        )
+        try:
+            dcx_res = await asyncio.wait_for(
+                orchestrator.dcx.think(
+                    query=prompt_user,
+                    layer=DCXLayer.BODY,
+                    graph_context=None,
+                ),
+                timeout=45,
+            )
+            briefing_text = dcx_res.content.strip()
+            if not briefing_text or briefing_text.startswith("[DCX "):
+                briefing_text = fallback_briefing
+        except Exception as e:
+            logger.warning("DCX briefing generation timed out or failed; using verified fallback: %s", e)
+            briefing_text = fallback_briefing
+
+        audio_url = None
         # 4. Log briefing event and woo utterance in Neo4j to keep graph data rich
         if write_log:
             memory_layer = app.state.memory_layer
@@ -395,10 +443,48 @@ async def get_autonomous_briefing(write_log: bool = False):
                 mood=mood,
                 source="briefing",
                 text="Grid Awaken Sequence Initiated",
-                payload={"facts": facts, "message": briefing_text}
+                payload={"facts": facts, "message": briefing_text},
+                source_type="runtime_generated",
+                verification_status="verified",
+                operational_trust="reference",
+                created_by="get_autonomous_briefing",
             )
             await memory_layer.log_event(briefing_event)
             await memory_layer.log_briefing(briefing_event, telemetry, news)
+
+            # Persist BriefingLog node to database
+            from datetime import datetime, timezone
+            iso_now = datetime.now(timezone.utc).isoformat()
+            async with driver.session(database="neo4j") as session:
+                await session.run("""
+                    CREATE (b:BriefingLog {
+                        id: $b_id,
+                        message: $message,
+                        created_at: $created_at,
+                        event_count: $event_count,
+                        node_count: $node_count,
+                        relationship_count: $relationship_count,
+                        referenced_previous: $has_history,
+                        cluster_id: $cluster_id,
+                        source: 'autonomous_briefing',
+                        created_by: 'get_autonomous_briefing',
+                        source_type: 'ai_generated',
+                        verification_status: 'unverified',
+                        operational_trust: 'reference',
+                        seal: 'Synthetic'
+                    })
+                """, b_id=f"brief_aware_{int(datetime.now(timezone.utc).timestamp())}",
+                     message=briefing_text,
+                     created_at=iso_now,
+                     event_count=facts["current_events"],
+                     node_count=facts["current_nodes"],
+                     relationship_count=facts["current_relationships"],
+                     has_history=facts.get("has_history", False),
+                     cluster_id=MOSTAR_CLUSTER_ID)
+
+            # Synthesize voice for the briefing text with reflective mood
+            audio_path = await synthesize_woo_voice(briefing_text, mood=mood)
+            audio_url = f"/api/audio/{audio_path.name}" if audio_path else None
             if audio_url:
                 await memory_layer.log_woo_utterance(briefing_event, audio_url)
 
@@ -411,6 +497,8 @@ async def get_autonomous_briefing(write_log: bool = False):
             "telemetry": telemetry,
             "signals": news,
             "facts": facts,
+            "weather": weather,
+            "flights": flights,
             "seal": "🜃∴🜂",
         }
     except Exception as e:
@@ -616,6 +704,54 @@ async def density():
     })
 
 
+class GridEventSchema(BaseModel):
+    cluster_id: str
+    cycles: int
+    status: str
+    seal: str
+
+_idempotency_cache = set()
+
+def is_duplicate_transaction(key: str) -> bool:
+    if key in _idempotency_cache:
+        return True
+    _idempotency_cache.add(key)
+    return False
+
+@app.get("/api/grid/event")
+async def get_grid_events():
+    return {"status": "success", "data": []}
+
+@app.post("/api/grid/event")
+async def create_grid_event(payload: GridEventSchema, request: Request):
+    idempotency_key = request.headers.get("X-Idempotency-Key")
+    if idempotency_key:
+        if is_duplicate_transaction(idempotency_key):
+            raise HTTPException(
+                status_code=409,
+                detail="Duplicate transaction signal detected and absorbed."
+            )
+            
+    try:
+        event = GridEvent(
+            type="ingestion",
+            severity="info",
+            mood="stable",
+            source="external_agent",
+            text=f"Cycle update: {payload.cycles} for {payload.cluster_id}",
+            payload={"cycles": payload.cycles, "status": payload.status, "seal": payload.seal}
+        )
+        await app.state.memory_layer.log_event(event)
+        await event_bus.publish(event)
+        
+        return {"status": "committed", "cluster_id": payload.cluster_id}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Ledger compilation failure: {str(e)}"
+        )
+
+
 @app.get("/api/grid/census")
 async def get_grid_census():
     """Retrieve live database metrics from the mindgraph for crowning the dashboard."""
@@ -805,6 +941,316 @@ async def emit_test_event():
     await app.state.memory_layer.log_event(event)
     await event_bus.publish(event)
     return {"ok": True, "event_id": event.id}
+
+
+# ── Watchtower Agent Governance ─────────────────────────────────────
+
+watchtower_router = APIRouter(prefix="/watchtower", tags=["watchtower"])
+
+VALID_AGENT_STATUSES = {
+    "SCANNED",
+    "PENDING_REVIEW",
+    "REFORMATTED",
+    "SANCTIONED",
+    "REJECTED",
+    "QUARANTINED",
+}
+VALID_AUTH_LEVELS = {"PROVISIONAL", "OPERATIONAL", "INSTITUTIONAL"}
+
+
+class WatchtowerAgentCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=200)
+    source: str = Field(..., min_length=1, max_length=500)
+    purpose: str = Field(..., min_length=1, max_length=1000)
+    namespace: str = Field(..., min_length=1, max_length=120)
+    capabilities: list[str] = Field(default_factory=list)
+    data_contracts: list[str] = Field(default_factory=list)
+    safety_flags: list[str] = Field(default_factory=list)
+    provenance_verified: bool = False
+
+
+class WatchtowerAgentStatusUpdate(BaseModel):
+    status: str
+    approved_by: Optional[str] = None
+    auth_level: Optional[str] = None
+
+
+class WatchtowerTrustScoreUpdate(BaseModel):
+    trust_score: int = Field(..., ge=0, le=100)
+
+
+def _watchtower_now() -> str:
+    from datetime import datetime, timezone
+
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _compute_initial_trust(payload: WatchtowerAgentCreate) -> int:
+    score = 50
+    if payload.provenance_verified:
+        score += 20
+    if payload.data_contracts:
+        score += 10
+    if payload.capabilities:
+        score += 5
+    score -= len(payload.safety_flags) * 10
+    return max(0, min(100, score))
+
+
+def _agent_from_record(record) -> dict:
+    agent = dict(record["a"])
+    agent.setdefault("capabilities", [])
+    agent.setdefault("data_contracts", [])
+    agent.setdefault("safety_flags", [])
+    agent.setdefault("approved_by", None)
+    agent.setdefault("approved_at", None)
+    agent.setdefault("auth_level", None)
+    agent.setdefault("last_sync", None)
+    agent.setdefault("provenance_verified", False)
+    return agent
+
+
+async def _emit_watchtower_event(event_type: str, ref_id: str, detail: str) -> None:
+    try:
+        if not orchestrator.mindgraph.connected:
+            return
+        driver = orchestrator.mindgraph._driver
+        async with driver.session(database="neo4j") as session:
+            await session.run(
+                """
+                CREATE (:GridEvent {
+                    id: $id,
+                    type: $type,
+                    ref_id: $ref_id,
+                    detail: $detail,
+                    created_at: $created_at
+                })
+                """,
+                id=str(uuid.uuid4()),
+                type=event_type,
+                ref_id=ref_id,
+                detail=detail,
+                created_at=_watchtower_now(),
+            )
+    except Exception as exc:
+        logger.warning("Watchtower event emission failed: %s", exc)
+
+
+def _require_mindgraph():
+    if not orchestrator.mindgraph.connected:
+        raise HTTPException(503, "MindGraph not connected")
+    return orchestrator.mindgraph._driver
+
+
+@watchtower_router.get("/agents")
+async def watchtower_list_agents(status: Optional[str] = None):
+    if status and status not in VALID_AGENT_STATUSES:
+        raise HTTPException(status_code=400, detail=f"Invalid status: {status}")
+
+    driver = _require_mindgraph()
+    async with driver.session(database="neo4j") as session:
+        result = await session.run(
+            """
+            MATCH (a:Agent)
+            WHERE $status IS NULL OR a.status = $status
+            RETURN a
+            ORDER BY coalesce(a.created_at, "") DESC
+            """,
+            status=status,
+        )
+        records = await result.data()
+    return [_agent_from_record(record) for record in records]
+
+
+@watchtower_router.get("/agents/{agent_id}")
+async def watchtower_get_agent(agent_id: str):
+    driver = _require_mindgraph()
+    async with driver.session(database="neo4j") as session:
+        result = await session.run("MATCH (a:Agent {id: $id}) RETURN a", id=agent_id)
+        record = await result.single()
+    if not record:
+        raise HTTPException(status_code=404, detail=f"Agent {agent_id} not found")
+    return _agent_from_record(record)
+
+
+@watchtower_router.post("/agents", status_code=201)
+async def watchtower_register_agent(payload: WatchtowerAgentCreate):
+    driver = _require_mindgraph()
+    async with driver.session(database="neo4j") as session:
+        count_result = await session.run("MATCH (a:Agent) RETURN count(a) AS count")
+        count_record = await count_result.single()
+        agent_id = f"AGT-{(count_record['count'] if count_record else 0) + 1:04d}"
+
+        props = {
+            "id": agent_id,
+            "name": payload.name,
+            "source": payload.source,
+            "purpose": payload.purpose,
+            "namespace": payload.namespace,
+            "capabilities": payload.capabilities,
+            "data_contracts": payload.data_contracts,
+            "safety_flags": payload.safety_flags,
+            "provenance_verified": payload.provenance_verified,
+            "trust_score": _compute_initial_trust(payload),
+            "status": "SCANNED",
+            "approved_by": None,
+            "approved_at": None,
+            "auth_level": None,
+            "last_sync": None,
+            "created_at": _watchtower_now(),
+        }
+        result = await session.run(
+            """
+            CREATE (a:Agent)
+            SET a = $props
+            RETURN a
+            """,
+            props=props,
+        )
+        record = await result.single()
+
+    await _emit_watchtower_event(
+        "AGENT_REGISTERED",
+        agent_id,
+        f"New agent detected: {payload.name} from {payload.source}",
+    )
+    return _agent_from_record(record)
+
+
+@watchtower_router.put("/agents/{agent_id}/status")
+async def watchtower_update_agent_status(agent_id: str, payload: WatchtowerAgentStatusUpdate):
+    if payload.status not in VALID_AGENT_STATUSES:
+        raise HTTPException(status_code=400, detail=f"Invalid status: {payload.status}")
+    if payload.auth_level and payload.auth_level not in VALID_AUTH_LEVELS:
+        raise HTTPException(status_code=400, detail=f"Invalid auth_level: {payload.auth_level}")
+
+    updates = {
+        "status": payload.status,
+        "approved_by": payload.approved_by,
+        "auth_level": payload.auth_level,
+    }
+    if payload.status == "SANCTIONED":
+        updates["approved_at"] = _watchtower_now()
+
+    driver = _require_mindgraph()
+    async with driver.session(database="neo4j") as session:
+        result = await session.run(
+            """
+            MATCH (a:Agent {id: $id})
+            SET a += $updates
+            RETURN a
+            """,
+            id=agent_id,
+            updates=updates,
+        )
+        record = await result.single()
+
+    if not record:
+        raise HTTPException(status_code=404, detail=f"Agent {agent_id} not found")
+
+    await _emit_watchtower_event(
+        f"AGENT_{payload.status}",
+        agent_id,
+        f"Agent status updated to {payload.status}"
+        + (f" by {payload.approved_by}" if payload.approved_by else ""),
+    )
+    return _agent_from_record(record)
+
+
+@watchtower_router.put("/agents/{agent_id}/trust")
+async def watchtower_update_trust_score(agent_id: str, payload: WatchtowerTrustScoreUpdate):
+    driver = _require_mindgraph()
+    async with driver.session(database="neo4j") as session:
+        result = await session.run(
+            """
+            MATCH (a:Agent {id: $id})
+            SET a.trust_score = $trust_score
+            RETURN a
+            """,
+            id=agent_id,
+            trust_score=payload.trust_score,
+        )
+        record = await result.single()
+    if not record:
+        raise HTTPException(status_code=404, detail=f"Agent {agent_id} not found")
+
+    await _emit_watchtower_event(
+        "AGENT_TRUST_OVERRIDE",
+        agent_id,
+        f"Agent trust score manually set to {payload.trust_score}",
+    )
+    return _agent_from_record(record)
+
+
+@watchtower_router.get("/sanctuary")
+async def watchtower_sanctuary():
+    driver = _require_mindgraph()
+    async with driver.session(database="neo4j") as session:
+        result = await session.run(
+            """
+            MATCH (a:Agent {status: 'SANCTIONED'})
+            RETURN a
+            ORDER BY coalesce(a.approved_at, "") DESC
+            """
+        )
+        records = await result.data()
+    return [_agent_from_record(record) for record in records]
+
+
+@watchtower_router.get("/stats")
+async def watchtower_stats():
+    driver = _require_mindgraph()
+    async with driver.session(database="neo4j") as session:
+        counts_result = await session.run(
+            "MATCH (a:Agent) RETURN a.status AS status, count(a) AS count"
+        )
+        count_records = await counts_result.data()
+        flagged_result = await session.run(
+            """
+            MATCH (a:Agent)
+            WHERE size(coalesce(a.safety_flags, [])) > 0
+            RETURN count(a) AS count
+            """
+        )
+        flagged_record = await flagged_result.single()
+
+    counts = {record["status"]: record["count"] for record in count_records if record["status"]}
+    return {
+        "total": sum(counts.values()),
+        "by_status": counts,
+        "sanctioned": counts.get("SANCTIONED", 0),
+        "pending": counts.get("PENDING_REVIEW", 0) + counts.get("SCANNED", 0),
+        "flagged": flagged_record["count"] if flagged_record else 0,
+    }
+
+
+@watchtower_router.delete("/agents/{agent_id}")
+async def watchtower_delete_agent(agent_id: str):
+    driver = _require_mindgraph()
+    async with driver.session(database="neo4j") as session:
+        result = await session.run(
+            """
+            MATCH (a:Agent {id: $id})
+            WITH a, a.name AS name
+            DETACH DELETE a
+            RETURN name
+            """,
+            id=agent_id,
+        )
+        record = await result.single()
+
+    if not record:
+        raise HTTPException(status_code=404, detail=f"Agent {agent_id} not found")
+
+    await _emit_watchtower_event(
+        "AGENT_DELETED",
+        agent_id,
+        f"Agent {agent_id} permanently removed",
+    )
+    return {"deleted": agent_id}
+
+
+app.include_router(watchtower_router)
 
 
 # ── SPA Catch-All (must be LAST route) ─────────────────────────────

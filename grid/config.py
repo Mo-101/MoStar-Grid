@@ -16,7 +16,7 @@ load_dotenv(GRID_ROOT / ".env")
 
 def _required_env(name: str) -> str:
     value = os.getenv(name)
-    if not value:
+    if value is None:
         raise RuntimeError(f"{name} is required. Set it in {GRID_ROOT / '.env'}")
     return value
 
@@ -60,9 +60,9 @@ NEO4J_DATABASE = _required_env("NEO4J_DATABASE")
 
 # === Ollama ===
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-DCX0_MODEL = os.getenv("DCX0_MODEL", "phi4:latest")          # Mind
-DCX1_MODEL = os.getenv("DCX1_MODEL", "qwen2.5:1.5b")        # Soul
-DCX2_MODEL = os.getenv("DCX2_MODEL", "mistral:latest")       # Body
+DCX0_MODEL = os.getenv("DCX0_MODEL", "Mostar/mostar-ai:dcx0")  # Mind
+DCX1_MODEL = os.getenv("DCX1_MODEL", "Mostar/mostar-ai:dcx1")  # Soul
+DCX2_MODEL = os.getenv("DCX2_MODEL", "Mostar/mostar-ai:dcx2")  # Body
 
 # === Truth Gate Elemental Thresholds ===
 TRUTH_THRESHOLDS = {

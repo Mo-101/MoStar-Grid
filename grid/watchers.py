@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import feedparser
+from grid.config import MOSTAR_CLUSTER_ID
 from grid.events import event_bus, GridEvent
 
 logger = logging.getLogger("grid_watchers")
@@ -55,9 +56,14 @@ async def world_signal_watcher():
                         type="world_signal",
                         severity=severity,
                         mood=mood_engine.current_mood, # will be updated on next observe
-                        source="world_signal_watcher",
+                        source="bbc_africa_rss",
                         text=headline,
-                        payload={"url": top_entry.link}
+                        payload={"url": top_entry.link},
+                        source_type="live_api",
+                        verification_status="unverified",
+                        operational_trust="reference",
+                        created_by="world_signal_watcher",
+                        source_id=top_entry.link,
                     )
                     
                     mood = mood_engine.observe(event)
@@ -99,7 +105,11 @@ async def telemetry_watcher(orchestrator):
                     mood=mood_engine.current_mood,
                     source="telemetry_watcher",
                     text=text,
-                    payload={"status": status}
+                    payload={"status": status},
+                    source_type="runtime_generated",
+                    verification_status="verified",
+                    operational_trust="operational",
+                    created_by="telemetry_watcher",
                 )
                 
                 mood = mood_engine.observe(event)
@@ -124,9 +134,16 @@ async def executor_watcher(orchestrator):
                         CREATE (h:ExecutorHeartbeat {
                             id: randomUUID(),
                             created_at: datetime(),
-                            status: 'ALIVE'
+                            status: 'ALIVE',
+                            cluster_id: $cluster_id,
+                            source: 'executor_watcher',
+                            source_type: 'runtime_generated',
+                            created_by: 'executor_watcher',
+                            verification_status: 'verified',
+                            operational_trust: 'operational',
+                            seal: 'Operational'
                         })
-                    """)
+                    """, cluster_id=MOSTAR_CLUSTER_ID)
                 # Cycles are tied to provenance records
         except Exception as e:
             logger.error(f"ExecutorWatcher error: {e}")

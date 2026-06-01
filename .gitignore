@@ -64,3 +64,9 @@ scratch/
 # Private local key material
 config/*-keys.json
 !config/*-keys.example.json
+
+# Local Neo4j instance files
+mindgraph/neo4j-mindgraph/data/
+mindgraph/neo4j-mindgraph/data_wired_default/
+mindgraph/neo4j-mindgraph/run/
+mindgraph/neo4j-mindgraph/logs/

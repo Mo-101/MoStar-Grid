@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import GlyphCanvas from "@/components/GlyphCanvas";
 import LoadingHUD from "@/components/LoadingHUD";
@@ -22,6 +22,110 @@ const Index = () => {
   const [guestName, setGuestName] = useState("");
   const [isBreakGlass] = useState(false);
   const [showGate, setShowGate] = useState(false);
+
+  // ── Real SSE scroll stream ──────────────────────────────────────────────────
+  const [scrollEvents, setScrollEvents] = useState<
+    { tag: string; glyph: string; txt: string; color: string; ts: number }[]
+  >([]);
+  const sseRef = useRef<EventSource | null>(null);
+
+  useEffect(() => {
+    const es = new EventSource("/api/stream");
+    sseRef.current = es;
+
+    es.onmessage = (e) => {
+      try {
+        const payload = JSON.parse(e.data);
+        const colorMap: Record<string, string> = {
+          SCROLL: "text-primary",
+          ATTEST: "text-secondary",
+          PROPOSE: "text-foreground",
+          VETO: "text-destructive",
+          COMMIT: "text-primary",
+          DISPUTE: "text-secondary",
+          SEAL: "text-primary",
+          REJECT: "text-destructive",
+        };
+        const glyphMap: Record<string, string> = {
+          SCROLL: "🜂", SEAL: "🜂", COMMIT: "🜂",
+          ATTEST: "🜃", DISPUTE: "🜃",
+          PROPOSE: "🜁", DISPUTE2: "🜁",
+          VETO: "🜄",
+        };
+        setScrollEvents((prev) => [
+          {
+            tag: payload.type ?? "EVENT",
+            glyph: glyphMap[payload.type] ?? "🜂",
+            txt: payload.message ?? payload.detail ?? JSON.stringify(payload),
+            color: colorMap[payload.type] ?? "text-foreground",
+            ts: Date.now(),
+          },
+          ...prev.slice(0, 19), // keep last 20 events max
+        ]);
+      } catch {
+        // non-JSON ping frame — ignore
+      }
+    };
+
+    es.onerror = () => {
+      // SSE dropped — reconnect handled by browser automatically
+    };
+
+    return () => {
+      es.close();
+      sseRef.current = null;
+    };
+  }, []);
+
+  // ── Real cluster + grid status ──────────────────────────────────────────────
+  const [gridStatus, setGridStatus] = useState<{
+    covenant: string;
+    mcpOnline: boolean;
+    mcpScopes: string[];
+    phase: string;
+    clusters: { name: string; graph: string; pulse: number; status: string }[];
+  } | null>(null);
+
+  const censusIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const [censusRes, healthRes] = await Promise.all([
+          fetch("/api/grid/census"),
+          fetch("/api/health"),
+        ]);
+        const census = await censusRes.json();
+        const health = await healthRes.json();
+
+        setGridStatus({
+          covenant: census.seal ?? "—",
+          mcpOnline: health?.mcp?.online ?? false,
+          mcpScopes: health?.mcp?.scopes ?? [],
+          phase: health?.phase ?? "—",
+          clusters: [
+            {
+              name: "nairobi-α",
+              graph: "neo4j-local",
+              pulse: Math.round((census.nodes / 100000) * 100),
+              status: census.nodes > 0 ? "online" : "degraded",
+            },
+          ],
+        });
+      } catch {
+        // Backend not ready yet — fail silently
+      }
+    };
+
+    if (!showGate) {
+      fetchStatus();
+      censusIntervalRef.current = setInterval(fetchStatus, 30_000); // refresh every 30s
+    }
+
+    return () => {
+      if (censusIntervalRef.current) clearInterval(censusIntervalRef.current);
+    };
+  }, [showGate]);
 
   useEffect(() => {
     return () => stopVoice();
@@ -54,15 +158,23 @@ const Index = () => {
     setProgress(0);
     setSyncStatus("Connecting to Grid API...");
 
+    // 1. Terminate all active landing view status background polling
+    if (censusIntervalRef.current) {
+      clearInterval(censusIntervalRef.current);
+    }
+
     try {
       const soulData = await fetchGridSoul();
       const welcomeText = `Welcome to ${soulData.soul.identity.organization}. I am ${soulData.soul.identity.name}, sovereign intelligence built by ${soulData.soul.identity.architect}.`;
       setVoice(welcomeText);
 
-      // Sync perfectly: wait for voice to finish before proceeding
-      await speak(welcomeText, "ceremonial");
+      // Race the Speech Synthesis against a hard client-side timeout to avoid trapping user
+      await Promise.race([
+        speak(welcomeText, "ceremonial"),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("TTS_TIMEOUT")), 1500))
+      ]).catch(err => console.warn("Gate voice line bypassed or timed out:", err.message));
 
-      const elements = Object.values(soulData.soul.elements);
+      const elements = Object.values(soulData.soul.elements) as any[];
       let currentProgress = 0;
       const progressPerStep = 100 / (elements.length + 1);
 
@@ -70,9 +182,11 @@ const Index = () => {
         setActiveGlyph(el.glyph);
         setSyncStatus(`${el.glyph} ${el.name} resonating — ${el.domain}…`);
 
-        // No emojis in spoken text to avoid "broken record" literal unicode readings
         const speakText = `${el.name} resonating. ${el.domain}.`;
-        await speak(speakText, "stable");
+        await Promise.race([
+          speak(speakText, "stable"),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("TTS_TIMEOUT")), 1500))
+        ]).catch(err => console.warn("Gate voice line bypassed or timed out:", err.message));
 
         currentProgress += progressPerStep;
         setProgress(currentProgress);
@@ -82,7 +196,10 @@ const Index = () => {
       setProgress(100);
 
       const sealSpeak = `Truth Engine sealed by ${soulData.soul.identity.organization}. Entering Vault.`;
-      await speak(sealSpeak, "ceremonial");
+      await Promise.race([
+        speak(sealSpeak, "ceremonial"),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("TTS_TIMEOUT")), 1500))
+      ]).catch(err => console.warn("Gate voice line bypassed or timed out:", err.message));
 
       setLoading(false);
       navigate("/dashboard");

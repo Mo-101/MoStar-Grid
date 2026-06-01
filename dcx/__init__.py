@@ -82,14 +82,14 @@ class DCXTrinity:
         }
         self._client = httpx.AsyncClient(
             base_url=OLLAMA_BASE_URL,
-            timeout=120.0,
+            timeout=300.0,
         )
         self._available_models: set[str] = set()
 
     async def connect(self):
         """Check which models are available in Ollama."""
         try:
-            resp = await self._client.get("/api/tags")
+            resp = await self._client.get("/api/tags", timeout=5.0)
             if resp.status_code == 200:
                 data = resp.json()
                 self._available_models = {
@@ -114,16 +114,14 @@ class DCXTrinity:
         return DCXLayer.MIND  # default
 
     def _resolve_model(self, layer: DCXLayer) -> str:
-        """Find the best available model for a layer."""
+        """Resolve the configured model for a layer without substitution."""
         preferred = self._models[layer]
         if preferred in self._available_models:
             return preferred
-        # Fallback: use any available model
-        if self._available_models:
-            fallback = next(iter(self._available_models))
-            logger.warning("Model %s not found, falling back to %s", preferred, fallback)
-            return fallback
-        raise RuntimeError("No Ollama models available")
+        raise RuntimeError(
+            f"Configured DCX model {preferred} is not available. "
+            "Refusing fallback substitution."
+        )
 
     async def think(
         self,
@@ -150,24 +148,31 @@ class DCXTrinity:
             )
             system += f"\n\n=== KNOWLEDGE GRAPH CONTEXT ===\n{context_block}\n=== END CONTEXT ==="
 
-        messages = [{"role": "system", "content": system}]
+        prompt_parts = [f"System:\n{system}"]
         if conversation_history:
-            messages.extend(conversation_history[-10:])  # last 10 turns
-        messages.append({"role": "user", "content": query})
+            for message in conversation_history[-10:]:  # last 10 turns
+                role = str(message.get("role", "user")).title()
+                content = message.get("content", "")
+                prompt_parts.append(f"{role}:\n{content}")
+        prompt_parts.append(f"User:\n{query}")
+        prompt_parts.append("Assistant:")
+        prompt = "\n\n".join(prompt_parts)
 
         try:
-            resp = await self._client.post("/api/chat", json={
+            resp = await self._client.post("/api/generate", json={
                 "model": model,
-                "messages": messages,
+                "prompt": prompt,
+                "raw": True,
                 "stream": False,
                 "options": {
                     "temperature": 0.7,
-                    "num_predict": 1024,
+                    "num_ctx": 2048,
+                    "num_predict": 48,
                 },
             })
             resp.raise_for_status()
             data = resp.json()
-            content = data.get("message", {}).get("content", "")
+            content = data.get("response", "")
             tokens = data.get("eval_count")
 
             return DCXResponse(

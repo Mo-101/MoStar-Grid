@@ -1,7 +1,7 @@
 import asyncio
 import uuid
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, Callable, Awaitable, List
 
 logger = logging.getLogger("grid_events")
@@ -14,7 +14,12 @@ class GridEvent:
         mood: str,
         source: str,
         text: str,
-        payload: dict
+        payload: dict,
+        source_type: str = "runtime_generated",
+        verification_status: str = "unverified",
+        operational_trust: str = "reference",
+        created_by: str | None = None,
+        source_id: str | None = None,
     ):
         self.id = uuid.uuid4().hex
         self.type = type
@@ -23,7 +28,12 @@ class GridEvent:
         self.source = source
         self.text = text
         self.payload = payload
-        self.created_at = datetime.utcnow().isoformat() + "Z"
+        self.source_type = source_type
+        self.verification_status = verification_status
+        self.operational_trust = operational_trust
+        self.created_by = created_by or source
+        self.source_id = source_id
+        self.created_at = datetime.now(timezone.utc).isoformat()
 
     def to_dict(self):
         return {
@@ -34,6 +44,11 @@ class GridEvent:
             "source": self.source,
             "text": self.text,
             "payload": self.payload,
+            "source_type": self.source_type,
+            "verification_status": self.verification_status,
+            "operational_trust": self.operational_trust,
+            "created_by": self.created_by,
+            "source_id": self.source_id,
             "created_at": self.created_at
         }
 

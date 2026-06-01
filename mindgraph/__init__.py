@@ -166,12 +166,34 @@ class MindGraph:
         self,
         category: str,
         content: str,
+        source_type: str = "runtime_generated",
+        verification_status: str = "unverified",
+        operational_trust: str = "reference",
+        seal: str = "Synthetic",
         source: str = "conversation",
+        created_by: str = "grid_orchestrator",
+        source_id: str | None = None,
         metadata: dict = None,
         _commit_token: str = None,
     ) -> str:
         """Write new knowledge to the graph. Returns the node ID."""
         self._assert_commit_token(_commit_token)
+
+        # Provenance Validation
+        ALLOWED_SOURCE_TYPES = {"live_api", "human_attested", "imported_archive", "runtime_generated", "seeded_demo", "ai_generated"}
+        ALLOWED_VERIFICATION_STATUSES = {"verified", "unverified", "synthetic", "disputed"}
+        ALLOWED_OPERATIONAL_TRUSTS = {"operational", "reference", "simulation", "design"}
+        ALLOWED_SEALS = {"Operational", "Verified", "Synthetic", "Design"}
+
+        if source_type not in ALLOWED_SOURCE_TYPES:
+            raise ValueError(f"Invalid source_type: '{source_type}'. Must be one of {ALLOWED_SOURCE_TYPES}")
+        if verification_status not in ALLOWED_VERIFICATION_STATUSES:
+            raise ValueError(f"Invalid verification_status: '{verification_status}'. Must be one of {ALLOWED_VERIFICATION_STATUSES}")
+        if operational_trust not in ALLOWED_OPERATIONAL_TRUSTS:
+            raise ValueError(f"Invalid operational_trust: '{operational_trust}'. Must be one of {ALLOWED_OPERATIONAL_TRUSTS}")
+        if seal not in ALLOWED_SEALS:
+            raise ValueError(f"Invalid seal: '{seal}'. Must be one of {ALLOWED_SEALS}")
+
         if not self._driver:
             return "no_connection"
 
@@ -181,9 +203,14 @@ class MindGraph:
             "content": content,
             "category": category,
             "source": source,
+            "source_id": source_id,
+            "created_by": created_by,
             "cluster_id": MOSTAR_CLUSTER_ID,
             "created_at": datetime.now(timezone.utc).isoformat(),
-            "seal": SEAL_GLYPH,
+            "seal": seal,
+            "source_type": source_type,
+            "verification_status": verification_status,
+            "operational_trust": operational_trust
         }
         if metadata:
             props["metadata"] = json.dumps(metadata)
@@ -194,9 +221,14 @@ class MindGraph:
             content: $props.content,
             category: $props.category,
             source: $props.source,
+            source_id: $props.source_id,
+            created_by: $props.created_by,
             cluster_id: $props.cluster_id,
             created_at: $props.created_at,
-            seal: $props.seal
+            seal: $props.seal,
+            source_type: $props.source_type,
+            verification_status: $props.verification_status,
+            operational_trust: $props.operational_trust
         })
         RETURN m.id AS id
         """
@@ -213,10 +245,32 @@ class MindGraph:
         talk_input: str,
         think_output: str,
         memory_id: str,
+        source_type: str = "runtime_generated",
+        verification_status: str = "unverified",
+        operational_trust: str = "reference",
+        seal: str = "Synthetic",
+        source: str = "conversation",
+        created_by: str = "grid_orchestrator",
         _commit_token: str = None,
     ) -> str:
         """Seal a Talk→Learn→Remember cycle as a MoStarMoment."""
         self._assert_commit_token(_commit_token)
+
+        # Provenance Validation
+        ALLOWED_SOURCE_TYPES = {"live_api", "human_attested", "imported_archive", "runtime_generated", "seeded_demo", "ai_generated"}
+        ALLOWED_VERIFICATION_STATUSES = {"verified", "unverified", "synthetic", "disputed"}
+        ALLOWED_OPERATIONAL_TRUSTS = {"operational", "reference", "simulation", "design"}
+        ALLOWED_SEALS = {"Operational", "Verified", "Synthetic", "Design"}
+
+        if source_type not in ALLOWED_SOURCE_TYPES:
+            raise ValueError(f"Invalid source_type: '{source_type}'. Must be one of {ALLOWED_SOURCE_TYPES}")
+        if verification_status not in ALLOWED_VERIFICATION_STATUSES:
+            raise ValueError(f"Invalid verification_status: '{verification_status}'. Must be one of {ALLOWED_VERIFICATION_STATUSES}")
+        if operational_trust not in ALLOWED_OPERATIONAL_TRUSTS:
+            raise ValueError(f"Invalid operational_trust: '{operational_trust}'. Must be one of {ALLOWED_OPERATIONAL_TRUSTS}")
+        if seal not in ALLOWED_SEALS:
+            raise ValueError(f"Invalid seal: '{seal}'. Must be one of {ALLOWED_SEALS}")
+
         if not self._driver:
             return "no_connection"
 
@@ -228,7 +282,12 @@ class MindGraph:
             think_output: $think_output,
             cluster_id: $cluster_id,
             sealed_at: $sealed_at,
-            seal: $seal
+            seal: $seal,
+            source: $source,
+            created_by: $created_by,
+            source_type: $source_type,
+            verification_status: $verification_status,
+            operational_trust: $operational_trust
         })
         WITH m
         OPTIONAL MATCH (mem:Memory {id: $memory_id})
@@ -245,10 +304,15 @@ class MindGraph:
                 memory_id=memory_id,
                 cluster_id=MOSTAR_CLUSTER_ID,
                 sealed_at=datetime.now(timezone.utc).isoformat(),
-                seal=SEAL_GLYPH,
+                seal=seal,
+                source=source,
+                created_by=created_by,
+                source_type=source_type,
+                verification_status=verification_status,
+                operational_trust=operational_trust
             )
             record = await result.single()
-            logger.info("MoStarMoment sealed: %s %s", moment_id, SEAL_GLYPH)
+            logger.info("MoStarMoment sealed: %s %s", moment_id, seal)
             return record["id"] if record else moment_id
 
     # ── Schema Bootstrap ──────────────────────────────────────────

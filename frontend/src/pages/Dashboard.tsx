@@ -68,7 +68,7 @@ const clusters = [
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", active: true, path: "/dashboard" },
-  { icon: Grid3x3, label: "MindGraph", path: "/dashboard" },
+  { icon: Grid3x3, label: "Watchtower", path: "/watchtower" },
   { icon: Activity, label: "TruthEngine", path: "/dashboard" },
   { icon: Database, label: "Proposals", path: "/proposals" },
   { icon: Users, label: "Disputes", path: "/disputes" },
@@ -79,6 +79,8 @@ type WakeState = 'booting' | 'signal' | 'memory' | 'resonance' | 'world' | 'onli
 interface DashboardProps {
   role?: string;
 }
+
+let globalHasBriefed = false;
 
 const Dashboard = ({ role = "architect" }: DashboardProps) => {
   const [livePulse, setLivePulse] = useState(98.4);
@@ -173,8 +175,9 @@ const Dashboard = ({ role = "architect" }: DashboardProps) => {
   // Single briefing on first mount after wake completes
   useEffect(() => {
     if (wakeState !== 'complete') return;
-    if (hasBriefedRef.current) return;
+    if (globalHasBriefed || hasBriefedRef.current) return;
     hasBriefedRef.current = true;
+    globalHasBriefed = true;
 
     setTimeout(() => {
       document.body.setAttribute("data-voice-state", "thinking");
@@ -197,6 +200,105 @@ const Dashboard = ({ role = "architect" }: DashboardProps) => {
         });
     }, 1200);
   }, [wakeState]);
+
+  // ── Real SSE scroll stream ──────────────────────────────────────────────────
+  const [scrollEvents, setScrollEvents] = useState<
+    { tag: string; glyph: string; txt: string; color: string; ts: number }[]
+  >([]);
+  const sseRef = useRef<EventSource | null>(null);
+
+  useEffect(() => {
+    const es = new EventSource("/api/stream");
+    sseRef.current = es;
+
+    es.onmessage = (e) => {
+      try {
+        const payload = JSON.parse(e.data);
+        const colorMap: Record<string, string> = {
+          SCROLL:  "text-primary",
+          ATTEST:  "text-secondary",
+          PROPOSE: "text-foreground",
+          VETO:    "text-destructive",
+          COMMIT:  "text-primary",
+          DISPUTE: "text-secondary",
+          SEAL:    "text-primary",
+          REJECT:  "text-destructive",
+        };
+        const glyphMap: Record<string, string> = {
+          SCROLL:  "🜂", SEAL: "🜂", COMMIT: "🜂",
+          ATTEST:  "🜃", DISPUTE: "🜃",
+          PROPOSE: "🜁", DISPUTE2: "🜁",
+          VETO:    "🜄",
+        };
+        setScrollEvents((prev) => [
+          {
+            tag:   payload.type ?? "EVENT",
+            glyph: glyphMap[payload.type] ?? "🜂",
+            txt:   payload.message ?? payload.detail ?? JSON.stringify(payload),
+            color: colorMap[payload.type] ?? "text-foreground",
+            ts:    Date.now(),
+          },
+          ...prev.slice(0, 19), // keep last 20 events max
+        ]);
+      } catch {
+        // non-JSON ping frame — ignore
+      }
+    };
+
+    es.onerror = () => {
+      // SSE dropped — reconnect handled by browser automatically
+    };
+
+    return () => {
+      es.close();
+      sseRef.current = null;
+    };
+  }, []);
+
+  // ── Real cluster + grid status ──────────────────────────────────────────────
+  const [gridStatus, setGridStatus] = useState<{
+    covenant: string;
+    mcpOnline: boolean;
+    mcpScopes: string[];
+    phase: string;
+    clusters: { name: string; graph: string; pulse: number; status: string }[];
+  } | null>(null);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const [censusRes, healthRes] = await Promise.all([
+          fetch("/api/grid/census"),
+          fetch("/api/health"),
+        ]);
+        const census = await censusRes.json();
+        const health = await healthRes.json();
+
+        setGridStatus({
+          covenant:  census.seal ?? "—",
+          mcpOnline: health?.mcp?.online ?? false,
+          mcpScopes: health?.mcp?.scopes ?? [],
+          phase:     health?.phase ?? "—",
+          clusters: [
+            {
+              name:   "nairobi-α",
+              graph:  "neo4j-local",
+              pulse:  Math.round((census.nodes / 100000) * 100),
+              status: census.nodes > 0 ? "online" : "degraded",
+            },
+            // Add kampala-β and lagos-γ when those instances are live
+            // { name: "kampala-β", graph: "neo4j-kampala", pulse: 0, status: "pending" },
+          ],
+        });
+      } catch {
+        // Backend not ready yet — fail silently
+      }
+    };
+
+    fetchStatus();
+    const interval = setInterval(fetchStatus, 30_000); // refresh every 30s
+    return () => clearInterval(interval);
+  }, []);
 
   const stats = [
     { label: "MindGraph Nodes", value: census.nodes.toLocaleString(), delta: "Live", icon: Database, color: "text-primary" },
@@ -449,22 +551,21 @@ const Dashboard = ({ role = "architect" }: DashboardProps) => {
                 </span>
               </div>
               <ul className="space-y-3 font-mono text-xs">
-                {[
-                  { tag: "SCROLL", g: "🜂", txt: "nairobi-α → kampala-β · proposal #4a9 sealed (Ed25519)", color: "text-primary" },
-                  { tag: "ATTEST", g: "🜃", txt: "kampala-β attested · JCS hash verified", color: "text-secondary" },
-                  { tag: "PROPOSE", g: "🜁", txt: "/api/propose · resource request queued", color: "text-foreground" },
-                  { tag: "VETO", g: "🜄", txt: "TruthEngine 409 · Ikang 0.71 < 0.75", color: "text-destructive" },
-                  { tag: "COMMIT", g: "🜂", txt: "/api/commit · MASTER registry updated", color: "text-primary" },
-                  { tag: "DISPUTE", g: "🜁", txt: "lagos-γ disputed scroll #3f2 · under review", color: "text-secondary" },
-                ].map((e, i) => (
-                  <li key={i} className="flex items-start gap-3 py-2 border-b border-border/60 last:border-0">
-                    <span className="text-base leading-none mt-0.5">{e.g}</span>
-                    <span className={`px-2 py-0.5 rounded text-[10px] uppercase tracking-wider border border-current ${e.color}`}>
-                      {e.tag}
-                    </span>
-                    <span className="text-muted-foreground flex-1">{e.txt}</span>
+                {scrollEvents.length === 0 ? (
+                  <li className="text-muted-foreground text-xs font-mono py-2 animate-pulse">
+                    🜂 awaiting scroll events…
                   </li>
-                ))}
+                ) : (
+                  scrollEvents.map((e, i) => (
+                    <li key={i} className="flex items-start gap-3 py-2 border-b border-border/60 last:border-0">
+                      <span className="text-base leading-none mt-0.5">{e.glyph}</span>
+                      <span className={`px-2 py-0.5 rounded text-[10px] uppercase tracking-wider border border-current ${e.color}`}>
+                        {e.tag}
+                      </span>
+                      <span className="text-muted-foreground flex-1">{e.txt}</span>
+                    </li>
+                  ))
+                )}
               </ul>
             </article>
 
@@ -472,32 +573,50 @@ const Dashboard = ({ role = "architect" }: DashboardProps) => {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-black tracking-tight">MindGraph · Sovereign Clusters</h2>
                 <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                  Two graphs · one protocol
+                  Live · /api/grid/census
                 </span>
               </div>
               <div className="space-y-5">
-                {clusters.map((c) => (
+                {(gridStatus?.clusters ?? []).map((c) => (
                   <div key={c.name}>
                     <div className="flex items-center justify-between mb-2 text-xs font-mono uppercase tracking-wider">
                       <span className="flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${c.status === "online" ? "bg-primary animate-pulse" : "bg-secondary animate-pulse"}`} />
+                        <span
+                          className={`w-2 h-2 rounded-full ${
+                            c.status === "online" ? "bg-primary animate-pulse" : "bg-secondary animate-pulse"
+                          }`}
+                        />
                         {c.name}
                         <span className="text-muted-foreground normal-case">· {c.graph}</span>
                       </span>
-                      <span className={c.status === "online" ? "text-primary" : "text-secondary"}>{c.pulse}%</span>
+                      <span className={c.status === "online" ? "text-primary" : "text-secondary"}>
+                        {c.pulse}%
+                      </span>
                     </div>
                     <div className="h-2 rounded-full bg-muted overflow-hidden">
                       <div
-                        className={`h-full ${c.status === "online" ? "bg-gradient-primary shadow-glow-orange" : "bg-gradient-red shadow-glow-red"}`}
+                        className={`h-full ${
+                          c.status === "online"
+                            ? "bg-gradient-primary shadow-glow-orange"
+                            : "bg-gradient-red shadow-glow-red"
+                        }`}
                         style={{ width: `${c.pulse}%` }}
                       />
                     </div>
                   </div>
                 ))}
+
+                {/* Real system status notices — sourced from /api/health and /api/grid/census */}
                 <div className="pt-4 border-t border-border space-y-1 text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
-                  <p>[MOSCRIPT] covenant fef52e66ef3037a3 · stable</p>
-                  <p>[MCP] gateway online · scopes: propose, approve, commit</p>
-                  <p>[PHASE 4.0a] /api/think disabled · proposal pipeline enforced</p>
+                  {gridStatus ? (
+                    <>
+                      <p>[SEAL] {gridStatus.covenant}</p>
+                      <p>[MCP] gateway {gridStatus.mcpOnline ? "online" : "offline"}{gridStatus.mcpScopes.length > 0 ? ` · scopes: ${gridStatus.mcpScopes.join(", ")}` : ""}</p>
+                      <p>[PHASE] {gridStatus.phase}</p>
+                    </>
+                  ) : (
+                    <p className="animate-pulse">[GRID] loading sovereign status…</p>
+                  )}
                 </div>
               </div>
             </article>

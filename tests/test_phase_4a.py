@@ -4,6 +4,7 @@ import pytest
 
 from approval_queue import ApprovalQueue, ProposalRecord, ProposalState
 from grid.orchestrator import CommitForbiddenError, GridOrchestrator
+from grid.events import GridEvent
 from mindgraph import CommitForbiddenError as MindGraphCommitForbiddenError
 from mindgraph import MindGraph
 
@@ -29,6 +30,31 @@ def test_commit_with_expired_token_raises():
 
     with pytest.raises(MindGraphCommitForbiddenError):
         asyncio.run(graph.learn(category="canon", content="sealed canon", _commit_token=token))
+
+
+def test_grid_event_carries_provenance_fields():
+    event = GridEvent(
+        type="world_signal",
+        severity="high",
+        mood="alert",
+        source="bbc_africa_rss",
+        text="Verified source headline",
+        payload={"url": "https://example.test/story"},
+        source_type="live_api",
+        verification_status="unverified",
+        operational_trust="reference",
+        created_by="world_signal_watcher",
+        source_id="https://example.test/story",
+    )
+
+    data = event.to_dict()
+
+    assert data["source"] == "bbc_africa_rss"
+    assert data["source_type"] == "live_api"
+    assert data["verification_status"] == "unverified"
+    assert data["operational_trust"] == "reference"
+    assert data["created_by"] == "world_signal_watcher"
+    assert data["source_id"] == "https://example.test/story"
 
 
 def test_queue_survives_restart(tmp_path):

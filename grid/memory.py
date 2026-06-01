@@ -32,8 +32,15 @@ class MemoryLayer:
                         severity: $severity,
                         mood: $mood,
                         source: $source,
+                        source_id: $source_id,
+                        created_by: $created_by,
                         text: $text,
-                        created_at: $created_at
+                        created_at: $created_at,
+                        cluster_id: $cluster_id,
+                        source_type: $source_type,
+                        verification_status: $verification_status,
+                        operational_trust: $operational_trust,
+                        seal: $seal
                     })
                     WITH e
                     MATCH (grid:MoStarGrid {cluster_id: $cluster_id})
@@ -45,8 +52,14 @@ class MemoryLayer:
                     severity=event.severity,
                     mood=event.mood,
                     source=event.source,
+                    source_id=event.source_id,
+                    created_by=event.created_by,
                     text=event.text,
                     created_at=event.created_at,
+                    source_type=event.source_type,
+                    verification_status=event.verification_status,
+                    operational_trust=event.operational_trust,
+                    seal="Operational" if event.operational_trust == "operational" else "Synthetic",
                     cluster_id=MOSTAR_CLUSTER_ID
                 )
                 record = await result.single()
@@ -67,14 +80,22 @@ class MemoryLayer:
                     MATCH (e:GridEvent {id: $event_id})
                     CREATE (b:BriefingLog {
                         id: $b_id,
-                        created_at: $created_at
+                        created_at: $created_at,
+                        cluster_id: $cluster_id,
+                        source: 'briefing_generator',
+                        created_by: 'autonomous_announcer',
+                        source_type: 'ai_generated',
+                        verification_status: 'unverified',
+                        operational_trust: 'reference',
+                        seal: 'Synthetic'
                     })
                     CREATE (b)-[:EMITTED]->(e)
                     RETURN b.id AS id
                     """,
                     event_id=event.id,
                     b_id=f"brief_{event.id}",
-                    created_at=event.created_at
+                    created_at=event.created_at,
+                    cluster_id=MOSTAR_CLUSTER_ID
                 )
                 record = await result.single()
                 return record["id"] if record else ""
@@ -95,7 +116,14 @@ class MemoryLayer:
                     CREATE (w:WooUtterance {
                         id: $w_id,
                         audio_url: $audio_url,
-                        created_at: $created_at
+                        created_at: $created_at,
+                        cluster_id: $cluster_id,
+                        source: 'woo_voice',
+                        created_by: 'woo',
+                        source_type: 'ai_generated',
+                        verification_status: 'unverified',
+                        operational_trust: 'reference',
+                        seal: 'Synthetic'
                     })
                     CREATE (w)-[:RESPONDED_TO]->(e)
                     RETURN w.id AS id
@@ -103,7 +131,8 @@ class MemoryLayer:
                     event_id=event.id,
                     w_id=f"woo_{event.id}",
                     audio_url=audio_url,
-                    created_at=event.created_at
+                    created_at=event.created_at,
+                    cluster_id=MOSTAR_CLUSTER_ID
                 )
                 record = await result.single()
                 return record["id"] if record else ""
@@ -201,7 +230,9 @@ async def get_last_briefing(session):
         WHERE b.event_count IS NOT NULL
         RETURN coalesce(b.message, b.content, b.text, '') AS message,
                b.created_at AS created_at,
-               coalesce(b.event_count, 0) AS event_count
+               coalesce(b.event_count, 0) AS event_count,
+               coalesce(b.node_count, 0) AS node_count,
+               coalesce(b.relationship_count, 0) AS relationship_count
         ORDER BY b.created_at DESC LIMIT 1
     """)
     rec = await result.single()
@@ -217,6 +248,13 @@ async def compute_continuity(driver, window_hours: int = 6) -> dict:
             "MATCH (e:GridEvent) RETURN count(e) AS c"
         )
         current_events = (await result_events.single())["c"]
+
+        # Node and Relationship count (general census counts)
+        result_nodes = await session.run("MATCH (n) RETURN count(n) AS c")
+        current_nodes = (await result_nodes.single())["c"]
+
+        result_rels = await session.run("MATCH ()-[r]->() RETURN count(r) AS c")
+        current_relationships = (await result_rels.single())["c"]
 
         # Repeated signals in the window
         result_types = await session.run(f"""
@@ -238,19 +276,30 @@ async def compute_continuity(driver, window_hours: int = 6) -> dict:
 
     facts = {
         "current_events": current_events,
+        "current_nodes": current_nodes,
+        "current_relationships": current_relationships,
         "type_counts": type_counts,
         "cluster_activity": cluster_activity,
         "has_history": last_briefing is not None,
         "last_briefing_events": last_briefing["event_count"] if last_briefing else None,
+        "last_briefing_nodes": last_briefing["node_count"] if last_briefing else None,
+        "last_briefing_relationships": last_briefing["relationship_count"] if last_briefing else None,
         "last_briefing_at": last_briefing["created_at"] if last_briefing else None,
     }
 
-    if last_briefing and last_briefing.get("event_count") is not None:
-        delta = current_events - last_briefing["event_count"]
-        facts["event_pressure_delta"] = delta
-        facts["pressure_direction"] = (
-            "increased" if delta > 0 else "decreased" if delta < 0 else "steady"
-        )
+    if last_briefing:
+        if last_briefing.get("event_count") is not None:
+            delta = current_events - last_briefing["event_count"]
+            facts["event_pressure_delta"] = delta
+            facts["pressure_direction"] = (
+                "increased" if delta > 0 else "decreased" if delta < 0 else "steady"
+            )
+
+        last_nodes = last_briefing.get("node_count", 0)
+        last_rels = last_briefing.get("relationship_count", 0)
+        # Calculate deltas only if there was a previous node/relationship count logged
+        facts["node_growth"] = current_nodes - last_nodes if last_nodes > 0 else 0
+        facts["relationship_growth"] = current_relationships - last_rels if last_rels > 0 else 0
 
     return facts
 
@@ -308,13 +357,25 @@ async def build_aware_briefing(driver, window_hours: int = 6, write_log: bool = 
                     message: $message,
                     created_at: $created_at,
                     event_count: $event_count,
-                    referenced_previous: $has_history
+                    node_count: $node_count,
+                    relationship_count: $relationship_count,
+                    referenced_previous: $has_history,
+                    cluster_id: $cluster_id,
+                    source: 'aware_briefing_builder',
+                    created_by: 'build_aware_briefing',
+                    source_type: 'ai_generated',
+                    verification_status: 'unverified',
+                    operational_trust: 'reference',
+                    seal: 'Synthetic'
                 })
             """, b_id=f"brief_aware_{int(datetime.now(timezone.utc).timestamp())}",
                  message=narrative,
                  created_at=_now_iso(),
                  event_count=facts["current_events"],
-                 has_history=facts.get("has_history", False))
+                 node_count=facts["current_nodes"],
+                 relationship_count=facts["current_relationships"],
+                 has_history=facts.get("has_history", False),
+                 cluster_id=MOSTAR_CLUSTER_ID)
 
     return {
         "message": narrative,

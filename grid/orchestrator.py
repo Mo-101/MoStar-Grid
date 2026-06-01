@@ -186,6 +186,11 @@ class GridOrchestrator:
                 category="conversation",
                 content=f"Q: {query[:200]} → A: {dcx_response.content[:300]}",
                 source=f"dcx:{dcx_response.layer.value}",
+                source_type="ai_generated",
+                verification_status="unverified",
+                operational_trust="simulation",
+                seal="Synthetic",
+                created_by=f"dcx:{dcx_response.layer.value}",
                 metadata={"cycle_id": cycle_id, "truth_scores": truth_verdict.scores},
             )
             self.moscript.fire_trigger("on_learn", {
@@ -200,6 +205,12 @@ class GridOrchestrator:
                 talk_input=query,
                 think_output=dcx_response.content,
                 memory_id=memory_id,
+                source_type="ai_generated",
+                verification_status="unverified",
+                operational_trust="simulation",
+                seal="Synthetic",
+                source=f"dcx:{dcx_response.layer.value}",
+                created_by=f"dcx:{dcx_response.layer.value}",
             )
 
         # ── PROVENANCE ──
@@ -361,7 +372,13 @@ class GridOrchestrator:
             memory_id = await self.mindgraph.learn(
                 category=proposal.interpretation.get("category", "canon"),
                 content=proposal.canon_input,
+                source_type="human_attested",
+                verification_status="verified",
+                operational_trust="operational",
+                seal="Operational",
                 source="canon_ingestion",
+                source_id=proposal.id,
+                created_by=proposal.approved_by,
                 metadata={
                     "proposal_id": proposal.id,
                     "approved_by": proposal.approved_by,
@@ -373,6 +390,12 @@ class GridOrchestrator:
                 talk_input=proposal.canon_input,
                 think_output=proposal.interpretation.get("reasoning", "sealed canon ingestion"),
                 memory_id=memory_id,
+                source_type="human_attested",
+                verification_status="verified",
+                operational_trust="operational",
+                seal="Operational",
+                source="canon_ingestion",
+                created_by=proposal.approved_by,
                 _commit_token=token,
             )
         finally:
