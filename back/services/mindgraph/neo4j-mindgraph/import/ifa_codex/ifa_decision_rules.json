@@ -1,0 +1,832 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "source": "Compiled from peer-reviewed research and traditional Ifa sources",
+    "domains": [
+      "health",
+      "water_infrastructure"
+    ],
+    "date_compiled": "2026-01-02"
+  },
+  "odu_decision_rules": {
+    "Ogbe": {
+      "binary_code": "0000",
+      "odu_number": 1,
+      "core_meaning": "Light, Clarity, Manifestation, Good Character",
+      "health_rules": {
+        "indicators": [
+          "high vitality",
+          "wellness metrics",
+          "preventive care",
+          "holistic health"
+        ],
+        "positive_actions": [
+          "maintain preventive care",
+          "regular health checks",
+          "wellness programs"
+        ],
+        "negative_actions": [
+          "investigate arrogance in care",
+          "check for neglected maintenance"
+        ],
+        "priority_level": "PREVENTIVE"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "strong foundation",
+          "source quality",
+          "structural integrity"
+        ],
+        "positive_actions": [
+          "inspect water sources",
+          "maintain foundations",
+          "ensure quality"
+        ],
+        "negative_actions": [
+          "check for neglected infrastructure",
+          "assess overconfidence in systems"
+        ],
+        "priority_level": "PREVENTIVE"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "vigilance",
+          "manifestation",
+          "good character",
+          "leadership",
+          "beginning"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Oyeku": {
+      "binary_code": "1111",
+      "odu_number": 2,
+      "core_meaning": "Darkness, Death, Endings, The Unknown",
+      "health_rules": {
+        "indicators": [
+          "disease outbreak",
+          "mortality spike",
+          "chronic conditions",
+          "contamination"
+        ],
+        "positive_actions": [
+          "deep cleansing protocols",
+          "prepare renewal systems",
+          "investigate hidden threats"
+        ],
+        "negative_actions": [
+          "emergency response",
+          "quarantine measures",
+          "contamination control"
+        ],
+        "priority_level": "CRITICAL"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "system failure",
+          "contamination detected",
+          "complete breakdown",
+          "dead zones"
+        ],
+        "positive_actions": [
+          "thorough system cleansing",
+          "prepare for renewal",
+          "investigate hidden contamination"
+        ],
+        "negative_actions": [
+          "emergency shutdown",
+          "contamination containment",
+          "system replacement"
+        ],
+        "priority_level": "CRITICAL"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "darkness",
+          "endings",
+          "death",
+          "mystery",
+          "closure",
+          "cleansing"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Iwori": {
+      "binary_code": "1001",
+      "odu_number": 3,
+      "core_meaning": "Fire, Transformation, Conflict, Identity",
+      "health_rules": {
+        "indicators": [
+          "inflammation",
+          "fever",
+          "acute conditions",
+          "immune response"
+        ],
+        "positive_actions": [
+          "transformative treatment",
+          "purification protocols"
+        ],
+        "negative_actions": [
+          "pause and assess",
+          "manage conflicts",
+          "prevent escalation"
+        ],
+        "priority_level": "URGENT"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "disruption",
+          "conflict points",
+          "pressure buildup",
+          "system stress"
+        ],
+        "positive_actions": [
+          "transformative upgrades",
+          "stress relief"
+        ],
+        "negative_actions": [
+          "pause operations",
+          "manage conflicts",
+          "prevent system escalation"
+        ],
+        "priority_level": "URGENT"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "vitality",
+          "fire",
+          "transformation",
+          "conflict",
+          "individuation"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Odi": {
+      "binary_code": "0110",
+      "odu_number": 4,
+      "core_meaning": "Blockage, Obstruction, Boundaries",
+      "health_rules": {
+        "indicators": [
+          "blockages",
+          "constipation",
+          "circulation issues",
+          "stagnation"
+        ],
+        "positive_actions": [
+          "clear blockages",
+          "restore flow",
+          "set healthy boundaries"
+        ],
+        "negative_actions": [
+          "emergency unblocking",
+          "circulation restoration"
+        ],
+        "priority_level": "HIGH"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "pipe blockages",
+          "flow obstruction",
+          "clogged systems"
+        ],
+        "positive_actions": [
+          "clear obstructions",
+          "restore flow",
+          "preventive cleaning"
+        ],
+        "negative_actions": [
+          "emergency pipe clearing",
+          "system shutdown prevention"
+        ],
+        "priority_level": "HIGH"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "blockage",
+          "obstruction",
+          "boundaries",
+          "people-pleasing",
+          "weakness"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Irosun": {
+      "binary_code": "0011",
+      "odu_number": 5,
+      "core_meaning": "Healing, Medicine, Ancestral Connection",
+      "health_rules": {
+        "indicators": [
+          "healing in progress",
+          "treatment response",
+          "recovery phase"
+        ],
+        "positive_actions": [
+          "apply healing measures",
+          "ancestral wisdom protocols",
+          "treat root causes"
+        ],
+        "negative_actions": [
+          "address clouded judgment",
+          "improve treatment effectiveness"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "repair needed",
+          "restoration phase",
+          "treatment systems"
+        ],
+        "positive_actions": [
+          "apply repair measures",
+          "restore systems",
+          "purification protocols"
+        ],
+        "negative_actions": [
+          "address ineffective repairs",
+          "improve treatment systems"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "healing",
+          "medicine",
+          "ancestral wisdom",
+          "emotional clarity"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Owonrin": {
+      "binary_code": "1100",
+      "odu_number": 6,
+      "core_meaning": "Chaos, Disorder, Inversion, Change",
+      "health_rules": {
+        "indicators": [
+          "chaos in body systems",
+          "disorder",
+          "epidemic conditions"
+        ],
+        "positive_actions": [
+          "restore order",
+          "manage chaos",
+          "transformation protocols"
+        ],
+        "negative_actions": [
+          "prevent cascading health failures",
+          "epidemic control"
+        ],
+        "priority_level": "CRITICAL"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "system chaos",
+          "disorder",
+          "multiple failures",
+          "cascading problems"
+        ],
+        "positive_actions": [
+          "restore system order",
+          "manage chaos",
+          "prevent cascade"
+        ],
+        "negative_actions": [
+          "emergency stabilization",
+          "prevent total collapse"
+        ],
+        "priority_level": "CRITICAL"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "chaos",
+          "disorder",
+          "inversion",
+          "transformation",
+          "upheaval"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Obara": {
+      "binary_code": "0111",
+      "odu_number": 7,
+      "core_meaning": "Family, Community, Energy, Positive Action",
+      "health_rules": {
+        "indicators": [
+          "community health",
+          "family wellness",
+          "social determinants"
+        ],
+        "positive_actions": [
+          "strengthen community health",
+          "collective action",
+          "family support"
+        ],
+        "negative_actions": [
+          "address community breakdown",
+          "restore relationships"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "community systems",
+          "shared resources",
+          "collective infrastructure"
+        ],
+        "positive_actions": [
+          "strengthen community systems",
+          "collective maintenance",
+          "shared responsibility"
+        ],
+        "negative_actions": [
+          "address community infrastructure breakdown",
+          "restore collective systems"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "family",
+          "community",
+          "energy",
+          "action",
+          "relationships",
+          "fidelity"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Okanran": {
+      "binary_code": "1110",
+      "odu_number": 8,
+      "core_meaning": "Loss, Destruction, Difficult Processes",
+      "health_rules": {
+        "indicators": [
+          "loss of function",
+          "destructive processes",
+          "degenerative conditions"
+        ],
+        "positive_actions": [
+          "accept difficult processes",
+          "learn from loss",
+          "rebuild carefully"
+        ],
+        "negative_actions": [
+          "manage severe loss",
+          "prevent further destruction"
+        ],
+        "priority_level": "HIGH"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "infrastructure loss",
+          "destruction",
+          "degradation"
+        ],
+        "positive_actions": [
+          "accept loss",
+          "learn from failure",
+          "rebuild strategically"
+        ],
+        "negative_actions": [
+          "prevent further destruction",
+          "emergency stabilization"
+        ],
+        "priority_level": "HIGH"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "loss",
+          "destruction",
+          "hardship",
+          "formative experiences"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Ogunda": {
+      "binary_code": "0001",
+      "odu_number": 9,
+      "core_meaning": "War, Conflict Resolution, Strength, Overcoming",
+      "health_rules": {
+        "indicators": [
+          "fighting disease",
+          "immune warfare",
+          "aggressive treatment needed"
+        ],
+        "positive_actions": [
+          "overcome disease obstacles",
+          "strategic treatment",
+          "conflict resolution"
+        ],
+        "negative_actions": [
+          "avoid treatment violence",
+          "prevent destructive interventions"
+        ],
+        "priority_level": "URGENT"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "system conflicts",
+          "competing demands",
+          "resource wars"
+        ],
+        "positive_actions": [
+          "resolve system conflicts",
+          "strategic resource allocation",
+          "overcome obstacles"
+        ],
+        "negative_actions": [
+          "avoid destructive solutions",
+          "prevent infrastructure violence"
+        ],
+        "priority_level": "URGENT"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "war",
+          "conflict",
+          "strength",
+          "obstacles",
+          "resolution",
+          "violence"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Osa": {
+      "binary_code": "1000",
+      "odu_number": 10,
+      "core_meaning": "Change, Transformation, Magic, Escape",
+      "health_rules": {
+        "indicators": [
+          "transformative healing needed",
+          "sudden changes",
+          "magical interventions"
+        ],
+        "positive_actions": [
+          "embrace health transformation",
+          "seek balance",
+          "innovative treatments"
+        ],
+        "negative_actions": [
+          "manage chaotic changes",
+          "control external influences"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "system transformation needed",
+          "paradigm shifts",
+          "innovative solutions"
+        ],
+        "positive_actions": [
+          "embrace system transformation",
+          "seek balance",
+          "innovative infrastructure"
+        ],
+        "negative_actions": [
+          "manage chaotic changes",
+          "control external influences"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "change",
+          "transformation",
+          "magic",
+          "witchcraft",
+          "escape",
+          "balance"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Ika": {
+      "binary_code": "1011",
+      "odu_number": 11,
+      "core_meaning": "Deception, Corruption, Order, Balance",
+      "health_rules": {
+        "indicators": [
+          "deceptive symptoms",
+          "hidden conditions",
+          "corruption in body"
+        ],
+        "positive_actions": [
+          "investigate hidden issues",
+          "restore order",
+          "divine correction"
+        ],
+        "negative_actions": [
+          "address deception",
+          "correct corruption",
+          "reveal evil thoughts"
+        ],
+        "priority_level": "HIGH"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "corruption",
+          "deceptive failures",
+          "hidden system problems"
+        ],
+        "positive_actions": [
+          "investigate hidden infrastructure issues",
+          "restore system order",
+          "correct corruption"
+        ],
+        "negative_actions": [
+          "address system deception",
+          "reveal hidden problems"
+        ],
+        "priority_level": "HIGH"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "deception",
+          "corruption",
+          "order",
+          "balance",
+          "evil thoughts"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Oturupon": {
+      "binary_code": "0100",
+      "odu_number": 12,
+      "core_meaning": "Suffering, Hardship, Endurance, Hidden Truths",
+      "health_rules": {
+        "indicators": [
+          "chronic suffering",
+          "endurance through illness",
+          "hidden conditions"
+        ],
+        "positive_actions": [
+          "endure with resilience",
+          "reveal hidden health truths",
+          "share healing blessings"
+        ],
+        "negative_actions": [
+          "address hoarded health resources",
+          "prevent breaking sacred health protocols"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "enduring hardship",
+          "hidden infrastructure problems",
+          "resilience needed"
+        ],
+        "positive_actions": [
+          "endure with system resilience",
+          "reveal hidden infrastructure truths",
+          "share resources"
+        ],
+        "negative_actions": [
+          "address hoarded infrastructure resources",
+          "prevent protocol breaking"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "suffering",
+          "hardship",
+          "endurance",
+          "hidden truths",
+          "resilience"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Otura": {
+      "binary_code": "0010",
+      "odu_number": 13,
+      "core_meaning": "Revelation, Insight, Clarity, Destiny",
+      "health_rules": {
+        "indicators": [
+          "diagnostic clarity needed",
+          "insight into conditions",
+          "revelatory healing"
+        ],
+        "positive_actions": [
+          "seek diagnostic clarity",
+          "align with health destiny",
+          "reveal hidden health insights"
+        ],
+        "negative_actions": [
+          "address confusion",
+          "correct misalignment",
+          "improve clarity"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "system insights needed",
+          "diagnostic clarity",
+          "revealing problems"
+        ],
+        "positive_actions": [
+          "seek system clarity",
+          "align with infrastructure destiny",
+          "reveal hidden system insights"
+        ],
+        "negative_actions": [
+          "address system confusion",
+          "correct misalignment"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "revelation",
+          "insight",
+          "clarity",
+          "destiny",
+          "alignment",
+          "transformation"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Irete": {
+      "binary_code": "0101",
+      "odu_number": 14,
+      "core_meaning": "Determination, Perseverance, Following Precepts",
+      "health_rules": {
+        "indicators": [
+          "treatment adherence needed",
+          "determined recovery",
+          "protocol following"
+        ],
+        "positive_actions": [
+          "follow health protocols strictly",
+          "persevere in treatment",
+          "maintain discipline"
+        ],
+        "negative_actions": [
+          "address non-adherence",
+          "improve discipline",
+          "enforce protocols"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "standards following needed",
+          "strict maintenance",
+          "determined repair"
+        ],
+        "positive_actions": [
+          "follow infrastructure standards strictly",
+          "persevere in maintenance",
+          "maintain discipline"
+        ],
+        "negative_actions": [
+          "address non-compliance",
+          "improve discipline",
+          "enforce standards"
+        ],
+        "priority_level": "MODERATE"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "determination",
+          "perseverance",
+          "following rules",
+          "strict adherence"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Ose": {
+      "binary_code": "1010",
+      "odu_number": 15,
+      "core_meaning": "Abundance, Prosperity, Change, Rituals",
+      "health_rules": {
+        "indicators": [
+          "abundant health",
+          "prosperity in wellness",
+          "ritual healing"
+        ],
+        "positive_actions": [
+          "consistent intelligent health effort",
+          "perform healing rituals",
+          "complete health cycles"
+        ],
+        "negative_actions": [
+          "address lack of health abundance",
+          "complete incomplete cycles"
+        ],
+        "priority_level": "LOW"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "abundant resources",
+          "prosperous systems",
+          "ritual maintenance"
+        ],
+        "positive_actions": [
+          "consistent intelligent infrastructure effort",
+          "perform maintenance rituals",
+          "complete system cycles"
+        ],
+        "negative_actions": [
+          "address resource lack",
+          "complete incomplete infrastructure cycles"
+        ],
+        "priority_level": "LOW"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "abundance",
+          "prosperity",
+          "change",
+          "rituals",
+          "femininity",
+          "completion"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    },
+    "Ofun": {
+      "binary_code": "0101",
+      "odu_number": 16,
+      "core_meaning": "Wisdom, Knowledge, Mysteries, Purity",
+      "health_rules": {
+        "indicators": [
+          "wisdom in healing",
+          "knowledge-based treatment",
+          "pure health"
+        ],
+        "positive_actions": [
+          "seek healing wisdom",
+          "apply health knowledge",
+          "maintain health purity"
+        ],
+        "negative_actions": [
+          "address health ignorance",
+          "improve knowledge",
+          "restore purity"
+        ],
+        "priority_level": "LOW"
+      },
+      "infrastructure_rules": {
+        "indicators": [
+          "knowledge systems",
+          "wise management",
+          "pure water systems"
+        ],
+        "positive_actions": [
+          "seek infrastructure wisdom",
+          "apply system knowledge",
+          "maintain water purity"
+        ],
+        "negative_actions": [
+          "address system ignorance",
+          "improve knowledge",
+          "restore water purity"
+        ],
+        "priority_level": "LOW"
+      },
+      "pattern_matching": {
+        "keywords": [
+          "wisdom",
+          "knowledge",
+          "mysteries",
+          "purity",
+          "white",
+          "clarity"
+        ],
+        "positive_patterns": [],
+        "negative_patterns": []
+      }
+    }
+  }
+}

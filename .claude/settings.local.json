@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"\\\\\\\\wsl.localhost\\\\Ubuntu-24.04\\\\home\\\\idona\\\\MoStar\\\\_apps\\\\grid\\\\mindgraph\\\\neo4j-mindgraph\\\\bin\")",
+      "Bash(ls \"\\\\\\\\wsl.localhost\\\\Ubuntu-24.04\\\\home\\\\idona\\\\MoStar\\\\_apps\\\\grid\\\\mindgraph\\\\neo4j-mindgraph\")",
+      "Bash(ls \"\\\\\\\\wsl.localhost\\\\Ubuntu-24.04\\\\home\\\\idona\\\\MoStar\\\\_apps\\\\grid\\\\mindgraph\\\\neo4j-mindgraph\\\\conf\")",
+      "Bash(grep -n \"bolt\\\\|http\\\\|connector\\\\|listen\\\\|address\\\\|7687\\\\|7474\" \"\\\\\\\\wsl.localhost\\\\Ubuntu-24.04\\\\home\\\\idona\\\\MoStar\\\\_apps\\\\grid\\\\mindgraph\\\\neo4j-mindgraph\\\\conf\\\\neo4j.conf\")",
+      "Bash(wsl -d Ubuntu-24.04 -- bash -c \"which neo4j 2>/dev/null; systemctl status neo4j 2>/dev/null | head -10; ss -tlnp 2>/dev/null | grep -E '7687|47687|7474|47474' || echo 'no ports found'\")",
+      "Bash(wsl -d Ubuntu-24.04 -- bash -c \"curl -s http://localhost:47474 | python3 -c 'import sys,json; d=json.load\\(sys.stdin\\); print\\(\\\\\"Neo4j version:\\\\\", d.get\\(\\\\\"neo4j_version\\\\\",\\\\\"?\\\\\"\\), \\\\\"| edition:\\\\\", d.get\\(\\\\\"edition\\\\\",\\\\\"?\\\\\"\\)\\)' 2>/dev/null || echo 'HTTP check failed'\")",
+      "Bash(wsl -d Ubuntu-24.04 -- bash -c \"cd /home/idona/MoStar/_apps/grid && python3 scripts/test_neo4j_conn.py 2>&1 | head -30\")",
+      "Bash(wsl -d Ubuntu-24.04 -- bash -c 'cd /home/idona/MoStar/_apps/grid && python3 -c \" *)",
+      "Bash(wsl -d *)"
+    ],
+    "deny": [],
+    "additionalDirectories": [
+      "\\\\wsl.localhost\\Ubuntu-24.04\\home\\idona\\MoStar\\_orchestra\\07_moscripts"
+    ]
+  }
+}
