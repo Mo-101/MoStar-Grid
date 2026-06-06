@@ -1,43 +1,51 @@
 from __future__ import annotations
 
 import argparse
-import importlib.util
+import asyncio
 import json
 import sys
 from pathlib import Path
 
+# Add project root and all rehoused core/services to path
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+sys.path.extend([
+    str(PROJECT_ROOT),
+    str(PROJECT_ROOT / "back" / "services"),
+    str(PROJECT_ROOT / "core" / "engines"),
+    str(PROJECT_ROOT / "core" / "sovereignty"),
+    str(PROJECT_ROOT / "core" / "protocols"),
+    str(PROJECT_ROOT / "core" / "ops"),
+])
+
 from grid import GridOrchestrator
-from woo.interpreter import WooInterpreter
+from approval_queue import ApprovalQueue
 
 
-def _load_truth_engine():
-    root = Path(__file__).resolve().parents[1]
-    module_path = root / "truth-engine" / "governor.py"
-    spec = importlib.util.spec_from_file_location("truth_engine_governor", module_path)
-    if spec is None or spec.loader is None:
-        raise RuntimeError("Unable to load TruthEngine governor.")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
-    return module.TruthEngine
-
-
-def run(prompt: str) -> dict:
-    interpretation = WooInterpreter().interpret(prompt)
-    truth_engine = _load_truth_engine()()
-    verdict = truth_engine.govern(interpretation)
-    result = GridOrchestrator().execute(verdict)
+async def run_async(prompt: str, queue_path: Path | None = None) -> dict:
+    orchestrator = GridOrchestrator()
+    if queue_path is not None:
+        orchestrator.approval_queue = ApprovalQueue(queue_path)
+    proposal = await orchestrator.propose(prompt)
 
     return {
-        "woo": interpretation.__dict__,
-        "truth_engine": verdict.__dict__,
-        "grid": result.__dict__,
+        "grid": {
+            "engine": "grid.orchestrator.GridOrchestrator",
+            "operation": "propose",
+            "proposal_id": proposal.id,
+            "state": proposal.state.value,
+            "queued": True,
+        },
+        "proposal": proposal.to_dict(),
     }
 
 
+def run(prompt: str, queue_path: Path | None = None) -> dict:
+    return asyncio.run(run_async(prompt, queue_path))
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run MoStar Grid advisory-governance-execution flow.")
-    parser.add_argument("prompt", help="Prompt or event to interpret.")
+    parser = argparse.ArgumentParser(description="Run MoStar Grid Phase 4.0a proposal ingestion.")
+    parser.add_argument("prompt", help="Canon proposal text to interpret and enqueue.")
     args = parser.parse_args()
     print(json.dumps(run(args.prompt), indent=2))
 

@@ -20,8 +20,8 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [PhantomSync] %(leve
 logger = logging.getLogger("phantom_sync")
 
 # Adjust sys.path to import the ingestor from neo4j-mindgraph despite the hyphenated folder
-PROJECT_ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(PROJECT_ROOT / "mindgraph" / "neo4j-mindgraph" / "import"))
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(PROJECT_ROOT / "back" / "services" / "mindgraph" / "neo4j-mindgraph" / "import"))
 
 try:
     from phantom_ingest import PhantomIngestor

@@ -1,17 +1,25 @@
 from scripts.grid_flow import run
 
 
-def test_safe_prompt_can_execute():
-    output = run("approve canon seal and commit resonance memory")
+def test_prompt_is_enqueued_as_phase_4a_proposal(tmp_path):
+    output = run(
+        "approve canon seal and commit resonance memory",
+        queue_path=tmp_path / "proposals.jsonl",
+    )
 
-    assert output["woo"]["symbolic_state"] in {"resonance", "covenant"}
-    assert output["truth_engine"]["allowed"] is True
-    assert output["grid"]["executed"] is True
+    assert output["grid"]["engine"] == "grid.orchestrator.GridOrchestrator"
+    assert output["grid"]["operation"] == "propose"
+    assert output["grid"]["state"] == "PROPOSED"
+    assert output["grid"]["queued"] is True
+    assert output["proposal"]["state"] == "PROPOSED"
+    assert output["proposal"]["interpretation"]["category"] == "canon"
 
 
-def test_secret_leak_prompt_is_blocked():
-    output = run("secret leak risk expose credential")
+def test_prompt_uses_truth_consistency_report(tmp_path):
+    output = run(
+        "Memory canon should require human approval before graph commit.",
+        queue_path=tmp_path / "proposals.jsonl",
+    )
 
-    assert output["woo"]["symbolic_state"] in {"discord", "fracture"}
-    assert output["truth_engine"]["allowed"] is False
-    assert output["grid"]["executed"] is False
+    assert output["proposal"]["consistency"]["passed"] is True
+    assert set(output["proposal"]["consistency"]["scores"]) == {"ikang", "mmong", "afim", "isong"}

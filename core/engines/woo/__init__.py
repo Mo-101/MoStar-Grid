@@ -114,6 +114,11 @@ class WooInterpreter:
         return relationships
 
 
+# Explicit aliases — use when you need the canon/ingestion interpreter specifically
+WooCanonInterpreter = WooInterpreter
+WooCanonInterpretation = WooInterpretation
+
+
 class WooGate:
     """
     High-confidence judgment gate.

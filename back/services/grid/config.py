@@ -7,9 +7,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # === Paths ===
-GRID_ROOT = Path(__file__).parent.parent
-DATA_DIR = GRID_ROOT / "data"
-LOGS_DIR = GRID_ROOT / "logs"
+GRID_ROOT = Path(__file__).resolve().parents[3]
+DATA_DIR = GRID_ROOT / "back" / "data"
+LOGS_DIR = GRID_ROOT / "back" / "logs"
 
 load_dotenv(GRID_ROOT / ".env")
 

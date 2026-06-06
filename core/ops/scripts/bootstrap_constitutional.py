@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 import blake3
 
 # Configuration
-GRID_ROOT = Path(__file__).parent.parent
+GRID_ROOT = Path(__file__).resolve().parents[3]
 load_dotenv(GRID_ROOT / ".env")
 
 
@@ -34,7 +34,7 @@ NEO4J_PASSWORD = required_env("NEO4J_PASSWORD")
 MOSTAR_CLUSTER_ID = os.getenv("MOSTAR_CLUSTER_ID", "nairobi-alpha")
 MOSTAR_CLUSTER_NAME = os.getenv("MOSTAR_CLUSTER_NAME", "Nairobi Health Cluster")
 MOSTAR_CLUSTER_REGION = os.getenv("MOSTAR_CLUSTER_REGION", "east-africa")
-CLUSTER_DIR = GRID_ROOT / "data" / "clusters" / MOSTAR_CLUSTER_ID
+CLUSTER_DIR = GRID_ROOT / "back" / "data" / "clusters" / MOSTAR_CLUSTER_ID
 RECEIPT_PATH = CLUSTER_DIR / "bootstrap_receipt.txt"
 
 # Ensure data directory exists

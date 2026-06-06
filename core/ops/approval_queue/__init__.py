@@ -39,6 +39,7 @@ class ProposalRecord:
     committed_at: Optional[str] = None
     memory_id: Optional[str] = None
     moment_id: Optional[str] = None
+    semantic_frame: Optional[dict] = None
 
     def to_dict(self) -> dict:
         data = asdict(self)

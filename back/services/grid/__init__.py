@@ -1,21 +1,28 @@
-from __future__ import annotations
+"""Grid service package exports."""
 
-from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .orchestrator import (
+        CommitFailedError,
+        CommitForbiddenError,
+        CommitResult,
+        GridOrchestrator,
+        GridResponse,
+    )
+
+__all__ = [
+    "CommitFailedError",
+    "CommitForbiddenError",
+    "CommitResult",
+    "GridOrchestrator",
+    "GridResponse",
+]
 
 
-@dataclass(frozen=True)
-class GridExecutionResult:
-    executed: bool
-    reason: str
-    actions: list[str] = field(default_factory=list)
+def __getattr__(name: str):
+    if name in __all__:
+        from . import orchestrator
 
-
-class GridOrchestrator:
-    """Compatibility executor for the advisory governance flow."""
-
-    def execute(self, verdict) -> GridExecutionResult:
-        return GridExecutionResult(
-            executed=bool(verdict.allowed),
-            reason=verdict.reason,
-            actions=list(verdict.actions),
-        )
+        return getattr(orchestrator, name)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

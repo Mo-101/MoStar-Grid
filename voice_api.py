@@ -31,7 +31,7 @@ from pydantic import BaseModel
 
 VOICE_ROOT = Path.home() / "MoStar" / "voice"
 PIPER_BIN = VOICE_ROOT / "piper" / "piper"
-VOICE_MODEL = VOICE_ROOT / "models" / "en_GB-cori-high.onnx"
+VOICE_MODEL = VOICE_ROOT / "models" / "en_US-libritts-high.onnx"
 AUDIO_OUT = VOICE_ROOT / "audio"
 AUDIO_OUT.mkdir(parents=True, exist_ok=True)
 

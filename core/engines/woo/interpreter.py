@@ -43,3 +43,8 @@ class WooInterpreter:
             advisory=f"Woo advises symbolic state `{symbolic_state}` with confidence {resonance_score:.3f}.",
             evidence=evidence,
         )
+
+
+# Explicit aliases — use when you need the symbolic/state interpreter specifically
+WooSymbolicInterpreter = WooInterpreter
+WooSymbolicInterpretation = WooInterpretation

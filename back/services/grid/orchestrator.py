@@ -9,7 +9,6 @@ import logging
 import uuid
 from datetime import datetime, timezone
 from dataclasses import dataclass, field, asdict
-
 from mindgraph import MindGraph
 from dcx import DCXTrinity, DCXLayer
 from truth_engine import TruthEngine
@@ -17,6 +16,7 @@ from woo import WooGate, WooInterpreter
 from moscript import MoScriptEngine
 from provenance import ProvenanceLog
 from soul import SoulPrint
+from semantic_grid import SemanticGrid
 from grid.config import MOSTAR_CLUSTER_ID, SEAL_GLYPH, cluster_metadata, ensure_cluster_dirs
 from approval_queue import ApprovalQueue, ProposalRecord, ProposalState, new_proposal_id
 from decision_engine import DecisionEngine
@@ -93,6 +93,7 @@ class GridOrchestrator:
         self.approval_queue = ApprovalQueue()
         self.decision_engine = DecisionEngine()
         self.density = DensityTelemetry(self.mindgraph)
+        self.semantic_grid = SemanticGrid()
         self._conversation_history: list[dict] = []
         self._ready = False
 
@@ -282,7 +283,19 @@ class GridOrchestrator:
             "placement": placement,
         }
 
-    async def propose(self, canon_input: str, parent_id: str = None, version: int = 1) -> ProposalRecord:
+    async def propose(self, canon_input: str, parent_id: str = None, version: int = 1, user_id: str = "grid") -> ProposalRecord:
+        # ── Semantic Grid: understand before speaking ─────────────────
+        semantic_frame = None
+        try:
+            semantic_frame = await self.semantic_grid.interpret(
+                raw_input=canon_input,
+                user_id=user_id,
+                source="canon",
+                persist=True,
+            )
+        except Exception as _se:
+            logger.warning("SemanticGrid.interpret failed (non-fatal): %s", _se)
+
         interpreted = await self.interpret(canon_input)
         interpretation = interpreted["interpretation"]
         consistency = interpreted["consistency"]
@@ -321,6 +334,10 @@ class GridOrchestrator:
             parent_id=parent_id,
             version=version,
         )
+        # Attach semantic frame to proposal metadata if available
+        if semantic_frame is not None:
+            proposal.semantic_frame = semantic_frame.to_dict()
+
         await self.approval_queue.enqueue(proposal)
         self.provenance.record_event("proposal_created", {"proposal_id": proposal.id})
         return proposal

@@ -7,6 +7,7 @@ Port: 41010 (sovereign band)
 import logging
 import sys
 import asyncio
+import csv
 import json
 import uuid
 import os
@@ -24,12 +25,20 @@ from pydantic import BaseModel, Field
 from typing import Optional
 import httpx
 
-# Add project root to path
-PROJECT_ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+# Add project root and all rehoused core/services to path
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+sys.path.extend([
+    str(PROJECT_ROOT),
+    str(PROJECT_ROOT / "back" / "services"),
+    str(PROJECT_ROOT / "core" / "engines"),
+    str(PROJECT_ROOT / "core" / "sovereignty"),
+    str(PROJECT_ROOT / "core" / "protocols"),
+    str(PROJECT_ROOT / "core" / "ops"),
+])
 
 from grid.config import GRID_HOST, GRID_PORT, MOSTAR_CLUSTER_ID, SEAL_GLYPH, cluster_metadata
 from grid.orchestrator import CommitFailedError, CommitForbiddenError, GridOrchestrator
+from grid.semantic_api import router as semantic_router
 from grid.telemetry import ClusterTelemetry
 from dcx import DCXLayer
 from grid.events import event_bus, GridEvent
@@ -51,6 +60,8 @@ from federation import (
     ScrollImporter,
     ScrollImportError,
 )
+from grid.auth import get_current_user_and_role, verify_permission
+from grid.truth_gate import TruthGateEngine
 
 # ── Logging ────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -91,13 +102,22 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Remediate open CORS configurations detected during baseline auditing
+ALLOWED_ORIGINS = [
+    "http://localhost:41012",
+    "http://127.0.0.1:41012",
+    "http://localhost:8080",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "X-MoStar-Token"],
 )
+
+app.include_router(semantic_router)
 
 
 @app.exception_handler(HTTPException)
@@ -116,19 +136,98 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         content=_with_cluster({"detail": exc.errors()}),
     )
 
-# Serve frontend
-FRONTEND_DIR = PROJECT_ROOT / "frontend" / "dist"
-if FRONTEND_DIR.exists():
-    ASSETS_DIR = FRONTEND_DIR / "assets"
-    if ASSETS_DIR.exists():
-        app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
-    MOCONS_DIR = FRONTEND_DIR / "moCons"
-    if MOCONS_DIR.exists():
-        app.mount("/moCons", StaticFiles(directory=str(MOCONS_DIR)), name="mocons")
-    app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
+# FastAPI runs in API-only mode on port 41010.
+# Frontend runs on its own server on port 41012.
 
 AUDIO_DIR = PROJECT_ROOT / "grid" / ".tmp" / "audio"
 AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+ENTITY_REGISTRY_PATH = PROJECT_ROOT / "data" / "mem" / "03_registry_data" / "csv" / "Entity.csv"
+
+
+def _clean_registry_value(value: object, default: str = "") -> str:
+    if value is None:
+        return default
+    text = str(value).strip()
+    if not text or text.lower() == "nan":
+        return default
+    return text
+
+
+def _registry_capabilities(value: object) -> list[str]:
+    text = _clean_registry_value(value)
+    if not text:
+        return []
+    if "|" in text:
+        return [item.strip() for item in text.split("|") if item.strip()]
+    if text.startswith("[") and text.endswith("]"):
+        return [
+            item.strip(" '\"")
+            for item in text.strip("[]").split(",")
+            if item.strip(" '\"")
+        ]
+    return [text]
+
+
+def _registry_score(row: dict) -> int:
+    preferred_fields = (
+        "activation_protocol",
+        "bonded_to",
+        "essence",
+        "layer",
+        "name",
+        "origin",
+        "role",
+        "status",
+        "title",
+        "version",
+        "vows",
+    )
+    return sum(1 for field in preferred_fields if _clean_registry_value(row.get(field)))
+
+
+def _fallback_startup_reports() -> list[dict]:
+    if not ENTITY_REGISTRY_PATH.exists():
+        logger.warning("Startup registry fallback missing: %s", ENTITY_REGISTRY_PATH)
+        return []
+
+    by_entity: dict[str, dict] = {}
+    with ENTITY_REGISTRY_PATH.open(newline="", encoding="utf-8-sig", errors="replace") as handle:
+        for row in csv.DictReader(handle):
+            entity_id = _clean_registry_value(row.get("entity_id"))
+            if not entity_id:
+                continue
+            current = by_entity.get(entity_id)
+            if current is None or _registry_score(row) >= _registry_score(current):
+                by_entity[entity_id] = row
+
+    reports = []
+    for row in by_entity.values():
+        name = _clean_registry_value(row.get("name"), _clean_registry_value(row.get("entity_id")))
+        role = _clean_registry_value(row.get("role"), _clean_registry_value(row.get("title"), "ENTITY"))
+        state = _clean_registry_value(row.get("status"), "REGISTRY")
+        vows = _clean_registry_value(row.get("vows"), "Registry identity loaded")
+        routing = _clean_registry_value(row.get("activation_protocol"), "REGISTRY")
+        response = f"{name} reporting. {role}. {vows}."
+
+        reports.append({
+            "name": name,
+            "entity_id": _clean_registry_value(row.get("entity_id")),
+            "sp_element": _clean_registry_value(row.get("layer"), _clean_registry_value(row.get("essence"))),
+            "state": state,
+            "response": response,
+            "voiceLine": response,
+            "routing": routing,
+            "timestamp": None,
+            "role": role,
+            "insignia": _clean_registry_value(row.get("insignia")),
+            "sp_file": _clean_registry_value(row.get("activation_protocol")),
+            "sp_cid": "",
+            "vows": vows,
+            "capabilities": _registry_capabilities(row.get("capabilities")),
+            "source": "registry_fallback",
+        })
+
+    return sorted(reports, key=lambda report: report["name"].lower())
 
 @app.get("/api/audio/{filename}")
 async def get_audio(filename: str):
@@ -224,17 +323,13 @@ def _with_cluster(payload: dict) -> dict:
 
 @app.get("/")
 async def root():
-    """Serve the chat UI or return identity."""
-    index_file = FRONTEND_DIR / "index.html"
-    if index_file.exists():
-        return FileResponse(str(index_file))
     return {
         "name": "MoStar Grid",
-        **cluster_metadata(),
         "version": "2.0.0",
         "status": "online",
+        "mindgraph": orchestrator.mindgraph.connected,
+        "dcx": orchestrator.dcx.connected,
         "seal": SEAL_GLYPH,
-        "ui": "no frontend/index.html found — API-only mode",
     }
 
 
@@ -247,7 +342,7 @@ async def get_status():
 @app.get("/api/health")
 async def health():
     """Simple health check."""
-    return _with_cluster({
+    return {
         "status": "alive",
         "mindgraph": orchestrator.mindgraph.connected,
         "dcx": orchestrator.dcx.connected,
@@ -258,7 +353,41 @@ async def health():
             "scopes": ["propose", "approve", "commit"],
         },
         "phase": "4.0a",
-    })
+    }
+
+
+@app.get("/api/mindgraph/status")
+async def mindgraph_status():
+    """Live graph stats — node count, relationship count, label breakdown."""
+    return await orchestrator.mindgraph.get_graph_stats()
+
+
+@app.get("/api/truthgate/report")
+async def generate_truthgate_report(request: Request):
+    """
+    Enforces the TruthGate Reporting Law. Maps physical environment metrics
+    and open ports to ensure narrative assumptions never override system reality.
+    """
+    user = get_current_user_and_role(request)
+    verify_permission("read", user)
+    try:
+        engine = TruthGateEngine()
+        return {
+            "title": "TruthGate Structural System Audit",
+            "doctrine_seal": "MoStar audits must report evidence state, not narrative confidence.",
+            "timestamp_epoch": os.times()[4],
+            "covenant_verdict": {
+                "Observed_Not_Equal_Inferred": True,
+                "Configured_Not_Equal_Running": True,
+                "Declared_Not_Equal_Verified": True,
+            },
+            "matrix": engine.compile_report(),
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"TruthGate Engine Interruption: {str(e)}",
+        )
 
 
 def _direct_write_disabled(endpoint: str) -> JSONResponse:
@@ -745,6 +874,49 @@ def is_duplicate_transaction(key: str) -> bool:
 async def get_grid_events():
     return {"status": "success", "data": []}
 
+@app.get("/api/grid/startup-reports")
+async def get_startup_reports():
+    driver = orchestrator.mindgraph._driver
+    if driver is None:
+        logger.warning("MindGraph unavailable; serving startup reports from registry fallback")
+        return _with_cluster({"reports": _fallback_startup_reports(), "source": "registry_fallback"})
+
+    try:
+        async with driver.session(database="neo4j") as session:
+            result = await session.run("""
+                MATCH (e:Entity)
+                OPTIONAL MATCH (e)-[:REPORTED_STARTUP]->(m:StartupReport)
+                WITH e, m ORDER BY m.timestamp DESC
+                WITH e, head(collect(m)) as latest_report
+                RETURN e.name as name, 
+                       e.entity_id as entity_id, 
+                       coalesce(e.sp_element, e.element, '') as sp_element, 
+                       coalesce(e.status, e.state, 'DORMANT') as state,
+                       coalesce(latest_report.response, e.vows, '') as response, 
+                       coalesce(latest_report.routing, e.activation_protocol, '') as routing, 
+                       toString(latest_report.timestamp) as timestamp,
+                       e.role as role,
+                       e.insignia as insignia,
+                       coalesce(e.sp_file, '') as sp_file,
+                       coalesce(e.sp_cid, '') as sp_cid,
+                       e.vows as vows,
+                       e.capabilities as capabilities
+                ORDER BY e.name
+            """)
+            records = await result.data()
+            if records:
+                return _with_cluster({"reports": records, "source": "mindgraph"})
+
+            logger.warning("MindGraph returned no startup reports; serving registry fallback")
+            return _with_cluster({"reports": _fallback_startup_reports(), "source": "registry_fallback"})
+    except Exception as e:
+        logger.error(f"Failed to fetch startup reports: {e}")
+        return _with_cluster({
+            "reports": _fallback_startup_reports(),
+            "source": "registry_fallback",
+            "warning": str(e),
+        })
+
 @app.post("/api/grid/event")
 async def create_grid_event(payload: GridEventSchema, request: Request):
     idempotency_key = request.headers.get("X-Idempotency-Key")
@@ -811,6 +983,11 @@ async def get_grid_census():
             utts_record = await utts_res.single()
             utts_count = utts_record["total"] if utts_record else 0
 
+            # Sealed Agents count
+            sealed_res = await session.run("MATCH (e:Entity) WHERE e.soulprint_loaded = true RETURN count(e) AS total")
+            sealed_record = await sealed_res.single()
+            sealed_count = sealed_record["total"] if sealed_record else 0
+
             # ExecutorHeartbeat
             hb_res = await session.run("MATCH (h:ExecutorHeartbeat) RETURN h.created_at AS hb ORDER BY h.created_at DESC LIMIT 1")
             hb_record = await hb_res.single()
@@ -821,6 +998,7 @@ async def get_grid_census():
                 "relationships": rels_count,
                 "events": events_count,
                 "utterances": utts_count,
+                "sealed_agents": sealed_count,
                 "last_heartbeat": last_hb,
                 "seal": "🜃∴🜂"
             }
