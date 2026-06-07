@@ -22,7 +22,7 @@ export function Awakening() {
       });
       if (res.ok) {
         const { audio_url } = await res.json();
-        const src = audio_url.startsWith("/audio/") ?  : audio_url;
+        const src = audio_url.startsWith("/audio/") ? `/api/voice${audio_url}` : audio_url;
         new Audio(src).play().catch(() => {});
       }
     } catch { /* voice failure never blocks boot */ }
@@ -58,7 +58,7 @@ export function Awakening() {
             <span>{progress.toString().padStart(3, "0")}%</span>
           </div>
           <div className="h-1 overflow-hidden rounded-full bg-[#f6c4531f]">
-            <div className="h-full rounded-full transition-all duration-500" style={{ width: , background: "linear-gradient(90deg, #f6c453, #00d8ff)", boxShadow: "0 0 18px rgba(0,216,255,0.55)" }} />
+            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, background: "linear-gradient(90deg, #f6c453, #00d8ff)", boxShadow: "0 0 18px rgba(0,216,255,0.55)" }} />
           </div>
         </div>
         <div className="pointer-events-auto mt-6">
