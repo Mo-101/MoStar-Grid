@@ -1,0 +1,86 @@
+{
+  "created_at": "2026-06-07T15:29:42.508838+00:00",
+  "ticket": "P4-008",
+  "purpose": "before apply evidence snapshot; counts and classification preview only",
+  "before_counts": {
+    "total": 13865,
+    "with_source_type": 1,
+    "with_verification_status": 1,
+    "with_operational_trust": 1,
+    "with_seal": 1,
+    "with_source": 1,
+    "with_created_by": 1
+  },
+  "missing_label_distribution": [
+    {
+      "labels": [
+        "MoStarMoment",
+        "Grid"
+      ],
+      "count": 13832
+    },
+    {
+      "labels": [
+        "MoStarMoment",
+        "StartupReport"
+      ],
+      "count": 26
+    },
+    {
+      "labels": [
+        "MoStarMoment",
+        "WooUtterance"
+      ],
+      "count": 5
+    },
+    {
+      "labels": [
+        "MoStarMoment",
+        "AgentUtterance"
+      ],
+      "count": 1
+    }
+  ],
+  "classification_preview": [
+    {
+      "labels": [
+        "MoStarMoment",
+        "Grid"
+      ],
+      "proposed_source_type": "runtime_generated",
+      "proposed_verification_status": "synthetic",
+      "proposed_operational_trust": "simulation",
+      "count": 13832
+    },
+    {
+      "labels": [
+        "MoStarMoment",
+        "StartupReport"
+      ],
+      "proposed_source_type": "runtime_generated",
+      "proposed_verification_status": "synthetic",
+      "proposed_operational_trust": "simulation",
+      "count": 26
+    },
+    {
+      "labels": [
+        "MoStarMoment",
+        "WooUtterance"
+      ],
+      "proposed_source_type": "runtime_generated",
+      "proposed_verification_status": "synthetic",
+      "proposed_operational_trust": "simulation",
+      "count": 5
+    },
+    {
+      "labels": [
+        "MoStarMoment",
+        "AgentUtterance"
+      ],
+      "proposed_source_type": "runtime_generated",
+      "proposed_verification_status": "synthetic",
+      "proposed_operational_trust": "simulation",
+      "count": 1
+    }
+  ]
+}

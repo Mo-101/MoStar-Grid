@@ -1075,11 +1075,23 @@ async def agents():
 
 @app.get("/api/provenance")
 async def provenance(n: int = 20):
-    """Recent intelligence cycles."""
-    return _with_cluster({
+    """Volatile runtime provenance log.
+
+    TODO P4-010: Implement graph-backed /api/provenance summary from Neo4j.
+    Current /api/provenance is explicitly runtime-memory-only.
+    """
+    return {
+        "scope": "runtime-memory-only",
+        "store": "orchestrator-memory",
+        "persistent_graph_backed": False,
+        "warning": (
+            "This endpoint reflects volatile in-memory orchestrator provenance only. "
+            "It is not proof of persistent MoStarMoment graph provenance."
+        ),
+        "p4_008_status": "backfill-complete-api-runtime-labeled",
         "total": orchestrator.provenance.total_cycles,
         "recent": orchestrator.provenance.recent(n),
-    })
+    }
 
 
 @app.get("/api/moscripts")

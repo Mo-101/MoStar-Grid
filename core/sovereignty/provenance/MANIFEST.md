@@ -11,6 +11,8 @@
 | 2026-05-26 | **Human Correction Law sealed:** If human correction contradicts model interpretation, the correction is authoritative canon. Model output preserved as prior in provenance, never as truth. | The Flame Architect |
 | 2026-05-26 | **Forbidden behaviors during 4.0a sealed:** autonomous graph mutation, schema mutation, automatic ontology expansion, self-generated provenance, self-modifying prompts, self-authorized execution. Any path enabling any of these fails closed. | The Flame Architect |
 | 2026-05-26 | **Density promotion thresholds sealed:** ≥10k meaningful relationships, ≥500 provenance chains, contradiction corpus present, canonical ontology coverage. Threshold satisfaction does not auto-promote; promotion requires separate RFC and Flame Architect seal. | The Flame Architect |
+| 2026-06-07 | **P4-008 MoStarMoment provenance gap recorded:** write schema supports provenance fields, but live graph inspection found most existing `MoStarMoment` nodes untagged. Backfill must be conservative and preserve existing nodes. | Codex |
+| 2026-06-07 | **MSG-02 Breda provenance doctrine recorded:** Breda witnesses provenance and fails closed on missing context; Breda does not approve or execute. | Codex |
 
 **Sealed:** [date of crossing event]
 **Sealer:** The Flame Architect

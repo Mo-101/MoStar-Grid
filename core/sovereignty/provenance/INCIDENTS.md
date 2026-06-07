@@ -2,6 +2,21 @@
 
 Append-only. Format: date, scope, action taken, evidence.
 
+## 2026-06-07 - Neo4j local credential exposure in working-session command
+
+Scope: local Neo4j development credential was exposed in a working-session command/context.
+
+Action required:
+
+```text
+rotate Neo4j password before any shared commit/log/export
+update local `.env` only
+restart dependent PM2 services after rotation
+do not paste the rotated value into chat, commit messages, logs, or docs
+```
+
+Status: **rotation pending**.
+
 ## 2026-04 — Vault leak inventory at archive seal
 
 Discovered during pre-migration gitleaks scan of `MoStar-Grid` (archive). 24 findings, 5 categories of real exposure:
