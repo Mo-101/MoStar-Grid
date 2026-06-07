@@ -12,7 +12,7 @@ export function EnterGridButton({ state, onBegin }: Props) {
 
   const label =
     state === "idle"
-      ? "BEGIN GRID ROLL CALL"
+      ? "BEGIN GRID BOOT"
       : state === "awakening"
         ? "AWAKENING ..."
         : "ENTER GRID ->";
