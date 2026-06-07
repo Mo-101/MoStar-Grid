@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   KpiCard, CouncilList, GlyphPanel, CodeConduit,
-  GridFeed, QuickCommands, CovenantOath,
+  GridFeed, CovenantOath,
   useGridStream, KPI, FEED_SEED, PageShell,
 } from "@/components/grid/parts";
 import { AwakeningScreen } from "@/components/grid/awakening";
@@ -51,10 +51,7 @@ function GridDashboard() {
             <div className="min-h-0 flex-1"><GlyphPanel /></div>
             <div className="shrink-0"><CodeConduit pulse={pulse} /></div>
           </div>
-          <div className="col-span-3 flex min-h-0 flex-col gap-3">
-            <div className="min-h-0 flex-1"><GridFeed items={items} /></div>
-            <div className="shrink-0"><QuickCommands /></div>
-          </div>
+          <div className="col-span-3 min-h-0"><GridFeed items={items} /></div>
         </div>
         {/* Covenant oath — compact strip */}
         <div className="shrink-0"><CovenantOath /></div>
