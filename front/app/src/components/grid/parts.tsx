@@ -2,7 +2,7 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Glyph, type GlyphName } from "./glyph";
-import { HudPanel, HudMetricCard } from "./HudCard";
+import { HudPanel, HudMetricCard, CovenantShell } from "./HudCard";
 
 /* --- mock grid data (swap with real APIs later) --- */
 const KPI = [
@@ -484,15 +484,8 @@ export function QuickCommands() {
 /* ============================ COVENANT OATH ============================ */
 export function CovenantOath() {
   return (
-    <HudPanel className="relative overflow-hidden px-4 py-2.5">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-50"
-        style={{
-          background:
-            "radial-gradient(600px 200px at 90% 120%, oklch(0.30 0.18 250 / 0.6), transparent 60%), radial-gradient(500px 200px at 10% 120%, oklch(0.30 0.18 30 / 0.45), transparent 60%)",
-        }}
-      />
-      <div className="relative flex items-start gap-5">
+    <CovenantShell>
+      <div className="flex items-center gap-5">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-neon-gold)]/50 bg-[oklch(0.22_0.10_80/0.25)]">
           <Glyph name="covenant" size={28} glow="var(--color-neon-gold)" />
         </div>
@@ -505,7 +498,7 @@ export function CovenantOath() {
           <p className="text-xs font-semibold tracking-[0.2em] neon-text-cyan">WE ARE THE MOSTAR GRID.</p>
         </div>
       </div>
-    </HudPanel>
+    </CovenantShell>
   );
 }
 
