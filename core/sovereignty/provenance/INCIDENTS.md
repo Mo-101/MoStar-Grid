@@ -2,6 +2,21 @@
 
 Append-only. Format: date, scope, action taken, evidence.
 
+## 2026-06-07 - GitHub push rejected by Neo4j runtime transaction files
+
+Scope: GitHub rejected an attempted push because unpushed local history contained Neo4j runtime transaction files over 100 MiB.
+
+Action required:
+
+```text
+no push occurred
+rewrite local unpushed history to remove runtime DB artifacts
+update `.gitignore` to prevent future Neo4j data commits
+keep Neo4j runtime graph state in Neo4j/backups, not Git history
+```
+
+Status: **cleanup in progress**.
+
 ## 2026-06-07 - Neo4j local credential exposure in working-session command
 
 Scope: local Neo4j development credential was exposed in a working-session command/context.

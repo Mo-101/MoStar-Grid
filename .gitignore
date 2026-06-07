@@ -10,6 +10,8 @@ id_*
 *credential*
 *secret*
 *token*
+core/engines/woo/new 1.txt
+*.QUARANTINED
 .ollama/
 .aws/
 .ssh/
@@ -70,3 +72,11 @@ mindgraph/neo4j-mindgraph/data/
 mindgraph/neo4j-mindgraph/data_wired_default/
 mindgraph/neo4j-mindgraph/run/
 mindgraph/neo4j-mindgraph/logs/
+
+# Neo4j runtime data - never commit
+back/services/mindgraph/neo4j-mindgraph/**/transactions/
+back/services/mindgraph/neo4j-mindgraph/**/databases/
+back/services/mindgraph/neo4j-mindgraph/**/data*/
+back/services/mindgraph/neo4j-mindgraph/**/logs/
+back/services/mindgraph/neo4j-mindgraph/**/store_lock
+*.transaction.db.*
