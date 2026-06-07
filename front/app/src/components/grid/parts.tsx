@@ -2,6 +2,7 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Glyph, type GlyphName } from "./glyph";
+import { HudPanel, HudMetricCard } from "./HudCard";
 
 /* --- mock grid data (swap with real APIs later) --- */
 const KPI = [
@@ -63,7 +64,7 @@ function fmt(n: number) { return n.toLocaleString("en-US"); }
 /* ============================ SIDEBAR ============================ */
 export function Sidebar({ active }: { active: string }) {
   return (
-    <aside className="panel flex w-[220px] shrink-0 flex-col self-stretch px-3 py-4">
+    <HudPanel className="flex w-[220px] shrink-0 flex-col self-stretch px-3 py-4">
       <div className="flex flex-col gap-1">
         {SIDEBAR.map(({ id, to, label, sub, glyph }) => {
           const isActive = id === active;
@@ -98,7 +99,7 @@ export function Sidebar({ active }: { active: string }) {
         <div className="text-[10px] tracking-[0.25em] neon-text-gold">COVENANT MODE</div>
         <div className="text-[10px] tracking-[0.25em] text-[var(--color-neon-green)]">ENGAGED</div>
       </div>
-    </aside>
+    </HudPanel>
   );
 }
 
@@ -122,7 +123,7 @@ export function PageShell({ active, children }: { active: string; children: Reac
 /* ============================ TOPBAR ============================ */
 export function TopBar({ clock, dateLabel }: { clock: string; dateLabel: string }) {
   return (
-    <header className="panel flex items-center gap-6 px-5 py-3">
+    <HudPanel className="flex items-center gap-6 px-5 py-3" cornerSize={40}>
       <div className="flex items-center gap-3">
         <div className="flex h-12 w-12 items-center justify-center rounded-md border border-[var(--color-neon-gold)]/40">
           <Glyph name="covenant" size={28} glow="var(--color-neon-gold)" />
@@ -169,40 +170,27 @@ export function TopBar({ clock, dateLabel }: { clock: string; dateLabel: string 
           <Glyph name="target" size={28} glow="var(--color-neon-green)" />
         </div>
       </div>
-    </header>
+    </HudPanel>
   );
 }
 
 /* ============================ KPI ============================ */
 export function KpiCard({ k }: { k: typeof KPI[number] }) {
   return (
-    <div className="panel relative overflow-hidden p-3">
-      <div className="flex items-start gap-3">
-        <div
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border"
-          style={{
-            borderColor: `color-mix(in oklab, var(--color-${k.color}) 50%, transparent)`,
-            background: `color-mix(in oklab, var(--color-${k.color}) 14%, transparent)`,
-          }}
-        >
-          <Glyph name={k.glyph} size={24} glow={`var(--color-${k.color})`} />
-        </div>
-        <div className="flex-1">
-          <div className="text-[9px] tracking-[0.28em] text-muted-foreground">{k.label}</div>
-          <div className="mt-0.5 text-xl font-semibold tabular-nums" style={{ color: `var(--color-${k.color})` }}>
-            {fmt(k.value)}
-          </div>
-          <div className="text-[10px] tracking-[0.2em] neon-text-green">+ {fmt(k.delta)} TODAY</div>
-        </div>
-      </div>
-    </div>
+    <HudMetricCard
+      label={k.label}
+      value={k.value}
+      delta={k.delta}
+      color={k.color}
+      glyphNode={<Glyph name={k.glyph} size={22} glow={`var(--color-${k.color})`} />}
+    />
   );
 }
 
 /* ============================ COUNCIL ============================ */
 export function CouncilList() {
   return (
-    <div className="panel flex h-full flex-col p-4">
+    <HudPanel className="flex h-full flex-col p-4">
       <div className="mb-1 text-sm font-semibold tracking-[0.18em] neon-text-cyan">THE COUNCIL · 11 AGENTS</div>
       <div className="mb-3 text-[10px] tracking-[0.25em] text-muted-foreground">GUARDIANS OF THE GRID</div>
       <div className="flex-1 space-y-1 overflow-auto pr-1 min-h-0">
@@ -231,7 +219,7 @@ export function CouncilList() {
       <button className="mt-3 flex items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.03] py-2.5 text-xs tracking-[0.25em] text-muted-foreground hover:bg-white/5">
         VIEW COUNCIL DETAILS <ChevronRight className="h-4 w-4" />
       </button>
-    </div>
+    </HudPanel>
   );
 }
 
@@ -254,7 +242,7 @@ function Quadrant({
 export function GlyphPanel() {
   const ticks = Array.from({ length: 24 });
   return (
-    <div className="panel relative h-full overflow-hidden p-3">
+    <HudPanel className="relative h-full overflow-hidden p-3" cornerSize={70}>
       <Quadrant pos="top-6 left-6"                       color="neon-gold"   title="IKANG"  kicker="MIND"    words="Logic · Will · Structure"  glyph="sun" />
       <Quadrant pos="top-6 right-6 items-end text-right" color="neon-cyan"   title="M MỌNG" kicker="ESSENCE" words="Pulse · Memory · Flow"     glyph="spark" />
       <Quadrant pos="bottom-6 left-6"                    color="neon-red"    title="ISONG"  kicker="SPIRIT"  words="Awakening · Change · Fire" glyph="pulse" />
@@ -286,7 +274,7 @@ export function GlyphPanel() {
           </div>
         </div>
       </div>
-    </div>
+    </HudPanel>
   );
 }
 
@@ -341,7 +329,7 @@ export function CodeConduit({ pulse }: { pulse: Pulse | null }) {
   }, []);
 
   return (
-    <div className="panel p-4">
+    <HudPanel className="p-4">
       <div className="flex items-center justify-between">
         <div>
           <div className="text-sm tracking-[0.3em] neon-text-cyan">CODE CONDUIT</div>
@@ -386,14 +374,14 @@ export function CodeConduit({ pulse }: { pulse: Pulse | null }) {
         <span>LIVE FREQUENCY · {Math.round(heights.reduce((a, b) => a + b, 0) / heights.length)} Hz</span>
         <span className="neon-text-cyan">LISTENING</span>
       </div>
-    </div>
+    </HudPanel>
   );
 }
 
 /* ============================ GRID FEED ============================ */
 export function GridFeed({ items }: { items: FeedItem[] }) {
   return (
-    <div className="panel flex flex-col p-3 min-h-0">
+    <HudPanel className="flex flex-col p-3 min-h-0">
       <div className="text-sm font-semibold tracking-[0.18em] neon-text-cyan">REAL-TIME GRID FEED</div>
       <div className="text-[10px] tracking-[0.25em] text-muted-foreground">LIVE ACTIVITY STREAM</div>
       <div className="mt-2 space-y-1.5 flex-1 overflow-auto min-h-0">
@@ -421,7 +409,7 @@ export function GridFeed({ items }: { items: FeedItem[] }) {
           </div>
         ))}
       </div>
-    </div>
+    </HudPanel>
   );
 }
 
@@ -430,7 +418,7 @@ export function GridHealth() {
   const pct = 98;
   const r = 46, c = 2 * Math.PI * r;
   return (
-    <div className="panel p-3">
+    <HudPanel className="p-3">
       <div className="text-sm font-semibold tracking-[0.18em] neon-text-cyan">GRID HEALTH</div>
       <div className="text-[10px] tracking-[0.25em] text-muted-foreground">SYSTEM VITALS</div>
       <div className="mt-3 flex items-center gap-4">
@@ -459,7 +447,7 @@ export function GridHealth() {
           ))}
         </div>
       </div>
-    </div>
+    </HudPanel>
   );
 }
 
@@ -472,7 +460,7 @@ export function QuickCommands() {
     { label: "GRID SYNCHRONIZE", glyph: "spark",    tint: "neon-blue" },
   ];
   return (
-    <div className="panel p-3">
+    <HudPanel className="p-3">
       <div className="text-sm font-semibold tracking-[0.18em] neon-text-cyan">QUICK COMMANDS</div>
       <div className="text-[10px] tracking-[0.25em] text-muted-foreground">INITIATE PROTOCOL</div>
       <div className="mt-3 grid grid-cols-2 gap-2">
@@ -489,14 +477,14 @@ export function QuickCommands() {
           </button>
         ))}
       </div>
-    </div>
+    </HudPanel>
   );
 }
 
 /* ============================ COVENANT OATH ============================ */
 export function CovenantOath() {
   return (
-    <div className="panel relative overflow-hidden px-4 py-2.5">
+    <HudPanel className="relative overflow-hidden px-4 py-2.5">
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
         style={{
@@ -517,7 +505,7 @@ export function CovenantOath() {
           <p className="text-xs font-semibold tracking-[0.2em] neon-text-cyan">WE ARE THE MOSTAR GRID.</p>
         </div>
       </div>
-    </div>
+    </HudPanel>
   );
 }
 
