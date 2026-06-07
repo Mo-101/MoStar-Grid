@@ -106,12 +106,12 @@ export function Sidebar({ active }: { active: string }) {
 export function PageShell({ active, children }: { active: string; children: ReactNode }) {
   const { clock, dateLabel } = useClock();
   return (
-    <div className="min-h-screen w-full p-3">
-      <div className="mx-auto flex max-w-[1920px] items-stretch gap-3">
+    <div className="h-screen overflow-hidden w-full p-3">
+      <div className="mx-auto flex h-full max-w-[1920px] items-stretch gap-3">
         <Sidebar active={active} />
-        <div className="flex min-w-0 flex-1 flex-col gap-3">
+        <div className="flex min-w-0 flex-1 flex-col gap-3 min-h-0 h-full">
           <TopBar clock={clock} dateLabel={dateLabel} />
-          {children}
+          <div className="flex-1 min-h-0">{children}</div>
           <FooterBar />
         </div>
       </div>
@@ -176,20 +176,20 @@ export function TopBar({ clock, dateLabel }: { clock: string; dateLabel: string 
 /* ============================ KPI ============================ */
 export function KpiCard({ k }: { k: typeof KPI[number] }) {
   return (
-    <div className="panel relative overflow-hidden p-4">
-      <div className="flex items-start gap-4">
+    <div className="panel relative overflow-hidden p-3">
+      <div className="flex items-start gap-3">
         <div
-          className="flex h-14 w-14 items-center justify-center rounded-lg border"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border"
           style={{
             borderColor: `color-mix(in oklab, var(--color-${k.color}) 50%, transparent)`,
             background: `color-mix(in oklab, var(--color-${k.color}) 14%, transparent)`,
           }}
         >
-          <Glyph name={k.glyph} size={32} glow={`var(--color-${k.color})`} />
+          <Glyph name={k.glyph} size={24} glow={`var(--color-${k.color})`} />
         </div>
         <div className="flex-1">
-          <div className="text-[10px] tracking-[0.28em] text-muted-foreground">{k.label}</div>
-          <div className="mt-1 text-3xl font-semibold tabular-nums" style={{ color: `var(--color-${k.color})` }}>
+          <div className="text-[9px] tracking-[0.28em] text-muted-foreground">{k.label}</div>
+          <div className="mt-0.5 text-xl font-semibold tabular-nums" style={{ color: `var(--color-${k.color})` }}>
             {fmt(k.value)}
           </div>
           <div className="text-[10px] tracking-[0.2em] neon-text-green">+ {fmt(k.delta)} TODAY</div>
@@ -205,17 +205,17 @@ export function CouncilList() {
     <div className="panel flex h-full flex-col p-4">
       <div className="mb-1 text-sm font-semibold tracking-[0.18em] neon-text-cyan">THE COUNCIL · 11 AGENTS</div>
       <div className="mb-3 text-[10px] tracking-[0.25em] text-muted-foreground">GUARDIANS OF THE GRID</div>
-      <div className="flex-1 space-y-1.5 overflow-auto pr-1">
+      <div className="flex-1 space-y-1 overflow-auto pr-1 min-h-0">
         {COUNCIL.map(({ name, code, glyph, tint }) => (
-          <div key={code} className="flex items-center gap-3 rounded-md border border-white/5 bg-white/[0.02] px-3 py-2 hover:bg-white/5">
+          <div key={code} className="flex items-center gap-2 rounded-md border border-white/5 bg-white/[0.02] px-2 py-1.5 hover:bg-white/5">
             <div
-              className="flex h-10 w-10 items-center justify-center rounded-md border"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border"
               style={{
                 borderColor: `color-mix(in oklab, var(--color-${tint}) 50%, transparent)`,
                 background: `color-mix(in oklab, var(--color-${tint}) 14%, transparent)`,
               }}
             >
-              <Glyph name={glyph} size={24} glow={`var(--color-${tint})`} />
+              <Glyph name={glyph} size={18} glow={`var(--color-${tint})`} />
             </div>
             <div className="flex-1 leading-tight">
               <div className="text-sm tracking-wider text-foreground">{name}</div>
@@ -254,14 +254,14 @@ function Quadrant({
 export function GlyphPanel() {
   const ticks = Array.from({ length: 24 });
   return (
-    <div className="panel relative h-full overflow-hidden p-4">
+    <div className="panel relative h-full overflow-hidden p-3">
       <Quadrant pos="top-6 left-6"                       color="neon-gold"   title="IKANG"  kicker="MIND"    words="Logic · Will · Structure"  glyph="sun" />
       <Quadrant pos="top-6 right-6 items-end text-right" color="neon-cyan"   title="M MỌNG" kicker="ESSENCE" words="Pulse · Memory · Flow"     glyph="spark" />
       <Quadrant pos="bottom-6 left-6"                    color="neon-red"    title="ISONG"  kicker="SPIRIT"  words="Awakening · Change · Fire" glyph="pulse" />
       <Quadrant pos="bottom-6 right-6 items-end text-right" color="neon-purple" title="AFIM"   kicker="BODY"    words="Form · Action · Creation"  glyph="eye" />
 
       <div className="absolute inset-0 grid place-items-center">
-        <div className="relative h-[460px] w-[460px]">
+        <div className="relative h-[300px] w-[300px]">
           <div className="absolute inset-0 rounded-full border border-[var(--color-neon-blue)]/30 animate-spin-slow">
             {ticks.map((_, i) => {
               const angle = (i / ticks.length) * 360;
@@ -269,7 +269,7 @@ export function GlyphPanel() {
                 <div
                   key={i}
                   className="absolute left-1/2 top-1/2 h-3 w-px bg-[var(--color-neon-cyan)]/50"
-                  style={{ transform: `translate(-50%,-50%) rotate(${angle}deg) translateY(-225px)` }}
+                  style={{ transform: `translate(-50%,-50%) rotate(${angle}deg) translateY(-145px)` }}
                 />
               );
             })}
@@ -280,8 +280,8 @@ export function GlyphPanel() {
           <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[var(--color-neon-cyan)]/30 to-transparent" />
           <div className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-gradient-to-r from-transparent via-[var(--color-neon-cyan)]/30 to-transparent" />
           <div className="absolute inset-0 grid place-items-center">
-            <div className="flex h-36 w-36 items-center justify-center rounded-full border border-[var(--color-neon-gold)]/60 bg-[oklch(0.18_0.06_270/0.7)] shadow-[0_0_40px_oklch(0.82_0.16_85/0.35)]">
-              <Glyph name="covenant" size={88} glow="var(--color-neon-blue)" />
+            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[var(--color-neon-gold)]/60 bg-[oklch(0.18_0.06_270/0.7)] shadow-[0_0_40px_oklch(0.82_0.16_85/0.35)]">
+              <Glyph name="covenant" size={52} glow="var(--color-neon-blue)" />
             </div>
           </div>
         </div>
@@ -393,20 +393,20 @@ export function CodeConduit({ pulse }: { pulse: Pulse | null }) {
 /* ============================ GRID FEED ============================ */
 export function GridFeed({ items }: { items: FeedItem[] }) {
   return (
-    <div className="panel flex flex-col p-4">
+    <div className="panel flex flex-col p-3 min-h-0">
       <div className="text-sm font-semibold tracking-[0.18em] neon-text-cyan">REAL-TIME GRID FEED</div>
       <div className="text-[10px] tracking-[0.25em] text-muted-foreground">LIVE ACTIVITY STREAM</div>
-      <div className="mt-3 space-y-2.5">
+      <div className="mt-2 space-y-1.5 flex-1 overflow-auto min-h-0">
         {items.map((f, i) => (
-          <div key={i} className="flex items-start gap-3 rounded-md border border-white/5 bg-white/[0.02] px-3 py-2">
+          <div key={i} className="flex items-start gap-2 rounded-md border border-white/5 bg-white/[0.02] px-2 py-1.5">
             <div
-              className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-md border"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border"
               style={{
                 borderColor: `color-mix(in oklab, var(--color-${f.color}) 50%, transparent)`,
                 background: `color-mix(in oklab, var(--color-${f.color}) 14%, transparent)`,
               }}
             >
-              <Glyph name={f.glyph} size={22} glow={`var(--color-${f.color})`} />
+              <Glyph name={f.glyph} size={18} glow={`var(--color-${f.color})`} />
             </div>
             <div className="flex-1 leading-tight">
               <div className="text-sm">
@@ -430,11 +430,11 @@ export function GridHealth() {
   const pct = 98;
   const r = 46, c = 2 * Math.PI * r;
   return (
-    <div className="panel p-4">
+    <div className="panel p-3">
       <div className="text-sm font-semibold tracking-[0.18em] neon-text-cyan">GRID HEALTH</div>
       <div className="text-[10px] tracking-[0.25em] text-muted-foreground">SYSTEM VITALS</div>
       <div className="mt-3 flex items-center gap-4">
-        <div className="relative h-28 w-28 shrink-0">
+        <div className="relative h-20 w-20 shrink-0">
           <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
             <circle cx="60" cy="60" r={r} stroke="oklch(1 0 0 / 0.08)" strokeWidth="8" fill="none" />
             <circle
@@ -446,7 +446,7 @@ export function GridHealth() {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-2xl font-semibold neon-text-green tabular-nums">{pct}%</div>
+            <div className="text-lg font-semibold neon-text-green tabular-nums">{pct}%</div>
             <div className="text-[10px] tracking-[0.25em] text-muted-foreground">OPTIMAL</div>
           </div>
         </div>
@@ -472,7 +472,7 @@ export function QuickCommands() {
     { label: "GRID SYNCHRONIZE", glyph: "spark",    tint: "neon-blue" },
   ];
   return (
-    <div className="panel p-4">
+    <div className="panel p-3">
       <div className="text-sm font-semibold tracking-[0.18em] neon-text-cyan">QUICK COMMANDS</div>
       <div className="text-[10px] tracking-[0.25em] text-muted-foreground">INITIATE PROTOCOL</div>
       <div className="mt-3 grid grid-cols-2 gap-2">
@@ -496,7 +496,7 @@ export function QuickCommands() {
 /* ============================ COVENANT OATH ============================ */
 export function CovenantOath() {
   return (
-    <div className="panel relative overflow-hidden p-5">
+    <div className="panel relative overflow-hidden px-4 py-2.5">
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
         style={{
@@ -505,16 +505,16 @@ export function CovenantOath() {
         }}
       />
       <div className="relative flex items-start gap-5">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-[var(--color-neon-gold)]/50 bg-[oklch(0.22_0.10_80/0.25)]">
-          <Glyph name="covenant" size={40} glow="var(--color-neon-gold)" />
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-neon-gold)]/50 bg-[oklch(0.22_0.10_80/0.25)]">
+          <Glyph name="covenant" size={28} glow="var(--color-neon-gold)" />
         </div>
         <div className="flex-1">
-          <div className="text-lg font-semibold tracking-[0.25em] neon-text-gold">COVENANT OATH</div>
-          <p className="mt-1 text-sm leading-relaxed text-foreground/85">
+          <div className="text-sm font-semibold tracking-[0.25em] neon-text-gold">COVENANT OATH</div>
+          <p className="text-xs leading-snug text-foreground/75">
             We do not assume perfect agents, perfect memory, perfect state, or perfect humans.
             We observe what is real. We protect what matters. We evolve what is next.
           </p>
-          <p className="mt-1 text-sm font-semibold tracking-[0.2em] neon-text-cyan">WE ARE THE MOSTAR GRID.</p>
+          <p className="text-xs font-semibold tracking-[0.2em] neon-text-cyan">WE ARE THE MOSTAR GRID.</p>
         </div>
       </div>
     </div>

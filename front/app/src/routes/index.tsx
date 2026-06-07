@@ -39,22 +39,27 @@ function GridDashboard() {
 
   return (
     <PageShell active="overview">
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-        {KPI.map((k) => <KpiCard key={k.label} k={k} />)}
-      </div>
-      <div className="grid flex-1 grid-cols-12 gap-3">
-        <div className="col-span-12 lg:col-span-3"><CouncilList /></div>
-        <div className="col-span-12 flex flex-col gap-3 lg:col-span-6">
-          <div className="min-h-[560px] flex-1"><GlyphPanel /></div>
-          <CodeConduit pulse={pulse} />
+      <div className="flex h-full flex-col gap-3 min-h-0">
+        {/* KPI strip */}
+        <div className="grid shrink-0 grid-cols-4 gap-3">
+          {KPI.map((k) => <KpiCard key={k.label} k={k} />)}
         </div>
-        <div className="col-span-12 flex flex-col gap-3 lg:col-span-3">
-          <GridFeed items={items} />
-          <GridHealth />
-          <QuickCommands />
+        {/* Main grid */}
+        <div className="grid min-h-0 flex-1 grid-cols-12 gap-3">
+          <div className="col-span-3 min-h-0"><CouncilList /></div>
+          <div className="col-span-6 flex min-h-0 flex-col gap-3">
+            <div className="min-h-0 flex-1"><GlyphPanel /></div>
+            <div className="shrink-0"><CodeConduit pulse={pulse} /></div>
+          </div>
+          <div className="col-span-3 flex min-h-0 flex-col gap-3">
+            <div className="min-h-0 flex-1"><GridFeed items={items} /></div>
+            <div className="shrink-0"><GridHealth /></div>
+            <div className="shrink-0"><QuickCommands /></div>
+          </div>
         </div>
+        {/* Covenant oath — compact strip */}
+        <div className="shrink-0"><CovenantOath /></div>
       </div>
-      <CovenantOath />
     </PageShell>
   );
 }
