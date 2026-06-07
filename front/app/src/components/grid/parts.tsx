@@ -92,9 +92,43 @@ export function Sidebar({ active }: { active: string }) {
         })}
       </div>
 
-      <div className="mt-auto flex flex-col items-center gap-2 pt-6">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[var(--color-neon-gold)]/40 bg-[oklch(0.22_0.08_80/0.25)] animate-pulse-ring">
-          <Glyph name="covenant" size={36} glow="var(--color-neon-gold)" />
+      {/* Grid Health — compact sidebar block */}
+      <div className="mt-4 border-t border-white/10 pt-3">
+        <div className="mb-2 text-[9px] tracking-[0.22em] neon-text-cyan">GRID HEALTH</div>
+        <div className="flex items-center gap-3">
+          {/* Mini ring */}
+          <div className="relative h-12 w-12 shrink-0">
+            <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
+              <circle cx="60" cy="60" r="46" stroke="oklch(1 0 0 / 0.08)" strokeWidth="8" fill="none" />
+              <circle
+                cx="60" cy="60" r="46"
+                stroke="var(--color-neon-green)" strokeWidth="8" fill="none"
+                strokeDasharray={2 * Math.PI * 46}
+                strokeDashoffset={2 * Math.PI * 46 * 0.02}
+                strokeLinecap="round"
+                style={{ filter: "drop-shadow(0 0 6px var(--color-neon-green))" }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className="text-[11px] font-semibold neon-text-green">98%</div>
+              <div className="text-[7px] tracking-wider text-muted-foreground">OK</div>
+            </div>
+          </div>
+          {/* Status list */}
+          <div className="flex-1 min-w-0 space-y-[3px]">
+            {HEALTH.map((h) => (
+              <div key={h.label} className="flex items-center justify-between gap-1">
+                <span className="text-[8px] tracking-[0.1em] text-foreground/65 truncate">{h.label}</span>
+                <span className="text-[8px] shrink-0 neon-text-green">{h.status}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-auto flex flex-col items-center gap-2 pt-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[var(--color-neon-gold)]/40 bg-[oklch(0.22_0.08_80/0.25)] animate-pulse-ring">
+          <Glyph name="covenant" size={32} glow="var(--color-neon-gold)" />
         </div>
         <div className="text-[10px] tracking-[0.25em] neon-text-gold">COVENANT MODE</div>
         <div className="text-[10px] tracking-[0.25em] text-[var(--color-neon-green)]">ENGAGED</div>
