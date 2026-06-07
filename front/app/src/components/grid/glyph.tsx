@@ -1,66 +1,41 @@
+// All glyphs served from /public/moCons/ — no asset.json, no CDN dependency.
+const BASE = "/moCons";
+
 export type GlyphName =
-  | "covenant"
-  | "grid"
-  | "council"
-  | "mind"
-  | "lattice"
-  | "events"
-  | "conduit"
-  | "sanctuary"
-  | "moscripts"
-  | "settings"
-  | "health"
-  | "nodes"
-  | "relationships"
-  | "utterances"
-  | "status"
-  | "warning"
-  | "alert"
-  | "info"
-  | "seal"
-  | "memory"
-  | "target"
-  | "sun"
-  | "spark"
-  | "eye"
-  | "eyelight"
-  | "venus"
-  | "ban"
-  | "cube";
+  | "covenant"       // gold trinity network        — df (7)
+  | "target"         // blue crosshair              — df (2)
+  | "ban"            // black prohibition           — df (4)
+  | "sun"            // gold quartered circle       — df (5)
+  | "spark"          // blue 4-point sparkle        — df (6)
+  | "eye"            // blue eye-spiral             — df (8)
+  | "eyeLight"       // white eye-spiral            — df (9)
+  | "venus"          // gold venus                  — df (1)
+  | "pulse"          // blue lightning bolt         — df (3)
+  | "venusDark"      // black venus                 — df (10)
+  | "covenantGold"   // gold trinity (alias)        — sd (1)
+  | "triangleUp"     // black upward triangle       — sd (2)
+  | "triangleDown"   // white downward triangle     — sd (3)
+  | "covenantLight"  // white trinity               — sd (4)
+  | "banDark"        // black prohibition (alias)   — sd (5)
+  | "sunGold";       // gold quartered circle (alias)— sd (6)
 
-const icon = (file: string) => `/moCons/${encodeURIComponent(file)}`;
-
-const MAP: Record<GlyphName, { url: string }> = {
-  covenant: { url: icon("df (10).png") },
-  grid: { url: icon("df (1).png") },
-  council: { url: icon("df (2).png") },
-  mind: { url: icon("df (3).png") },
-  lattice: { url: icon("df (4).png") },
-  events: { url: icon("df (5).png") },
-  conduit: { url: icon("df (6).png") },
-  sanctuary: { url: icon("df (7).png") },
-  moscripts: { url: icon("df (8).png") },
-  settings: { url: icon("df (9).png") },
-
-  health: { url: icon("sd (2).png") },
-  nodes: { url: icon("sd (3).png") },
-  relationships: { url: icon("sd (4).png") },
-  utterances: { url: icon("sd (5).png") },
-  status: { url: icon("sd (6).png") },
-
-  warning: { url: icon("f3.png") },
-  alert: { url: icon("glo3t.png") },
-  info: { url: icon("ms_34_-removebg-preview.png") },
-  seal: { url: icon("ms_18_-removebg-preview.png") },
-  memory: { url: icon("ms_19_-removebg-preview.png") },
-  target: { url: icon("ms_14_-removebg-preview.png") },
-  sun: { url: icon("ms_41_-removebg-preview.png") },
-  spark: { url: icon("ms_16_-removebg-preview.png") },
-  eye: { url: icon("ms_35_-removebg-preview.png") },
-  eyelight: { url: icon("ms_35_-removebg-preview.png") },
-  venus: { url: icon("ms_41_-removebg-preview.png") },
-  ban: { url: icon("ms_17_-removebg-preview.png") },
-  cube: { url: icon("Cube 1.png") },
+const MAP: Record<GlyphName, string> = {
+  venus:         `${BASE}/df (1).png`,
+  target:        `${BASE}/df (2).png`,
+  pulse:         `${BASE}/df (3).png`,
+  ban:           `${BASE}/df (4).png`,
+  sun:           `${BASE}/df (5).png`,
+  spark:         `${BASE}/df (6).png`,
+  covenant:      `${BASE}/df (7).png`,
+  eye:           `${BASE}/df (8).png`,
+  eyeLight:      `${BASE}/df (9).png`,
+  venusDark:     `${BASE}/df (10).png`,
+  covenantGold:  `${BASE}/sd (1).png`,
+  triangleUp:    `${BASE}/sd (2).png`,
+  triangleDown:  `${BASE}/sd (3).png`,
+  covenantLight: `${BASE}/sd (4).png`,
+  banDark:       `${BASE}/sd (5).png`,
+  sunGold:       `${BASE}/sd (6).png`,
 };
 
 export function Glyph({
@@ -74,11 +49,9 @@ export function Glyph({
   glow?: string;
   className?: string;
 }) {
-  const src = MAP[name]?.url ?? MAP.covenant.url;
-
   return (
     <img
-      src={src}
+      src={MAP[name]}
       alt=""
       draggable={false}
       width={size}
@@ -87,9 +60,7 @@ export function Glyph({
       style={{
         width: size,
         height: size,
-        filter: glow
-          ? `drop-shadow(0 0 6px ${glow}) drop-shadow(0 0 14px ${glow})`
-          : undefined,
+        filter: glow ? `drop-shadow(0 0 8px ${glow})` : undefined,
       }}
     />
   );
