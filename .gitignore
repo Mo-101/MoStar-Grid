@@ -74,6 +74,8 @@ mindgraph/neo4j-mindgraph/run/
 mindgraph/neo4j-mindgraph/logs/
 
 # Neo4j runtime data - never commit
+back/services/mindgraph/mo-neo4j/
+back/services/mindgraph/neo4j-mindgraph/
 back/services/mindgraph/neo4j-mindgraph/**/transactions/
 back/services/mindgraph/neo4j-mindgraph/**/databases/
 back/services/mindgraph/neo4j-mindgraph/**/data*/

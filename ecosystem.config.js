@@ -147,7 +147,8 @@ module.exports = {
       interpreter: 'none',
       cwd: GRID_ROOT,
       env: {
-        NEO4J_HOME: `${GRID_ROOT}/back/services/mindgraph/neo4j-mindgraph`,
+        NEO4J_HOME: '/usr/share/neo4j',
+        NEO4J_CONF: `${GRID_ROOT}/back/services/mindgraph/mo-neo4j/conf`,
       },
       watch: false,
       autorestart: true,

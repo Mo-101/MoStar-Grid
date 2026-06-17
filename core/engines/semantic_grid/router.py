@@ -59,7 +59,7 @@ class SemanticGrid:
         self,
         ollama_url: str = "http://localhost:11434",
         model: str = "phi4:latest",
-        neo4j_uri: str = "bolt://localhost:47687",
+        neo4j_uri: str | None = None,
         enable_truth_engine: bool = True,
         enable_woo: bool = True,
     ):

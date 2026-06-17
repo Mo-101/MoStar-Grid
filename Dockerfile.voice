@@ -1,0 +1,33 @@
+# MoStar Voice (Piper TTS) — Render deploy
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Piper binary (Linux x86_64) — matches the build the rest of the stack was
+# validated against (rhasspy/piper release 2023.11.14-2).
+RUN curl -L -o /tmp/piper.tar.gz \
+    https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_x86_64.tar.gz \
+    && tar -xzf /tmp/piper.tar.gz -C /opt \
+    && rm /tmp/piper.tar.gz
+
+# Voice model — en_US-libritts-high
+RUN mkdir -p /opt/voice-models \
+    && curl -L -o /opt/voice-models/en_US-libritts-high.onnx \
+    https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/libritts/high/en_US-libritts-high.onnx \
+    && curl -L -o /opt/voice-models/en_US-libritts-high.onnx.json \
+    https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/libritts/high/en_US-libritts-high.onnx.json
+
+ENV PIPER_BIN=/opt/piper/piper
+ENV VOICE_MODEL=/opt/voice-models/en_US-libritts-high.onnx
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY voice_api.py .
+
+ENV PYTHONUNBUFFERED=1
+EXPOSE 10000
+CMD ["python", "voice_api.py"]

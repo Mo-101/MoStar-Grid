@@ -146,5 +146,25 @@ async def executor_watcher(orchestrator):
                 # Cycles are tied to provenance records
         except Exception as e:
             logger.error(f"ExecutorWatcher error: {e}")
-            
+
+        await asyncio.sleep(60)
+
+async def mindgraph_reconnect_watcher(orchestrator):
+    """Retries the MindGraph connection if boot-time connect failed or it later drops.
+
+    orchestrator.boot() only attempts the Neo4j connection once; if that single
+    attempt fails (e.g. a transient outage during deploy), mindgraph.connected
+    stays False for the lifetime of the process. This loop keeps retrying so a
+    cloud DB hiccup at startup doesn't permanently degrade the service.
+    """
+    logger.info("MindGraphReconnectWatcher started.")
+    while True:
+        if not orchestrator.mindgraph.connected:
+            try:
+                await orchestrator.mindgraph.connect()
+                await orchestrator.mindgraph.ensure_schema()
+                logger.info("MindGraphReconnectWatcher: connection restored.")
+            except Exception as e:
+                logger.warning(f"MindGraphReconnectWatcher: still unreachable ({e})")
+
         await asyncio.sleep(60)

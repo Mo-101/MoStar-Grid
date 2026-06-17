@@ -42,7 +42,7 @@ from grid.semantic_api import router as semantic_router
 from grid.telemetry import ClusterTelemetry
 from dcx import DCXLayer
 from grid.events import event_bus, GridEvent
-from grid.watchers import world_signal_watcher, telemetry_watcher, mood_engine, executor_watcher
+from grid.watchers import world_signal_watcher, telemetry_watcher, mood_engine, executor_watcher, mindgraph_reconnect_watcher
 from grid.memory import (
     MemoryLayer,
     get_recent_memory,
@@ -89,7 +89,8 @@ async def lifespan(app: FastAPI):
     asyncio.create_task(telemetry_watcher(orchestrator))
     asyncio.create_task(autonomous_announcer(app.state.memory_layer))
     asyncio.create_task(executor_watcher(orchestrator))
-    
+    asyncio.create_task(mindgraph_reconnect_watcher(orchestrator))
+
     yield
     await orchestrator.shutdown()
 

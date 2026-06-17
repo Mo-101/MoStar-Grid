@@ -353,18 +353,36 @@ function DashboardLayout() {
     setVoiceLog((prev) => [...prev, { sender: "user", text: cmd }]);
     setVoiceCommandInput("");
     try {
-      const res = await fetch(`${API_BASE}/api/voice/speak`, {
+      // Route through LLM voice agent first for intelligent response
+      let speechText = cmd;
+      try {
+        const agentRes = await fetch(`${API_BASE}/api/voice-command`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...authHeaders() },
+          body: JSON.stringify({ text: cmd }),
+        });
+        if (agentRes.ok) {
+          const agentData = await agentRes.json();
+          if (agentData.speech) speechText = agentData.speech;
+        }
+      } catch {
+        /* fall through — speak raw command if LLM unreachable */
+      }
+
+      setVoiceLog((prev) => [...prev, { sender: "woo", text: speechText }]);
+
+      // Speak the LLM response via Piper TTS
+      const res = await fetch("http://localhost:41071/speak", {
         method: "POST",
-        headers: { "Content-Type": "application/json", ...authHeaders() },
-        body: JSON.stringify({ text: cmd, mood: "ceremonial" }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: speechText, mood: "ceremonial" }),
       });
-      const data = await res.json();
-      const audioUrl = data.audio_url?.startsWith("/audio/")
-        ? `${API_BASE}/api/voice${data.audio_url}`
-        : data.audio_url;
-      if (audioUrl) await new Audio(audioUrl).play();
-      const reply = audioUrl ? "Speaking through Piper." : "Voice route returned no audio.";
-      setVoiceLog((prev) => [...prev, { sender: "woo", text: reply }]);
+      if (!res.ok) throw new Error(`Voice error: ${res.status}`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.onended = () => URL.revokeObjectURL(url);
+      await audio.play();
     } catch {
       setVoiceLog((prev) => [...prev, { sender: "woo", text: "Signal lost. Try again." }]);
     }
@@ -394,7 +412,6 @@ function DashboardLayout() {
 
   return (
     <DashboardContext.Provider value={ctx}>
-      <style>{panelCss}</style>
       <Outlet />
 
       {showSoulprint && (
@@ -442,282 +459,3 @@ function DashboardLayout() {
     </DashboardContext.Provider>
   );
 }
-
-// ─── panel / orbit CSS shared by all dashboard pages ─────────────────────────
-
-const panelCss = `
-:root {
-  --gold: var(--color-neon-gold);
-  --cyan: var(--color-neon-cyan);
-  --green: var(--color-neon-green);
-  --purple: var(--color-neon-purple);
-  --red: var(--color-neon-red);
-  --muted: var(--color-muted-foreground);
-}
-
-/* Page grid */
-section.main {
-  display: grid;
-  grid-template-columns: 280px 1fr 1fr;
-  gap: 12px;
-  height: 100vh;
-  padding: 12px;
-  box-sizing: border-box;
-  background: var(--color-background);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-}
-
-/* Panel shared */
-.panel {
-  background: linear-gradient(180deg,oklch(0.22 0.05 270 / 0.75),oklch(0.18 0.05 270 / 0.6));
-  border: 1px solid var(--panel-border);
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-}
-.panel::before, .panel::after {
-  content: "";
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border-color: var(--cyan);
-  opacity: 0.3;
-  pointer-events: none;
-}
-.panel::before { left:8px; top:8px; border-left:1px solid; border-top:1px solid; }
-.panel::after  { right:8px; bottom:8px; border-right:1px solid; border-bottom:1px solid; }
-
-/* Panel type modifiers */
-.panel.left { grid-column: 1; display: flex; flex-direction: column; gap: 16px; padding: 20px 18px; }
-.panel.right { grid-column: 3; display: flex; flex-direction: column; gap: 14px; padding: 20px 18px; }
-.panel.chamber { grid-column: 2; }
-
-/* Typography */
-.kicker {
-  font-size: 9px;
-  letter-spacing: 0.22em;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-.adinkra {
-  font-size: 18px;
-  text-align: center;
-  color: var(--gold);
-  letter-spacing: 0.3em;
-  opacity: 0.7;
-}
-.sub {
-  font-size: 12px;
-  color: oklch(0.7 0.04 250);
-  line-height: 1.7;
-  letter-spacing: 0.05em;
-}
-.proverb {
-  font-size: 10px;
-  font-style: italic;
-  color: var(--gold);
-  opacity: 0.75;
-  border-left: 2px solid var(--gold);
-  padding: 8px 12px;
-  background: oklch(0.82 0.16 85 / 0.05);
-  line-height: 1.5;
-}
-
-/* Data box */
-.box {
-  background: oklch(0.14 0.04 270 / 0.5);
-  border: 1px solid oklch(0.35 0.08 250 / 0.3);
-  border-radius: 6px;
-  padding: 12px 14px;
-}
-.box h3 {
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  color: var(--cyan);
-  margin: 0 0 10px;
-  text-transform: uppercase;
-}
-.row {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 0;
-  border-bottom: 1px solid oklch(1 0 0 / 0.05);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-}
-.row span:first-child { color: oklch(0.6 0.04 250); }
-.row span:last-child  { color: var(--color-foreground); }
-.row.green span:last-child { color: var(--green); }
-.row.red   span:last-child { color: var(--red); }
-
-.bar {
-  height: 4px;
-  background: oklch(0.25 0.05 270);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-top: 8px;
-}
-.fill {
-  height: 100%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
-  transition: width 0.4s ease;
-}
-
-/* Elemental balance */
-.balance {
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.diamond {
-  width: 40px;
-  height: 40px;
-  transform: rotate(45deg);
-  border: 1px solid var(--gold);
-  background: oklch(0.82 0.16 85 / 0.1);
-}
-
-/* Agent actions */
-.actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: auto;
-}
-.actions button {
-  background: oklch(0.14 0.04 270 / 0.8);
-  border: 1px solid oklch(0.50 0.10 250 / 0.4);
-  color: var(--cyan);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  padding: 9px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: inherit;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.actions button:hover {
-  border-color: var(--cyan);
-  box-shadow: 0 0 12px oklch(0.85 0.16 210 / 0.3);
-}
-
-/* Agent head in right panel */
-.agent-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.agent-head h2 {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--gold);
-  margin: 0;
-}
-.portrait {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--gold);
-  background: oklch(0.82 0.16 85 / 0.08);
-  box-shadow: 0 0 18px oklch(0.82 0.16 85 / 0.3);
-}
-.crest {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid var(--gold);
-  background: oklch(0.82 0.16 85 / 0.1);
-}
-.quote {
-  font-size: 11px;
-  font-style: italic;
-  color: oklch(0.70 0.04 250);
-  line-height: 1.5;
-  border-left: 2px solid var(--gold);
-  padding-left: 10px;
-}
-.info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-/* Council orbit */
-.chamber-title {
-  text-align: center;
-  font-size: 13px;
-  letter-spacing: 0.2em;
-  color: var(--gold);
-  padding: 18px 0 8px;
-  text-transform: uppercase;
-}
-.orbit {
-  position: relative;
-  width: 440px;
-  height: 440px;
-  margin: 0 auto;
-}
-.core {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  border: 2px solid var(--gold);
-  background: oklch(0.15 0.05 270 / 0.8);
-  box-shadow: 0 0 30px oklch(0.82 0.16 85 / 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 2;
-}
-.agent {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  z-index: 1;
-}
-.agent.selected .orb { box-shadow: 0 0 20px var(--agent, var(--gold)); transform: scale(1.2); }
-.agent.pinged .orb   { animation: ping-flash 0.4s ease 3; }
-.orb {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid var(--agent, var(--gold));
-  background: oklch(0.15 0.05 270 / 0.9);
-  box-shadow: 0 0 10px var(--agent, var(--gold));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.glyph {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--agent, var(--gold));
-  box-shadow: 0 0 8px var(--agent, var(--gold));
-}
-.name  { font-size: 8px;  letter-spacing: 0.12em; color: var(--gold); }
-.role  { font-size: 7px;  letter-spacing: 0.08em; color: var(--muted); }
-.state { font-size: 7px;  letter-spacing: 0.08em; }
-
-@keyframes ping-flash {
-  0%, 100% { box-shadow: 0 0 10px var(--agent, var(--gold)); }
-  50%       { box-shadow: 0 0 30px var(--agent, var(--gold)), 0 0 60px var(--agent, var(--gold)); }
-}
-`;

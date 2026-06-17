@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-export NEO4J_HOME="/home/idona/MoStar/_apps/grid/mindgraph/neo4j-mindgraph"
-export NEO4J_CONF="${NEO4J_HOME}/conf"
-exec /usr/share/neo4j/bin/neo4j-admin "$@"

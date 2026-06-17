@@ -13,16 +13,14 @@ Seal: 🜃∴🜂
 ============================================================================
 """
 
-import hashlib
+import io
 import os
 import subprocess
-import time
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -30,14 +28,11 @@ from pydantic import BaseModel
 # ─────────────────────────────────────────────────────────────────────────
 
 VOICE_ROOT = Path.home() / "MoStar" / "voice"
-PIPER_BIN = VOICE_ROOT / "piper" / "piper"
-VOICE_MODEL = VOICE_ROOT / "models" / "en_US-libritts-high.onnx"
-AUDIO_OUT = VOICE_ROOT / "audio"
-AUDIO_OUT.mkdir(parents=True, exist_ok=True)
+PIPER_BIN = Path(os.getenv("PIPER_BIN", str(VOICE_ROOT / "piper" / "piper")))
+VOICE_MODEL = Path(os.getenv("VOICE_MODEL", str(VOICE_ROOT / "models" / "en_US-libritts-high.onnx")))
 
 VOICE_NAME = "mostar-sovereign-v1"
 
-# Mood → Piper parameters (length_scale = pacing, sentence_silence = pauses)
 MOODS = {
     "stable":      {"length_scale": "1.0",  "sentence_silence": "0.4"},
     "ceremonial":  {"length_scale": "1.15", "sentence_silence": "0.6"},
@@ -59,9 +54,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve generated audio files
-app.mount("/audio", StaticFiles(directory=str(AUDIO_OUT)), name="audio")
-
 
 class SpeakRequest(BaseModel):
     text: str
@@ -72,7 +64,7 @@ class SpeakRequest(BaseModel):
 # TEXT SANITIZATION
 # ─────────────────────────────────────────────────────────────────────────
 
-GLYPH_STRIP = ["🜂", "🜄", "🜁", "🜃", "∴", "🜃∴🜂"]
+GLYPH_STRIP = ["🜂", "🜄", "🜁", "🜃", "∴"]
 
 def sanitize(text: str) -> str:
     cleaned = text
@@ -100,7 +92,7 @@ async def health():
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# SPEAK — the core endpoint
+# SPEAK
 # ─────────────────────────────────────────────────────────────────────────
 
 @app.post("/speak")
@@ -116,29 +108,15 @@ async def speak(req: SpeakRequest):
 
     mood_params = MOODS.get(req.mood, MOODS["ceremonial"])
 
-    # Deterministic filename per (text, mood) — cache identical requests
-    digest = hashlib.sha256(f"{text}|{req.mood}".encode()).hexdigest()[:16]
-    out_file = AUDIO_OUT / f"woo-{digest}.wav"
+    cmd = [
+        str(PIPER_BIN),
+        "--model", str(VOICE_MODEL),
+        "--length_scale", mood_params["length_scale"],
+        "--sentence_silence", mood_params["sentence_silence"],
+        "--output_file", "-",
+    ]
 
-    # Return cached audio if it exists
-    if out_file.exists():
-        return {
-            "ok": True,
-            "audio_url": f"/audio/{out_file.name}",
-            "engine": "piper",
-            "voice": VOICE_NAME,
-            "cached": True,
-        }
-
-    # Generate via Piper
     try:
-        cmd = [
-            str(PIPER_BIN),
-            "--model", str(VOICE_MODEL),
-            "--length_scale", mood_params["length_scale"],
-            "--sentence_silence", mood_params["sentence_silence"],
-            "--output_file", str(out_file),
-        ]
         result = subprocess.run(
             cmd,
             input=text.encode("utf-8"),
@@ -155,30 +133,9 @@ async def speak(req: SpeakRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Piper error: {str(e)[:200]}")
 
-    return {
-        "ok": True,
-        "audio_url": f"/audio/{out_file.name}",
-        "engine": "piper",
-        "voice": VOICE_NAME,
-        "cached": False,
-    }
-
-
-# ─────────────────────────────────────────────────────────────────────────
-# CLEANUP — purge old audio (keep last 200 files)
-# ─────────────────────────────────────────────────────────────────────────
-
-@app.post("/cleanup")
-async def cleanup():
-    files = sorted(AUDIO_OUT.glob("woo-*.wav"), key=lambda p: p.stat().st_mtime)
-    removed = 0
-    while len(files) > 200:
-        oldest = files.pop(0)
-        oldest.unlink()
-        removed += 1
-    return {"ok": True, "removed": removed, "remaining": len(files)}
+    return StreamingResponse(io.BytesIO(result.stdout), media_type="audio/wav")
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=41071)
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "41071")))

@@ -1,0 +1,16 @@
+# MoStar Grid API — Render deploy
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY back/ ./back/
+COPY core/ ./core/
+
+ENV PYTHONPATH=/app:/app/back/services:/app/core/engines:/app/core/sovereignty:/app/core/protocols:/app/core/ops
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 10000
+CMD ["sh", "-c", "uvicorn back.services.grid.api:app --host 0.0.0.0 --port ${PORT:-10000}"]

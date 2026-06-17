@@ -1,0 +1,19 @@
+.git
+.venv
+__pycache__
+**/__pycache__
+*.pyc
+.pytest_cache
+logs/
+data/
+models/
+mindgraph/
+grid/
+front/
+.handoff
+.vscode
+.claude
+*.log
+
+# Self-hosted Neo4j install/data — not used in cloud deploy (Aura instead)
+back/services/mindgraph/mo-neo4j/

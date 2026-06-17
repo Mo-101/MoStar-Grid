@@ -14,8 +14,6 @@ from .contracts import SemanticState
 
 logger = logging.getLogger("semantic_grid.state")
 
-NEO4J_URI = "bolt://localhost:47687"
-
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -27,15 +25,20 @@ class SemanticStateManager:
     Falls back gracefully if Neo4j is unavailable.
     """
 
-    def __init__(self, uri: str = NEO4J_URI):
+    def __init__(self, uri: str | None = None, auth: tuple[str, str] | None = None):
+        if uri is None or auth is None:
+            from grid.config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+            uri = uri if uri is not None else NEO4J_URI
+            auth = auth if auth is not None else (NEO4J_USER, NEO4J_PASSWORD)
         self._uri = uri
+        self._auth = auth
         self._driver = None
 
     def _connect(self):
         if self._driver is None:
             try:
                 from neo4j import GraphDatabase
-                self._driver = GraphDatabase.driver(self._uri, auth=None)
+                self._driver = GraphDatabase.driver(self._uri, auth=self._auth)
             except Exception as exc:
                 logger.warning("SemanticStateManager: Neo4j unavailable (%s)", exc)
         return self._driver

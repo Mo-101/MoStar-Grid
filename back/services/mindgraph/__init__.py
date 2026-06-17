@@ -2,13 +2,16 @@
 MindGraph — Neo4j Knowledge Graph Interface
 Handles all graph reads and writes for the living intelligence.
 """
+import asyncio
 import json
 import logging
 import uuid
+import grid.config
+from grid import glyphs
 from datetime import datetime, timezone
 from typing import Optional
 
-from neo4j import AsyncGraphDatabase, AsyncDriver
+from neo4j import AsyncGraphDatabase, AsyncDriver, Query
 from grid.config import (
     MOSTAR_CLUSTER_ID,
     NEO4J_DATABASE,
@@ -32,17 +35,23 @@ class MindGraph:
         self._driver: Optional[AsyncDriver] = None
         self._active_commit_token: Optional[str] = None
 
-    async def connect(self):
-        self._driver = AsyncGraphDatabase.driver(
-            NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD)
-        )
-        try:
-            await self._driver.verify_connectivity()
-            logger.info("MindGraph connected to Neo4j at %s", NEO4J_URI)
-        except Exception as e:
-            logger.error("MindGraph connection failed: %s", e)
-            self._driver = None
-            raise
+    async def connect(self, retries: int = 5, delay: float = 3.0):
+        """Connect to Neo4j, retrying if not ready yet (handles startup race)."""
+        for attempt in range(1, retries + 1):
+            try:
+                driver = AsyncGraphDatabase.driver(
+                    NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD)
+                )
+                await driver.verify_connectivity()
+                self._driver = driver
+                logger.info("MindGraph connected to Neo4j at %s (attempt %d)", NEO4J_URI, attempt)
+                return
+            except Exception as e:
+                logger.warning("MindGraph connect attempt %d/%d failed: %s", attempt, retries, e)
+                if attempt < retries:
+                    await asyncio.sleep(delay)
+        logger.error("MindGraph could not connect after %d attempts", retries)
+        raise RuntimeError(f"MindGraph failed to connect to {NEO4J_URI}")
 
     async def close(self):
         if self._driver:
@@ -94,7 +103,7 @@ class MindGraph:
             try:
                 result = await session.run(
                     cypher,
-                    query=query,
+                    query_param=query,
                     limit=limit,
                     cluster_id=MOSTAR_CLUSTER_ID,
                 )
@@ -107,7 +116,7 @@ class MindGraph:
             try:
                 result = await session.run(
                     fallback,
-                    query=query,
+                    query_param=query,
                     limit=limit,
                     cluster_id=MOSTAR_CLUSTER_ID,
                 )
@@ -173,8 +182,8 @@ class MindGraph:
         source: str = "conversation",
         created_by: str = "grid_orchestrator",
         source_id: str | None = None,
-        metadata: dict = None,
-        _commit_token: str = None,
+        metadata: dict | None = None,
+        _commit_token: str | None = None,
     ) -> str:
         """Write new knowledge to the graph. Returns the node ID."""
         self._assert_commit_token(_commit_token)
@@ -251,7 +260,7 @@ class MindGraph:
         seal: str = "Synthetic",
         source: str = "conversation",
         created_by: str = "grid_orchestrator",
-        _commit_token: str = None,
+        _commit_token: str | None = None,
     ) -> str:
         """Seal a Talk→Learn→Remember cycle as a MoStarMoment."""
         self._assert_commit_token(_commit_token)
@@ -338,7 +347,7 @@ class MindGraph:
         async with self._driver.session(database=NEO4J_DATABASE) as session:
             for cmd in commands:
                 try:
-                    await session.run(cmd)
+                    await session.run(Query(cmd))
                 except Exception as e:
                     logger.debug("Schema command skipped: %s", e)
             try:

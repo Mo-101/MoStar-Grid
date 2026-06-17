@@ -5,6 +5,7 @@ Mediator. Requests. Cluster decides.
 
 import json
 import logging
+import os
 from datetime import datetime
 from pathlib import Path
 import httpx
@@ -13,7 +14,7 @@ from pydantic import BaseModel
 from typing import Any, Dict
 
 # Setup logging
-LOG_FILE = Path("/home/idona/MoStar/_apps/grid/logs/mcp_gateway.jsonl")
+LOG_FILE = Path(os.getenv("MCP_GATEWAY_LOG_FILE", str(Path(__file__).resolve().parents[3] / "logs" / "mcp_gateway.jsonl")))
 LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 def log_mcp_request(request_data: dict, status: str):
@@ -27,7 +28,7 @@ def log_mcp_request(request_data: dict, status: str):
 
 app = FastAPI(title="MoStar MCP Gateway")
 
-GRID_API_URL = "http://localhost:41010"
+GRID_API_URL = os.getenv("GRID_API_URL", "http://localhost:41010")
 
 def verify_soulprint(request: Request):
     # Placeholder for Soulprint validation (Light gate)

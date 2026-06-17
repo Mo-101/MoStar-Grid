@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 406" fill="none">
+  <defs>
+    <radialGradient id="orb-bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0d1a2e" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#060f1a" stop-opacity="0.6"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Ring track -->
+  <circle cx="196.5" cy="203" r="180" stroke="#00d8ff" stroke-opacity="0.12" stroke-width="1" fill="url(#orb-bg)"/>
+  <circle cx="196.5" cy="203" r="170" stroke="#f6c453" stroke-opacity="0.06" stroke-width="0.5" fill="none"/>
+
+  <!-- Node 0 — top -->
+  <ellipse cx="195.722" cy="35.3291" rx="14" ry="14" fill="#f6c453" fill-opacity="0.08" stroke="#f6c453" stroke-opacity="0.4" stroke-width="1"/>
+  <ellipse cx="195.722" cy="35.3291" rx="8"  ry="8"  fill="#f6c453" fill-opacity="0.18" stroke="#f6c453" stroke-opacity="0.6" stroke-width="1"/>
+  <ellipse cx="195.722" cy="35.3291" rx="3"  ry="3"  fill="#f6c453" fill-opacity="0.9"/>
+
+  <!-- Node 1 — top-right -->
+  <ellipse cx="316.995" cy="92.7552" rx="14" ry="14" fill="#00d8ff" fill-opacity="0.08" stroke="#00d8ff" stroke-opacity="0.4" stroke-width="1"/>
+  <ellipse cx="316.995" cy="92.7552" rx="8"  ry="8"  fill="#00d8ff" fill-opacity="0.18" stroke="#00d8ff" stroke-opacity="0.6" stroke-width="1"/>
+  <ellipse cx="316.995" cy="92.7552" rx="3"  ry="3"  fill="#00d8ff" fill-opacity="0.9"/>
+
+  <!-- Node 2 — right -->
+  <ellipse cx="358.52" cy="203.56" rx="14" ry="14" fill="#b46cff" fill-opacity="0.08" stroke="#b46cff" stroke-opacity="0.4" stroke-width="1"/>
+  <ellipse cx="358.52" cy="203.56" rx="8"  ry="8"  fill="#b46cff" fill-opacity="0.18" stroke="#b46cff" stroke-opacity="0.6" stroke-width="1"/>
+  <ellipse cx="358.52" cy="203.56" rx="3"  ry="3"  fill="#b46cff" fill-opacity="0.9"/>
+
+  <!-- Node 3 — bottom-right -->
+  <ellipse cx="316.066" cy="318.762" rx="14" ry="14" fill="#21ff64" fill-opacity="0.08" stroke="#21ff64" stroke-opacity="0.4" stroke-width="1"/>
+  <ellipse cx="316.066" cy="318.762" rx="8"  ry="8"  fill="#21ff64" fill-opacity="0.18" stroke="#21ff64" stroke-opacity="0.6" stroke-width="1"/>
+  <ellipse cx="316.066" cy="318.762" rx="3"  ry="3"  fill="#21ff64" fill-opacity="0.9"/>
+
+  <!-- Node 4 — bottom -->
+  <ellipse cx="198.309" cy="370.321" rx="14" ry="14" fill="#f6c453" fill-opacity="0.08" stroke="#f6c453" stroke-opacity="0.4" stroke-width="1"/>
+  <ellipse cx="198.309" cy="370.321" rx="8"  ry="8"  fill="#f6c453" fill-opacity="0.18" stroke="#f6c453" stroke-opacity="0.6" stroke-width="1"/>
+  <ellipse cx="198.309" cy="370.321" rx="3"  ry="3"  fill="#f6c453" fill-opacity="0.9"/>
+
+  <!-- Node 5 — bottom-left -->
+  <ellipse cx="79.0684" cy="319.885" rx="14" ry="14" fill="#168bff" fill-opacity="0.08" stroke="#168bff" stroke-opacity="0.4" stroke-width="1"/>
+  <ellipse cx="79.0684" cy="319.885" rx="8"  ry="8"  fill="#168bff" fill-opacity="0.18" stroke="#168bff" stroke-opacity="0.6" stroke-width="1"/>
+  <ellipse cx="79.0684" cy="319.885" rx="3"  ry="3"  fill="#168bff" fill-opacity="0.9"/>
+
+  <!-- Node 6 — left -->
+  <ellipse cx="34.5241" cy="205.095" rx="14" ry="14" fill="#ff3b6b" fill-opacity="0.08" stroke="#ff3b6b" stroke-opacity="0.4" stroke-width="1"/>
+  <ellipse cx="34.5241" cy="205.095" rx="8"  ry="8"  fill="#ff3b6b" fill-opacity="0.18" stroke="#ff3b6b" stroke-opacity="0.6" stroke-width="1"/>
+  <ellipse cx="34.5241" cy="205.095" rx="3"  ry="3"  fill="#ff3b6b" fill-opacity="0.9"/>
+
+  <!-- Node 7 — top-left -->
+  <ellipse cx="70.0168" cy="97.9253" rx="14" ry="14" fill="#9be15d" fill-opacity="0.08" stroke="#9be15d" stroke-opacity="0.4" stroke-width="1"/>
+  <ellipse cx="70.0168" cy="97.9253" rx="8"  ry="8"  fill="#9be15d" fill-opacity="0.18" stroke="#9be15d" stroke-opacity="0.6" stroke-width="1"/>
+  <ellipse cx="70.0168" cy="97.9253" rx="3"  ry="3"  fill="#9be15d" fill-opacity="0.9"/>
+
+  <!-- Core orb -->
+  <circle cx="196.5" cy="203" r="36" fill="#0d1a2e" stroke="#f6c453" stroke-opacity="0.5" stroke-width="1.5"/>
+  <circle cx="196.5" cy="203" r="22" fill="#0a1525" stroke="#f6c453" stroke-opacity="0.3" stroke-width="1"/>
+  <circle cx="196.5" cy="203" r="8" fill="#f6c453" fill-opacity="0.6"/>
+</svg>

@@ -45,7 +45,7 @@ let bootVoiceQueue = Promise.resolve();
 
 async function speakActivation(text: string): Promise<void> {
   try {
-    const res = await fetch(`${API_BASE}/api/voice/speak`, {
+    const res = await fetch("http://localhost:41071/speak", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text, mood: "ceremonial" }),
@@ -53,17 +53,13 @@ async function speakActivation(text: string): Promise<void> {
 
     if (!res.ok) return;
 
-    const data = await res.json();
-    if (!data.audio_url) return;
-
-    const src = data.audio_url.startsWith("/audio/")
-      ? `${API_BASE}/api/voice${data.audio_url}`
-      : data.audio_url;
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
 
     await new Promise<void>((resolve) => {
-      const audio = new Audio(src);
-      audio.onended = () => resolve();
-      audio.onerror = () => resolve();
+      const audio = new Audio(url);
+      audio.onended = () => { URL.revokeObjectURL(url); resolve(); };
+      audio.onerror = () => { URL.revokeObjectURL(url); resolve(); };
       audio.play().catch(() => resolve());
     });
   } catch {
@@ -115,7 +111,7 @@ async function checkServices(): Promise<Service[]> {
   }
 
   try {
-    const voice = await fetch(`${API_BASE}/api/voice/health`).then((res) => res.json());
+    const voice = await fetch("http://localhost:41071/health").then((res) => res.json());
 
     results[4].status = voice.status === "healthy" ? "online" : "degraded";
     results[4].detail = voice.status === "healthy" ? "piper active" : (voice.status ?? "partial");

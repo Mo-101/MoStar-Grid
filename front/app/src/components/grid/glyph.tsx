@@ -20,22 +20,22 @@ export type GlyphName =
   | "sunGold";       // gold quartered circle (alias)— sd (6)
 
 const MAP: Record<GlyphName, string> = {
-  venus:         `${BASE}/df (1).png`,
-  target:        `${BASE}/df (2).png`,
-  pulse:         `${BASE}/df (3).png`,
-  ban:           `${BASE}/df (4).png`,
-  sun:           `${BASE}/df (5).png`,
-  spark:         `${BASE}/df (6).png`,
-  covenant:      `${BASE}/df (7).png`,
-  eye:           `${BASE}/df (8).png`,
-  eyeLight:      `${BASE}/df (9).png`,
-  venusDark:     `${BASE}/df (10).png`,
-  covenantGold:  `${BASE}/sd (1).png`,
-  triangleUp:    `${BASE}/sd (2).png`,
-  triangleDown:  `${BASE}/sd (3).png`,
-  covenantLight: `${BASE}/sd (4).png`,
-  banDark:       `${BASE}/sd (5).png`,
-  sunGold:       `${BASE}/sd (6).png`,
+  venus:         `${BASE}/g2.png`,
+  target:        `${BASE}/g3.png`,
+  pulse:         `${BASE}/g4.png`,
+  ban:           `${BASE}/g5.png`,
+  sun:           `${BASE}/g6.png`,
+  spark:         `${BASE}/g7.png`,
+  covenant:      `${BASE}/g8.png`,
+  eye:           `${BASE}/g9.png`,
+  eyeLight:      `${BASE}/g10.png`,
+  venusDark:     `${BASE}/g11.png`,
+  covenantGold:  `${BASE}/g12.png`,
+  triangleUp:    `${BASE}/g13.png`,
+  triangleDown:  `${BASE}/g14.png`,
+  covenantLight: `${BASE}/g8.png`,
+  banDark:       `${BASE}/g5.png`,
+  sunGold:       `${BASE}/g6.png`,
 };
 
 export function Glyph({

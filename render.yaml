@@ -1,0 +1,79 @@
+envVarGroups:
+  - name: grid-shared
+    envVars:
+      - key: NEO4J_URI
+        sync: false
+      - key: NEO4J_USER
+        sync: false
+      - key: NEO4J_PASSWORD
+        sync: false
+      - key: NEO4J_DATABASE
+        sync: false
+      - key: OLLAMA_BASE_URL
+        sync: false
+      - key: DCX0_MODEL
+        value: "Mostar/mostar-ai:dcx0"
+      - key: DCX1_MODEL
+        value: "Mostar/mostar-ai:dcx1"
+      - key: DCX2_MODEL
+        value: "Mostar/mostar-ai:dcx2"
+      - key: MOSTAR_CLUSTER_ID
+        value: "nairobi-alpha"
+      - key: MOSTAR_CLUSTER_NAME
+        value: "Nairobi Health Cluster"
+      - key: MOSTAR_CLUSTER_REGION
+        value: "east-africa"
+      - key: MOSTAR_SESSION_TOKEN
+        sync: false
+      - key: GRID_AUTH_DISABLED
+        value: "false"
+
+services:
+  - type: web
+    name: mostar-grid-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn back.services.grid.api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - fromGroup: grid-shared
+      - key: PYTHONPATH
+        value: /opt/render/project/src:/opt/render/project/src/back/services:/opt/render/project/src/core/engines:/opt/render/project/src/core/sovereignty:/opt/render/project/src/core/protocols:/opt/render/project/src/core/ops
+      - key: MCP_CLUSTER_API_URL
+        sync: false  # set to mostar-mcp-gateway's public onrender.com URL
+    healthCheckPath: /api/health
+
+  - type: web
+    name: mostar-mcp-gateway
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn back.services.mcp_gateway.api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - fromGroup: grid-shared
+      - key: PYTHONPATH
+        value: /opt/render/project/src:/opt/render/project/src/back/services
+      - key: GRID_API_URL
+        sync: false  # set to mostar-grid-api's public onrender.com URL
+
+  - type: web
+    name: mostar-voice
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.voice
+    healthCheckPath: /health
+
+  - type: web
+    name: mostar-frontend
+    runtime: node
+    plan: free
+    rootDir: front/app
+    buildCommand: npm install && npm run build && rm -rf public/assets && cp -r dist/client/assets public/assets
+    startCommand: node serve.mjs
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_GRID_API_BASE
+        sync: false  # set to mostar-grid-api's public onrender.com URL
+      - key: VITE_MOSTAR_TOKEN
+        sync: false
