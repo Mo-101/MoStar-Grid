@@ -108,7 +108,8 @@ ALLOWED_ORIGINS = [
     "http://localhost:41012",
     "http://127.0.0.1:41012",
     "http://localhost:8080",
-]
+    "https://mostar-frontend.onrender.com",
+] + [origin.strip() for origin in os.getenv("CORS_EXTRA_ORIGINS", "").split(",") if origin.strip()]
 
 app.add_middleware(
     CORSMiddleware,
