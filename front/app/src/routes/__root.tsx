@@ -7,11 +7,12 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { reportMoScriptsError } from "../lib/moscripts-error-reporting";
+import { AwakeningScreen } from "../components/grid/awakening";
 
 function NotFoundComponent() {
   return (
@@ -39,7 +40,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reportMoScriptsError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (
@@ -78,14 +79,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "MoStar Grid" },
+      { name: "description", content: "MoStar Grid" },
+      { name: "author", content: "MoStar" },
+      { property: "og:title", content: "MoStar Grid" },
+      { property: "og:description", content: "MoStar Grid" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@mostar_ai" },
     ],
     links: [
       {
@@ -116,11 +117,13 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [booting, setBooting] = useState(true);
 
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      {booting ? <AwakeningScreen onComplete={() => setBooting(false)} /> : null}
       <Toaster
         position="top-right"
         toastOptions={{ unstyled: true, className: "" }}

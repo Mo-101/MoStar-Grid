@@ -62,6 +62,18 @@ services:
     plan: free
     dockerfilePath: ./Dockerfile.voice
     healthCheckPath: /health
+    envVars:
+      - fromGroup: grid-shared
+      - key: VOICE_NAME
+        value: mostar-sovereign-v1
+      - key: VOICE_MODEL
+        value: /opt/voice-models/en_GB-cori-high.onnx
+      - key: AUDIO_OUT
+        value: /tmp/mostar-voice-audio
+      - key: GRID_API_URL
+        sync: false  # set to MoStar-Grid's public onrender.com URL
+      - key: MAX_AUDIO_FILES
+        value: 200
 
   - type: web
     name: mostar-frontend
@@ -73,6 +85,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: "22.12.0"
       - key: VITE_GRID_API_BASE
         sync: false  # set to MoStar-Grid's public onrender.com URL
       - key: VITE_MOSTAR_TOKEN

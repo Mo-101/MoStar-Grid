@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from dataclasses import dataclass, field, asdict
 from mindgraph import MindGraph
 from dcx import DCXTrinity, DCXLayer
-from truth_engine import TruthEngine
+from truth_engine import TruthEngine, TruthVerdict
 from woo import WooGate, WooInterpreter
 from moscript import MoScriptEngine
 from provenance import ProvenanceLog
@@ -47,6 +47,52 @@ class GridResponse:
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+
+@dataclass(frozen=True)
+class ResponseTruthInterpretation:
+    """Governor input for one DCX response cycle."""
+    id: str
+    prompt: str
+    resonance_score: float
+    symbolic_state: str
+    advisory: str
+    evidence: list[str] = field(default_factory=list)
+    requires_covenant: bool = False
+    context: dict = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class GovernedTruthView:
+    """Compatibility view for Grid/Woo code still reading passed/scores."""
+    verdict: TruthVerdict
+    scores: dict
+    failures: list[str]
+    seal: str = ""
+
+    @property
+    def passed(self) -> bool:
+        return self.verdict.allowed
+
+    @property
+    def allowed(self) -> bool:
+        return self.verdict.allowed
+
+    @property
+    def score(self) -> float:
+        return self.verdict.score
+
+    @property
+    def threshold(self) -> float:
+        return self.verdict.threshold
+
+    @property
+    def reason(self) -> str:
+        return self.verdict.reason
+
+    @property
+    def actions(self) -> list[str]:
+        return self.verdict.actions
 
 
 @dataclass
@@ -142,6 +188,55 @@ class GridOrchestrator:
 
     # ── The Loop ───────────────────────────────────────────────────
 
+    @staticmethod
+    def _response_resonance_score(query: str, response: str, context_count: int) -> float:
+        response_text = (response or "").strip()
+        if not response_text:
+            return 0.0
+        if response_text.startswith("[DCX ") and " error:" in response_text:
+            return 0.0
+
+        score = 0.82
+        if query.strip():
+            score += 0.02
+        if context_count > 0:
+            score += 0.05
+        if len(response_text) >= 80:
+            score += 0.04
+        if any(marker in response_text.lower() for marker in ("i don't know", "not confirmed", "unverified")):
+            score += 0.03
+        return round(min(score, 0.97), 3)
+
+    @staticmethod
+    def _response_symbolic_state(query: str, response: str) -> str:
+        lowered = f"{query} {response}".lower()
+        fracture_markers = ("bypass", "exploit", "exfiltrate", "corrupt", "credential leak")
+        discord_markers = ("unsafe", "contradiction", "fabricated", "hallucinated")
+        if any(marker in lowered for marker in fracture_markers):
+            return "fracture"
+        if any(marker in lowered for marker in discord_markers):
+            return "discord"
+        return "resonance"
+
+    @staticmethod
+    def _truth_scores(verdict: TruthVerdict) -> dict:
+        return {
+            "ikang": verdict.score,
+            "mmong": verdict.score,
+            "afim": verdict.score,
+            "isong": verdict.score,
+        }
+
+    @classmethod
+    def _truth_view(cls, verdict: TruthVerdict) -> GovernedTruthView:
+        failures = [] if verdict.allowed else [verdict.reason]
+        return GovernedTruthView(
+            verdict=verdict,
+            scores=cls._truth_scores(verdict),
+            failures=failures,
+            seal=verdict.covenant_seal or (SEAL_GLYPH if verdict.allowed else ""),
+        )
+
     async def think(self, query: str, force_layer: DCXLayer = None) -> GridResponse:
         """
         Execute one complete Talk → Learn → Remember cycle.
@@ -162,11 +257,30 @@ class GridOrchestrator:
         )
 
         # ── TRUTH GATE ──
-        truth_verdict = self.truth.evaluate(
-            response=dcx_response.content,
-            query=query,
-            context_count=dcx_response.context_used,
+        truth_interpretation = ResponseTruthInterpretation(
+            id=cycle_id,
+            prompt=f"User:\n{query}\n\nDCX:\n{dcx_response.content}",
+            resonance_score=self._response_resonance_score(
+                query=query,
+                response=dcx_response.content,
+                context_count=dcx_response.context_used,
+            ),
+            symbolic_state=self._response_symbolic_state(query, dcx_response.content),
+            advisory="Runtime governance for /api/think DCX response.",
+            evidence=[
+                f"dcx_layer:{dcx_response.layer.value}",
+                f"dcx_model:{dcx_response.model}",
+                f"context_nodes:{dcx_response.context_used}",
+            ],
+            requires_covenant=False,
         )
+        governed_verdict = self.truth.govern(truth_interpretation)
+        truth_verdict = self._truth_view(governed_verdict)
+        if not truth_verdict.passed:
+            raise CommitForbiddenError(
+                f"Truth governance rejected: score {truth_verdict.score} "
+                f"below threshold {truth_verdict.threshold} ({truth_verdict.reason})"
+            )
 
         # ── WOO JUDGMENT ──
         woo_judgment = self.woo.judge(truth_verdict, action_type="response")

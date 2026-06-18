@@ -1,41 +1,53 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import sunVideo from "@/assets/sun5.mp4";
 import rawOrbSvg from "./loadord.svg?raw";
-import sunVideo from "@/assets/sun5.mp4.asset.json";
+import "./awakening.css";
 
 export type RollCallState = "idle" | "awakening" | "ready";
 
-/* 8 nodes, clockwise from top, matched to the SVG ellipse centers. */
-const NODES: { cx: string; cy: string; label: string; color: string }[] = [
-  { cx: "195.722", cy: "35.3291", label: "COVENANT CORE",        color: "#f6c453" }, // gold
-  { cx: "316.995", cy: "92.7552", label: "COUNCIL OF ELEVEN",    color: "#ff5a2e" }, // ember
-  { cx: "358.52",  cy: "203.56",  label: "NEO4J SOULPRINT",      color: "#00d8ff" }, // cyan
-  { cx: "316.066", cy: "318.762", label: "ELEMENTAL QUADRANTS",  color: "#b46cff" }, // violet
-  { cx: "198.309", cy: "370.321", label: "CODE CONDUIT",         color: "#00ff88" }, // green
-  { cx: "79.0684", cy: "319.885", label: "WOO ORACLE",           color: "#168bff" }, // blue
-  { cx: "34.5241", cy: "205.095", label: "DCX TRINITY",          color: "#ff3b6b" }, // red
-  { cx: "70.0168", cy: "97.9253", label: "GRID PERIMETER",       color: "#9be15d" }, // lime
+export type TelemetryEventType =
+  | "woo.evaluation"
+  | "truth.validation"
+  | "agent.lifecycle"
+  | "governor.cost"
+  | "council.decision"
+  | "registry.mutation"
+  | "voice.synthesis"
+  | "omni-symbolic"
+  | "memory.append"
+  | "ledger.write"
+  | "sanctuary.activation"
+  | "lingua.activation"
+  | "moscripts.execute"
+  | "runtime.execution";
+
+export const NODE_EVENT_MAP = {
+  "WOO ORACLE": ["woo.evaluation", "truth.validation"],
+  "COVENANT CORE": ["agent.lifecycle", "governor.cost"],
+  "COUNCIL OF THIRTEEN": ["council.decision", "registry.mutation"],
+  "SOUL · MIND · BODY": ["voice.synthesis"],
+  "IFÁ-CORPUS · AHP+TOPSIS+GREY": ["omni-symbolic"],
+  "NEO4J MEMORY CODEX": ["memory.append", "ledger.write"],
+  "SANCTUARY ACTIVATION": ["sanctuary.activation", "voice.synthesis"],
+  "IBIBIO LINGUA": ["lingua.activation", "voice.synthesis"],
+  MoScripts: ["moscripts.execute", "runtime.execution"],
+} as const satisfies Record<string, readonly TelemetryEventType[]>;
+
+const NODES: { label: keyof typeof NODE_EVENT_MAP; color: string }[] = [
+  { label: "WOO ORACLE", color: "#ff5a2e" },
+  { label: "COVENANT CORE", color: "#9be15d" },
+  { label: "COUNCIL OF THIRTEEN", color: "#00d8ff" },
+  { label: "SOUL · MIND · BODY", color: "#f6c453" },
+  { label: "IFÁ-CORPUS · AHP+TOPSIS+GREY", color: "#3b82f6" },
+  { label: "NEO4J MEMORY CODEX", color: "#00ff88" },
+  { label: "SANCTUARY ACTIVATION", color: "#168bff" },
+  { label: "IBIBIO LINGUA", color: "#6cd9ff" },
+  { label: "MoScripts", color: "#ff3b6b" },
 ];
 
-/* Inject data-node / data-layer attributes onto each node's 3 ellipses
-   so we can theme them individually with CSS variables. */
-const TAGGED_SVG = (() => {
-  let svg = rawOrbSvg;
-  NODES.forEach((n, i) => {
-    let layer = 0;
-    const re = new RegExp(
-      `<ellipse cx="${n.cx}" cy="${n.cy}"([^/]*?)/>`,
-      "g",
-    );
-    svg = svg.replace(re, (_m, attrs) => {
-      const tag = `<ellipse cx="${n.cx}" cy="${n.cy}"${attrs} data-node="${i}" data-layer="${layer}"/>`;
-      layer++;
-      return tag;
-    });
-  });
-  return svg;
-})();
+let ritualHasRun = false;
 
-export function AwakeningOrb({
+function AwakeningOrb({
   state,
   progress,
   activeStep = 0,
@@ -45,68 +57,48 @@ export function AwakeningOrb({
   activeStep?: number;
 }) {
   const glow =
-    state === "ready" ? "#00d8ff" : state === "awakening" ? "#f6c453" : "#8a5f14";
-
-  /* Per-node CSS that lights up reached / active nodes in their color. */
-  const nodeStyle = useMemo(() => {
-    const rules: string[] = [];
-    NODES.forEach((n, i) => {
-      const reached = i < activeStep || state === "ready";
-      const active = i === activeStep && state === "awakening";
-      if (!reached && !active) return;
-      const c = n.color;
-      // layer 0 = base fill (the darker plate)
-      rules.push(`.orb-svg [data-node="${i}"][data-layer="0"]{fill:${c};fill-opacity:${active ? 0.55 : 0.35};}`);
-      // layer 1 = radial gradient overlay — force a hot fill
-      rules.push(`.orb-svg [data-node="${i}"][data-layer="1"]{fill:${c};fill-opacity:${active ? 0.85 : 0.55};}`);
-      // layer 2 = stroke ring
-      rules.push(
-        `.orb-svg [data-node="${i}"][data-layer="2"]{stroke:${c};stroke-width:${active ? 2.5 : 1.5};filter:drop-shadow(0 0 ${active ? 14 : 6}px ${c});${active ? "animation:node-pulse 1.1s ease-out infinite;" : ""}}`,
-      );
-    });
-    return rules.join("\n");
-  }, [activeStep, state]);
+    state === "ready" ? "#dfee0a" : state === "awakening" ? "#03f079" : "#eb0808";
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-0 bottom-40 z-[4] grid place-items-center">
-      <style>{`
-        @keyframes node-pulse {
-          0%,100% { transform: scale(1); }
-          50% { transform: scale(1.12); }
-        }
-        .orb-svg svg { overflow: visible; }
-        .orb-svg ellipse[data-node] { transform-box: fill-box; transform-origin: center; transition: fill 300ms ease, stroke 300ms ease, fill-opacity 300ms ease; }
-        ${nodeStyle}
-      `}</style>
-
-      <div
-        className="relative h-[520px] w-[520px] transition-all duration-700"
-        style={{
-          transform:
-            state === "awakening" ? `scale(${1 + progress / 2200})` : "scale(1)",
-        }}
-      >
-        {/* Counter-rotating ambient halo */}
+    <div className="absolute inset-x-0 top-[20%] z-[5] flex justify-center">
+      <div className="relative h-[240px] w-[240px]">
         <div
-          className="absolute inset-[-40px] rounded-full opacity-60 animate-spin-reverse"
-          style={{
-            background:
-              "conic-gradient(from 0deg, transparent 0deg, rgba(246,196,83,0.18) 60deg, transparent 120deg, rgba(0,216,255,0.22) 220deg, transparent 300deg)",
-            filter: "blur(18px)",
-          }}
-        />
-
-        {/* Inline SVG so node ellipses can be themed live */}
-        <div
-          className="orb-svg relative h-full w-full animate-spin-slow"
+          className="orb-svg relative h-full w-full"
           style={{
             filter:
               state === "ready"
-                ? "drop-shadow(0 0 40px #00d8ff)"
-                : "drop-shadow(0 0 28px rgba(246,196,83,0.55))",
+                ? "drop-shadow(0 0 42px #ff1e00)"
+                : "drop-shadow(0 0 30px rgba(246,196,83,0.58))",
           }}
-          dangerouslySetInnerHTML={{ __html: TAGGED_SVG }}
+          dangerouslySetInnerHTML={{ __html: rawOrbSvg }}
         />
+
+        {NODES.map((node, index) => {
+          const lit = index < activeStep || state === "ready";
+          const active = index === activeStep && state === "awakening";
+          const angle = (index / NODES.length) * Math.PI * 2 - Math.PI / 2;
+          const radius = 122;
+          const x = Math.cos(angle) * radius;
+          const y = Math.sin(angle) * radius;
+
+          return (
+            <span
+              key={node.label}
+              className={[
+                "absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-all duration-500",
+                active ? "animate-blink" : "",
+              ].join(" ")}
+              style={{
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+                borderColor: node.color,
+                background: lit || active ? node.color : "transparent",
+                boxShadow: lit || active ? `0 0 16px ${node.color}` : "none",
+                opacity: lit || active ? 1 : 0.35,
+              }}
+              aria-hidden="true"
+            />
+          );
+        })}
 
         <div
           className="absolute left-1/2 top-[72%] -translate-x-1/2 font-mono text-[11px] tracking-[0.42em]"
@@ -125,7 +117,7 @@ export function AwakeningOrb({
 
 export function AwakeningScreen({
   onComplete,
-  stepDuration = 750,
+  stepDuration = 1620,
 }: {
   onComplete?: () => void;
   stepDuration?: number;
@@ -133,69 +125,90 @@ export function AwakeningScreen({
   const [state, setState] = useState<RollCallState>("idle");
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    const t = window.setTimeout(() => setState("awakening"), 400);
-    return () => window.clearTimeout(t);
-  }, []);
+    if (ritualHasRun) {
+      setProgress(100);
+      setActiveStep(NODES.length);
+      setState("ready");
+      onComplete?.();
+      return;
+    }
+    ritualHasRun = true;
+
+    const timer = window.setTimeout(() => setState("awakening"), 560);
+    return () => window.clearTimeout(timer);
+  }, [onComplete]);
 
   useEffect(() => {
     if (state !== "awakening") return;
+
     const total = NODES.length;
     const start = performance.now();
-    const totalDur = stepDuration * total;
+    const totalDuration = stepDuration * total;
     let raf = 0;
+
     const tick = (now: number) => {
       const elapsed = now - start;
-      const pct = Math.min(100, Math.round((elapsed / totalDur) * 100));
+      const pct = Math.min(100, Math.round((elapsed / totalDuration) * 100));
       const step = Math.min(total, Math.floor(elapsed / stepDuration));
+
       setProgress(pct);
       setActiveStep(step);
-      if (elapsed < totalDur) {
+
+      if (elapsed < totalDuration) {
         raf = requestAnimationFrame(tick);
       } else {
+        setProgress(100);
+        setActiveStep(total);
         setState("ready");
-        window.setTimeout(() => onComplete?.(), 900);
+        window.setTimeout(() => setExiting(true), 420);
+        window.setTimeout(() => onComplete?.(), 1150);
       }
     };
+
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [state, stepDuration, onComplete]);
+  }, [onComplete, state, stepDuration]);
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-hidden bg-background">
-      {/* Living background — video loads as the system loads */}
+    <div
+      className={[
+        "fixed inset-0 z-[100] overflow-hidden bg-background transition-[opacity,filter] duration-700 ease-out",
+        exiting ? "opacity-0 blur-sm" : "opacity-100 blur-0",
+      ].join(" ")}
+    >
       <video
-        src={sunVideo.url}
+        src={sunVideo}
         autoPlay
         muted
         loop
         playsInline
-        className="absolute inset-0 h-full w-full object-cover opacity-60"
+        preload="auto"
+        className="absolute inset-0 h-full w-full object-cover opacity-75"
       />
-      {/* Dim vignette to keep the orb legible over the video */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(60% 55% at 50% 50%, transparent 0%, oklch(0.10 0.04 270 / 0.65) 70%, oklch(0.08 0.04 270 / 0.92) 100%)",
+            "radial-gradient(52% 48% at 50% 48%, oklch(0.10 0.03 270 / 0.18) 0%, oklch(0.10 0.04 270 / 0.72) 70%, oklch(0.08 0.04 270 / 0.94) 100%)",
         }}
       />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0,transparent_38%,oklch(0.06_0.03_270/0.58)_78%)]" />
 
-      {/* Title */}
-      <div className="absolute inset-x-0 top-10 z-[5] flex flex-col items-center gap-2">
-        <div className="text-[10px] tracking-[0.5em] text-[var(--color-neon-cyan)]">
+      <div className="absolute inset-x-0 top-10 z-[5] flex flex-col items-center gap-2 px-5 text-center">
+        <div className="max-sm:tracking-[0.24em] text-[10px] tracking-[0.5em] text-[var(--color-neon-cyan)]">
           MOSTAR · COVENANT BOOT SEQUENCE
         </div>
-        <div className="text-2xl tracking-[0.4em] neon-text-gold">
+        <div className="neon-text-gold max-sm:text-lg max-sm:tracking-[0.2em] text-2xl tracking-[0.4em]">
           GRID AWAKENING
         </div>
       </div>
 
       <AwakeningOrb state={state} progress={progress} activeStep={activeStep} />
 
-      {/* Step log + progress */}
-      <div className="absolute inset-x-0 bottom-12 z-[5] mx-auto flex max-w-[640px] flex-col items-center gap-3 px-6">
+      <div className="absolute inset-x-0 bottom-12 z-[5] mx-auto flex max-w-[680px] flex-col items-center gap-3 px-6">
         <div className="h-[3px] w-full overflow-hidden rounded-full border border-[var(--color-neon-cyan)]/30 bg-[oklch(0.10_0.05_270/0.7)]">
           <div
             className="h-full rounded-full transition-[width] duration-150"
@@ -207,30 +220,40 @@ export function AwakeningScreen({
             }}
           />
         </div>
-        <div className="flex w-full flex-col gap-1 font-mono text-[11px]">
-          {NODES.map((n, i) => {
-            const done = i < activeStep || state === "ready";
-            const active = i === activeStep && state === "awakening";
-            if (!done && !active) return null;
+
+        <div className="grid w-full grid-cols-1 gap-1 font-mono text-[11px] sm:grid-cols-2">
+          {NODES.map((node, index) => {
+            const done = index < activeStep || state === "ready";
+            const active = index === activeStep && state === "awakening";
+
             return (
-              <div key={n.label} className="flex items-center gap-3 animate-fade-in">
+              <div
+                key={node.label}
+                className={[
+                  "flex h-7 items-center gap-3 rounded-md border px-3 transition-all duration-300",
+                  done || active
+                    ? "border-[color-mix(in_oklab,var(--color-neon-cyan)_28%,transparent)] bg-[oklch(0.12_0.04_270/0.64)] opacity-100"
+                    : "border-transparent bg-transparent opacity-35",
+                ].join(" ")}
+              >
                 <span
-                  style={{ color: n.color, textShadow: `0 0 8px ${n.color}` }}
                   className={active ? "animate-blink" : ""}
+                  style={{ color: node.color, textShadow: `0 0 8px ${node.color}` }}
                 >
-                  {done ? "●" : "◐"}
+                  {done ? "●" : "○"}
                 </span>
-                <span style={{ color: done ? "rgba(219,232,246,0.85)" : n.color }}>
-                  LINK · {n.label}
+                <span style={{ color: done ? "rgba(219,232,246,0.9)" : node.color }}>
+                  {node.label}
                 </span>
-                <span className="ml-auto text-muted-foreground tracking-[0.2em]">
-                  {done ? "SEALED" : "BINDING…"}
+                <span className="ml-auto text-[9px] tracking-[0.18em] text-muted-foreground">
+                  {done ? "SEALED" : active ? "BINDING" : "WAIT"}
                 </span>
               </div>
             );
           })}
         </div>
-        <div className="text-[10px] tracking-[0.4em] text-muted-foreground">
+
+        <div className="max-sm:tracking-[0.16em] text-center text-[10px] tracking-[0.36em] text-muted-foreground">
           HONOR FIRST · STRIKE FAST · SEE AHEAD · STAY UNTOUCHABLE
         </div>
       </div>
