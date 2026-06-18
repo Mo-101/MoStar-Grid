@@ -30,7 +30,7 @@ envVarGroups:
 
 services:
   - type: web
-    name: mostar-grid-api
+    name: MoStar-Grid
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
@@ -54,7 +54,7 @@ services:
       - key: PYTHONPATH
         value: /opt/render/project/src:/opt/render/project/src/back/services
       - key: GRID_API_URL
-        sync: false  # set to mostar-grid-api's public onrender.com URL
+        sync: false  # set to MoStar-Grid's public onrender.com URL
 
   - type: web
     name: mostar-voice
@@ -74,6 +74,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: VITE_GRID_API_BASE
-        sync: false  # set to mostar-grid-api's public onrender.com URL
+        sync: false  # set to MoStar-Grid's public onrender.com URL
       - key: VITE_MOSTAR_TOKEN
         sync: false
