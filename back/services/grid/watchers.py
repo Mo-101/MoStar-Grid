@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import feedparser
-from grid.config import MOSTAR_CLUSTER_ID
+from grid.config import MOSTAR_CLUSTER_ID, NEO4J_DATABASE
 from grid.events import event_bus, GridEvent
 
 logger = logging.getLogger("grid_watchers")
@@ -128,7 +128,7 @@ async def executor_watcher(orchestrator):
     while True:
         try:
             if orchestrator.mindgraph.connected:
-                async with orchestrator.mindgraph._driver.session(database="neo4j") as session:
+                async with orchestrator.mindgraph._driver.session(database=NEO4J_DATABASE) as session:
                     await session.run("""
                         CREATE (h:ExecutorHeartbeat {
                             id: randomUUID(),

@@ -36,7 +36,7 @@ sys.path.extend([
     str(PROJECT_ROOT / "core" / "ops"),
 ])
 
-from grid.config import GRID_HOST, GRID_PORT, MOSTAR_CLUSTER_ID, SEAL_GLYPH, cluster_metadata
+from grid.config import GRID_HOST, GRID_PORT, MOSTAR_CLUSTER_ID, NEO4J_DATABASE, SEAL_GLYPH, cluster_metadata
 from grid.orchestrator import CommitFailedError, CommitForbiddenError, GridOrchestrator
 from grid.semantic_api import router as semantic_router
 from grid.telemetry import ClusterTelemetry
@@ -485,7 +485,7 @@ async def memory_recent(limit: int = 10):
 async def memory_foundational():
     try:
         driver = orchestrator.mindgraph._driver
-        async with driver.session(database="neo4j") as session:
+        async with driver.session(database=NEO4J_DATABASE) as session:
             result = await session.run("MATCH (fm:FoundationalMemory) RETURN fm")
             records = await result.data()
             return {"results": [r["fm"] for r in records], "seal": "🜃∴🜂"}
@@ -608,7 +608,7 @@ async def get_autonomous_briefing(write_log: bool = False):
             # Persist BriefingLog node to database
             from datetime import datetime, timezone
             iso_now = datetime.now(timezone.utc).isoformat()
-            async with driver.session(database="neo4j") as session:
+            async with driver.session(database=NEO4J_DATABASE) as session:
                 await session.run("""
                     CREATE (b:BriefingLog {
                         id: $b_id,
@@ -883,7 +883,7 @@ async def get_startup_reports():
         return _with_cluster({"reports": _fallback_startup_reports(), "source": "registry_fallback"})
 
     try:
-        async with driver.session(database="neo4j") as session:
+        async with driver.session(database=NEO4J_DATABASE) as session:
             result = await session.run("""
                 MATCH (e:Entity)
                 OPTIONAL MATCH (e)-[:REPORTED_STARTUP]->(m:StartupReport)
@@ -963,7 +963,7 @@ async def get_grid_census():
         }, status_code=503)
 
     try:
-        async with orchestrator.mindgraph._driver.session(database="neo4j") as session:
+        async with orchestrator.mindgraph._driver.session(database=NEO4J_DATABASE) as session:
             # Nodes count
             nodes_res = await session.run("MATCH (n) RETURN count(n) AS total")
             nodes_record = await nodes_res.single()
@@ -1229,7 +1229,7 @@ async def _emit_watchtower_event(event_type: str, ref_id: str, detail: str) -> N
         if not orchestrator.mindgraph.connected:
             return
         driver = orchestrator.mindgraph._driver
-        async with driver.session(database="neo4j") as session:
+        async with driver.session(database=NEO4J_DATABASE) as session:
             await session.run(
                 """
                 CREATE (:GridEvent {
@@ -1262,7 +1262,7 @@ async def watchtower_list_agents(status: Optional[str] = None):
         raise HTTPException(status_code=400, detail=f"Invalid status: {status}")
 
     driver = _require_mindgraph()
-    async with driver.session(database="neo4j") as session:
+    async with driver.session(database=NEO4J_DATABASE) as session:
         result = await session.run(
             """
             MATCH (a:Agent)
@@ -1279,7 +1279,7 @@ async def watchtower_list_agents(status: Optional[str] = None):
 @watchtower_router.get("/agents/{agent_id}")
 async def watchtower_get_agent(agent_id: str):
     driver = _require_mindgraph()
-    async with driver.session(database="neo4j") as session:
+    async with driver.session(database=NEO4J_DATABASE) as session:
         result = await session.run("MATCH (a:Agent {id: $id}) RETURN a", id=agent_id)
         record = await result.single()
     if not record:
@@ -1290,7 +1290,7 @@ async def watchtower_get_agent(agent_id: str):
 @watchtower_router.post("/agents", status_code=201)
 async def watchtower_register_agent(payload: WatchtowerAgentCreate):
     driver = _require_mindgraph()
-    async with driver.session(database="neo4j") as session:
+    async with driver.session(database=NEO4J_DATABASE) as session:
         count_result = await session.run("MATCH (a:Agent) RETURN count(a) AS count")
         count_record = await count_result.single()
         agent_id = f"AGT-{(count_record['count'] if count_record else 0) + 1:04d}"
@@ -1347,7 +1347,7 @@ async def watchtower_update_agent_status(agent_id: str, payload: WatchtowerAgent
         updates["approved_at"] = _watchtower_now()
 
     driver = _require_mindgraph()
-    async with driver.session(database="neo4j") as session:
+    async with driver.session(database=NEO4J_DATABASE) as session:
         result = await session.run(
             """
             MATCH (a:Agent {id: $id})
@@ -1374,7 +1374,7 @@ async def watchtower_update_agent_status(agent_id: str, payload: WatchtowerAgent
 @watchtower_router.put("/agents/{agent_id}/trust")
 async def watchtower_update_trust_score(agent_id: str, payload: WatchtowerTrustScoreUpdate):
     driver = _require_mindgraph()
-    async with driver.session(database="neo4j") as session:
+    async with driver.session(database=NEO4J_DATABASE) as session:
         result = await session.run(
             """
             MATCH (a:Agent {id: $id})
@@ -1399,7 +1399,7 @@ async def watchtower_update_trust_score(agent_id: str, payload: WatchtowerTrustS
 @watchtower_router.get("/sanctuary")
 async def watchtower_sanctuary():
     driver = _require_mindgraph()
-    async with driver.session(database="neo4j") as session:
+    async with driver.session(database=NEO4J_DATABASE) as session:
         result = await session.run(
             """
             MATCH (a:Agent {status: 'SANCTIONED'})
@@ -1414,7 +1414,7 @@ async def watchtower_sanctuary():
 @watchtower_router.get("/stats")
 async def watchtower_stats():
     driver = _require_mindgraph()
-    async with driver.session(database="neo4j") as session:
+    async with driver.session(database=NEO4J_DATABASE) as session:
         counts_result = await session.run(
             "MATCH (a:Agent) RETURN a.status AS status, count(a) AS count"
         )
@@ -1441,7 +1441,7 @@ async def watchtower_stats():
 @watchtower_router.delete("/agents/{agent_id}")
 async def watchtower_delete_agent(agent_id: str):
     driver = _require_mindgraph()
-    async with driver.session(database="neo4j") as session:
+    async with driver.session(database=NEO4J_DATABASE) as session:
         result = await session.run(
             """
             MATCH (a:Agent {id: $id})
