@@ -714,13 +714,26 @@ Return JSON only:
     }
 
 
-@app.api_route("/api/think", methods=["GET", "POST"])
-async def think(req: Optional[ThinkRequest] = None):
+@app.post("/api/think")
+async def think(req: ThinkRequest):
     """
     Execute a full Talk → Learn → Remember cycle.
     The core intelligence endpoint.
     """
-    return _direct_write_disabled("/api/think")
+    force_layer = DCXLayer(req.layer) if req.layer else None
+    try:
+        result = await orchestrator.think(req.query, force_layer=force_layer)
+    except CommitForbiddenError as e:
+        raise HTTPException(status_code=403, detail=str(e))
+    return {
+        "layer": result.dcx_layer,
+        "model": result.dcx_model,
+        "content": result.response,
+        "context_used": result.context_nodes,
+        "truth_passed": result.truth_passed,
+        "sealed": result.sealed,
+        "seal": result.seal,
+    }
 
 
 @app.api_route("/api/learn", methods=["GET", "POST"])

@@ -11,7 +11,6 @@ let serverEntryPromise: Promise<ServerEntry> | undefined;
 
 async function getServerEntry(): Promise<ServerEntry> {
   if (!serverEntryPromise) {
-    // @ts-expect-error - This module is generated/resolved at build time
     serverEntryPromise = import("@tanstack/react-start/server-entry").then(
       (m) => (m.default ?? m) as ServerEntry,
     );

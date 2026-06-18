@@ -68,7 +68,7 @@ services:
     runtime: node
     plan: free
     rootDir: front/app
-    buildCommand: npm install --include=dev && npm run build && rm -rf public/assets && cp -r dist/client/assets public/assets
+    buildCommand: npm install --include=dev && npm run build
     startCommand: node serve.mjs
     envVars:
       - key: NODE_ENV

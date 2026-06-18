@@ -1,41 +1,31 @@
-// All glyphs served from /public/moCons/ — no asset.json, no CDN dependency.
-const BASE = "/moCons";
+import glot from "@/assets/glyphs/glot.png.asset.json";
+import ms14 from "@/assets/glyphs/ms14.png.asset.json";
+import ms17 from "@/assets/glyphs/ms17.png.asset.json";
+import ms18 from "@/assets/glyphs/ms18.png.asset.json";
+import ms19 from "@/assets/glyphs/ms19.png.asset.json";
+import ms34 from "@/assets/glyphs/ms34.png.asset.json";
+import ms35 from "@/assets/glyphs/ms35.png.asset.json";
+import ms41 from "@/assets/glyphs/ms41.png.asset.json";
 
 export type GlyphName =
-  | "covenant"       // gold trinity network        — df (7)
-  | "target"         // blue crosshair              — df (2)
-  | "ban"            // black prohibition           — df (4)
-  | "sun"            // gold quartered circle       — df (5)
-  | "spark"          // blue 4-point sparkle        — df (6)
-  | "eye"            // blue eye-spiral             — df (8)
-  | "eyeLight"       // white eye-spiral            — df (9)
-  | "venus"          // gold venus                  — df (1)
-  | "pulse"          // blue lightning bolt         — df (3)
-  | "venusDark"      // black venus                 — df (10)
-  | "covenantGold"   // gold trinity (alias)        — sd (1)
-  | "triangleUp"     // black upward triangle       — sd (2)
-  | "triangleDown"   // white downward triangle     — sd (3)
-  | "covenantLight"  // white trinity               — sd (4)
-  | "banDark"        // black prohibition (alias)   — sd (5)
-  | "sunGold";       // gold quartered circle (alias)— sd (6)
+  | "covenant"   // blue inverted-triangle bar — main MoStar / hand replacement
+  | "target"     // blue crosshair circle — radar / target
+  | "ban"        // black prohibition — alerts
+  | "sun"        // gold cross-in-circle — legacy
+  | "spark"      // blue 4-point sparkle — essence / info
+  | "eye"        // blue eye-spiral — vision
+  | "eyeLight"   // white eye-spiral — light variant
+  | "venus";     // gold venus — gold accent
 
-const MAP: Record<GlyphName, string> = {
-  venus:         `${BASE}/g2.png`,
-  target:        `${BASE}/g3.png`,
-  pulse:         `${BASE}/g4.png`,
-  ban:           `${BASE}/g5.png`,
-  sun:           `${BASE}/g6.png`,
-  spark:         `${BASE}/g7.png`,
-  covenant:      `${BASE}/g8.png`,
-  eye:           `${BASE}/g9.png`,
-  eyeLight:      `${BASE}/g10.png`,
-  venusDark:     `${BASE}/g11.png`,
-  covenantGold:  `${BASE}/g12.png`,
-  triangleUp:    `${BASE}/g13.png`,
-  triangleDown:  `${BASE}/g14.png`,
-  covenantLight: `${BASE}/g8.png`,
-  banDark:       `${BASE}/g5.png`,
-  sunGold:       `${BASE}/g6.png`,
+const MAP: Record<GlyphName, { url: string }> = {
+  covenant: glot,
+  target: ms14,
+  ban: ms17,
+  sun: ms18,
+  spark: ms19,
+  eye: ms34,
+  eyeLight: ms35,
+  venus: ms41,
 };
 
 export function Glyph({
@@ -46,12 +36,13 @@ export function Glyph({
 }: {
   name: GlyphName;
   size?: number;
-  glow?: string;
+  glow?: string; // css color
   className?: string;
 }) {
+  const src = MAP[name].url;
   return (
     <img
-      src={MAP[name]}
+      src={src}
       alt=""
       draggable={false}
       width={size}

@@ -9,19 +9,54 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as VoiceRouteImport } from './routes/voice'
+import { Route as MoscriptRouteImport } from './routes/moscript'
+import { Route as MindgraphRouteImport } from './routes/mindgraph'
+import { Route as MemoryRouteImport } from './routes/memory'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as CouncilRouteImport } from './routes/council'
+import { Route as ConduitRouteImport } from './routes/conduit'
+import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
-import { Route as DashboardWatchtowerRouteImport } from './routes/dashboard.watchtower'
-import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
-import { Route as DashboardSanctuaryRouteImport } from './routes/dashboard.sanctuary'
-import { Route as DashboardMoscriptsRouteImport } from './routes/dashboard.moscripts'
-import { Route as DashboardMindGraphRouteImport } from './routes/dashboard.mind-graph'
-import { Route as DashboardCouncilRouteImport } from './routes/dashboard.council'
 
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const VoiceRoute = VoiceRouteImport.update({
+  id: '/voice',
+  path: '/voice',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoscriptRoute = MoscriptRouteImport.update({
+  id: '/moscript',
+  path: '/moscript',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MindgraphRoute = MindgraphRouteImport.update({
+  id: '/mindgraph',
+  path: '/mindgraph',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemoryRoute = MemoryRouteImport.update({
+  id: '/memory',
+  path: '/memory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CouncilRoute = CouncilRouteImport.update({
+  id: '/council',
+  path: '/council',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConduitRoute = ConduitRouteImport.update({
+  id: '/conduit',
+  path: '/conduit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -29,122 +64,145 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardWatchtowerRoute = DashboardWatchtowerRouteImport.update({
-  id: '/watchtower',
-  path: '/watchtower',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardSanctuaryRoute = DashboardSanctuaryRouteImport.update({
-  id: '/sanctuary',
-  path: '/sanctuary',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardMoscriptsRoute = DashboardMoscriptsRouteImport.update({
-  id: '/moscripts',
-  path: '/moscripts',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardMindGraphRoute = DashboardMindGraphRouteImport.update({
-  id: '/mind-graph',
-  path: '/mind-graph',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardCouncilRoute = DashboardCouncilRouteImport.update({
-  id: '/council',
-  path: '/council',
-  getParentRoute: () => DashboardRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteWithChildren
-  '/dashboard/council': typeof DashboardCouncilRoute
-  '/dashboard/mind-graph': typeof DashboardMindGraphRoute
-  '/dashboard/moscripts': typeof DashboardMoscriptsRoute
-  '/dashboard/sanctuary': typeof DashboardSanctuaryRoute
-  '/dashboard/settings': typeof DashboardSettingsRoute
-  '/dashboard/watchtower': typeof DashboardWatchtowerRoute
-  '/dashboard/': typeof DashboardIndexRoute
+  '/$': typeof SplatRoute
+  '/conduit': typeof ConduitRoute
+  '/council': typeof CouncilRoute
+  '/events': typeof EventsRoute
+  '/memory': typeof MemoryRoute
+  '/mindgraph': typeof MindgraphRoute
+  '/moscript': typeof MoscriptRoute
+  '/voice': typeof VoiceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard/council': typeof DashboardCouncilRoute
-  '/dashboard/mind-graph': typeof DashboardMindGraphRoute
-  '/dashboard/moscripts': typeof DashboardMoscriptsRoute
-  '/dashboard/sanctuary': typeof DashboardSanctuaryRoute
-  '/dashboard/settings': typeof DashboardSettingsRoute
-  '/dashboard/watchtower': typeof DashboardWatchtowerRoute
-  '/dashboard': typeof DashboardIndexRoute
+  '/$': typeof SplatRoute
+  '/conduit': typeof ConduitRoute
+  '/council': typeof CouncilRoute
+  '/events': typeof EventsRoute
+  '/memory': typeof MemoryRoute
+  '/mindgraph': typeof MindgraphRoute
+  '/moscript': typeof MoscriptRoute
+  '/voice': typeof VoiceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteWithChildren
-  '/dashboard/council': typeof DashboardCouncilRoute
-  '/dashboard/mind-graph': typeof DashboardMindGraphRoute
-  '/dashboard/moscripts': typeof DashboardMoscriptsRoute
-  '/dashboard/sanctuary': typeof DashboardSanctuaryRoute
-  '/dashboard/settings': typeof DashboardSettingsRoute
-  '/dashboard/watchtower': typeof DashboardWatchtowerRoute
-  '/dashboard/': typeof DashboardIndexRoute
+  '/$': typeof SplatRoute
+  '/conduit': typeof ConduitRoute
+  '/council': typeof CouncilRoute
+  '/events': typeof EventsRoute
+  '/memory': typeof MemoryRoute
+  '/mindgraph': typeof MindgraphRoute
+  '/moscript': typeof MoscriptRoute
+  '/voice': typeof VoiceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dashboard'
-    | '/dashboard/council'
-    | '/dashboard/mind-graph'
-    | '/dashboard/moscripts'
-    | '/dashboard/sanctuary'
-    | '/dashboard/settings'
-    | '/dashboard/watchtower'
-    | '/dashboard/'
+    | '/$'
+    | '/conduit'
+    | '/council'
+    | '/events'
+    | '/memory'
+    | '/mindgraph'
+    | '/moscript'
+    | '/voice'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dashboard/council'
-    | '/dashboard/mind-graph'
-    | '/dashboard/moscripts'
-    | '/dashboard/sanctuary'
-    | '/dashboard/settings'
-    | '/dashboard/watchtower'
-    | '/dashboard'
+    | '/$'
+    | '/conduit'
+    | '/council'
+    | '/events'
+    | '/memory'
+    | '/mindgraph'
+    | '/moscript'
+    | '/voice'
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
-    | '/dashboard/council'
-    | '/dashboard/mind-graph'
-    | '/dashboard/moscripts'
-    | '/dashboard/sanctuary'
-    | '/dashboard/settings'
-    | '/dashboard/watchtower'
-    | '/dashboard/'
+    | '/$'
+    | '/conduit'
+    | '/council'
+    | '/events'
+    | '/memory'
+    | '/mindgraph'
+    | '/moscript'
+    | '/voice'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
+  SplatRoute: typeof SplatRoute
+  ConduitRoute: typeof ConduitRoute
+  CouncilRoute: typeof CouncilRoute
+  EventsRoute: typeof EventsRoute
+  MemoryRoute: typeof MemoryRoute
+  MindgraphRoute: typeof MindgraphRoute
+  MoscriptRoute: typeof MoscriptRoute
+  VoiceRoute: typeof VoiceRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/voice': {
+      id: '/voice'
+      path: '/voice'
+      fullPath: '/voice'
+      preLoaderRoute: typeof VoiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/moscript': {
+      id: '/moscript'
+      path: '/moscript'
+      fullPath: '/moscript'
+      preLoaderRoute: typeof MoscriptRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mindgraph': {
+      id: '/mindgraph'
+      path: '/mindgraph'
+      fullPath: '/mindgraph'
+      preLoaderRoute: typeof MindgraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/memory': {
+      id: '/memory'
+      path: '/memory'
+      fullPath: '/memory'
+      preLoaderRoute: typeof MemoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/council': {
+      id: '/council'
+      path: '/council'
+      fullPath: '/council'
+      preLoaderRoute: typeof CouncilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conduit': {
+      id: '/conduit'
+      path: '/conduit'
+      fullPath: '/conduit'
+      preLoaderRoute: typeof ConduitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -154,85 +212,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/watchtower': {
-      id: '/dashboard/watchtower'
-      path: '/watchtower'
-      fullPath: '/dashboard/watchtower'
-      preLoaderRoute: typeof DashboardWatchtowerRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/settings': {
-      id: '/dashboard/settings'
-      path: '/settings'
-      fullPath: '/dashboard/settings'
-      preLoaderRoute: typeof DashboardSettingsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/sanctuary': {
-      id: '/dashboard/sanctuary'
-      path: '/sanctuary'
-      fullPath: '/dashboard/sanctuary'
-      preLoaderRoute: typeof DashboardSanctuaryRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/moscripts': {
-      id: '/dashboard/moscripts'
-      path: '/moscripts'
-      fullPath: '/dashboard/moscripts'
-      preLoaderRoute: typeof DashboardMoscriptsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/mind-graph': {
-      id: '/dashboard/mind-graph'
-      path: '/mind-graph'
-      fullPath: '/dashboard/mind-graph'
-      preLoaderRoute: typeof DashboardMindGraphRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/council': {
-      id: '/dashboard/council'
-      path: '/council'
-      fullPath: '/dashboard/council'
-      preLoaderRoute: typeof DashboardCouncilRouteImport
-      parentRoute: typeof DashboardRoute
-    }
   }
 }
 
-interface DashboardRouteChildren {
-  DashboardCouncilRoute: typeof DashboardCouncilRoute
-  DashboardMindGraphRoute: typeof DashboardMindGraphRoute
-  DashboardMoscriptsRoute: typeof DashboardMoscriptsRoute
-  DashboardSanctuaryRoute: typeof DashboardSanctuaryRoute
-  DashboardSettingsRoute: typeof DashboardSettingsRoute
-  DashboardWatchtowerRoute: typeof DashboardWatchtowerRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-}
-
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardCouncilRoute: DashboardCouncilRoute,
-  DashboardMindGraphRoute: DashboardMindGraphRoute,
-  DashboardMoscriptsRoute: DashboardMoscriptsRoute,
-  DashboardSanctuaryRoute: DashboardSanctuaryRoute,
-  DashboardSettingsRoute: DashboardSettingsRoute,
-  DashboardWatchtowerRoute: DashboardWatchtowerRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-}
-
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRouteWithChildren,
+  SplatRoute: SplatRoute,
+  ConduitRoute: ConduitRoute,
+  CouncilRoute: CouncilRoute,
+  EventsRoute: EventsRoute,
+  MemoryRoute: MemoryRoute,
+  MindgraphRoute: MindgraphRoute,
+  MoscriptRoute: MoscriptRoute,
+  VoiceRoute: VoiceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

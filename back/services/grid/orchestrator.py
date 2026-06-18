@@ -146,9 +146,6 @@ class GridOrchestrator:
         """
         Execute one complete Talk → Learn → Remember cycle.
         """
-        raise CommitForbiddenError(
-            "think() direct cycles are disabled under Phase 4.0a. Use propose/approve/commit."
-        )
         cycle_id = f"cycle_{uuid.uuid4().hex[:12]}"
         logger.info("=== CYCLE %s START ===", cycle_id)
 
