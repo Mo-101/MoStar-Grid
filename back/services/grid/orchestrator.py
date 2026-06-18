@@ -9,6 +9,7 @@ import logging
 import uuid
 from datetime import datetime, timezone
 from dataclasses import dataclass, field, asdict
+from mindgraph import CommitForbiddenError as MindGraphCommitForbiddenError
 from mindgraph import MindGraph
 from dcx import DCXTrinity, DCXLayer
 from truth_engine import TruthEngine, TruthVerdict
@@ -294,36 +295,42 @@ class GridOrchestrator:
         # ── LEARN: Write knowledge to graph ──
         memory_id = ""
         if self.mindgraph.connected and truth_verdict.passed:
-            memory_id = await self.mindgraph.learn(
-                category="conversation",
-                content=f"Q: {query[:200]} → A: {dcx_response.content[:300]}",
-                source=f"dcx:{dcx_response.layer.value}",
-                source_type="ai_generated",
-                verification_status="unverified",
-                operational_trust="simulation",
-                seal="Synthetic",
-                created_by=f"dcx:{dcx_response.layer.value}",
-                metadata={"cycle_id": cycle_id, "truth_scores": truth_verdict.scores},
-            )
-            self.moscript.fire_trigger("on_learn", {
-                "content": dcx_response.content[:100],
-                "category": "conversation",
-            })
+            try:
+                memory_id = await self.mindgraph.learn(
+                    category="conversation",
+                    content=f"Q: {query[:200]} → A: {dcx_response.content[:300]}",
+                    source=f"dcx:{dcx_response.layer.value}",
+                    source_type="ai_generated",
+                    verification_status="unverified",
+                    operational_trust="simulation",
+                    seal="Synthetic",
+                    created_by=f"dcx:{dcx_response.layer.value}",
+                    metadata={"cycle_id": cycle_id, "truth_scores": truth_verdict.scores},
+                )
+                self.moscript.fire_trigger("on_learn", {
+                    "content": dcx_response.content[:100],
+                    "category": "conversation",
+                })
+            except MindGraphCommitForbiddenError as exc:
+                logger.info("Skipping direct think memory write under Phase 4.0a: %s", exc)
 
         # ── REMEMBER: Stamp the moment ──
         moment_id = ""
         if self.mindgraph.connected and truth_verdict.passed and memory_id:
-            moment_id = await self.mindgraph.stamp_moment(
-                talk_input=query,
-                think_output=dcx_response.content,
-                memory_id=memory_id,
-                source_type="ai_generated",
-                verification_status="unverified",
-                operational_trust="simulation",
-                seal="Synthetic",
-                source=f"dcx:{dcx_response.layer.value}",
-                created_by=f"dcx:{dcx_response.layer.value}",
-            )
+            try:
+                moment_id = await self.mindgraph.stamp_moment(
+                    talk_input=query,
+                    think_output=dcx_response.content,
+                    memory_id=memory_id,
+                    source_type="ai_generated",
+                    verification_status="unverified",
+                    operational_trust="simulation",
+                    seal="Synthetic",
+                    source=f"dcx:{dcx_response.layer.value}",
+                    created_by=f"dcx:{dcx_response.layer.value}",
+                )
+            except MindGraphCommitForbiddenError as exc:
+                logger.info("Skipping direct think moment stamp under Phase 4.0a: %s", exc)
 
         # ── PROVENANCE ──
         self.provenance.record(
