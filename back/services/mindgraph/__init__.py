@@ -7,7 +7,6 @@ import json
 import logging
 import uuid
 import grid.config
-from grid import glyphs
 from datetime import datetime, timezone
 from typing import Optional
 

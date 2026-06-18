@@ -78,18 +78,57 @@ else
 fi
 mkdir -p "$DEST"
 
+# A previous golden dump seals its file chmod 444. --overwrite-destination
+# can't write through that at the filesystem level, so unlock it first —
+# this script remains the only thing touching the golden dir, per the law.
+PRIOR_DUMP="$DEST/$NEO4J_DATABASE.dump"
+[ -f "$PRIOR_DUMP" ] && chmod u+w "$PRIOR_DUMP" "$PRIOR_DUMP.sha256" 2>/dev/null
+
 # ── 4. Stop, dump, checksum ───────────────────────────────────────────────
 log "Stopping Neo4j via $MANAGER ..."
 stop_neo4j
-sleep 5
+
+LOCK_FILE="/home/idona/MoStar/_apps/grid/back/services/mindgraph/mo-neo4j/data/databases/$NEO4J_DATABASE/database_lock"
+log "Waiting for Neo4j to fully release its lock file ..."
+# pm2 only manages Neo4j's launcher process; the actual server runs as a
+# separate child JVM that doesn't always exit promptly when the launcher
+# does, so the lock file can stay held well after pm2 reports "stopped".
+RELEASED=0
+for _ in $(seq 1 30); do
+  if [ ! -f "$LOCK_FILE" ] || ! lsof "$LOCK_FILE" >/dev/null 2>&1; then
+    RELEASED=1
+    break
+  fi
+  sleep 2
+done
+
+if [ "$RELEASED" -eq 0 ]; then
+  log "Lock still held after 60s — killing the lingering Neo4j server JVM directly."
+  pkill -f "org.neo4j.server.Neo4jCommunity.*--config-dir=.*mo-neo4j/conf" || true
+  for _ in $(seq 1 10); do
+    [ ! -f "$LOCK_FILE" ] || ! lsof "$LOCK_FILE" >/dev/null 2>&1 && break
+    sleep 2
+  done
+fi
+sleep 2
 
 log "Dumping database '$NEO4J_DATABASE' → $DEST"
+# NEO4J_CONF must point at the actual running instance's config, or
+# neo4j-admin silently falls back to /etc/neo4j/neo4j.conf and dumps
+# whatever (likely empty) data directory that points to instead.
+export NEO4J_CONF="${NEO4J_CONF:-/home/idona/MoStar/_apps/grid/back/services/mindgraph/mo-neo4j/conf}"
 neo4j-admin database dump "$NEO4J_DATABASE" \
   --to-path="$DEST" \
   --overwrite-destination=true
 
 DUMP_FILE="$DEST/$NEO4J_DATABASE.dump"
 [ -s "$DUMP_FILE" ] || { log "FATAL: dump file missing or empty."; exit 4; }
+
+DUMP_AGE_SEC=$(( $(date +%s) - $(date -r "$DUMP_FILE" +%s) ))
+if [ "$DUMP_AGE_SEC" -gt 120 ]; then
+  log "FATAL: dump file is $DUMP_AGE_SEC""s old — neo4j-admin did not write a fresh file (likely blocked by a stale read-only dump from a prior run)."
+  exit 4
+fi
 
 sha256sum "$DUMP_FILE" > "$DUMP_FILE.sha256"
 log "Dump $(du -h "$DUMP_FILE" | cut -f1), checksum written."
