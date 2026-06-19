@@ -76,6 +76,8 @@ services:
         sync: false  # set to MoStar-Grid's public onrender.com URL
       - key: MAX_AUDIO_FILES
         value: 200
+      - key: SYNTHESIS_TIMEOUT_SECONDS
+        value: 180
 
   - type: web
     name: mostar-frontend

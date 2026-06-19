@@ -53,7 +53,7 @@ export type HealthResponse = {
   mock?: boolean;
 };
 
-const TIMEOUT_MS = 60_000;
+const TIMEOUT_MS = 180_000;
 
 async function withTimeout<T>(p: Promise<T>, ms = TIMEOUT_MS): Promise<T> {
   return await Promise.race([

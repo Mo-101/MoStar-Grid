@@ -33,6 +33,7 @@ GRID_API_URL = os.getenv("GRID_API_URL", "https://mostar-grid-api.onrender.com")
 GRID_API_TOKEN = os.getenv("MOSTAR_SESSION_TOKEN", "")
 
 MAX_AUDIO_FILES = int(os.getenv("MAX_AUDIO_FILES", "200"))
+SYNTHESIS_TIMEOUT_SECONDS = int(os.getenv("SYNTHESIS_TIMEOUT_SECONDS", "180"))
 SEAL = "earth therefore fire"
 
 # Voice registry — maps a stable voice_id to an on-disk Piper model.
@@ -299,7 +300,7 @@ def synthesize(text: str, mood: str, voice_model: Path, out_file: Path) -> None:
             cmd,
             input=processed_text.encode("utf-8"),
             capture_output=True,
-            timeout=45,
+            timeout=SYNTHESIS_TIMEOUT_SECONDS,
             check=False,
         )
 
@@ -308,7 +309,10 @@ def synthesize(text: str, mood: str, voice_model: Path, out_file: Path) -> None:
             raise HTTPException(status_code=500, detail=f"Piper failed: {err[:300]}")
 
     except subprocess.TimeoutExpired as exc:
-        raise HTTPException(status_code=504, detail="Piper synthesis timed out") from exc
+        raise HTTPException(
+            status_code=504,
+            detail=f"Piper synthesis timed out after {SYNTHESIS_TIMEOUT_SECONDS}s",
+        ) from exc
 
 
 @app.get("/")
