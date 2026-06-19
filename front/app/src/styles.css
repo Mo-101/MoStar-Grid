@@ -4,6 +4,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --font-sans: "Chakra Petch", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "Share Tech Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -36,76 +41,135 @@
   --color-neon-green: var(--neon-green);
   --color-neon-red: var(--neon-red);
   --color-neon-orange: var(--neon-orange);
+  --color-neon-ember: var(--neon-ember);
   --color-panel: var(--panel);
   --color-panel-border: var(--panel-border);
 }
 
 :root {
   --radius: 0.5rem;
-  --background: oklch(0.16 0.04 270);
-  --foreground: oklch(0.96 0.02 240);
+  /* Match HUD reference: deep navy bg #020711, cyan #00d8ff, gold #f6c453 */
+  --background: #020711;
+  --foreground: #dbe8f6;
 
-  --panel: oklch(0.20 0.05 270 / 0.6);
-  --panel-border: oklch(0.55 0.18 250 / 0.35);
+  --panel: rgba(4, 14, 28, 0.78);
+  --panel-border: rgba(0, 216, 255, 0.24);
 
-  --card: oklch(0.20 0.05 270);
-  --card-foreground: oklch(0.96 0.02 240);
-  --popover: oklch(0.20 0.05 270);
-  --popover-foreground: oklch(0.96 0.02 240);
+  --card: #050f1e;
+  --card-foreground: #dbe8f6;
+  --popover: #050f1e;
+  --popover-foreground: #dbe8f6;
 
-  --primary: oklch(0.78 0.18 230);
-  --primary-foreground: oklch(0.15 0.04 270);
-  --secondary: oklch(0.28 0.06 270);
-  --secondary-foreground: oklch(0.96 0.02 240);
-  --muted: oklch(0.24 0.04 270);
-  --muted-foreground: oklch(0.70 0.04 250);
-  --accent: oklch(0.30 0.08 270);
-  --accent-foreground: oklch(0.96 0.02 240);
-  --destructive: oklch(0.65 0.24 25);
-  --destructive-foreground: oklch(0.98 0.01 240);
-  --border: oklch(0.45 0.10 260 / 0.3);
-  --input: oklch(0.30 0.06 270);
-  --ring: oklch(0.78 0.18 230);
+  --primary: #00d8ff;
+  --primary-foreground: #02060d;
+  --secondary: #0e1a2e;
+  --secondary-foreground: #dbe8f6;
+  --muted: #0a1424;
+  --muted-foreground: #8aa0b8;
+  --accent: #142540;
+  --accent-foreground: #dbe8f6;
+  --destructive: #ff5a2e;
+  --destructive-foreground: #fff;
+  --border: rgba(0, 216, 255, 0.20);
+  --input: #142540;
+  --ring: #00d8ff;
 
-  --neon-blue: oklch(0.72 0.20 245);
-  --neon-cyan: oklch(0.85 0.16 210);
-  --neon-gold: oklch(0.82 0.16 85);
-  --neon-purple: oklch(0.70 0.22 305);
-  --neon-green: oklch(0.78 0.22 145);
-  --neon-red: oklch(0.68 0.24 25);
-  --neon-orange: oklch(0.75 0.20 50);
+  /* HUD palette — locked to reference hexes */
+  --neon-blue:   #168bff;
+  --neon-cyan:   #00d8ff;
+  --neon-gold:   #f6c453;
+  --neon-purple: #b46cff;
+  --neon-green:  #25ff8a;
+  --neon-red:    #ff5a2e;
+  --neon-orange: #ff8d28;
+  --neon-ember:  #ff5a2e;
 }
 
 @layer base {
   * { border-color: var(--color-border); }
   html, body, #root { height: 100%; }
   body {
-    background:
-      radial-gradient(1200px 600px at 20% 0%, oklch(0.30 0.12 260 / 0.35), transparent 60%),
-      radial-gradient(1000px 500px at 80% 100%, oklch(0.30 0.18 300 / 0.30), transparent 60%),
-      var(--color-background);
     color: var(--color-foreground);
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: "Chakra Petch", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    background:
+      radial-gradient(circle at 52% 28%, #0e2440 0%, #030914 38%, #000 100%);
+    background-attachment: fixed;
+    position: relative;
   }
+  /* Adinkra diagonal glyph backdrop — global, fixed, masked to center */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.085;
+    background-image:
+      linear-gradient(135deg, transparent 43%, var(--neon-gold) 44% 45%, transparent 46%),
+      linear-gradient(45deg,  transparent 43%, var(--neon-cyan) 44% 45%, transparent 46%);
+    background-size: 58px 58px;
+    -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 0 55%, transparent 85%);
+            mask-image: radial-gradient(circle at 50% 45%, #000 0 55%, transparent 85%);
+    z-index: 0;
+  }
+  body > * { position: relative; z-index: 1; }
 }
 
 @utility panel {
-  background: linear-gradient(180deg, oklch(0.22 0.05 270 / 0.75), oklch(0.18 0.05 270 / 0.6));
+  background: linear-gradient(180deg, rgba(4, 14, 28, 0.82), rgba(2, 8, 16, 0.92));
   border: 1px solid var(--panel-border);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   box-shadow:
-    inset 0 1px 0 oklch(1 0 0 / 0.04),
-    0 0 0 1px oklch(0 0 0 / 0.3),
-    0 20px 40px -20px oklch(0.10 0.05 260 / 0.6);
+    0 0 32px rgba(0, 216, 255, 0.05),
+    inset 0 0 34px rgba(0, 216, 255, 0.022),
+    0 20px 40px -20px rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
 }
 
-@utility neon-text-blue { color: var(--color-neon-blue); text-shadow: 0 0 12px color-mix(in oklab, var(--color-neon-blue) 60%, transparent); }
-@utility neon-text-cyan { color: var(--color-neon-cyan); text-shadow: 0 0 12px color-mix(in oklab, var(--color-neon-cyan) 60%, transparent); }
-@utility neon-text-gold { color: var(--color-neon-gold); text-shadow: 0 0 12px color-mix(in oklab, var(--color-neon-gold) 60%, transparent); }
+/* Hairline corner ticks like the HUD mockups */
+@utility panel-corners {
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-color: var(--neon-cyan);
+    opacity: 0.42;
+    pointer-events: none;
+  }
+  &::before {
+    left: 7px; top: 7px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+  }
+  &::after {
+    right: 7px; bottom: 7px;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+  }
+}
+
+@utility neon-text-blue   { color: var(--color-neon-blue);   text-shadow: 0 0 12px color-mix(in oklab, var(--color-neon-blue) 60%, transparent); }
+@utility neon-text-cyan   { color: var(--color-neon-cyan);   text-shadow: 0 0 12px color-mix(in oklab, var(--color-neon-cyan) 60%, transparent); }
+@utility neon-text-gold   { color: var(--color-neon-gold);   text-shadow: 0 0 12px color-mix(in oklab, var(--color-neon-gold) 60%, transparent); }
 @utility neon-text-purple { color: var(--color-neon-purple); text-shadow: 0 0 12px color-mix(in oklab, var(--color-neon-purple) 60%, transparent); }
-@utility neon-text-green { color: var(--color-neon-green); text-shadow: 0 0 10px color-mix(in oklab, var(--color-neon-green) 60%, transparent); }
-@utility neon-text-red { color: var(--color-neon-red); text-shadow: 0 0 10px color-mix(in oklab, var(--color-neon-red) 60%, transparent); }
+@utility neon-text-green  { color: var(--color-neon-green);  text-shadow: 0 0 10px color-mix(in oklab, var(--color-neon-green) 60%, transparent); }
+@utility neon-text-red    { color: var(--color-neon-red);    text-shadow: 0 0 10px color-mix(in oklab, var(--color-neon-red) 60%, transparent); }
+@utility neon-text-ember  { color: var(--color-neon-ember);  text-shadow: 0 0 10px color-mix(in oklab, var(--color-neon-ember) 60%, transparent); }
+
+/* Crest clip — the gold star-cluster crest used in the HUD masthead */
+@utility crest-clip {
+  clip-path: polygon(
+    50% 0, 62% 30%, 94% 18%, 73% 51%, 91% 86%,
+    55% 70%, 50% 100%, 45% 70%, 9% 86%, 27% 51%,
+    6% 18%, 38% 30%
+  );
+}
+
+@utility hex-clip {
+  clip-path: polygon(3% 0, 97% 0, 100% 50%, 97% 100%, 3% 100%, 0 50%);
+}
 
 @keyframes pulse-ring {
   0%, 100% { opacity: 0.9; transform: scale(1); }
@@ -113,9 +177,12 @@
 }
 @keyframes spin-slow { to { transform: rotate(360deg); } }
 @keyframes spin-reverse { to { transform: rotate(-360deg); } }
-@keyframes blink { 0%,100% {opacity:1} 50% {opacity:.35} }
+@keyframes blink { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
+@keyframes breathe { 50% { filter: brightness(1.32); transform: scale(1.035); } }
+@keyframes dash-flow { to { stroke-dashoffset: -80; } }
 
-@utility animate-pulse-ring { animation: pulse-ring 3s ease-in-out infinite; }
-@utility animate-spin-slow { animation: spin-slow 40s linear infinite; }
+@utility animate-pulse-ring   { animation: pulse-ring 3s ease-in-out infinite; }
+@utility animate-spin-slow    { animation: spin-slow 40s linear infinite; }
 @utility animate-spin-reverse { animation: spin-reverse 60s linear infinite; }
-@utility animate-blink { animation: blink 1.6s ease-in-out infinite; }
+@utility animate-blink        { animation: blink 1.6s ease-in-out infinite; }
+@utility animate-breathe      { animation: breathe 3.2s ease-in-out infinite; }

@@ -1,7 +1,28 @@
+.boot-screen {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.boot-screen--exit {
+  opacity: 0;
+  transform: scale(1.012);
+  pointer-events: none;
+}
+
 .boot-image {
   display: block;
-  width: min(100%, 404px);
+  width: min(58vw, 404px);
+  max-width: 404px;
   height: auto;
   margin: 0 auto;
   filter: drop-shadow(0 0 24px rgba(244, 141, 15, 0.18));
+}
+
+@media (max-width: 640px) {
+  .boot-image {
+    width: min(82vw, 360px);
+  }
 }

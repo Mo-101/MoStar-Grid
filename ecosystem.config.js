@@ -174,6 +174,11 @@ module.exports = {
         GRID_PORT: '41010',
         NO_PROXY: 'localhost,127.0.0.1',
         no_proxy: 'localhost,127.0.0.1',
+        // WSL2 can't reach Windows-hosted Ollama via 127.0.0.1 (no
+        // localhostForwarding in this direction) — route through the
+        // same Cloudflare tunnel the cloud deploy uses instead of the
+        // unfinished wsl_tunnel.py bridge.
+        OLLAMA_BASE_URL: 'https://ollama.mostarindustries.com',
         ...NEO4J_ENV,
       },
       watch: false,

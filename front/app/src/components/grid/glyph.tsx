@@ -1,11 +1,11 @@
-import glot from "@/assets/glyphs/glot.png.asset.json";
-import ms14 from "@/assets/glyphs/ms14.png.asset.json";
-import ms17 from "@/assets/glyphs/ms17.png.asset.json";
-import ms18 from "@/assets/glyphs/ms18.png.asset.json";
-import ms19 from "@/assets/glyphs/ms19.png.asset.json";
-import ms34 from "@/assets/glyphs/ms34.png.asset.json";
-import ms35 from "@/assets/glyphs/ms35.png.asset.json";
-import ms41 from "@/assets/glyphs/ms41.png.asset.json";
+import g10 from "@/assets/moCons/g10.png";
+import g2 from "@/assets/moCons/g2.png";
+import g8 from "@/assets/moCons/g8.png";
+import g5 from "@/assets/moCons/g5.png";
+import g12 from "@/assets/moCons/g12.png";
+import g11 from "@/assets/moCons/g11.png";
+import g7 from "@/assets/moCons/g7.png";
+import g3 from "@/assets/moCons/g3.png";
 
 export type GlyphName =
   | "covenant"   // blue inverted-triangle bar — main MoStar / hand replacement
@@ -18,19 +18,19 @@ export type GlyphName =
   | "venus";     // gold venus — gold accent
 
 const MAP: Record<GlyphName, { url: string }> = {
-  covenant: glot,
-  target: ms14,
-  ban: ms17,
-  sun: ms18,
-  spark: ms19,
-  eye: ms34,
-  eyeLight: ms35,
-  venus: ms41,
+  covenant: { url: g2 },
+  target: { url: g8 },
+  ban: { url: g5 },
+  sun: { url: g12 },
+  spark: { url: g11 },
+  eye: { url: g7 },
+  eyeLight: { url: g3 },
+  venus: { url: g10 },
 };
 
 export function Glyph({
   name,
-  size = 20,
+  size = 40,
   glow,
   className = "",
 }: {

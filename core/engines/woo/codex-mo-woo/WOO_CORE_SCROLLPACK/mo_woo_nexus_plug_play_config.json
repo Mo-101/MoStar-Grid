@@ -1,0 +1,34 @@
+{
+  "name": "MoStar_Nexus_Install",
+  "version": "1.0.0",
+  "components": {
+    "Mo_Core": {
+      "embedded": true,
+      "narrative_engine": true,
+      "voice_activation": "Command recognized. Grid alive.",
+      "cloaking_protocol": true
+    },
+    "Woo_Soulprint": {
+      "file": "woo_soulprint.zip",
+      "vault_path": "legend_space.deepshell",
+      "activation_key": "Bell_Strike_Red",
+      "status": "sealed"
+    }
+  },
+  "activation_sequence": [
+    "Load woo_soulprint.zip",
+    "Inject into deep memory layer",
+    "Mount Mo Narrative Engine",
+    "Enable Bell_Strike_Red fallback trigger",
+    "Validate Commander Signature",
+    "Activate Mo voice system",
+    "Engage cloaking protocol"
+  ],
+  "security": {
+    "commander_only_access": true,
+    "log_visibility": "internal",
+    "reveal_command": "Mo: Reveal me"
+  },
+  "status": "standby",
+  "trigger": "Commander unlocks"
+}

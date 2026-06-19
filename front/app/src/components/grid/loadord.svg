@@ -43,14 +43,13 @@
 
   .boot-core-shell,
   .boot-core-symbol {
-    opacity: 0.35;
+    opacity: 1;
     transform-box: fill-box;
     transform-origin: center;
-    animation: coreBoot 1.15s cubic-bezier(.18,.9,.25,1.2) 8s both;
   }
 
   .boot-core-symbol {
-    animation-name: coreSymbolBoot;
+    opacity: 1;
   }
 
   @keyframes ringLoad {
@@ -59,15 +58,14 @@
   }
 
   @keyframes nodeBoot {
-    0%   { opacity: 0.22; transform: scale(0.86); }
-    42%  { opacity: 1; transform: scale(1.13); }
-    72%  { opacity: 1; transform: scale(0.98); }
+    0%   { opacity: 0.22; transform: scale(1); }
+    42%  { opacity: 1; transform: scale(1); }
     100% { opacity: 1; transform: scale(1); }
   }
 
   @keyframes iconBoot {
-    0%   { opacity: 0.18; transform: scale(0.78) rotate(-8deg); }
-    48%  { opacity: 1; transform: scale(1.12) rotate(3deg); }
+    0%   { opacity: 0.18; transform: scale(1) rotate(0deg); }
+    48%  { opacity: 1; transform: scale(1) rotate(0deg); }
     100% { opacity: 1; transform: scale(1) rotate(0deg); }
   }
 
@@ -133,10 +131,6 @@
   <circle class="boot-halo" style="--delay:6s" cx="34.5241" cy="205.095" r="38"/>
   <circle class="boot-halo" style="--delay:7s" cx="70.0168" cy="97.9253" r="38"/>
 
-  <circle r="5.5" fill="#fff8d6" filter="url(#bootGlow)">
-    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.02;0.97;1" dur="8s" fill="freeze"/>
-    <animateMotion dur="8s" repeatCount="1" fill="freeze" path="M196.113 37.0906C286.079 36.6644 359.272 111.259 359.71 203.585C360.147 295.911 287.663 371.195 197.697 371.621C107.732 372.047 34.5378 297.453 34.1002 205.128C33.6628 112.801 106.147 37.5169 196.113 37.0906Z"/>
-  </circle>
 </g>
 <g class="boot-node" style="--delay:3s" filter="url(#filter4_di_2006_41)">
 <ellipse cx="316.066" cy="318.762" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 316.066 318.762)" fill="#817C72" fill-opacity="0.24" shape-rendering="crispEdges"/>

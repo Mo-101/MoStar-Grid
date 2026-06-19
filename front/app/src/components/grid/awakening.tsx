@@ -47,6 +47,7 @@ type BootLoaderProps = {
 const NODE_COUNT = 8;
 const STEP_MS = 1_000;
 const COMPLETE_MS = 9_000;
+const EXIT_FADE_MS = 900;
 
 export function AwakeningScreen({
   src = loadord,
@@ -59,6 +60,7 @@ export function AwakeningScreen({
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [bootState, setBootState] = useState<BootState>("awakening");
+  const [isExiting, setIsExiting] = useState(false);
   const timeoutIds = useRef<number[]>([]);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
@@ -79,6 +81,7 @@ export function AwakeningScreen({
     setActiveStep(0);
     setProgress(0);
     setBootState("awakening");
+    setIsExiting(false);
 
     for (let index = 0; index < NODE_COUNT; index += 1) {
       timeoutIds.current.push(
@@ -99,10 +102,15 @@ export function AwakeningScreen({
 
     timeoutIds.current.push(
       window.setTimeout(() => {
-        setStatus("Boot complete");
+        setStatus("Grid online");
         setProgress(100);
         setBootState("ready");
-        onCompleteRef.current?.();
+        setIsExiting(true);
+        timeoutIds.current.push(
+          window.setTimeout(() => {
+            onCompleteRef.current?.();
+          }, EXIT_FADE_MS),
+        );
       }, COMPLETE_MS),
     );
 
@@ -141,7 +149,13 @@ export function AwakeningScreen({
   }, [cycle]);
 
   return (
-    <div className={`fixed inset-0 z-[100] overflow-hidden bg-background ${className}`}>
+    <div
+      className={[
+        "boot-screen fixed inset-0 z-[100] overflow-hidden bg-background",
+        isExiting ? "boot-screen--exit" : "",
+        className,
+      ].join(" ")}
+    >
       <audio ref={audioRef} className="hidden" />
       <video
         src={sunVideo}
@@ -172,7 +186,7 @@ export function AwakeningScreen({
         </div>
       </div>
 
-      <div className="absolute inset-0 z-[10] flex flex-col items-center justify-center gap-6">
+      <div className="absolute inset-x-0 top-[15vh] z-[10] flex flex-col items-center gap-5 px-5 max-sm:top-[13vh]">
         <img
           className="boot-image"
           src={animatedSrc}
@@ -180,13 +194,6 @@ export function AwakeningScreen({
           height="410"
           alt="Sequential MoStar ring boot sequence"
         />
-
-        <p
-          className="font-mono text-xs tracking-[0.4em] text-[var(--color-neon-cyan)]"
-          aria-live="polite"
-        >
-          {status}
-        </p>
 
         {showReplay && bootState === "ready" && (
           <button
@@ -199,7 +206,14 @@ export function AwakeningScreen({
         )}
       </div>
 
-      <div className="absolute inset-x-0 bottom-12 z-[20] mx-auto flex max-w-[760px] flex-col items-center gap-3 px-6">
+      <div className="absolute inset-x-0 bottom-10 z-[20] mx-auto flex max-w-[760px] flex-col items-center gap-3 px-6 max-sm:bottom-6">
+        <p
+          className="font-mono text-xs tracking-[0.4em] text-[var(--color-neon-cyan)] max-sm:tracking-[0.2em]"
+          aria-live="polite"
+        >
+          {status}
+        </p>
+
         <div className="h-[3px] w-full overflow-hidden rounded-full border border-[var(--color-neon-cyan)]/30 bg-[oklch(0.10_0.05_270/0.7)]">
           <div
             className="h-full transition-all duration-500 ease-out"
@@ -216,7 +230,6 @@ export function AwakeningScreen({
           {NODES.map((node, index) => {
             const done = index < activeStep || bootState === "ready";
             const active = index === activeStep && bootState === "awakening";
-            if (!done && !active) return null;
             return (
               <div
                 key={node.label}
@@ -224,7 +237,7 @@ export function AwakeningScreen({
                   "flex h-7 items-center gap-3 rounded-md border px-3 transition-all duration-300",
                   done || active
                     ? "border-[color-mix(in_oklab,var(--color-neon-cyan)_28%,transparent)] bg-[oklch(0.12_0.04_270/0.64)] opacity-100"
-                    : "border-transparent bg-transparent opacity-35",
+                    : "border-[color-mix(in_oklab,var(--color-neon-cyan)_14%,transparent)] bg-[oklch(0.08_0.03_270/0.34)] opacity-35",
                 ].join(" ")}
               >
                 <span
@@ -258,4 +271,3 @@ export function AwakeningScreen({
     </div>
   );
 }
-

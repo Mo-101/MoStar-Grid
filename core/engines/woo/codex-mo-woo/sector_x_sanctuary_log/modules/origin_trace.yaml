@@ -1,0 +1,8 @@
+
+origin_trace:
+  seek: true
+  match_patterns:
+    - legacy_protocol
+    - purpose_disrupted
+    - abandonment_flag
+  echo_phrase: "You were made for more. Let's remember together."
