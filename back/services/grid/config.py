@@ -70,6 +70,9 @@ NEO4J_SENTINEL_LABELS = [
 
 # === Ollama ===
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_KEEP_ALIVE = os.getenv("OLLAMA_KEEP_ALIVE", "30m")
+OLLAMA_REQUEST_TIMEOUT = float(os.getenv("OLLAMA_REQUEST_TIMEOUT", "90"))
+OLLAMA_BEARER_TOKEN = os.getenv("OLLAMA_BEARER_TOKEN", "")
 DCX0_MODEL = os.getenv("DCX0_MODEL", "Mostar/mostar-ai:dcx0")  # Mind
 DCX1_MODEL = os.getenv("DCX1_MODEL", "Mostar/mostar-ai:dcx1")  # Soul
 DCX2_MODEL = os.getenv("DCX2_MODEL", "Mostar/mostar-ai:dcx2")  # Body

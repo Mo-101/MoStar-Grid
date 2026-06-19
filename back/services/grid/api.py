@@ -48,10 +48,11 @@ from grid.config import (
     NEO4J_EXPECTED_PORT,
     NEO4J_SENTINEL_LABELS,
     NEO4J_URI,
+    OLLAMA_BEARER_TOKEN,
     SEAL_GLYPH,
     cluster_metadata,
 )
-from grid.config import OLLAMA_BASE_URL
+from grid.config import OLLAMA_BASE_URL, OLLAMA_KEEP_ALIVE, OLLAMA_REQUEST_TIMEOUT
 from grid.orchestrator import CommitFailedError, CommitForbiddenError, GridOrchestrator
 from grid.semantic_api import router as semantic_router
 from grid.telemetry import ClusterTelemetry
@@ -256,6 +257,19 @@ def _failed_probe(error: str) -> dict:
     }
 
 
+def _ollama_headers() -> dict[str, str] | None:
+    if not OLLAMA_BEARER_TOKEN:
+        return None
+    return {"Authorization": f"Bearer {OLLAMA_BEARER_TOKEN}"}
+
+
+def _format_probe_error(exc: Exception) -> str:
+    text = str(exc)
+    if text:
+        return f"{exc.__class__.__name__}: {text}"[:300]
+    return exc.__class__.__name__
+
+
 def _neo4j_endpoint_identity() -> dict:
     parsed = urlparse(NEO4J_URI)
     scheme = parsed.scheme
@@ -348,13 +362,18 @@ async def _probe_dcx() -> dict:
         "model": DCX0_MODEL,
         "prompt": "Reply with exactly: DCX_HEALTH_OK",
         "stream": False,
+        "keep_alive": OLLAMA_KEEP_ALIVE,
         "options": {
             "temperature": 0,
             "num_predict": 8,
         },
     }
     try:
-        async with httpx.AsyncClient(base_url=OLLAMA_BASE_URL, timeout=45.0) as client:
+        async with httpx.AsyncClient(
+            base_url=OLLAMA_BASE_URL,
+            timeout=OLLAMA_REQUEST_TIMEOUT,
+            headers=_ollama_headers(),
+        ) as client:
             resp = await client.post("/api/generate", json=payload)
             resp.raise_for_status()
             data = resp.json()
@@ -364,7 +383,10 @@ async def _probe_dcx() -> dict:
             "connected": False,
             "model": DCX0_MODEL,
             "base_url": OLLAMA_BASE_URL,
-            "error": str(exc)[:300],
+            "keep_alive": OLLAMA_KEEP_ALIVE,
+            "timeout_s": OLLAMA_REQUEST_TIMEOUT,
+            "auth_configured": bool(OLLAMA_BEARER_TOKEN),
+            "error": _format_probe_error(exc),
             "duration_ms": int((time.monotonic() - started) * 1000),
         }
 
@@ -376,6 +398,9 @@ async def _probe_dcx() -> dict:
         "model": DCX0_MODEL,
         "base_url": OLLAMA_BASE_URL,
         "execution": "remote_ollama_via_configured_url",
+        "keep_alive": OLLAMA_KEEP_ALIVE,
+        "timeout_s": OLLAMA_REQUEST_TIMEOUT,
+        "auth_configured": bool(OLLAMA_BEARER_TOKEN),
         "tokens": tokens,
         "response_preview": text[:80],
         "duration_ms": int((time.monotonic() - started) * 1000),

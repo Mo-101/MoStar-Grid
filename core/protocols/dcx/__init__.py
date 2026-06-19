@@ -13,7 +13,15 @@ from enum import Enum
 from dataclasses import dataclass
 from typing import Optional, AsyncIterator
 
-from grid.config import OLLAMA_BASE_URL, DCX0_MODEL, DCX1_MODEL, DCX2_MODEL
+from grid.config import (
+    DCX0_MODEL,
+    DCX1_MODEL,
+    DCX2_MODEL,
+    OLLAMA_BASE_URL,
+    OLLAMA_BEARER_TOKEN,
+    OLLAMA_KEEP_ALIVE,
+    OLLAMA_REQUEST_TIMEOUT,
+)
 
 logger = logging.getLogger("dcx")
 
@@ -101,9 +109,13 @@ class DCXTrinity:
             DCXLayer.SOUL: DCX1_MODEL,
             DCXLayer.BODY: DCX2_MODEL,
         }
+        headers = None
+        if OLLAMA_BEARER_TOKEN:
+            headers = {"Authorization": f"Bearer {OLLAMA_BEARER_TOKEN}"}
         self._client = httpx.AsyncClient(
             base_url=OLLAMA_BASE_URL,
-            timeout=300.0,
+            timeout=OLLAMA_REQUEST_TIMEOUT,
+            headers=headers,
         )
         self._available_models: set[str] = set()
 
@@ -185,6 +197,7 @@ class DCXTrinity:
                 "prompt": prompt,
                 "raw": True,
                 "stream": False,
+                "keep_alive": OLLAMA_KEEP_ALIVE,
                 "options": {
                     "temperature": 0.7,
                     "num_ctx": 2048,

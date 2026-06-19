@@ -17,6 +17,12 @@ envVarGroups:
         value: "MoStarMoment,Memory,GridKnowledge"
       - key: OLLAMA_BASE_URL
         sync: false
+      - key: OLLAMA_KEEP_ALIVE
+        value: "30m"
+      - key: OLLAMA_REQUEST_TIMEOUT
+        value: "90"
+      - key: OLLAMA_BEARER_TOKEN
+        sync: false
       - key: DCX0_MODEL
         value: "Mostar/mostar-ai:dcx0"
       - key: DCX1_MODEL
