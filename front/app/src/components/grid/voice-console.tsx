@@ -22,6 +22,8 @@ import { dcxThink, dcxHealth, ollamaHealth, type DCXLayer } from "@/services/dcx
 type BackendId = "piper" | "dcx" | "ollama" | "mock";
 type HealthStatus = "healthy" | "degraded" | "down" | "unknown";
 
+const PROBED_SERVICES: Exclude<ServiceKey, "api">[] = ["voice", "personality", "dcx", "ollama"];
+
 const BACKENDS: { id: BackendId; label: string; sub: string }[] = [
   { id: "piper",  label: "PIPER",   sub: "MoStar Voice · sovereign TTS" },
   { id: "dcx",    label: "DCX",     sub: "Trinity · Mind/Soul/Body" },
@@ -98,7 +100,7 @@ export function GridVoiceConsole() {
   const [transcript, setTranscript] = useState<
     { kind: "user" | "system" | "voice" | "dcx"; text: string; meta?: string }[]
   >([]);
-  const [health, setHealth] = useState<Record<ServiceKey, HealthStatus>>({
+  const [health, setHealth] = useState<Record<Exclude<ServiceKey, "api">, HealthStatus>>({
     voice: "unknown", personality: "unknown", dcx: "unknown", ollama: "unknown",
   });
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -200,7 +202,7 @@ export function GridVoiceConsole() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {(Object.keys(SERVICE_LABEL) as ServiceKey[]).map((k) => (
+          {PROBED_SERVICES.map((k) => (
             <div key={k} className="flex items-center gap-2 text-[10px] tracking-[0.18em]">
               <StatusDot s={health[k]} />
               <span className="text-foreground/80">{SERVICE_LABEL[k]}</span>

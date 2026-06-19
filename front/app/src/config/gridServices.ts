@@ -17,6 +17,7 @@ export const GRID_SERVICES = {
   personality: import.meta.env.VITE_PERSONALITY_ENGINE_URL ?? "http://localhost:41072",
   dcx:         import.meta.env.VITE_DCX_TRINITY_URL        ?? "http://localhost:41073",
   ollama:      import.meta.env.VITE_OLLAMA_URL             ?? "http://localhost:11434",
+  api:         import.meta.env.VITE_GRID_API_BASE          || "http://localhost:41010",
 } as const;
 
 export const LIVE_GRID_SERVICES =
@@ -31,4 +32,5 @@ export const SERVICE_LABEL: Record<ServiceKey, string> = {
   personality: "Personality Engine",
   dcx:         "DCX Trinity",
   ollama:      "Ollama",
+  api:         "Grid API",
 };

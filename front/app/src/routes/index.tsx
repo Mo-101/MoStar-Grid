@@ -1,89 +1,84 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
 import {
-  KpiCard, CouncilList, GlyphPanel, CodeConduit,
-  GridFeed, GridHealth, QuickCommands, CovenantOath,
-  useGridStream, KPI, FEED_SEED, PageShell,
+  CouncilList,
+  CodeConduit,
+  GridFeed,
+  useLiveFeed,
+  useGridStatus,
+  KPI_META,
+  PageShell,
 } from "@/components/grid/parts";
-import { AwakeningScreen } from "@/components/grid/awakening";
-import {
-  ElementalCard, elementalToast, type Element,
-} from "@/components/grid/elemental-toast";
+import { ElementalCard, type Element } from "@/components/grid/elemental-toast";
+import { GlyphPanel as CovenantRuntimeRing } from "@/components/grid/parts";
+
+const ELEMENT_QUADRANTS: { element: Element; title: string; body: string }[] = [
+  { element: "fire", title: "ISONG · SPIRIT", body: "Awakening · Change · Fire" },
+  { element: "water", title: "M MỌNG · ESSENCE", body: "Pulse · Memory · Flow" },
+  { element: "air", title: "IKANG · MIND", body: "Logic · Will · Structure" },
+  { element: "earth", title: "AFIM · BODY", body: "Form · Action · Creation" },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MoStar GRID — Covenant Command Center" },
-      { name: "description", content: "Real-time command center for the MoStar GRID covenant: agents, mind graph, conduits, and grid health." },
+      { title: "MoStar GRID — Covenant Home" },
+      {
+        name: "description",
+        content:
+          "Ultra real-time Covenant Home for the MoStar GRID: awakening nodes, live telemetry, agents, soulprint, Woo, and grid health.",
+      },
     ],
   }),
   component: GridDashboard,
 });
 
-const AWAKEN_KEY = "mostar.grid.awakened";
-
 function GridDashboard() {
-  const { items, pulse } = useGridStream(FEED_SEED);
-  const [awakened, setAwakened] = useState(true);
-  const greeted = useRef(false);
+  const { items, pulse, connected } = useLiveFeed();
+  const { data: status } = useGridStatus();
 
-  useEffect(() => {
-    const done = typeof window !== "undefined" && sessionStorage.getItem(AWAKEN_KEY) === "1";
-    if (!done) setAwakened(false);
-  }, []);
-
-  useEffect(() => {
-    if (!awakened || greeted.current) return;
-    greeted.current = true;
-    const order: { e: Element; title: string; body: string }[] = [
-      { e: "fire",  title: "FIRE · ISONG IGNITED",      body: "Awakening · Change · Will to act." },
-      { e: "water", title: "WATER · M MỌNG FLOWING",    body: "Memory streams synchronised across the conduit." },
-      { e: "air",   title: "AIR · IKANG BREATHING",     body: "Mind is open. The council is listening." },
-      { e: "earth", title: "EARTH · AFIM HOLDING",      body: "Form is stable. The grid stands on covenant." },
-    ];
-    order.forEach((o, i) =>
-      setTimeout(() => elementalToast(o.e, { title: o.title, body: o.body }), 600 + i * 1100),
-    );
-  }, [awakened]);
-
-  if (!awakened) {
-    return (
-      <AwakeningScreen
-        onComplete={() => {
-          try { sessionStorage.setItem(AWAKEN_KEY, "1"); } catch {}
-          setAwakened(true);
-        }}
-      />
-    );
-  }
+  const liveValues: Record<(typeof KPI_META)[number]["key"], number | null> = {
+    nodes: status?.mindgraph.nodes ?? null,
+    relationships: status?.mindgraph.relationships ?? null,
+    events: status?.density.label_distribution.GridEvent ?? null,
+    utterances: status?.density.label_distribution.WooUtterance ?? null,
+  };
 
   return (
     <PageShell active="overview">
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-        {KPI.map((k) => <KpiCard key={k.label} k={k} />)}
-      </div>
+      <section className="grid shrink-0 grid-cols-2 gap-3 md:grid-cols-4">
+        {ELEMENT_QUADRANTS.map((q, i) => {
+          const meta = KPI_META[i];
+          return (
+            <ElementalCard
+              key={q.element}
+              element={q.element}
+              title={q.title}
+              body={q.body}
+              metric={{ label: meta.label, value: liveValues[meta.key] ?? 0 }}
+              height={130}
+            />
+          );
+        })}
+      </section>
 
-      {/* Four elemental cards using looping gifs as backgrounds */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <ElementalCard element="fire"  title="ISONG · SPIRIT"  body="Awakening · Change · Fire"     height={130} />
-        <ElementalCard element="water" title="M MỌNG · ESSENCE" body="Pulse · Memory · Flow"        height={130} />
-        <ElementalCard element="air"   title="IKANG · MIND"    body="Logic · Will · Structure"       height={130} />
-        <ElementalCard element="earth" title="AFIM · BODY"     body="Form · Action · Creation"       height={130} />
-      </div>
+      <section className="grid min-h-0 flex-1 grid-cols-12 gap-3">
+        <aside className="col-span-12 min-h-0 lg:col-span-3">
+          <CouncilList />
+        </aside>
 
-      <div className="grid flex-1 grid-cols-12 gap-3">
-        <div className="col-span-12 lg:col-span-3"><CouncilList /></div>
-        <div className="col-span-12 flex flex-col gap-3 lg:col-span-6">
-          <div className="min-h-[560px] flex-1"><GlyphPanel /></div>
-          <CodeConduit pulse={pulse} />
-        </div>
-        <div className="col-span-12 flex flex-col gap-3 lg:col-span-3">
-          <GridFeed items={items} />
-          <GridHealth />
-          <QuickCommands />
-        </div>
-      </div>
-      <CovenantOath />
+        <main className="col-span-12 flex min-h-0 flex-col gap-3 lg:col-span-6">
+          <div className="min-h-0 flex-1">
+            <CovenantRuntimeRing />
+          </div>
+          <div className="shrink-0">
+            <CodeConduit pulse={pulse} />
+          </div>
+        </main>
+
+        <aside className="col-span-12 min-h-0 lg:col-span-3">
+          <GridFeed items={items} connected={connected} />
+        </aside>
+      </section>
     </PageShell>
   );
 }

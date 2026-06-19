@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { PageShell } from "@/components/grid/parts";
+import { PageShell, QuickCommands } from "@/components/grid/parts";
 import { Glyph } from "@/components/grid/glyph";
 
 export const Route = createFileRoute("/events")({
@@ -198,7 +198,7 @@ function EventsPage() {
       </div>
 
       {/* BOTTOM */}
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-4 xl:grid-cols-5">
         <Panel title="HIGH IMPACT EVENTS">
           {EVENTS.map((e) => (
             <div key={e.id} className="flex gap-3 py-1 text-[11px]">
@@ -244,6 +244,7 @@ function EventsPage() {
             </div>
           ))}
         </Panel>
+        <QuickCommands />
       </div>
     </PageShell>
   );

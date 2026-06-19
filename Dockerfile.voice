@@ -13,14 +13,23 @@ RUN curl -L -o /tmp/piper.tar.gz \
     && tar -xzf /tmp/piper.tar.gz -C /opt \
     && rm /tmp/piper.tar.gz
 
-# Voice model — en_US-libritts-high
+# Voice models advertised by back/services/voice/voice_api.py
 RUN mkdir -p /opt/voice-models \
     && curl -L -o /opt/voice-models/en_GB-cori-high.onnx \
     https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/cori/high/en_GB-cori-high.onnx \
     && curl -L -o /opt/voice-models/en_GB-cori-high.onnx.json \
-    https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/cori/high/en_GB-cori-high.onnx.json
+    https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/cori/high/en_GB-cori-high.onnx.json \
+    && curl -L -o /opt/voice-models/en_US-lessac-high.onnx \
+    https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/high/en_US-lessac-high.onnx \
+    && curl -L -o /opt/voice-models/en_US-lessac-high.onnx.json \
+    https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/high/en_US-lessac-high.onnx.json \
+    && curl -L -o /opt/voice-models/en_US-libritts-high.onnx \
+    https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/libritts/high/en_US-libritts-high.onnx \
+    && curl -L -o /opt/voice-models/en_US-libritts-high.onnx.json \
+    https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/libritts/high/en_US-libritts-high.onnx.json
 
 ENV PIPER_BIN=/opt/piper/piper
+ENV VOICE_MODEL_DIR=/opt/voice-models
 ENV VOICE_MODEL=/opt/voice-models/en_GB-cori-high.onnx
 ENV AUDIO_OUT=/tmp/mostar-voice-audio
 ENV VOICE_NAME=mostar-sovereign-v1

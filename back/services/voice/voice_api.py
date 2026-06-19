@@ -25,18 +25,38 @@ from starlette.concurrency import run_in_threadpool
 
 VOICE_ROOT = Path(os.getenv("VOICE_ROOT", str(Path.home() / "MoStar" / "voice")))
 PIPER_BIN = Path(os.getenv("PIPER_BIN", str(VOICE_ROOT / "piper" / "piper")))
-VOICE_MODEL = Path(
-    os.getenv("VOICE_MODEL", str(VOICE_ROOT / "models" / "en_GB-cori-high.onnx"))
-)
 AUDIO_OUT = Path(os.getenv("AUDIO_OUT", str(VOICE_ROOT / "audio")))
+VOICE_MODEL_DIR = Path(os.getenv("VOICE_MODEL_DIR", str(VOICE_ROOT / "models")))
 AUDIO_OUT.mkdir(parents=True, exist_ok=True)
 
 GRID_API_URL = os.getenv("GRID_API_URL", "https://mostar-grid-api.onrender.com")
 GRID_API_TOKEN = os.getenv("MOSTAR_SESSION_TOKEN", "")
 
-VOICE_NAME = os.getenv("VOICE_NAME", "mostar-sovereign-v1")
 MAX_AUDIO_FILES = int(os.getenv("MAX_AUDIO_FILES", "200"))
 SEAL = "earth therefore fire"
+
+# Voice registry — maps a stable voice_id to an on-disk Piper model.
+# Models live in VOICE_ROOT/models; add new entries here once a .onnx is
+# downloaded there. Gender/character notes are best-effort (Piper voice
+# names come from their training datasets, not a verified gender label).
+VOICE_NAME = os.getenv("VOICE_NAME", "mostar-sovereign-v1")
+VOICES: dict[str, dict[str, str]] = {
+    "mostar-sovereign-v1": {
+        "model": str(VOICE_MODEL_DIR / "en_GB-cori-high.onnx"),
+        "label": "Cori (en-GB) — ceremonial, the default Grid voice",
+    },
+    "mostar-clear-v1": {
+        "model": str(VOICE_MODEL_DIR / "en_US-lessac-high.onnx"),
+        "label": "Lessac (en-US) — clearer, less formal pacing",
+    },
+    "mostar-libritts-v1": {
+        "model": str(VOICE_MODEL_DIR / "en_US-libritts-high.onnx"),
+        "label": "LibriTTS (en-US) — multi-speaker corpus",
+    },
+}
+# Back-compat: VOICE_MODEL env var, if set, overrides the default entry's model.
+if os.getenv("VOICE_MODEL"):
+    VOICES[VOICE_NAME]["model"] = os.getenv("VOICE_MODEL")
 
 GLYPH_SPOKEN = {
     "🜂": "fire",
@@ -106,6 +126,10 @@ class SpeakRequest(BaseModel):
     mood: str = Field(
         default="ceremonial",
         description="stable, ceremonial, alert, reflective, prophecy, whisper",
+    )
+    voice: str = Field(
+        default=VOICE_NAME,
+        description="voice_id from GET /voices. Falls back to the default voice if unknown.",
     )
     speaker: Optional[str] = Field(default=None, description="Codex speaker key.")
     persona: Optional[str] = Field(
@@ -213,21 +237,47 @@ async def fetch_moment_text(moment_id: str) -> str:
             ) from exc
 
 
-def assert_piper_ready() -> None:
+def resolve_voice(voice_id: Optional[str]) -> tuple[str, Path]:
+    """Resolve a requested voice_id to a registered (id, model_path) pair.
+
+    Falls back to the default voice — and logs it — if the id is unknown,
+    rather than failing the whole request over a typo'd voice name.
+    """
+    candidate = voice_id or VOICE_NAME
+    entry = VOICES.get(candidate)
+    if entry is None:
+        print(f"[voice_api] unknown voice_id={candidate!r}, falling back to {VOICE_NAME!r}")
+        candidate = VOICE_NAME
+        entry = VOICES[VOICE_NAME]
+
+    model_path = Path(entry["model"])
+    if not model_path.exists() and candidate != VOICE_NAME:
+        print(
+            f"[voice_api] missing model for voice_id={candidate!r}: {model_path}; "
+            f"falling back to {VOICE_NAME!r}"
+        )
+        candidate = VOICE_NAME
+        entry = VOICES[VOICE_NAME]
+        model_path = Path(entry["model"])
+
+    return candidate, model_path
+
+
+def assert_piper_ready(voice_model: Path) -> None:
     if not PIPER_BIN.exists():
         raise HTTPException(
             status_code=503,
             detail=f"Piper binary not found: {PIPER_BIN}",
         )
-    if not VOICE_MODEL.exists():
+    if not voice_model.exists():
         raise HTTPException(
             status_code=503,
-            detail=f"Voice model not found: {VOICE_MODEL}",
+            detail=f"Voice model not found: {voice_model}",
         )
 
 
-def synthesize(text: str, mood: str, out_file: Path) -> None:
-    assert_piper_ready()
+def synthesize(text: str, mood: str, voice_model: Path, out_file: Path) -> None:
+    assert_piper_ready(voice_model)
 
     params = MOODS.get(mood, MOODS["ceremonial"])
     processed_text = breath_process(text)
@@ -235,7 +285,7 @@ def synthesize(text: str, mood: str, out_file: Path) -> None:
     cmd = [
         str(PIPER_BIN),
         "--model",
-        str(VOICE_MODEL),
+        str(voice_model),
         "--length_scale",
         params["length_scale"],
         "--sentence_silence",
@@ -284,7 +334,7 @@ async def health():
         pass
 
     piper_ok = PIPER_BIN.exists()
-    model_ok = VOICE_MODEL.exists()
+    model_ok = Path(VOICES[VOICE_NAME]["model"]).exists()
 
     return {
         "status": "healthy" if piper_ok and model_ok else "degraded",
@@ -304,11 +354,13 @@ async def voices():
         "default": VOICE_NAME,
         "voices": [
             {
-                "id": VOICE_NAME,
+                "id": voice_id,
                 "engine": "piper",
-                "model": str(VOICE_MODEL),
-                "status": "available" if VOICE_MODEL.exists() else "missing",
+                "label": entry["label"],
+                "model": entry["model"],
+                "status": "available" if Path(entry["model"]).exists() else "missing",
             }
+            for voice_id, entry in VOICES.items()
         ],
     }
 
@@ -340,7 +392,9 @@ async def speak(req: SpeakRequest):
         text_to_speak = replace_glyphs_with_speech(text_to_speak)
         text_to_speak = enrich_with_codex(text_to_speak, speaker, req.mood)
 
-    cache_str = f"{text_to_speak}|{req.mood}|{speaker or ''}|{req.moment_id or ''}"
+    voice_id, voice_model = resolve_voice(req.voice)
+
+    cache_str = f"{text_to_speak}|{req.mood}|{voice_id}|{speaker or ''}|{req.moment_id or ''}"
     digest = hashlib.sha256(cache_str.encode("utf-8")).hexdigest()[:16]
     out_file = AUDIO_OUT / f"woo-{digest}.wav"
 
@@ -348,7 +402,7 @@ async def speak(req: SpeakRequest):
     started = time.monotonic()
 
     if not cached:
-        await run_in_threadpool(synthesize, text_to_speak, req.mood, out_file)
+        await run_in_threadpool(synthesize, text_to_speak, req.mood, voice_model, out_file)
 
     duration_ms = int((time.monotonic() - started) * 1000)
 
@@ -363,11 +417,11 @@ async def speak(req: SpeakRequest):
         ok=True,
         audio_url=f"/audio/{out_file.name}",
         engine="piper",
-        voice=VOICE_NAME,
+        voice=voice_id,
         cached=cached,
         mood=req.mood,
         speaker=speaker,
-        persona=speaker or VOICE_NAME,
+        persona=speaker or voice_id,
         text_spoken=text_to_speak,
         seal=SEAL,
         duration_ms=duration_ms,
@@ -380,7 +434,7 @@ async def speak(req: SpeakRequest):
 async def speak_verify():
     started = time.monotonic()
     piper_ok = PIPER_BIN.exists()
-    model_ok = VOICE_MODEL.exists()
+    model_ok = Path(VOICES[VOICE_NAME]["model"]).exists()
     out_file: Optional[Path] = None
 
     if not piper_ok or not model_ok:
@@ -403,7 +457,9 @@ async def speak_verify():
     out_file = AUDIO_OUT / f"verify-{digest}.wav"
 
     try:
-        await run_in_threadpool(synthesize, "Runtime ready.", "stable", out_file)
+        await run_in_threadpool(
+            synthesize, "Runtime ready.", "stable", Path(VOICES[VOICE_NAME]["model"]), out_file
+        )
         audio_hash = await run_in_threadpool(file_sha256, out_file)
         ready = out_file.exists() and out_file.stat().st_size > 0
         response = SpeakVerifyResponse(

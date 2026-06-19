@@ -68,6 +68,8 @@ services:
         value: mostar-sovereign-v1
       - key: VOICE_MODEL
         value: /opt/voice-models/en_GB-cori-high.onnx
+      - key: VOICE_MODEL_DIR
+        value: /opt/voice-models
       - key: AUDIO_OUT
         value: /tmp/mostar-voice-audio
       - key: GRID_API_URL
@@ -89,5 +91,9 @@ services:
         value: "22.12.0"
       - key: VITE_GRID_API_BASE
         sync: false  # set to MoStar-Grid's public onrender.com URL
+      - key: VITE_MOSTAR_VOICE_URL
+        sync: false  # set to mostar-voice's public onrender.com URL
+      - key: VITE_ENABLE_LIVE_GRID_SERVICES
+        value: "true"
       - key: VITE_MOSTAR_TOKEN
         sync: false

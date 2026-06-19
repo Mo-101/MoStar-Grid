@@ -4,25 +4,25 @@
  * `<ElementalCard element="fire" .../>` inline.
  */
 import { toast } from "sonner";
-import fire from "@/assets/elements/fire.gif.asset.json";
-import earth from "@/assets/elements/earth.gif.asset.json";
-import air from "@/assets/elements/air.gif.asset.json";
-import water from "@/assets/elements/water.gif.asset.json";
+import fire from "@/assets/moCons/fire_element.gif";
+import earth from "@/assets/moCons/earth_element.gif";
+import air from "@/assets/moCons/air_element.gif";
+import water from "@/assets/moCons/water_element.gif";
 
 export type Element = "fire" | "earth" | "air" | "water";
 
 export const ELEMENT_GIF: Record<Element, string> = {
-  fire: fire.url,
-  earth: earth.url,
-  air: air.url,
-  water: water.url,
+  fire,
+  earth,
+  air,
+  water,
 };
 
 const GLOW: Record<Element, string> = {
-  fire: "#ff5a2e",
-  earth: "#f6c453",
-  air: "#9cd0ff",
-  water: "#168bff",
+  fire: "#e93908",
+  earth: "#eea806",
+  air: "#9aaef0",
+  water: "#1625ff",
 };
 
 const SIGIL: Record<Element, string> = {
@@ -36,12 +36,14 @@ export function ElementalCard({
   element,
   title,
   body,
+  metric,
   className = "",
   height = 140,
 }: {
   element: Element;
   title: string;
   body?: string;
+  metric?: { label: string; value: number; delta?: number };
   className?: string;
   height?: number;
 }) {
@@ -69,11 +71,31 @@ export function ElementalCard({
         }}
       />
       <div className="relative z-10 flex h-full flex-col justify-between p-3 font-mono">
-        <div
-          className="text-[10px] tracking-[0.32em]"
-          style={{ color: glow, textShadow: `0 0 8px ${glow}` }}
-        >
-          {SIGIL[element]} {element.toUpperCase()}
+        <div className="flex items-start justify-between gap-2">
+          <div
+            className="text-[10px] tracking-[0.32em]"
+            style={{ color: glow, textShadow: `0 0 8px ${glow}` }}
+          >
+            {SIGIL[element]} {element.toUpperCase()}
+          </div>
+          {metric && (
+            <div className="text-right leading-tight">
+              <div
+                className="text-lg font-semibold tabular-nums"
+                style={{ color: "#f3f7ff", textShadow: `0 0 10px ${glow}` }}
+              >
+                {metric.value.toLocaleString("en-US")}
+              </div>
+              {metric.delta != null && (
+                <div
+                  className="text-[9px] tracking-[0.15em]"
+                  style={{ color: glow }}
+                >
+                  + {metric.delta.toLocaleString("en-US")} TODAY
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <div>
           <div
@@ -85,6 +107,14 @@ export function ElementalCard({
           {body && (
             <div className="mt-1 text-[11px] leading-snug text-white/80">
               {body}
+            </div>
+          )}
+          {metric && (
+            <div
+              className="mt-0.5 text-[9px] tracking-[0.25em]"
+              style={{ color: "rgba(255,255,255,0.6)" }}
+            >
+              {metric.label}
             </div>
           )}
         </div>

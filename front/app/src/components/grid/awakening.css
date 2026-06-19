@@ -1,10 +1,7 @@
-.orb-svg svg {
+.boot-image {
   display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.orb-svg,
-.orb-svg * {
-  transform-box: fill-box;
+  width: min(100%, 404px);
+  height: auto;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 24px rgba(244, 141, 15, 0.18));
 }

@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import sunVideo from "@/assets/sun5.mp4";
-import rawOrbSvg from "./loadord.svg?raw";
+import loadord from "./loadord.svg";
+import { speak } from "@/services/gridVoiceClient";
 import "./awakening.css";
 
-export type RollCallState = "idle" | "awakening" | "ready";
+const BOOT_NARRATION =
+  "Covenant boot sequence initiated. Sealing the council. The grid is awakening.";
+
+export type BootState = "idle" | "awakening" | "ready";
 
 export type TelemetryEventType =
   | "woo.evaluation"
@@ -21,164 +25,124 @@ export type TelemetryEventType =
   | "moscripts.execute"
   | "runtime.execution";
 
-export const NODE_EVENT_MAP = {
-  "WOO ORACLE": ["woo.evaluation", "truth.validation"],
-  "COVENANT CORE": ["agent.lifecycle", "governor.cost"],
-  "COUNCIL OF THIRTEEN": ["council.decision", "registry.mutation"],
-  "SOUL · MIND · BODY": ["voice.synthesis"],
-  "IFÁ-CORPUS · AHP+TOPSIS+GREY": ["omni-symbolic"],
-  "NEO4J MEMORY CODEX": ["memory.append", "ledger.write"],
-  "SANCTUARY ACTIVATION": ["sanctuary.activation", "voice.synthesis"],
-  "IBIBIO LINGUA": ["lingua.activation", "voice.synthesis"],
-  MoScripts: ["moscripts.execute", "runtime.execution"],
-} as const satisfies Record<string, readonly TelemetryEventType[]>;
-
-const NODES: { label: keyof typeof NODE_EVENT_MAP; color: string }[] = [
-  { label: "WOO ORACLE", color: "#ff5a2e" },
-  { label: "COVENANT CORE", color: "#9be15d" },
-  { label: "COUNCIL OF THIRTEEN", color: "#00d8ff" },
-  { label: "SOUL · MIND · BODY", color: "#f6c453" },
-  { label: "IFÁ-CORPUS · AHP+TOPSIS+GREY", color: "#3b82f6" },
-  { label: "NEO4J MEMORY CODEX", color: "#00ff88" },
-  { label: "SANCTUARY ACTIVATION", color: "#168bff" },
-  { label: "IBIBIO LINGUA", color: "#6cd9ff" },
-  { label: "MoScripts", color: "#ff3b6b" },
+const NODES = [
+  { label: "COVENANT CORE", color: "#eba709" },
+  { label: "COUNCIL OF ELEVEN", color: "#f53905" },
+  { label: "NEO4J SOULPRINT", color: "#04b9da" },
+  { label: "ELEMENTAL QUADRANTS", color: "#7a06f7" },
+  { label: "CODE CONDUIT", color: "#145e06" },
+  { label: "WOO ORACLE", color: "#064fec" },
+  { label: "DCX TRINITY", color: "#f80441" },
+  { label: "GRID PERIMETER", color: "#03eea7" },
 ];
 
-let ritualHasRun = false;
+type BootLoaderProps = {
+  /** Put loadord.svg inside your public folder. */
+  src?: string;
+  className?: string;
+  showReplay?: boolean;
+  onComplete?: () => void;
+};
 
-function AwakeningOrb({
-  state,
-  progress,
-  activeStep = 0,
-}: {
-  state: RollCallState;
-  progress: number;
-  activeStep?: number;
-}) {
-  const glow =
-    state === "ready" ? "#dfee0a" : state === "awakening" ? "#03f079" : "#eb0808";
-
-  return (
-    <div className="absolute inset-x-0 top-[20%] z-[5] flex justify-center">
-      <div className="relative h-[240px] w-[240px]">
-        <div
-          className="orb-svg relative h-full w-full"
-          style={{
-            filter:
-              state === "ready"
-                ? "drop-shadow(0 0 42px #ff1e00)"
-                : "drop-shadow(0 0 30px rgba(246,196,83,0.58))",
-          }}
-          dangerouslySetInnerHTML={{ __html: rawOrbSvg }}
-        />
-
-        {NODES.map((node, index) => {
-          const lit = index < activeStep || state === "ready";
-          const active = index === activeStep && state === "awakening";
-          const angle = (index / NODES.length) * Math.PI * 2 - Math.PI / 2;
-          const radius = 122;
-          const x = Math.cos(angle) * radius;
-          const y = Math.sin(angle) * radius;
-
-          return (
-            <span
-              key={node.label}
-              className={[
-                "absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-all duration-500",
-                active ? "animate-blink" : "",
-              ].join(" ")}
-              style={{
-                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
-                borderColor: node.color,
-                background: lit || active ? node.color : "transparent",
-                boxShadow: lit || active ? `0 0 16px ${node.color}` : "none",
-                opacity: lit || active ? 1 : 0.35,
-              }}
-              aria-hidden="true"
-            />
-          );
-        })}
-
-        <div
-          className="absolute left-1/2 top-[72%] -translate-x-1/2 font-mono text-[11px] tracking-[0.42em]"
-          style={{ color: glow, textShadow: `0 0 12px ${glow}` }}
-        >
-          {state === "ready"
-            ? "GRID ONLINE"
-            : state === "awakening"
-              ? `${progress}%`
-              : "SEALED"}
-        </div>
-      </div>
-    </div>
-  );
-}
+const NODE_COUNT = 8;
+const STEP_MS = 1_000;
+const COMPLETE_MS = 9_000;
 
 export function AwakeningScreen({
+  src = loadord,
+  className = "",
+  showReplay = false,
   onComplete,
-  stepDuration = 1620,
-}: {
-  onComplete?: () => void;
-  stepDuration?: number;
-}) {
-  const [state, setState] = useState<RollCallState>("idle");
+}: BootLoaderProps) {
+  const [cycle, setCycle] = useState(0);
+  const [status, setStatus] = useState("Initializing ring");
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [exiting, setExiting] = useState(false);
+  const [bootState, setBootState] = useState<BootState>("awakening");
+  const timeoutIds = useRef<number[]>([]);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const animatedSrc = useMemo(
+    () => `${src}${src.includes("?") ? "&" : "?"}cycle=${cycle}`,
+    [src, cycle],
+  );
+
+  const clearTimers = useCallback(() => {
+    timeoutIds.current.forEach(window.clearTimeout);
+    timeoutIds.current = [];
+  }, []);
 
   useEffect(() => {
-    if (ritualHasRun) {
-      setProgress(100);
-      setActiveStep(NODES.length);
-      setState("ready");
-      onComplete?.();
-      return;
+    clearTimers();
+    setStatus("Initializing ring");
+    setActiveStep(0);
+    setProgress(0);
+    setBootState("awakening");
+
+    for (let index = 0; index < NODE_COUNT; index += 1) {
+      timeoutIds.current.push(
+        window.setTimeout(() => {
+          setStatus(`Node ${String(index + 1).padStart(2, "0")} online`);
+          setActiveStep(index + 1);
+          setProgress(Math.round(((index + 1) / NODE_COUNT) * 90));
+        }, index * STEP_MS + 350),
+      );
     }
-    ritualHasRun = true;
 
-    const timer = window.setTimeout(() => setState("awakening"), 560);
-    return () => window.clearTimeout(timer);
-  }, [onComplete]);
+    timeoutIds.current.push(
+      window.setTimeout(() => {
+        setStatus("Core ignition");
+        setProgress(96);
+      }, 8_100),
+    );
+
+    timeoutIds.current.push(
+      window.setTimeout(() => {
+        setStatus("Boot complete");
+        setProgress(100);
+        setBootState("ready");
+        onCompleteRef.current?.();
+      }, COMPLETE_MS),
+    );
+
+    return clearTimers;
+    // `cycle` is the only intentional restart trigger — onComplete is read via
+    // a ref so a fresh inline callback from the parent doesn't reset the
+    // sequence (which previously made the SVG, locked to its own one-shot
+    // CSS timeline via `src`, look "done" instantly while the status text
+    // kept restarting).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clearTimers, cycle]);
+
+  const replay = useCallback(() => {
+    setCycle((current) => current + 1);
+  }, []);
 
   useEffect(() => {
-    if (state !== "awakening") return;
-
-    const total = NODES.length;
-    const start = performance.now();
-    const totalDuration = stepDuration * total;
-    let raf = 0;
-
-    const tick = (now: number) => {
-      const elapsed = now - start;
-      const pct = Math.min(100, Math.round((elapsed / totalDuration) * 100));
-      const step = Math.min(total, Math.floor(elapsed / stepDuration));
-
-      setProgress(pct);
-      setActiveStep(step);
-
-      if (elapsed < totalDuration) {
-        raf = requestAnimationFrame(tick);
-      } else {
-        setProgress(100);
-        setActiveStep(total);
-        setState("ready");
-        window.setTimeout(() => setExiting(true), 420);
-        window.setTimeout(() => onComplete?.(), 1150);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await speak({ text: BOOT_NARRATION });
+        if (cancelled || !res.audio_url) return;
+        const audio = audioRef.current;
+        if (!audio) return;
+        audio.src = res.audio_url;
+        await audio.play().catch(() => {
+          // Autoplay blocked without prior user interaction — boot continues silently.
+        });
+      } catch {
+        // Voice service unreachable — boot continues silently.
       }
+    })();
+    return () => {
+      cancelled = true;
     };
-
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [onComplete, state, stepDuration]);
+  }, [cycle]);
 
   return (
-    <div
-      className={[
-        "fixed inset-0 z-[100] overflow-hidden bg-background transition-[opacity,filter] duration-700 ease-out",
-        exiting ? "opacity-0 blur-sm" : "opacity-100 blur-0",
-      ].join(" ")}
-    >
+    <div className={`fixed inset-0 z-[100] overflow-hidden bg-background ${className}`}>
+      <audio ref={audioRef} className="hidden" />
       <video
         src={sunVideo}
         autoPlay
@@ -188,6 +152,7 @@ export function AwakeningScreen({
         preload="auto"
         className="absolute inset-0 h-full w-full object-cover opacity-75"
       />
+
       <div
         className="absolute inset-0"
         style={{
@@ -195,23 +160,49 @@ export function AwakeningScreen({
             "radial-gradient(52% 48% at 50% 48%, oklch(0.10 0.03 270 / 0.18) 0%, oklch(0.10 0.04 270 / 0.72) 70%, oklch(0.08 0.04 270 / 0.94) 100%)",
         }}
       />
+
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0,transparent_38%,oklch(0.06_0.03_270/0.58)_78%)]" />
 
-      <div className="absolute inset-x-0 top-10 z-[5] flex flex-col items-center gap-2 px-5 text-center">
-        <div className="max-sm:tracking-[0.24em] text-[10px] tracking-[0.5em] text-[var(--color-neon-cyan)]">
+      <div className="absolute inset-x-0 top-10 z-[50] flex flex-col items-center gap-2 px-5 text-center">
+        <div className="text-[10px] tracking-[0.5em] text-[var(--color-neon-cyan)] max-sm:tracking-[0.24em]">
           MOSTAR · COVENANT BOOT SEQUENCE
         </div>
-        <div className="neon-text-gold max-sm:text-lg max-sm:tracking-[0.2em] text-2xl tracking-[0.4em]">
+        <div className="text-2xl tracking-[0.4em] neon-text-gold max-sm:text-lg max-sm:tracking-[0.2em]">
           GRID AWAKENING
         </div>
       </div>
 
-      <AwakeningOrb state={state} progress={progress} activeStep={activeStep} />
+      <div className="absolute inset-0 z-[10] flex flex-col items-center justify-center gap-6">
+        <img
+          className="boot-image"
+          src={animatedSrc}
+          width="404"
+          height="410"
+          alt="Sequential MoStar ring boot sequence"
+        />
 
-      <div className="absolute inset-x-0 bottom-12 z-[5] mx-auto flex max-w-[680px] flex-col items-center gap-3 px-6">
+        <p
+          className="font-mono text-xs tracking-[0.4em] text-[var(--color-neon-cyan)]"
+          aria-live="polite"
+        >
+          {status}
+        </p>
+
+        {showReplay && bootState === "ready" && (
+          <button
+            type="button"
+            onClick={replay}
+            className="rounded-md border border-[var(--color-neon-cyan)]/30 bg-black/30 px-4 py-2 text-[10px] tracking-[0.3em] text-[var(--color-neon-cyan)] hover:bg-white/5"
+          >
+            REPLAY BOOT
+          </button>
+        )}
+      </div>
+
+      <div className="absolute inset-x-0 bottom-12 z-[20] mx-auto flex max-w-[760px] flex-col items-center gap-3 px-6">
         <div className="h-[3px] w-full overflow-hidden rounded-full border border-[var(--color-neon-cyan)]/30 bg-[oklch(0.10_0.05_270/0.7)]">
           <div
-            className="h-full rounded-full transition-[width] duration-150"
+            className="h-full transition-all duration-500 ease-out"
             style={{
               width: `${progress}%`,
               background:
@@ -223,9 +214,9 @@ export function AwakeningScreen({
 
         <div className="grid w-full grid-cols-1 gap-1 font-mono text-[11px] sm:grid-cols-2">
           {NODES.map((node, index) => {
-            const done = index < activeStep || state === "ready";
-            const active = index === activeStep && state === "awakening";
-
+            const done = index < activeStep || bootState === "ready";
+            const active = index === activeStep && bootState === "awakening";
+            if (!done && !active) return null;
             return (
               <div
                 key={node.label}
@@ -242,10 +233,17 @@ export function AwakeningScreen({
                 >
                   {done ? "●" : "○"}
                 </span>
-                <span style={{ color: done ? "rgba(219,232,246,0.9)" : node.color }}>
+
+                <span
+                  className="truncate"
+                  style={{
+                    color: done || active ? "rgba(219,232,246,0.92)" : node.color,
+                  }}
+                >
                   {node.label}
                 </span>
-                <span className="ml-auto text-[9px] tracking-[0.18em] text-muted-foreground">
+
+                <span className="ml-auto shrink-0 text-[9px] tracking-[0.18em] text-muted-foreground">
                   {done ? "SEALED" : active ? "BINDING" : "WAIT"}
                 </span>
               </div>
@@ -253,10 +251,11 @@ export function AwakeningScreen({
           })}
         </div>
 
-        <div className="max-sm:tracking-[0.16em] text-center text-[10px] tracking-[0.36em] text-muted-foreground">
+        <div className="text-center text-[10px] tracking-[0.36em] text-muted-foreground max-sm:tracking-[0.16em]">
           HONOR FIRST · STRIKE FAST · SEE AHEAD · STAY UNTOUCHABLE
         </div>
       </div>
     </div>
   );
 }
+

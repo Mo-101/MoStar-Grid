@@ -1,9 +1,15 @@
 /**
  * gridVoiceClient — talks to MoStar Voice Service (Piper, :41071).
  *
- * Endpoint contract (server-owned):
- *   POST /speak  { text, persona, voice, format } -> { audio_url?, audio_base64?, ... }
+ * Endpoint contract (server-owned, back/services/voice/voice_api.py):
+ *   POST /speak  { text, mood, voice, persona, ... } -> { audio_url, ... }
+ *   GET  /voices -> { default, voices: [{ id, label, status }] }
  *   GET  /health -> { status, engine, voice, ... }
+ *
+ * `voice` selects a registered voice_id (see GET /voices); unknown ids fall
+ * back to the server's default. `mood` controls pacing — "ceremonial" (the
+ * server default) is deliberately slow/dramatic; use "stable" for plain,
+ * clear narration.
  *
  * In Lovable preview (LIVE_GRID_SERVICES=false) this client returns a
  * deterministic mock so the UI can be built without a backend. After
@@ -17,9 +23,16 @@ import {
 
 export type SpeakRequest = {
   text: string;
+  mood?: "stable" | "ceremonial" | "alert" | "reflective" | "prophecy" | "whisper";
   persona?: string;
   voice?: string;
   format?: "wav" | "mp3" | "ogg";
+};
+
+export type VoiceOption = {
+  id: string;
+  label: string;
+  status: "available" | "missing";
 };
 
 export type SpeakResponse = {
@@ -40,7 +53,7 @@ export type HealthResponse = {
   mock?: boolean;
 };
 
-const TIMEOUT_MS = 15_000;
+const TIMEOUT_MS = 60_000;
 
 async function withTimeout<T>(p: Promise<T>, ms = TIMEOUT_MS): Promise<T> {
   return await Promise.race([
@@ -65,6 +78,7 @@ export async function speak(req: SpeakRequest): Promise<SpeakResponse> {
   if (!LIVE_GRID_SERVICES) return mockSpeak(req);
   const body = {
     text: req.text,
+    mood: req.mood ?? "stable",
     persona: req.persona ?? GRID_VOICE_NAME,
     voice: req.voice ?? GRID_VOICE_NAME,
     format: req.format ?? "wav",
@@ -102,5 +116,19 @@ export async function voiceHealth(): Promise<HealthResponse> {
     return (await res.json()) as HealthResponse;
   } catch (err) {
     return { status: "down", detail: (err as Error).message };
+  }
+}
+
+export async function listVoices(): Promise<VoiceOption[]> {
+  if (!LIVE_GRID_SERVICES) {
+    return [{ id: GRID_VOICE_NAME, label: "Mock voice (preview)", status: "available" }];
+  }
+  try {
+    const res = await withTimeout(fetch(`${GRID_SERVICES.voice}/voices`), 5_000);
+    if (!res.ok) return [];
+    const data = (await res.json()) as { voices?: VoiceOption[] };
+    return data.voices ?? [];
+  } catch {
+    return [];
   }
 }
