@@ -41,7 +41,7 @@ services:
         value: /opt/render/project/src:/opt/render/project/src/back/services:/opt/render/project/src/core/engines:/opt/render/project/src/core/sovereignty:/opt/render/project/src/core/protocols:/opt/render/project/src/core/ops
       - key: MCP_CLUSTER_API_URL
         sync: false  # set to mostar-mcp-gateway's public onrender.com URL
-    healthCheckPath: /api/health
+    healthCheckPath: /api/live
 
   - type: web
     name: mostar-mcp-gateway

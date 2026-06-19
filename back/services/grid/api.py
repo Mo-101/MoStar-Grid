@@ -471,6 +471,17 @@ async def get_status():
     return await orchestrator.status()
 
 
+@app.get("/api/live")
+async def live():
+    """Cheap process liveness for Render routing health checks."""
+    return {
+        "status": "alive",
+        "ready": orchestrator._ready,
+        "seal": SEAL_GLYPH,
+        "phase": "4.0a",
+    }
+
+
 @app.get("/api/health")
 async def health():
     """Earned runtime health check.
