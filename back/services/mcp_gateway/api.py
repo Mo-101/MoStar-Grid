@@ -77,9 +77,24 @@ async def execute_mcp_tool(
 
 @app.get("/api/health")
 async def health():
+    downstream_grid = {
+        "ok": False,
+        "url": GRID_API_URL,
+    }
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.get(f"{GRID_API_URL}/api/status")
+            downstream_grid.update({
+                "ok": response.status_code == 200,
+                "status_code": response.status_code,
+            })
+    except Exception as exc:
+        downstream_grid["error"] = str(exc)[:200]
+
     return {
         "service": "mcp-gateway",
         "status": "alive",
         "role": "mediator",
-        "gates": ["soulprint_placeholder", "thronelock_placeholder"]
+        "gates": ["soulprint_placeholder", "thronelock_placeholder"],
+        "downstream_grid": downstream_grid,
     }

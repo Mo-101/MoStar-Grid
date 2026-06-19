@@ -11,6 +11,7 @@ import csv
 import json
 import uuid
 import os
+import time
 import edge_tts
 import feedparser
 from pathlib import Path
@@ -36,7 +37,16 @@ sys.path.extend([
     str(PROJECT_ROOT / "core" / "ops"),
 ])
 
-from grid.config import GRID_HOST, GRID_PORT, MOSTAR_CLUSTER_ID, NEO4J_DATABASE, SEAL_GLYPH, cluster_metadata
+from grid.config import (
+    DCX0_MODEL,
+    GRID_HOST,
+    GRID_PORT,
+    MOSTAR_CLUSTER_ID,
+    NEO4J_DATABASE,
+    SEAL_GLYPH,
+    cluster_metadata,
+)
+from grid.config import OLLAMA_BASE_URL
 from grid.orchestrator import CommitFailedError, CommitForbiddenError, GridOrchestrator
 from grid.semantic_api import router as semantic_router
 from grid.telemetry import ClusterTelemetry
@@ -144,6 +154,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 AUDIO_DIR = PROJECT_ROOT / "grid" / ".tmp" / "audio"
 AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 ENTITY_REGISTRY_PATH = PROJECT_ROOT / "data" / "mem" / "03_registry_data" / "csv" / "Entity.csv"
+MCP_CLUSTER_API_URL = os.getenv("MCP_CLUSTER_API_URL", "")
 
 
 def _clean_registry_value(value: object, default: str = "") -> str:
@@ -230,6 +241,125 @@ def _fallback_startup_reports() -> list[dict]:
         })
 
     return sorted(reports, key=lambda report: report["name"].lower())
+
+
+def _failed_probe(error: str) -> dict:
+    return {
+        "ok": False,
+        "error": error[:300],
+        "duration_ms": 0,
+    }
+
+
+async def _probe_mindgraph() -> dict:
+    started = time.monotonic()
+    if not orchestrator.mindgraph.connected or orchestrator.mindgraph._driver is None:
+        return {
+            "ok": False,
+            "connected": False,
+            "error": "MindGraph driver is not connected",
+            "duration_ms": int((time.monotonic() - started) * 1000),
+        }
+
+    query = """
+    MATCH (n)
+    RETURN count(n) AS node_count
+    """
+    try:
+        async with orchestrator.mindgraph._driver.session(database=NEO4J_DATABASE) as session:
+            result = await session.run(query)
+            record = await result.single()
+            node_count = int(record["node_count"] if record else 0)
+    except Exception as exc:
+        return {
+            "ok": False,
+            "connected": True,
+            "error": str(exc)[:300],
+            "database": NEO4J_DATABASE,
+            "duration_ms": int((time.monotonic() - started) * 1000),
+        }
+
+    return {
+        "ok": node_count > 0,
+        "connected": True,
+        "database": NEO4J_DATABASE,
+        "node_count": node_count,
+        "assertion": "MATCH (n) RETURN count(n)",
+        "duration_ms": int((time.monotonic() - started) * 1000),
+    }
+
+
+async def _probe_dcx() -> dict:
+    started = time.monotonic()
+    payload = {
+        "model": DCX0_MODEL,
+        "prompt": "Reply with exactly: DCX_HEALTH_OK",
+        "stream": False,
+        "options": {
+            "temperature": 0,
+            "num_predict": 8,
+        },
+    }
+    try:
+        async with httpx.AsyncClient(base_url=OLLAMA_BASE_URL, timeout=45.0) as client:
+            resp = await client.post("/api/generate", json=payload)
+            resp.raise_for_status()
+            data = resp.json()
+    except Exception as exc:
+        return {
+            "ok": False,
+            "connected": False,
+            "model": DCX0_MODEL,
+            "base_url": OLLAMA_BASE_URL,
+            "error": str(exc)[:300],
+            "duration_ms": int((time.monotonic() - started) * 1000),
+        }
+
+    text = str(data.get("response", "")).strip()
+    tokens = data.get("eval_count")
+    return {
+        "ok": bool(text) and tokens is not None,
+        "connected": True,
+        "model": DCX0_MODEL,
+        "base_url": OLLAMA_BASE_URL,
+        "execution": "remote_ollama_via_configured_url",
+        "tokens": tokens,
+        "response_preview": text[:80],
+        "duration_ms": int((time.monotonic() - started) * 1000),
+    }
+
+
+async def _probe_mcp() -> dict:
+    started = time.monotonic()
+    if not MCP_CLUSTER_API_URL:
+        return {
+            "ok": False,
+            "error": "MCP_CLUSTER_API_URL is not configured",
+            "duration_ms": int((time.monotonic() - started) * 1000),
+        }
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.get(f"{MCP_CLUSTER_API_URL.rstrip('/')}/api/health")
+            resp.raise_for_status()
+            data = resp.json()
+    except Exception as exc:
+        return {
+            "ok": False,
+            "url": MCP_CLUSTER_API_URL,
+            "error": str(exc)[:300],
+            "duration_ms": int((time.monotonic() - started) * 1000),
+        }
+
+    downstream = data.get("downstream_grid") if isinstance(data, dict) else None
+    return {
+        "ok": bool(data.get("status") == "alive" and downstream and downstream.get("ok")),
+        "url": MCP_CLUSTER_API_URL,
+        "service": data.get("service"),
+        "role": data.get("role"),
+        "downstream_grid": downstream,
+        "duration_ms": int((time.monotonic() - started) * 1000),
+    }
 
 @app.get("/api/audio/{filename}")
 async def get_audio(filename: str):
@@ -343,18 +473,35 @@ async def get_status():
 
 @app.get("/api/health")
 async def health():
-    """Simple health check."""
+    """Earned runtime health check.
+
+    This endpoint only marks a subsystem true after a live round-trip:
+    Neo4j count query, Ollama generation, and MCP gateway health call.
+    """
+    started = time.monotonic()
+    checks = await asyncio.gather(
+        _probe_mindgraph(),
+        _probe_dcx(),
+        _probe_mcp(),
+        return_exceptions=True,
+    )
+
+    mindgraph, dcx, mcp = [
+        check if isinstance(check, dict) else _failed_probe(str(check))
+        for check in checks
+    ]
+    ready = bool(mindgraph["ok"] and dcx["ok"] and mcp["ok"])
+
     return {
-        "status": "alive",
-        "mindgraph": orchestrator.mindgraph.connected,
-        "dcx": orchestrator.dcx.connected,
+        "status": "ready" if ready else "degraded",
+        "ready": ready,
+        "mindgraph": mindgraph,
+        "dcx": dcx,
         "cycles": orchestrator.provenance.total_cycles,
         "seal": SEAL_GLYPH,
-        "mcp": {
-            "online": True,
-            "scopes": ["propose", "approve", "commit"],
-        },
+        "mcp": mcp,
         "phase": "4.0a",
+        "duration_ms": int((time.monotonic() - started) * 1000),
     }
 
 
