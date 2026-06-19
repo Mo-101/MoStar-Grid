@@ -16,6 +16,7 @@ import edge_tts
 import feedparser
 from pathlib import Path
 from contextlib import asynccontextmanager
+from urllib.parse import urlparse
 
 from fastapi import APIRouter, FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
@@ -43,6 +44,10 @@ from grid.config import (
     GRID_PORT,
     MOSTAR_CLUSTER_ID,
     NEO4J_DATABASE,
+    NEO4J_EXPECTED_HOST,
+    NEO4J_EXPECTED_PORT,
+    NEO4J_SENTINEL_LABELS,
+    NEO4J_URI,
     SEAL_GLYPH,
     cluster_metadata,
 )
@@ -251,40 +256,88 @@ def _failed_probe(error: str) -> dict:
     }
 
 
+def _neo4j_endpoint_identity() -> dict:
+    parsed = urlparse(NEO4J_URI)
+    scheme = parsed.scheme
+    host = parsed.hostname or ""
+    port = parsed.port or 7687
+    expected_host_ok = not NEO4J_EXPECTED_HOST or host == NEO4J_EXPECTED_HOST
+    expected_port_ok = port == NEO4J_EXPECTED_PORT
+    return {
+        "uri": f"{scheme}://{host}:{port}",
+        "scheme": scheme,
+        "host": host,
+        "port": port,
+        "expected_host": NEO4J_EXPECTED_HOST or None,
+        "expected_port": NEO4J_EXPECTED_PORT,
+        "expected_host_ok": expected_host_ok,
+        "expected_port_ok": expected_port_ok,
+        "ok": expected_host_ok and expected_port_ok,
+    }
+
+
 async def _probe_mindgraph() -> dict:
     started = time.monotonic()
+    endpoint = _neo4j_endpoint_identity()
     if not orchestrator.mindgraph.connected or orchestrator.mindgraph._driver is None:
         return {
             "ok": False,
             "connected": False,
             "error": "MindGraph driver is not connected",
+            "endpoint": endpoint,
             "duration_ms": int((time.monotonic() - started) * 1000),
         }
 
-    query = """
+    count_query = """
     MATCH (n)
     RETURN count(n) AS node_count
     """
+    labels_query = """
+    MATCH (n)
+    UNWIND labels(n) AS label
+    RETURN label, count(*) AS count
+    """
     try:
         async with orchestrator.mindgraph._driver.session(database=NEO4J_DATABASE) as session:
-            result = await session.run(query)
+            result = await session.run(count_query)
             record = await result.single()
             node_count = int(record["node_count"] if record else 0)
+            label_result = await session.run(labels_query)
+            label_records = await label_result.data()
+            label_counts = {
+                str(row["label"]): int(row["count"])
+                for row in label_records
+            }
     except Exception as exc:
         return {
             "ok": False,
             "connected": True,
             "error": str(exc)[:300],
             "database": NEO4J_DATABASE,
+            "endpoint": endpoint,
             "duration_ms": int((time.monotonic() - started) * 1000),
         }
 
+    sentinel_counts = {
+        label: label_counts.get(label, 0)
+        for label in NEO4J_SENTINEL_LABELS
+    }
+    sentinel_ok = all(count > 0 for count in sentinel_counts.values())
+
     return {
-        "ok": node_count > 0,
+        "ok": node_count > 0 and endpoint["ok"] and sentinel_ok,
         "connected": True,
         "database": NEO4J_DATABASE,
+        "endpoint": endpoint,
         "node_count": node_count,
-        "assertion": "MATCH (n) RETURN count(n)",
+        "sentinel_counts": sentinel_counts,
+        "sentinel_ok": sentinel_ok,
+        "top_labels": dict(sorted(label_counts.items(), key=lambda item: item[1], reverse=True)[:12]),
+        "assertions": [
+            "MATCH (n) RETURN count(n)",
+            "MATCH (n) UNWIND labels(n) AS label RETURN label, count(*)",
+            f"endpoint port == {NEO4J_EXPECTED_PORT}",
+        ],
         "duration_ms": int((time.monotonic() - started) * 1000),
     }
 

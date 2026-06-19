@@ -9,6 +9,12 @@ envVarGroups:
         sync: false
       - key: NEO4J_DATABASE
         sync: false
+      - key: NEO4J_EXPECTED_HOST
+        sync: false
+      - key: NEO4J_EXPECTED_PORT
+        value: "47687"
+      - key: NEO4J_SENTINEL_LABELS
+        value: "MoStarMoment,Memory,GridKnowledge"
       - key: OLLAMA_BASE_URL
         sync: false
       - key: DCX0_MODEL

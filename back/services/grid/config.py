@@ -57,6 +57,16 @@ NEO4J_URI = _required_env("NEO4J_URI")
 NEO4J_USER = _required_env("NEO4J_USER")
 NEO4J_PASSWORD = _required_env("NEO4J_PASSWORD")
 NEO4J_DATABASE = _required_env("NEO4J_DATABASE")
+NEO4J_EXPECTED_HOST = os.getenv("NEO4J_EXPECTED_HOST", "")
+NEO4J_EXPECTED_PORT = int(os.getenv("NEO4J_EXPECTED_PORT", "47687"))
+NEO4J_SENTINEL_LABELS = [
+    label.strip()
+    for label in os.getenv(
+        "NEO4J_SENTINEL_LABELS",
+        "MoStarMoment,Memory,GridKnowledge",
+    ).split(",")
+    if label.strip()
+]
 
 # === Ollama ===
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
