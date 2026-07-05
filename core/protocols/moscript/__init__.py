@@ -38,8 +38,9 @@ class MoScript:
 class MoScriptEngine:
     """Registry and executor for MoScript contracts."""
 
-    def __init__(self):
+    def __init__(self, enforcement_hook: Optional[Callable] = None):
         self._scripts: dict[str, MoScript] = {}
+        self._enforcement_hook = enforcement_hook
         self._register_builtins()
 
     def register(self, script: MoScript):
@@ -51,6 +52,8 @@ class MoScriptEngine:
         results = []
         for script in self._scripts.values():
             if script.trigger == trigger and script.enabled:
+                if self._enforcement_hook is not None:
+                    self._enforcement_hook(script, trigger, context)
                 results.append(script.fire(context))
         return results
 

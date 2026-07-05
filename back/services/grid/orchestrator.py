@@ -22,6 +22,7 @@ from grid.config import MOSTAR_CLUSTER_ID, SEAL_GLYPH, cluster_metadata, ensure_
 from approval_queue import ApprovalQueue, ProposalRecord, ProposalState, new_proposal_id
 from decision_engine import DecisionEngine
 from density_telemetry import DensityTelemetry
+from control_plane_runtime import RuntimeEnforcementDenied, RuntimeEnforcementGate
 from federation.scrolls import SCROLL_VERSION
 
 logger = logging.getLogger("orchestrator")
@@ -128,13 +129,14 @@ class GridOrchestrator:
     Remember → Stamp a MoStarMoment, seal the cycle
     """
 
-    def __init__(self):
+    def __init__(self, control_plane: RuntimeEnforcementGate = None):
         self.mindgraph = MindGraph()
         self.dcx = DCXTrinity()
         self.truth = TruthEngine()
         self.woo = WooGate()
         self.woo_interpreter = WooInterpreter()
-        self.moscript = MoScriptEngine()
+        self.control_plane = control_plane or RuntimeEnforcementGate()
+        self.moscript = MoScriptEngine(enforcement_hook=self._enforce_moscript)
         self.provenance = ProvenanceLog()
         self.soul = SoulPrint()
         self.approval_queue = ApprovalQueue()
@@ -143,6 +145,20 @@ class GridOrchestrator:
         self.semantic_grid = SemanticGrid()
         self._conversation_history: list[dict] = []
         self._ready = False
+
+    def _require_runtime(self, surface: str, operation: str, context: dict = None):
+        try:
+            return self.control_plane.require(surface, operation, context)
+        except RuntimeEnforcementDenied as exc:
+            raise CommitForbiddenError(str(exc)) from exc
+
+    def _enforce_moscript(self, script, trigger: str, context: dict):
+        return self._require_runtime(
+            "moscript_registry", trigger,
+            {"runtime_id": script.id,
+             "experimental": script.id.startswith("experimental-"),
+             "approved": bool(context.get("approved", False))},
+        )
 
     async def boot(self):
         """Initialize all subsystems."""
@@ -245,6 +261,11 @@ class GridOrchestrator:
         cycle_id = f"cycle_{uuid.uuid4().hex[:12]}"
         logger.info("=== CYCLE %s START ===", cycle_id)
 
+        self._require_runtime(
+            "agents", "dcx.think",
+            {"operation_class": "conversation", "critical": False, "approved": False},
+        )
+
         # ── TALK: Retrieve context and think ──
         graph_context = []
         if self.mindgraph.connected:
@@ -284,6 +305,10 @@ class GridOrchestrator:
             )
 
         # ── WOO JUDGMENT ──
+        self._require_runtime(
+            "mo_woo_nexus", "woo.judge.response",
+            {"side_effecting": False, "critical": True},
+        )
         woo_judgment = self.woo.judge(truth_verdict, action_type="response")
 
         # Fire on_query MoScripts
@@ -381,12 +406,20 @@ class GridOrchestrator:
         if self.mindgraph.connected:
             graph_context = await self.mindgraph.retrieve_context(canon_input)
 
+        self._require_runtime(
+            "mo_woo_nexus", "woo.interpret.canon",
+            {"side_effecting": False, "critical": True},
+        )
         interpretation = await self.woo_interpreter.interpret(canon_input, graph_context)
         proposed_labels = self._labels_for_category(interpretation.category)
         consistency = await self.truth.validate_consistency(
             proposed_content=canon_input,
             proposed_labels=proposed_labels,
             existing_context=graph_context,
+        )
+        self._require_runtime(
+            "decision_engine", "rank_placement",
+            {"approved": False, "secondary_auth": False, "side_effecting": False},
         )
         placement = await self.decision_engine.rank_placement(
             interpretation=interpretation,

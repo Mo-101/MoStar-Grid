@@ -78,6 +78,7 @@ from federation import (
 )
 from grid.auth import get_current_user_and_role, verify_permission
 from grid.truth_gate import TruthGateEngine
+from grid.trading_ingest import router as trading_router
 
 # ── Logging ────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -96,7 +97,10 @@ async def lifespan(app: FastAPI):
     boot_result = await orchestrator.boot()
     logger.info("Grid API live on port %s — %s", GRID_PORT, SEAL_GLYPH)
     logger.info("Boot: %s", boot_result)
-    
+
+    # Expose orchestrator on app.state so routers can access it without circular imports
+    app.state.orchestrator = orchestrator
+
     # Initialize MemoryLayer
     app.state.memory_layer = MemoryLayer(orchestrator.mindgraph)
     
@@ -136,6 +140,7 @@ app.add_middleware(
 )
 
 app.include_router(semantic_router)
+app.include_router(trading_router)
 
 
 @app.exception_handler(HTTPException)
@@ -159,6 +164,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 AUDIO_DIR = PROJECT_ROOT / "grid" / ".tmp" / "audio"
 AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+FRONTEND_DIR = PROJECT_ROOT / "front" / "app" / "out"
 ENTITY_REGISTRY_PATH = PROJECT_ROOT / "data" / "mem" / "03_registry_data" / "csv" / "Entity.csv"
 MCP_CLUSTER_API_URL = os.getenv("MCP_CLUSTER_API_URL", "")
 
@@ -302,25 +308,22 @@ async def _probe_mindgraph() -> dict:
             "duration_ms": int((time.monotonic() - started) * 1000),
         }
 
-    count_query = """
-    MATCH (n)
-    RETURN count(n) AS node_count
-    """
-    labels_query = """
-    MATCH (n)
-    UNWIND labels(n) AS label
-    RETURN label, count(*) AS count
+    sentinel_query = """
+    UNWIND $labels AS label
+    CALL (label) {
+      MATCH (n)
+      WHERE label IN labels(n)
+      RETURN n LIMIT 1
+    }
+    RETURN label, count(n) AS present
     """
     try:
         async with orchestrator.mindgraph._driver.session(database=NEO4J_DATABASE) as session:
-            result = await session.run(count_query)
-            record = await result.single()
-            node_count = int(record["node_count"] if record else 0)
-            label_result = await session.run(labels_query)
-            label_records = await label_result.data()
-            label_counts = {
-                str(row["label"]): int(row["count"])
-                for row in label_records
+            result = await session.run(sentinel_query, labels=NEO4J_SENTINEL_LABELS)
+            records = await result.data()
+            sentinel_counts = {
+                str(row["label"]): int(row["present"])
+                for row in records
             }
     except Exception as exc:
         return {
@@ -332,24 +335,17 @@ async def _probe_mindgraph() -> dict:
             "duration_ms": int((time.monotonic() - started) * 1000),
         }
 
-    sentinel_counts = {
-        label: label_counts.get(label, 0)
-        for label in NEO4J_SENTINEL_LABELS
-    }
-    sentinel_ok = all(count > 0 for count in sentinel_counts.values())
+    sentinel_ok = all(sentinel_counts.get(label, 0) > 0 for label in NEO4J_SENTINEL_LABELS)
 
     return {
-        "ok": node_count > 0 and endpoint["ok"] and sentinel_ok,
+        "ok": endpoint["ok"] and sentinel_ok,
         "connected": True,
         "database": NEO4J_DATABASE,
         "endpoint": endpoint,
-        "node_count": node_count,
         "sentinel_counts": sentinel_counts,
         "sentinel_ok": sentinel_ok,
-        "top_labels": dict(sorted(label_counts.items(), key=lambda item: item[1], reverse=True)[:12]),
         "assertions": [
-            "MATCH (n) RETURN count(n)",
-            "MATCH (n) UNWIND labels(n) AS label RETURN label, count(*)",
+            "sentinel labels exist without full graph census",
             f"endpoint port == {NEO4J_EXPECTED_PORT}",
         ],
         "duration_ms": int((time.monotonic() - started) * 1000),
@@ -358,22 +354,39 @@ async def _probe_mindgraph() -> dict:
 
 async def _probe_dcx() -> dict:
     started = time.monotonic()
-    payload = {
-        "model": DCX0_MODEL,
-        "prompt": "Reply with exactly: DCX_HEALTH_OK",
-        "stream": False,
-        "keep_alive": OLLAMA_KEEP_ALIVE,
-        "options": {
-            "temperature": 0,
-            "num_predict": 8,
-        },
-    }
+    model_root = DCX0_MODEL.split(":")[0]
     try:
         async with httpx.AsyncClient(
             base_url=OLLAMA_BASE_URL,
             timeout=OLLAMA_REQUEST_TIMEOUT,
             headers=_ollama_headers(),
         ) as client:
+            tags_resp = await client.get("/api/tags")
+            tags_resp.raise_for_status()
+            tags = tags_resp.json()
+            models = [str(m.get("name", "")).split(":")[0] for m in tags.get("models", [])]
+            if model_root not in models:
+                return {
+                    "ok": False,
+                    "connected": True,
+                    "state": "NAKED",
+                    "model": DCX0_MODEL,
+                    "base_url": OLLAMA_BASE_URL,
+                    "present_models": models,
+                    "reason": f"DCX model {DCX0_MODEL!r} is not pulled",
+                    "duration_ms": int((time.monotonic() - started) * 1000),
+                }
+
+            payload = {
+                "model": DCX0_MODEL,
+                "prompt": "Reply with one word: alive",
+                "stream": False,
+                "keep_alive": OLLAMA_KEEP_ALIVE,
+                "options": {
+                    "temperature": 0,
+                    "num_predict": 8,
+                },
+            }
             resp = await client.post("/api/generate", json=payload)
             resp.raise_for_status()
             data = resp.json()
@@ -381,6 +394,7 @@ async def _probe_dcx() -> dict:
         return {
             "ok": False,
             "connected": False,
+            "state": "DOWN",
             "model": DCX0_MODEL,
             "base_url": OLLAMA_BASE_URL,
             "keep_alive": OLLAMA_KEEP_ALIVE,
@@ -392,12 +406,24 @@ async def _probe_dcx() -> dict:
 
     text = str(data.get("response", "")).strip()
     tokens = data.get("eval_count")
+    if not text:
+        return {
+            "ok": False,
+            "connected": True,
+            "state": "DOWN",
+            "model": DCX0_MODEL,
+            "base_url": OLLAMA_BASE_URL,
+            "reason": "200 with an empty generation body",
+            "duration_ms": int((time.monotonic() - started) * 1000),
+        }
+
     return {
-        "ok": bool(text) and tokens is not None,
+        "ok": True,
         "connected": True,
+        "state": "THINKING",
         "model": DCX0_MODEL,
         "base_url": OLLAMA_BASE_URL,
-        "execution": "remote_ollama_via_configured_url",
+        "execution": "real_ollama_generation",
         "keep_alive": OLLAMA_KEEP_ALIVE,
         "timeout_s": OLLAMA_REQUEST_TIMEOUT,
         "auth_configured": bool(OLLAMA_BEARER_TOKEN),
@@ -409,33 +435,29 @@ async def _probe_dcx() -> dict:
 
 async def _probe_mcp() -> dict:
     started = time.monotonic()
-    if not MCP_CLUSTER_API_URL:
-        return {
-            "ok": False,
-            "error": "MCP_CLUSTER_API_URL is not configured",
-            "duration_ms": int((time.monotonic() - started) * 1000),
-        }
+    mcp_gateway_url = os.getenv("MCP_GATEWAY_URL", "http://localhost:41020").rstrip("/")
 
     try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            resp = await client.get(f"{MCP_CLUSTER_API_URL.rstrip('/')}/api/health")
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            resp = await client.get(f"{mcp_gateway_url}/health")
             resp.raise_for_status()
             data = resp.json()
     except Exception as exc:
         return {
             "ok": False,
-            "url": MCP_CLUSTER_API_URL,
+            "url": mcp_gateway_url,
+            "state": "GATE_HELD",
             "error": str(exc)[:300],
             "duration_ms": int((time.monotonic() - started) * 1000),
         }
 
-    downstream = data.get("downstream_grid") if isinstance(data, dict) else None
     return {
-        "ok": bool(data.get("status") == "alive" and downstream and downstream.get("ok")),
-        "url": MCP_CLUSTER_API_URL,
+        "ok": bool(data.get("status") == "ok" and data.get("tools", 0) > 0),
+        "url": mcp_gateway_url,
         "service": data.get("service"),
-        "role": data.get("role"),
-        "downstream_grid": downstream,
+        "transport": data.get("transport"),
+        "tools": data.get("tools"),
+        "resources": data.get("resources"),
         "duration_ms": int((time.monotonic() - started) * 1000),
     }
 
@@ -1113,11 +1135,14 @@ class GridEventSchema(BaseModel):
     status: str
     seal: str
 
-_idempotency_cache = set()
+_idempotency_cache: set[str] = set()
+_IDEMPOTENCY_MAX = 5_000
 
 def is_duplicate_transaction(key: str) -> bool:
     if key in _idempotency_cache:
         return True
+    if len(_idempotency_cache) >= _IDEMPOTENCY_MAX:
+        _idempotency_cache.clear()
     _idempotency_cache.add(key)
     return False
 

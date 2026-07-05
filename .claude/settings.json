@@ -1,4 +1,19 @@
 {
+  "mcpServers": {
+    "mostar": {
+      "command": "wsl",
+      "args": [
+        "-d", "Ubuntu-24.04", "--",
+        "/home/idona/MoStar/_apps/grid/.venv/bin/python",
+        "/home/idona/MoStar/_apps/grid/back/services/mcp_gateway/server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "/home/idona/MoStar/_apps/grid/back/services:/home/idona/MoStar/_apps/grid/core/engines:/home/idona/MoStar/_apps/grid/core/sovereignty:/home/idona/MoStar/_apps/grid/core/protocols:/home/idona/MoStar/_apps/grid/core/ops:/home/idona/MoStar/_apps/grid",
+        "GRID_API_URL": "http://localhost:41010",
+        "MCP_TRANSPORT": "stdio"
+      }
+    }
+  },
   "permissions": {
     "allow": [
       "Bash(wsl -d Ubuntu-24.04 -- bash -c \"find /home/idona/MoStar/_apps/grid/ -name 'all_nodes_*' -o -name 'nodes_202604*' 2>/dev/null | head -10\")",

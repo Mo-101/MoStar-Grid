@@ -1,0 +1,9 @@
+scenario_id,name,domain,input_pattern,left_odu,right_odu,combined_odu,expected_decision,expected_priority,expected_outcome,validation_criteria
+1,Clean water source with good flow,infrastructure,00000000,Ogbe,Ogbe,Ogbe-Ogbe (Eji Ogbe),"Maintain preventive care, regular inspections",PREVENTIVE,Continued good performance,System maintains high performance metrics
+2,Contaminated water with system failure,infrastructure,11111111,Oyeku,Oyeku,Oyeku-Oyeku (Oyeku Meji),"Emergency cleansing, system renewal",CRITICAL,System cleansing and renewal required,"Contamination eliminated, system restored"
+3,Pipe blockage with good source,infrastructure,01100000,Odi,Ogbe,Odi-Ogbe,"Clear blockages, restore flow",HIGH,Flow restored after blockage removal,Flow rate returns to normal
+4,Disease outbreak in community,health,11110000,Oyeku,Ogbe,Oyeku-Ogbe (Ogbe Oyeku),"Deep cleansing, renewal after darkness",CRITICAL,"Outbreak contained, renewal begins","Disease incidence decreases, health improves"
+5,Hidden infrastructure corruption,infrastructure,10110000,Ika,Ogbe,Ika-Ogbe,"Investigate hidden issues, restore order",HIGH,Hidden corruption revealed and corrected,"System integrity restored, corruption eliminated"
+6,System chaos with multiple failures,infrastructure,11000000,Owonrin,Ogbe,Owonrin-Ogbe,"Restore order, prevent cascading failures",CRITICAL,"Order restored, cascade prevented","System stabilized, failures contained"
+7,Healing in progress with good treatment,health,00110000,Irosun,Ogbe,Irosun-Ogbe,"Apply healing measures, treat root causes",MODERATE,Successful healing and recovery,"Health metrics improve, recovery complete"
+8,Community health with good resources,health,01110000,Obara,Ogbe,Obara-Ogbe,"Strengthen community health, collective action",MODERATE,Community health improved,Community health metrics improve

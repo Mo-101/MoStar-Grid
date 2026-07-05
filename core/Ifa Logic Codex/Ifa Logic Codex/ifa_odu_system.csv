@@ -1,0 +1,257 @@
+odu_number,binary_pattern,name_yoruba,name_english,interpretation,ritual_context,symbolic_meaning,divination_use,related_themes
+0,00000000,Eji Ogbe,Double Light,Foundation and pure beginnings - divine order manifesting,New moon ceremonies,Purity and infinite potential,Questions of origin and destiny,creation|order|divinity
+1,00000001,Ogbe-Oyeku,Light Meets Darkness,Transformation through duality - birth and death cycle,Eclipse rituals,Change and necessary transition,Life transitions and mortality,duality|transformation|cycles
+2,00000010,Ogbe-Iwori,Light Tests Path,Challenges revealing character - obstacles as teachers,Initiation rites,Strength through adversity,Overcoming difficulties,testing|growth|character
+3,00000011,Ogbe-Odi,Light In Conflict,Struggle between opposing forces - choosing sides,Dispute resolution,Conflict and choice,Disputes and decisions,conflict|choice|balance
+4,00000100,Ogbe-Irosun,Light Awakens Earth,Manifestation of divine will on earthly plane,Harvest festivals,Divine will made manifest,Material success questions,manifestation|abundance|will
+5,00000101,Ogbe-Owonrin,Light Faces Chaos,Order confronting entropy - structure vs randomness,Storm preparation,Chaos and uncertainty,Unpredictable situations,chaos|uncertainty|adaptation
+6,00000110,Ogbe-Obara,Light Transforms,Metamorphosis and rebirth - shedding old forms,Coming-of-age ceremonies,Transformation and renewal,Personal evolution,transformation|renewal|growth
+7,00000111,Ogbe-Okonron,Light Brings Fortune,Abundance through right action - karmic rewards,Blessing ceremonies,Good fortune and prosperity,Wealth and success inquiries,prosperity|karma|reward
+8,00001000,Oyeku-Ogbe,Darkness Seeks Light,Movement from ignorance to wisdom,Dawn ceremonies,Enlightenment journey,Seeking knowledge,ignorance|wisdom|seeking
+9,00001001,Oyeku-Meji,Double Darkness,Deep mysteries and the unknown - ancestral realm,Ancestral veneration,Mystery and the occult,Communication with dead,mystery|ancestors|occult
+10,00001010,Oyeku-Iwori,Darkness On Path,Hidden obstacles - what cannot yet be seen,Divination for dangers,Hidden threats,Uncovering hidden issues,hidden|danger|revelation
+11,00001011,Oyeku-Odi,Darkness In Strife,Internal conflict - battling inner demons,Spiritual warfare,Internal struggle,Psychological challenges,internal|conflict|demons
+12,00001100,Oyeku-Irosun,Darkness Grounds,Manifestation of hidden things - secrets revealed,Truth ceremonies,Revelation of secrets,Uncovering truth,secrets|revelation|truth
+13,00001101,Oyeku-Owonrin,Darkness Churns,Confusion and disorientation - loss of bearings,Protection rituals,Confusion and misdirection,Unclear situations,confusion|misdirection|protection
+14,00001110,Oyeku-Obara,Darkness Changes Form,Transformation in the unseen realm,Shadow work,Occult transformation,Deep spiritual change,shadow|occult|transformation
+15,00001111,Oyeku-Okonron,Darkness Conceals Wealth,Hidden resources - treasures in shadow,Treasure seeking,Hidden abundance,Finding hidden resources,hidden|resources|treasure
+16,00010000,Iwori-Ogbe,Path To Light,Journey toward understanding and clarity,Pilgrimage,Quest for enlightenment,Spiritual journey questions,journey|quest|enlightenment
+17,00010001,Iwori-Oyeku,Path Through Shadow,Dangerous journey - navigating peril,Protection during travel,Perilous journey,Travel and danger,danger|travel|protection
+18,00010010,Iwori-Meji,Double Path,Choices and crossroads - fork in the road,Decision ceremonies,Critical choice point,Major life decisions,choice|crossroads|decision
+19,00010011,Iwori-Odi,Path Of Conflict,Journey through strife - warrior's road,Warrior initiation,Combative path,Martial challenges,warrior|combat|strife
+20,00010100,Iwori-Irosun,Path Of Manifestation,Journey to material success - effort rewarded,Trade journeys,Productive journey,Career and work path,career|effort|success
+21,00010101,Iwori-Owonrin,Path Of Chaos,Unpredictable journey - expect the unexpected,Chaos navigation,Uncertain path,Unpredictable situations,chaos|uncertainty|adaptation
+22,00010110,Iwori-Obara,Path Of Change,Journey of transformation - becoming,Rites of passage,Transformative journey,Personal evolution path,transformation|passage|becoming
+23,00010111,Iwori-Okonron,Path Of Fortune,Lucky journey - favorable winds,Blessing travels,Fortunate path,Profitable ventures,fortune|luck|profit
+24,00011000,Odi-Ogbe,Conflict Seeks Resolution,Strife moving toward peace,Peace ceremonies,Conflict resolution,Ending disputes,peace|resolution|ending
+25,00011001,Odi-Oyeku,Conflict In Darkness,Hidden warfare - unseen battles,Spiritual protection,Occult conflict,Hidden enemies,hidden|enemies|warfare
+26,00011010,Odi-Iwori,Conflict On Path,Obstacles blocking progress,Obstacle removal,Barriers and blocks,Removing impediments,obstacles|barriers|removal
+27,00011011,Odi-Meji,Double Conflict,Intense struggle - war on all sides,Battle preparation,Total war,Overwhelming conflict,war|struggle|intensity
+28,00011100,Odi-Irosun,Conflict Over Resources,争夺物质 - competition for wealth,Resource disputes,Material competition,Property disputes,competition|resources|property
+29,00011101,Odi-Owonrin,Chaotic Conflict,Unpredictable warfare - no rules,Chaos warfare,Anarchic strife,Lawless situations,anarchy|chaos|lawlessness
+30,00011110,Odi-Obara,Transformative Conflict,Struggle that changes everything,Revolutionary rites,Revolutionary change,Major upheaval,revolution|upheaval|change
+31,00011111,Odi-Okonron,Profitable Conflict,Gains through struggle - victory spoils,Victory ceremonies,Victorious conflict,Winning disputes,victory|gains|winning
+32,00100000,Irosun-Ogbe,Earth Receives Light,Divine blessing on material plane,Agricultural rites,Divine material blessing,Prosperity questions,blessing|prosperity|divine
+33,00100001,Irosun-Oyeku,Earth In Shadow,Material loss - resources diminishing,Famine preparation,Material decline,Financial difficulties,loss|decline|famine
+34,00100010,Irosun-Iwori,Earth On Path,Material journey - physical travel,Trade routes,Material journey,Business travel,trade|business|travel
+35,00100011,Irosun-Odi,Earth In Conflict,Property disputes - land battles,Land disputes,Territorial conflict,Property rights,property|land|territory
+36,00100100,Irosun-Meji,Double Earth,Abundance and fertility - harvest time,Harvest festivals,Material abundance,Wealth accumulation,abundance|fertility|wealth
+37,00100101,Irosun-Owonrin,Chaotic Earth,Unpredictable material conditions,Disaster preparation,Material uncertainty,Economic instability,uncertainty|disaster|instability
+38,00100110,Irosun-Obara,Transforming Earth,Material transformation - alchemy,Craft ceremonies,Material transformation,Career changes,alchemy|craft|change
+39,00100111,Irosun-Okonron,Fortunate Earth,Material blessings - prosperity,Wealth ceremonies,Material fortune,Business success,fortune|wealth|success
+40,00101000,Owonrin-Ogbe,Chaos Meets Order,Entropy organizing - creating from chaos,Creation from chaos,Emergent order,Creating structure,creation|order|emergence
+41,00101001,Owonrin-Oyeku,Chaos In Darkness,Complete confusion - total disorientation,Protection from chaos,Utter confusion,Crisis situations,confusion|crisis|disorientation
+42,00101010,Owonrin-Iwori,Chaos On Path,Unpredictable journey - random events,Chaos navigation,Random journey,Unexpected events,random|unexpected|chaos
+43,00101011,Owonrin-Odi,Chaotic Conflict,Anarchic warfare - no rules,Chaos warfare,Lawless strife,Anarchic situations,anarchy|chaos|lawlessness
+44,00101100,Owonrin-Irosun,Chaotic Material,Economic chaos - market instability,Economic protection,Material chaos,Financial crises,chaos|economy|crisis
+45,00101101,Owonrin-Meji,Double Chaos,Maximum entropy - complete randomness,Chaos management,Total chaos,Overwhelming randomness,chaos|entropy|randomness
+46,00101110,Owonrin-Obara,Chaos Transforms,Change through disorder - creative destruction,Revolutionary change,Transformative chaos,Disruptive innovation,disruption|innovation|destruction
+47,00101111,Owonrin-Okonron,Fortunate Chaos,Luck in disorder - finding order in chaos,Chaos opportunity,Opportunistic chaos,Unexpected blessings,opportunity|luck|chaos
+48,00110000,Obara-Ogbe,Change Toward Light,Transformation toward divinity,Spiritual evolution,Upward transformation,Spiritual advancement,evolution|advancement|divinity
+49,00110001,Obara-Oyeku,Change Into Shadow,Descent and dissolution - dark night of soul,Dark night,Downward transformation,Spiritual crisis,descent|crisis|dissolution
+50,00110010,Obara-Iwori,Change On Path,Transforming journey - becoming different,Pilgrimage,Journey of change,Personal evolution,evolution|journey|becoming
+51,00110011,Obara-Odi,Transformative Conflict,Struggle creating change,Revolutionary rites,Revolutionary transformation,Major upheaval,revolution|upheaval|transformation
+52,00110100,Obara-Irosun,Material Transformation,Physical metamorphosis - changing form,Shape-shifting,Material change,Career transformation,metamorphosis|change|career
+53,00110101,Obara-Owonrin,Chaotic Transformation,Unpredictable change - random mutation,Chaos change,Random transformation,Unexpected changes,random|mutation|unexpected
+54,00110110,Obara-Meji,Double Transformation,Complete metamorphosis - total rebirth,Rebirth ceremonies,Total transformation,Complete life change,rebirth|metamorphosis|total
+55,00110111,Obara-Okonron,Fortunate Change,Beneficial transformation - evolution,Beneficial change,Positive transformation,Beneficial evolution,beneficial|positive|evolution
+56,00111000,Okonron-Ogbe,Fortune From Light,Divine blessings - heavenly gifts,Blessing ceremonies,Divine fortune,Spiritual blessings,blessings|divine|gifts
+57,00111001,Okonron-Oyeku,Fortune In Shadow,Hidden blessings - disguised gifts,Hidden blessings,Occult fortune,Unexpected benefits,hidden|occult|unexpected
+58,00111010,Okonron-Iwori,Fortune On Path,Lucky journey - favorable conditions,Fortunate travel,Lucky journey,Successful ventures,luck|success|favorable
+59,00111011,Okonron-Odi,Fortune Through Conflict,Gains from struggle - war spoils,Victory ceremonies,Victorious fortune,Winning battles,victory|gains|winning
+60,00111100,Okonron-Irosun,Material Fortune,Wealth and prosperity - abundance,Wealth ceremonies,Material abundance,Financial success,wealth|prosperity|abundance
+61,00111101,Okonron-Owonrin,Chaotic Fortune,Luck in chaos - random blessings,Chaos blessings,Random fortune,Unexpected luck,chaos|luck|random
+62,00111110,Okonron-Obara,Transformative Fortune,Blessings through change,Transformative blessings,Evolving fortune,Growing prosperity,growth|evolution|prosperity
+63,00111111,Okonron-Meji,Double Fortune,Maximum blessings - ultimate prosperity,Ultimate blessings,Total fortune,Complete success,ultimate|total|complete
+64,01000000,Ogunda-Ogbe,Warrior Seeks Light,Military campaign for righteous cause,Holy war,Sacred warfare,Fighting for justice,justice|war|righteousness
+65,01000001,Ogunda-Oyeku,Warrior In Darkness,Hidden warfare - covert operations,Espionage,Covert warfare,Secret conflicts,covert|secret|espionage
+66,01000010,Ogunda-Iwori,Warrior On Path,Military campaign - journey to battle,Military campaign,Warrior journey,Strategic movement,campaign|strategy|movement
+67,01000011,Ogunda-Odi,Warrior In Conflict,Combat and warfare - direct confrontation,Battle,Direct combat,Active warfare,combat|warfare|battle
+68,01000100,Ogunda-Irosun,Warrior Seeks Resources,Fighting for material gains,Resource warfare,Material conquest,Economic warfare,resources|conquest|economics
+69,01000101,Ogunda-Owonrin,Warrior In Chaos,Guerrilla warfare - irregular combat,Guerrilla war,Chaotic warfare,Irregular combat,guerrilla|irregular|chaos
+70,01000110,Ogunda-Obara,Warrior Transforms,Combat evolution - martial growth,Martial evolution,Warrior transformation,Military advancement,evolution|martial|advancement
+71,01000111,Ogunda-Okonron,Warrior Finds Fortune,Victory and spoils - successful campaign,Victory,Successful warfare,Military victory,victory|success|spoils
+72,01001000,Osa-Ogbe,Time Moves To Light,Progress toward enlightenment,Progress ceremonies,Temporal advancement,Forward movement,progress|advancement|forward
+73,01001001,Osa-Oyeku,Time In Darkness,Stagnation and delay - stuck in time,Breaking stagnation,Temporal stasis,Delays and blockages,stagnation|delay|stuck
+74,01001010,Osa-Iwori,Time On Path,Journey through time - temporal voyage,Time travel,Temporal journey,Historical inquiries,time|history|journey
+75,01001011,Osa-Odi,Time In Conflict,Battles across time - historical conflicts,Historical warfare,Temporal conflict,Legacy disputes,history|legacy|temporal
+76,01001100,Osa-Irosun,Time Manifests Material,Historical wealth - inherited resources,Inheritance,Historical resources,Ancestral wealth,inheritance|ancestors|legacy
+77,01001101,Osa-Owonrin,Chaotic Time,Unpredictable temporal flow - time distortions,Time chaos,Temporal chaos,Schedule disruptions,chaos|time|disruption
+78,01001110,Osa-Obara,Time Transforms,Historical change - evolution over time,Historical change,Temporal transformation,Evolutionary change,evolution|history|change
+79,01001111,Osa-Okonron,Time Brings Fortune,Patience rewarded - waiting pays off,Patience rewards,Temporal fortune,Long-term gains,patience|waiting|gains
+80,01010000,Ika-Ogbe,Web Toward Light,Connections leading to understanding,Network building,Connective enlightenment,Building relationships,connection|network|understanding
+81,01010001,Ika-Oyeku,Web In Darkness,Hidden connections - occult networks,Secret societies,Occult networks,Hidden alliances,secret|occult|hidden
+82,01010010,Ika-Iwori,Web On Path,Journey through networks - social travel,Social navigation,Network journey,Social climbing,network|social|navigation
+83,01010011,Ika-Odi,Web In Conflict,Conflicting alliances - network warfare,Alliance warfare,Network conflict,Political struggles,alliance|politics|conflict
+84,01010100,Ika-Irosun,Web Of Resources,Economic networks - trade connections,Trade networks,Economic connections,Business networks,trade|economics|business
+85,01010101,Ika-Owonrin,Chaotic Web,Unpredictable connections - random networks,Chaos networks,Random connections,Unexpected contacts,chaos|random|unexpected
+86,01010110,Ika-Obara,Web Transforms,Network evolution - changing connections,Network evolution,Transforming connections,Evolving relationships,evolution|transformation|relationships
+87,01010111,Ika-Okonron,Fortunate Web,Beneficial connections - lucky networks,Beneficial networks,Fortunate connections,Profitable alliances,beneficial|profitable|alliances
+88,01011000,Oturupon-Ogbe,Flow To Light,Progression toward enlightenment,Flow ceremonies,Progressive flow,Smooth advancement,flow|progression|smooth
+89,01011001,Oturupon-Oyeku,Flow In Darkness,Hidden currents - occult flows,Hidden flows,Occult currents,Subterranean movements,hidden|occult|subterranean
+90,01011010,Oturupon-Iwori,Flow On Path,Flowing journey - liquid travel,Fluid journey,Flowing path,River journeys,fluid|river|flow
+91,01011011,Oturupon-Odi,Flow In Conflict,Conflicting currents - opposing flows,Current conflict,Opposing flows,Contradictory forces,opposing|contradiction|conflict
+92,01011100,Oturupon-Irosun,Material Flow,Economic flow - wealth circulation,Economic flow,Material circulation,Money movement,circulation|money|economics
+93,01011101,Oturupon-Owonrin,Chaotic Flow,Turbulent currents - chaotic flows,Chaos currents,Turbulent flow,Unstable conditions,chaos|turbulent|unstable
+94,01011110,Oturupon-Obara,Transforming Flow,Evolutionary currents - changing flows,Flow transformation,Transforming currents,Evolving patterns,evolution|transformation|patterns
+95,01011111,Oturupon-Okonron,Fortunate Flow,Beneficial currents - lucky flows,Beneficial flow,Fortunate currents,Favorable conditions,beneficial|favorable|fortune
+96,01100000,Otura-Ogbe,Fire Toward Light,Passionate pursuit of enlightenment,Fire ceremonies,Passionate enlightenment,Intense spiritual seeking,passion|intensity|seeking
+97,01100001,Otura-Oyeku,Fire In Darkness,Hidden fire - occult passion,Hidden fire,Occult passion,Secret desires,hidden|passion|secret
+98,01100010,Otura-Iwori,Fire On Path,Passionate journey - burning desire,Passionate journey,Fiery path,Intense quest,passion|desire|quest
+99,01100011,Otura-Odi,Fire In Conflict,Passionate warfare - burning conflict,Passionate warfare,Fiery conflict,Intense battles,passion|intensity|warfare
+100,01100100,Otura-Irosun,Material Fire,Passionate acquisition - burning desire for wealth,Passionate acquisition,Fiery materialism,Intense ambition,passion|ambition|wealth
+101,01100101,Otura-Owonrin,Chaotic Fire,Unpredictable passion - wild fire,Chaos fire,Wild passion,Uncontrolled desire,chaos|wild|uncontrolled
+102,01100110,Otura-Obara,Transforming Fire,Passionate transformation - burning change,Fire transformation,Transformative passion,Intense evolution,transformation|passion|evolution
+103,01100111,Otura-Okonron,Fortunate Fire,Lucky passion - beneficial desire,Fortunate passion,Lucky fire,Beneficial intensity,fortune|passion|beneficial
+104,01101000,Irete-Ogbe,Pressure Toward Light,Stress leading to enlightenment,Pressure ceremonies,Pressurized enlightenment,Growth through stress,pressure|stress|growth
+105,01101001,Irete-Oyeku,Pressure In Darkness,Hidden stress - occult pressure,Hidden pressure,Occult stress,Secret burdens,hidden|stress|secret
+106,01101010,Irete-Iwori,Pressure On Path,Stressful journey - pressure travel,Pressure journey,Stressful path,Difficult journey,pressure|stress|difficulty
+107,01101011,Irete-Odi,Pressure In Conflict,Intense warfare - pressure warfare,Pressure warfare,Intense conflict,High-stress battles,pressure|intensity|warfare
+108,01101100,Irete-Irosun,Material Pressure,Economic stress - financial pressure,Economic pressure,Financial stress,Material burdens,pressure|stress|economics
+109,01101101,Irete-Owonrin,Chaotic Pressure,Unpredictable stress - chaos pressure,Chaos pressure,Random stress,Unexpected burdens,chaos|stress|unexpected
+110,01101110,Irete-Obara,Transforming Pressure,Stress-induced change - pressure transformation,Pressure transformation,Stress evolution,Change through burden,transformation|stress|change
+111,01101111,Irete-Okonron,Fortunate Pressure,Beneficial stress - lucky pressure,Fortunate pressure,Beneficial stress,Productive burden,fortune|stress|productive
+112,01110000,Ose-Ogbe,Victory Toward Light,Triumph leading to enlightenment,Victory ceremonies,Victorious enlightenment,Winning spiritually,victory|triumph|spiritual
+113,01110001,Ose-Oyeku,Victory In Darkness,Hidden triumph - occult victory,Hidden victory,Occult triumph,Secret wins,hidden|triumph|secret
+114,01110010,Ose-Iwori,Victory On Path,Triumphant journey - winning path,Victory journey,Triumphant path,Successful quest,victory|success|quest
+115,01110011,Ose-Odi,Victory In Conflict,Winning warfare - battle triumph,Battle victory,Triumphant warfare,Military success,victory|warfare|success
+116,01110100,Ose-Irosun,Material Victory,Economic triumph - financial success,Economic victory,Material triumph,Business success,victory|success|business
+117,01110101,Ose-Owonrin,Chaotic Victory,Unexpected triumph - chaos victory,Chaos victory,Random triumph,Unexpected wins,chaos|unexpected|triumph
+118,01110110,Ose-Obara,Transforming Victory,Evolutionary triumph - victory transformation,Victory transformation,Triumphant evolution,Winning change,victory|evolution|transformation
+119,01110111,Ose-Okonron,Fortunate Victory,Lucky triumph - maximum victory,Ultimate victory,Complete triumph,Total success,ultimate|complete|total
+120,01111000,Ofun-Ogbe,Spirit To Light,Spiritual ascension - divine connection,Ascension ceremonies,Spiritual enlightenment,Divine communion,spirit|ascension|divine
+121,01111001,Ofun-Oyeku,Spirit In Darkness,Occult spirituality - dark mysticism,Dark mysticism,Occult spirit,Shadow spirituality,occult|mysticism|shadow
+122,01111010,Ofun-Iwori,Spirit On Path,Spiritual journey - quest for meaning,Spiritual quest,Mystical journey,Seeking divinity,spiritual|quest|mystical
+123,01111011,Ofun-Odi,Spirit In Conflict,Spiritual warfare - fighting evil,Spiritual warfare,Holy conflict,Battling demons,spiritual|warfare|demons
+124,01111100,Ofun-Irosun,Material Spirit,Earthly spirituality - grounded mysticism,Grounded spirituality,Material mysticism,Practical faith,grounded|practical|faith
+125,01111101,Ofun-Owonrin,Chaotic Spirit,Unpredictable spirituality - wild mysticism,Chaos spirituality,Wild mysticism,Ecstatic faith,chaos|ecstatic|wild
+126,01111110,Ofun-Obara,Transforming Spirit,Spiritual evolution - mystical growth,Spiritual evolution,Mystical transformation,Evolving faith,evolution|transformation|mystical
+127,01111111,Ofun-Meji,Double Spirit,Ultimate spirituality - pure mysticism,Ultimate mysticism,Complete spirit,Total enlightenment,ultimate|complete|total
+128,10000000,Ogbe-Sa,Light Closes,Divine endings - sacred completion,Closing ceremonies,Divine closure,Sacred endings,divine|closure|endings
+129,10000001,Oyeku-Sa,Darkness Closes,Occult endings - mystery completion,Occult closure,Mysterious endings,Hidden conclusions,occult|mystery|hidden
+130,10000010,Iwori-Sa,Path Closes,Journey ending - destination reached,Journey completion,Path conclusion,Arrival ceremonies,journey|arrival|completion
+131,10000011,Odi-Sa,Conflict Closes,War ending - peace achieved,Peace treaties,Conflict resolution,Battle conclusions,peace|resolution|war
+132,10000100,Irosun-Sa,Earth Closes,Material completion - harvest complete,Harvest end,Material closure,Economic cycle end,harvest|material|cycle
+133,10000101,Owonrin-Sa,Chaos Closes,Order from chaos - entropy resolved,Order restoration,Chaos resolution,Stabilization,order|stabilization|resolution
+134,10000110,Obara-Sa,Change Closes,Transformation complete - new form stabilized,Form stabilization,Transformation end,Evolution complete,stabilization|evolution|complete
+135,10000111,Okonron-Sa,Fortune Closes,Prosperity cycle complete - abundance secured,Prosperity end,Fortune secured,Wealth established,prosperity|wealth|secured
+136,10001000,Ogunda-Sa,Warrior Rests,Combat ending - peace for warrior,Warrior rest,Combat conclusion,Battle end,peace|rest|conclusion
+137,10001001,Osa-Sa,Time Closes,Historical cycle complete - era ending,Era end,Historical closure,Time completion,era|history|completion
+138,10001010,Ika-Sa,Web Closes,Network completion - connections secured,Network secured,Connection completion,Alliance finalized,network|alliance|finalized
+139,10001011,Oturupon-Sa,Flow Closes,Current ending - flow stabilized,Flow stabilization,Current completion,Stream conclusion,stabilization|flow|conclusion
+140,10001100,Otura-Sa,Fire Closes,Passion cooling - desire satisfied,Passion satisfied,Fire conclusion,Desire fulfilled,passion|fulfillment|satisfied
+141,10001101,Irete-Sa,Pressure Closes,Stress relieved - burden lifted,Stress relief,Pressure released,Burden ended,relief|released|ended
+142,10001110,Ose-Sa,Victory Closes,Triumph complete - victory secured,Victory secured,Triumph complete,Success established,victory|success|secured
+143,10001111,Ofun-Sa,Spirit Closes,Spiritual completion - enlightenment achieved,Enlightenment achieved,Spiritual fulfillment,Mystical completion,enlightenment|fulfillment|mystical
+144,10010000,Ogbe-Tura,Light Burns,Divine passion - sacred fire,Sacred fire,Divine intensity,Holy passion,divine|passion|sacred
+145,10010001,Oyeku-Tura,Darkness Burns,Occult fire - hidden passion,Occult fire,Hidden intensity,Secret desire,occult|passion|secret
+146,10010010,Iwori-Tura,Path Burns,Passionate journey - fiery quest,Fiery quest,Passionate path,Burning journey,passion|quest|burning
+147,10010011,Odi-Tura,Conflict Burns,Intense warfare - burning battles,Burning battles,Intense warfare,Passionate conflict,intensity|warfare|passion
+148,10010100,Irosun-Tura,Earth Burns,Material passion - fiery acquisition,Fiery acquisition,Material intensity,Burning ambition,passion|ambition|intensity
+149,10010101,Owonrin-Tura,Chaos Burns,Wild fire - chaotic passion,Wild fire,Chaotic intensity,Uncontrolled desire,chaos|wild|uncontrolled
+150,10010110,Obara-Tura,Change Burns,Passionate transformation - burning evolution,Burning evolution,Intense transformation,Passionate change,passion|transformation|intensity
+151,10010111,Okonron-Tura,Fortune Burns,Lucky passion - fortunate fire,Fortunate fire,Lucky intensity,Beneficial passion,fortune|passion|beneficial
+152,10011000,Ogunda-Tura,Warrior Burns,Passionate warfare - burning combat,Burning combat,Intense warfare,Passionate battle,passion|intensity|warfare
+153,10011001,Osa-Tura,Time Burns,Urgent time - burning deadlines,Burning deadlines,Urgent time,Passionate history,urgency|deadlines|passion
+154,10011010,Ika-Tura,Web Burns,Passionate connections - burning networks,Burning networks,Intense connections,Passionate alliances,passion|intensity|connections
+155,10011011,Oturupon-Tura,Flow Burns,Passionate currents - burning flows,Burning flows,Intense currents,Passionate streams,passion|intensity|flow
+156,10011100,Otura-Meji,Double Fire,Maximum passion - burning intensity,Maximum intensity,Ultimate fire,Complete passion,ultimate|complete|maximum
+157,10011101,Irete-Tura,Pressure Burns,Intense stress - burning pressure,Burning pressure,Extreme stress,Passionate burden,intensity|stress|pressure
+158,10011110,Ose-Tura,Victory Burns,Passionate triumph - burning victory,Burning victory,Intense triumph,Passionate success,passion|intensity|victory
+159,10011111,Ofun-Tura,Spirit Burns,Ecstatic spirituality - burning faith,Burning faith,Intense mysticism,Passionate spirit,ecstatic|intensity|passion
+160,10100000,Ogbe-Rete,Light Presses,Divine pressure - sacred burden,Sacred burden,Divine stress,Holy pressure,divine|pressure|burden
+161,10100001,Oyeku-Rete,Darkness Presses,Hidden stress - occult pressure,Occult pressure,Hidden burden,Secret stress,occult|pressure|hidden
+162,10100010,Iwori-Rete,Path Presses,Difficult journey - pressured path,Pressured path,Stressful journey,Burdened quest,pressure|stress|burden
+163,10100011,Odi-Rete,Conflict Presses,Pressured warfare - stressed combat,Stressed combat,Pressured warfare,Burdened battles,pressure|stress|warfare
+164,10100100,Irosun-Rete,Earth Presses,Economic pressure - material stress,Economic stress,Material pressure,Financial burden,pressure|stress|economics
+165,10100101,Owonrin-Rete,Chaos Presses,Chaotic pressure - random stress,Chaotic stress,Random pressure,Unpredictable burden,chaos|pressure|random
+166,10100110,Obara-Rete,Change Presses,Transformation stress - evolutionary pressure,Evolution pressure,Transformative stress,Change burden,transformation|pressure|stress
+167,10100111,Okonron-Rete,Fortune Presses,Lucky pressure - beneficial stress,Beneficial stress,Fortunate pressure,Productive burden,fortune|pressure|beneficial
+168,10101000,Ogunda-Rete,Warrior Presses,Combat pressure - battle stress,Battle stress,Combat pressure,Warrior burden,pressure|stress|combat
+169,10101001,Osa-Rete,Time Presses,Deadline pressure - temporal stress,Deadline stress,Time pressure,Urgent burden,pressure|urgency|deadline
+170,10101010,Ika-Rete,Web Presses,Network pressure - connection stress,Connection stress,Network pressure,Alliance burden,pressure|stress|network
+171,10101011,Oturupon-Rete,Flow Presses,Current pressure - flow stress,Flow stress,Current pressure,Stream burden,pressure|stress|flow
+172,10101100,Otura-Rete,Fire Presses,Passionate pressure - burning stress,Burning stress,Intense pressure,Passionate burden,passion|intensity|pressure
+173,10101101,Irete-Meji,Double Pressure,Maximum stress - extreme burden,Maximum stress,Ultimate pressure,Complete burden,ultimate|maximum|extreme
+174,10101110,Ose-Rete,Victory Presses,Triumphant pressure - winning stress,Winning stress,Victorious pressure,Success burden,victory|pressure|success
+175,10101111,Ofun-Rete,Spirit Presses,Spiritual pressure - mystical stress,Mystical stress,Spiritual pressure,Holy burden,spiritual|pressure|mystical
+176,10110000,Ogbe-Se,Light Triumphs,Divine victory - sacred success,Sacred success,Divine triumph,Holy victory,divine|victory|sacred
+177,10110001,Oyeku-Se,Darkness Triumphs,Occult victory - hidden success,Occult success,Hidden triumph,Secret victory,occult|victory|hidden
+178,10110010,Iwori-Se,Path Triumphs,Journey victory - quest success,Quest success,Path triumph,Journey victory,journey|success|quest
+179,10110011,Odi-Se,Conflict Triumphs,Battle victory - war success,War success,Combat triumph,Battle victory,war|victory|combat
+180,10110100,Irosun-Se,Earth Triumphs,Material victory - economic success,Economic success,Material triumph,Business victory,economics|victory|business
+181,10110101,Owonrin-Se,Chaos Triumphs,Unexpected victory - chaos success,Chaos success,Random triumph,Unexpected victory,chaos|victory|unexpected
+182,10110110,Obara-Se,Change Triumphs,Transformation victory - evolutionary success,Evolution success,Transformative triumph,Change victory,evolution|victory|transformation
+183,10110111,Okonron-Se,Fortune Triumphs,Lucky victory - fortunate success,Fortunate success,Lucky triumph,Maximum victory,fortune|victory|lucky
+184,10111000,Ogunda-Se,Warrior Triumphs,Combat victory - military success,Military success,Warrior triumph,Battle victory,military|victory|warrior
+185,10111001,Osa-Se,Time Triumphs,Historical victory - temporal success,Historical success,Time triumph,Era victory,history|victory|temporal
+186,10111010,Ika-Se,Web Triumphs,Network victory - connection success,Connection success,Alliance triumph,Network victory,network|victory|alliance
+187,10111011,Oturupon-Se,Flow Triumphs,Current victory - flow success,Flow success,Stream triumph,Current victory,flow|victory|stream
+188,10111100,Otura-Se,Fire Triumphs,Passionate victory - burning success,Burning success,Intense triumph,Passionate victory,passion|victory|intensity
+189,10111101,Irete-Se,Pressure Triumphs,Stressed victory - burdened success,Stressed success,Pressured triumph,Burden victory,pressure|victory|burden
+190,10111110,Ose-Meji,Double Victory,Maximum triumph - ultimate success,Ultimate success,Complete triumph,Total victory,ultimate|complete|total
+191,10111111,Ofun-Se,Spirit Triumphs,Spiritual victory - mystical success,Mystical success,Spiritual triumph,Holy victory,spiritual|victory|mystical
+192,11000000,Ogbe-Fun,Light Spiritualizes,Divine spirituality - sacred mysticism,Sacred mysticism,Divine spirituality,Holy faith,divine|spiritual|sacred
+193,11000001,Oyeku-Fun,Darkness Spiritualizes,Occult spirituality - hidden mysticism,Occult mysticism,Hidden spirituality,Secret faith,occult|spiritual|hidden
+194,11000010,Iwori-Fun,Path Spiritualizes,Spiritual journey - mystical quest,Mystical quest,Spiritual path,Holy journey,spiritual|mystical|quest
+195,11000011,Odi-Fun,Conflict Spiritualizes,Spiritual warfare - holy combat,Holy combat,Spiritual warfare,Faith battles,spiritual|warfare|holy
+196,11000100,Irosun-Fun,Earth Spiritualizes,Grounded spirituality - material mysticism,Material mysticism,Grounded faith,Earthly spirituality,grounded|material|spiritual
+197,11000101,Owonrin-Fun,Chaos Spiritualizes,Ecstatic spirituality - wild mysticism,Wild mysticism,Chaotic faith,Ecstatic spirituality,chaos|ecstatic|spiritual
+198,11000110,Obara-Fun,Change Spiritualizes,Spiritual evolution - mystical transformation,Mystical evolution,Spiritual transformation,Faith evolution,spiritual|transformation|mystical
+199,11000111,Okonron-Fun,Fortune Spiritualizes,Lucky spirituality - fortunate mysticism,Fortunate mysticism,Lucky faith,Blessed spirituality,fortune|spiritual|blessed
+200,11001000,Ogunda-Fun,Warrior Spiritualizes,Spiritual warfare - holy combat,Holy combat,Warrior spirituality,Sacred warfare,spiritual|warfare|sacred
+201,11001001,Osa-Fun,Time Spiritualizes,Historical spirituality - temporal mysticism,Temporal mysticism,Historical faith,Era spirituality,temporal|spiritual|history
+202,11001010,Ika-Fun,Web Spiritualizes,Spiritual networks - mystical connections,Mystical connections,Spiritual alliances,Holy networks,spiritual|mystical|network
+203,11001011,Oturupon-Fun,Flow Spiritualizes,Spiritual currents - mystical flows,Mystical flows,Spiritual streams,Holy currents,spiritual|mystical|flow
+204,11001100,Otura-Fun,Fire Spiritualizes,Passionate spirituality - burning faith,Burning faith,Intense mysticism,Passionate spirituality,passion|spiritual|intensity
+205,11001101,Irete-Fun,Pressure Spiritualizes,Stressed spirituality - burdened faith,Burdened faith,Pressured mysticism,Stressed spirituality,pressure|spiritual|burden
+206,11001110,Ose-Fun,Victory Spiritualizes,Triumphant spirituality - victorious faith,Victorious faith,Triumphant mysticism,Victory spirituality,victory|spiritual|triumph
+207,11001111,Ofun-Meji,Double Spirit,Ultimate spirituality - complete mysticism,Complete mysticism,Ultimate spirituality,Total enlightenment,ultimate|complete|total
+208,11010000,Ogbe-Gunda,Light Wars,Divine warfare - holy combat,Holy warfare,Sacred combat,Divine battles,divine|warfare|holy
+209,11010001,Oyeku-Gunda,Darkness Wars,Occult warfare - hidden combat,Occult combat,Hidden warfare,Secret battles,occult|warfare|hidden
+210,11010010,Iwori-Gunda,Path Wars,Journey warfare - quest combat,Quest combat,Path warfare,Journey battles,journey|warfare|quest
+211,11010011,Odi-Gunda,Double Conflict,Maximum warfare - ultimate combat,Ultimate warfare,Complete combat,Total battles,ultimate|complete|total
+212,11010100,Irosun-Gunda,Earth Wars,Material warfare - economic combat,Economic warfare,Material combat,Resource battles,economics|warfare|resources
+213,11010101,Owonrin-Gunda,Chaos Wars,Chaotic warfare - random combat,Chaotic combat,Random warfare,Unpredictable battles,chaos|warfare|random
+214,11010110,Obara-Gunda,Change Wars,Transformative warfare - evolutionary combat,Evolution warfare,Transformative combat,Revolutionary battles,evolution|warfare|revolutionary
+215,11010111,Okonron-Gunda,Fortune Wars,Lucky warfare - fortunate combat,Fortunate combat,Lucky warfare,Profitable battles,fortune|warfare|profitable
+216,11011000,Ogunda-Meji,Double Warrior,Maximum combat - ultimate warfare,Ultimate combat,Complete warfare,Total battle,ultimate|complete|total
+217,11011001,Osa-Gunda,Time Wars,Historical warfare - temporal combat,Temporal warfare,Historical combat,Era battles,temporal|warfare|history
+218,11011010,Ika-Gunda,Web Wars,Network warfare - connection combat,Network combat,Alliance warfare,Connection battles,network|warfare|alliance
+219,11011011,Oturupon-Gunda,Flow Wars,Current warfare - flow combat,Flow combat,Stream warfare,Current battles,flow|warfare|stream
+220,11011100,Otura-Gunda,Fire Wars,Passionate warfare - burning combat,Burning combat,Intense warfare,Passionate battles,passion|warfare|intensity
+221,11011101,Irete-Gunda,Pressure Wars,Stressed warfare - burdened combat,Stressed combat,Pressured warfare,Burden battles,pressure|warfare|burden
+222,11011110,Ose-Gunda,Victory Wars,Triumphant warfare - victorious combat,Victorious combat,Triumphant warfare,Winning battles,victory|warfare|winning
+223,11011111,Ofun-Gunda,Spirit Wars,Spiritual warfare - mystical combat,Mystical combat,Spiritual warfare,Holy battles,spiritual|warfare|holy
+224,11100000,Ogbe-Ka,Light Connects,Divine networks - sacred connections,Sacred connections,Divine alliances,Holy networks,divine|connections|sacred
+225,11100001,Oyeku-Ka,Darkness Connects,Occult networks - hidden connections,Occult connections,Hidden alliances,Secret networks,occult|connections|hidden
+226,11100010,Iwori-Ka,Path Connects,Journey networks - quest connections,Quest connections,Path alliances,Journey networks,journey|connections|quest
+227,11100011,Odi-Ka,Conflict Connects,War alliances - battle networks,War alliances,Combat connections,Battle networks,war|alliances|combat
+228,11100100,Irosun-Ka,Earth Connects,Economic networks - material connections,Economic connections,Material alliances,Resource networks,economics|connections|resources
+229,11100101,Owonrin-Ka,Chaos Connects,Chaotic networks - random connections,Chaotic connections,Random alliances,Unpredictable networks,chaos|connections|random
+230,11100110,Obara-Ka,Change Connects,Transformative networks - evolutionary connections,Evolution connections,Transformative alliances,Revolutionary networks,evolution|connections|revolutionary
+231,11100111,Okonron-Ka,Fortune Connects,Lucky networks - fortunate connections,Fortunate connections,Lucky alliances,Profitable networks,fortune|connections|profitable
+232,11101000,Ogunda-Ka,Warrior Connects,Military alliances - combat networks,Military alliances,Warrior connections,Combat networks,military|alliances|combat
+233,11101001,Osa-Ka,Time Connects,Historical networks - temporal connections,Temporal connections,Historical alliances,Era networks,temporal|connections|history
+234,11101010,Ika-Meji,Double Web,Maximum networks - ultimate connections,Ultimate connections,Complete alliances,Total networks,ultimate|complete|total
+235,11101011,Oturupon-Ka,Flow Connects,Current networks - flow connections,Flow connections,Stream alliances,Current networks,flow|connections|stream
+236,11101100,Otura-Ka,Fire Connects,Passionate networks - burning connections,Burning connections,Intense alliances,Passionate networks,passion|connections|intensity
+237,11101101,Irete-Ka,Pressure Connects,Stressed networks - burdened connections,Stressed connections,Pressured alliances,Burden networks,pressure|connections|burden
+238,11101110,Ose-Ka,Victory Connects,Triumphant networks - victorious connections,Victorious connections,Triumphant alliances,Winning networks,victory|connections|winning
+239,11101111,Ofun-Ka,Spirit Connects,Spiritual networks - mystical connections,Mystical connections,Spiritual alliances,Holy networks,spiritual|connections|mystical
+240,11110000,Ogbe-Turupon,Light Flows,Divine currents - sacred flows,Sacred flows,Divine streams,Holy currents,divine|flows|sacred
+241,11110001,Oyeku-Turupon,Darkness Flows,Occult currents - hidden flows,Occult flows,Hidden streams,Secret currents,occult|flows|hidden
+242,11110010,Iwori-Turupon,Path Flows,Journey currents - quest flows,Quest flows,Path streams,Journey currents,journey|flows|quest
+243,11110011,Odi-Turupon,Conflict Flows,War currents - battle flows,War flows,Combat streams,Battle currents,war|flows|combat
+244,11110100,Irosun-Turupon,Earth Flows,Economic currents - material flows,Economic flows,Material streams,Resource currents,economics|flows|resources
+245,11110101,Owonrin-Turupon,Chaos Flows,Chaotic currents - random flows,Chaotic flows,Random streams,Unpredictable currents,chaos|flows|random
+246,11110110,Obara-Turupon,Change Flows,Transformative currents - evolutionary flows,Evolution flows,Transformative streams,Revolutionary currents,evolution|flows|revolutionary
+247,11110111,Okonron-Turupon,Fortune Flows,Lucky currents - fortunate flows,Fortunate flows,Lucky streams,Profitable currents,fortune|flows|profitable
+248,11111000,Ogunda-Turupon,Warrior Flows,Military currents - combat flows,Military flows,Warrior streams,Combat currents,military|flows|combat
+249,11111001,Osa-Turupon,Time Flows,Historical currents - temporal flows,Temporal flows,Historical streams,Era currents,temporal|flows|history
+250,11111010,Ika-Turupon,Web Flows,Network currents - connection flows,Connection flows,Alliance streams,Network currents,network|flows|alliance
+251,11111011,Oturupon-Meji,Double Flow,Maximum currents - ultimate flows,Ultimate flows,Complete streams,Total currents,ultimate|complete|total
+252,11111100,Otura-Turupon,Fire Flows,Passionate currents - burning flows,Burning flows,Intense streams,Passionate currents,passion|flows|intensity
+253,11111101,Irete-Turupon,Pressure Flows,Stressed currents - burdened flows,Stressed flows,Pressured streams,Burden currents,pressure|flows|burden
+254,11111110,Ose-Turupon,Victory Flows,Triumphant currents - victorious flows,Victorious flows,Triumphant streams,Winning currents,victory|flows|winning
+255,11111111,Ofun-Sa,Complete Closure,Ultimate ending - absolute completion,Absolute completion,Complete closure,Total ending,ultimate|complete|absolute

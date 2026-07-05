@@ -1,0 +1,212 @@
+# enforcement_policy.yaml
+#
+# Phase 16A Control-Plane Enforcement Policy
+#
+# This file defines what enforcement actions are permitted at each level.
+# Hard rule: Only actions explicitly listed here will be applied by 16A4.
+#
+# Enforcement levels (escalation):
+#   INFO       - No restrictions (baseline)
+#   WARN       - Alert raised; observation only
+#   ELEVATED   - Pattern emerging; additional checks required
+#   RESTRICTED - Boundaries tightened; denials apply
+#   LOCKED     - Hard stop unless ThroneLock override active
+
+policies:
+
+  # ========================================================================
+  # Agent Execution Policy
+  # ========================================================================
+  agent_execution:
+    info:
+      actions: []
+      description: "Baseline operation; no restrictions"
+
+    warn:
+      actions: []
+      description: "Warning raised; alerter only; no control changes"
+
+    elevated:
+      actions:
+        - require_approval        # Require secondary approval for execution
+        - increase_scrutiny       # Enable verbose logging
+        - mandate_validation      # Additional pre-execution checks
+      approval_timeout_seconds: 300
+      description: "Pattern detected; additional validation engaged"
+
+    restricted:
+      actions:
+        - deny_non_critical       # Block non-critical execution classes
+        - require_explicit_whitelist
+        - rate_limit              # Rate limit at 60 per minute
+      rate_limit_per_minute: 60
+      critical_classes:
+        - "system"
+        - "security"
+        - "recovery"
+      description: "Boundaries tightened; only critical agents permitted"
+
+    locked:
+      actions:
+        - hard_block              # Explicit hard block
+        - require_thronelock_override
+        - escalate_to_admin
+      description: "Hard stop; requires active ThroneLock override or manual reset"
+
+  # ========================================================================
+  # Decision Engine Policy
+  # ========================================================================
+  decision_engine:
+    info:
+      actions: []
+
+    warn:
+      actions: []
+
+    elevated:
+      actions:
+        - audit_all_decisions
+        - increase_validation_depth
+        - log_decision_trace
+
+    restricted:
+      actions:
+        - require_secondary_auth
+        - rate_limit              # Rate limit at 30 per minute
+        - require_approval
+      rate_limit_per_minute: 30
+
+    locked:
+      actions:
+        - hard_block
+        - require_thronelock_override
+        - escalate_to_admin
+
+  # ========================================================================
+  # Mo↔Woo Governance Nexus Policy
+  # ========================================================================
+  mo_woo_nexus:
+    info:
+      actions: []
+    warn:
+      actions: []
+    elevated:
+      actions:
+        - audit_all_judgments
+        - increase_validation_depth
+        - log_decision_trace
+    restricted:
+      actions:
+        - allow_governance_only
+        - deny_side_effects
+        - audit_all_judgments
+    locked:
+      actions:
+        - hard_block
+        - require_thronelock_override
+        - escalate_to_admin
+
+  # ========================================================================
+  # MoScript Registry Policy
+  # ========================================================================
+  moscript_registry:
+    info:
+      actions: []
+
+    warn:
+      actions: []
+
+    elevated:
+      actions:
+        - require_whitelist
+        - audit_all_executions
+        - log_script_params
+
+    restricted:
+      actions:
+        - deny_experimental
+        - require_approval
+        - sandbox_execution
+
+    locked:
+      actions:
+        - hard_block
+        - require_thronelock_override
+        - escalate_to_admin
+
+# ========================================================================
+# Thresholds & Resonance Parameters
+# (These can also be set via environment variables; env vars take precedence)
+# ========================================================================
+thresholds:
+  resonance_window_seconds: 3600
+  resonance_half_life_seconds: 600
+  
+  # Level boundaries
+  threshold_warn: 0.2
+  threshold_elevated: 0.5
+  threshold_restricted: 1.5
+  threshold_locked: 3.0
+  
+  # Recovery hysteresis (when does a level downgrade?)
+  # Example: if in RESTRICTED but score drops below (threshold_restricted * 0.7)
+  recovery_hysteresis: 0.7
+
+# ========================================================================
+# ThroneLock Configuration
+# ========================================================================
+thronelock:
+  authority_source: neo4j           # neo4j, neon, config
+  fallback_sources:
+    - neon
+    - config
+  staleness_warning_ms: 60000       # Warn if cache older than 1 min
+  
+  # Override behavior
+  override_bypass_lock: true         # If true, active ThroneLock bypasses LOCKED
+  override_downgrade_locked: "RESTRICTED"  # Downgrade LOCKED to this level
+  bootstrap_roles: []               # Emergency-only roles; intentionally empty by default
+
+# ========================================================================
+# Audit Configuration
+# ========================================================================
+audit:
+  store_events_in: "graph_audit_event"
+  include_event_data: true
+  include_trace_ids: true
+  
+  # Which event types to audit
+  audit_event_types:
+    - "TELEMETRY_ALERT_RAISED"
+    - "ANOMALY_SPIKE"
+    - "ANOMALY_TREND"
+    - "ANOMALY_THRESHOLD"
+    - "CONTROL_PLANE_LEVEL_TRANSITION"
+    - "CONTROL_PLANE_RESTRICTED"
+    - "CONTROL_PLANE_LOCKED"
+    - "CONTROL_PLANE_RELAXED"
+    - "THRONELOCK_ROLE_ENFORCED"
+    - "THRONELOCK_SOURCE_RESOLVED"
+    - "RESONANCE_SCORE_UPDATED"
+    - "RESONANCE_DECAY_APPLIED"
+    - "RESONANCE_MANUAL_RESET"
+    - "RUNTIME_ENFORCEMENT_ALLOWED"
+    - "RUNTIME_ENFORCEMENT_DENIED"
+
+# ========================================================================
+# Dry-Run & Testing
+# ========================================================================
+dry_run:
+  enabled: false                     # Set to true to run in observation mode
+  log_intended_actions: true         # Log what WOULD be done
+  make_no_changes: true              # Never persist state
+
+# ========================================================================
+# Phase 16B Runtime Attachment
+# ========================================================================
+runtime_attachment:
+  moscript_whitelist:
+    - "mo-grid-heartbeat-001"
+    - "mo-grid-identity-002"
+    - "mo-grid-learn-003"
+    - "mo-grid-truth-004"

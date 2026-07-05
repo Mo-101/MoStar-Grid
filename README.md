@@ -1,7 +1,5 @@
 # 🌌 MoStar Grid
 
-<div align="center">
-
 # ⚡ MoStar Grid Core
 
 ### The Sovereign Engineering Civilization

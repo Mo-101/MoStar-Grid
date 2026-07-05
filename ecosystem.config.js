@@ -74,9 +74,14 @@ const CRYS_ENV = `${CRYS_ROOT}/.env`;
 const CRYS_LOGS = `${CRYS_ROOT}/logs/pm2`;
 
 // ── Neo4j shared telemetry env (injected into every app) ─────
+// Aura Free Tier — graph in separate failure domain, no local Neo4j
 const NEO4J_ENV = {
-  NEO4J_BOLT_URL: 'bolt://127.0.0.1:47687',
-  NEO4J_HTTP_URL: 'http://127.0.0.1:47474',
+  NEO4J_URI: 'neo4j+s://2f88895b.databases.neo4j.io',
+  NEO4J_BOLT_URL: 'neo4j+s://2f88895b.databases.neo4j.io',
+  NEO4J_HTTP_URL: 'https://2f88895b.databases.neo4j.io',
+  NEO4J_USERNAME: '2f88895b',
+  NEO4J_USER: '2f88895b',
+  NEO4J_DATABASE: '2f88895b',
   // Password loaded from each app's own .env — not hardcoded here.
 };
 
@@ -116,7 +121,7 @@ function crysWorker(name, script, extraEnv = {}) {
     env: {
       PYTHONUNBUFFERED: '1',
       IDIM_API_URL: 'http://127.0.0.1:41050',
-      IDIM_DATABASE_URL: 'postgresql://idona:${IDIM_DB_PASSWORD}@127.0.0.1:5433/${IDIM_DB_NAME}',
+      IDIM_DATABASE_URL: `postgresql://idona:${process.env.IDIM_DB_PASSWORD || ''}@127.0.0.1:5433/${process.env.IDIM_DB_NAME || 'idimikang'}`,
       ...NEO4J_ENV,
       ...extraEnv,
     },
@@ -167,7 +172,11 @@ module.exports = {
     {
       name: 'mostar-grid',
       script: `${GRID_ROOT}/.venv/bin/python`,
-      args: '-m uvicorn back.services.grid.api:app --host 0.0.0.0 --port 41010',
+      // Loopback-only: reachability, not just authorization (First Wound
+      // doctrine, mostar-doorman/README.md). Only the cockpit-app aggregator
+      // and other local processes on this box need this port; the doorman
+      // tunnel never proxies directly to it.
+      args: '-m uvicorn back.services.grid.api:app --host 127.0.0.1 --port 41010',
       cwd: GRID_ROOT,
       env: {
         PYTHONPATH: GRID_PYTHONPATH,
@@ -190,10 +199,13 @@ module.exports = {
     {
       name: 'mostar-mcp-gateway',
       script: `${GRID_ROOT}/.venv/bin/python`,
-      args: '-m uvicorn mcp_gateway.api:app --host 0.0.0.0 --port 41020',
-      cwd: GRID_ROOT,
+      args: '-m uvicorn mcp_gateway.server:app --host 127.0.0.1 --port 41020',
+      cwd: `${GRID_ROOT}/back/services`,
       env: {
         PYTHONPATH: GRID_PYTHONPATH,
+        MCP_TRANSPORT: 'sse',
+        MCP_HOST: '127.0.0.1',
+        MCP_PORT: '41020',
         ...NEO4J_ENV,
       },
       watch: false,
@@ -219,7 +231,11 @@ module.exports = {
     {
       name: 'mostar-voice',
       script: `${GRID_ROOT}/.venv/bin/python`,
-      args: '-m uvicorn voice_api:app --host 0.0.0.0 --port 41071',
+      // Pre-existing bug fixed: this was 'voice_api:app' (bare, no package
+      // path), which only worked historically because PM2 was restarting
+      // from its own cached args rather than re-reading this file. The
+      // actual module lives at back/services/voice/voice_api.py.
+      args: '-m uvicorn back.services.voice.voice_api:app --host 127.0.0.1 --port 41071',
       cwd: GRID_ROOT,
       env: {
         PYTHONPATH: GRID_PYTHONPATH,
@@ -271,7 +287,7 @@ module.exports = {
       // idim-api — sovereign port 41050
       name: 'idim-api',
       script: IDIM_PYTHON,
-      args: '-m uvicorn api:app --host 0.0.0.0 --port 41050',
+      args: '-m uvicorn api:app --host 127.0.0.1 --port 41050',
       cwd: IDIM_OBS,
       interpreter: 'none',
       env_file: IDIM_ENV,
