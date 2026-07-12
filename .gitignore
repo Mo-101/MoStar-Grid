@@ -73,8 +73,47 @@ mindgraph/neo4j-mindgraph/data_wired_default/
 mindgraph/neo4j-mindgraph/run/
 mindgraph/neo4j-mindgraph/logs/
 
+# Neo4j runtime state and generated artifacts
+back/services/mindgraph/mo-neo4j/data/
+back/services/mindgraph/mo-neo4j/data_wired_default/
+back/services/mindgraph/mo-neo4j/logs/
+back/services/mindgraph/mo-neo4j/run/
+back/services/mindgraph/mo-neo4j/lib/
+back/services/mindgraph/mo-neo4j/licenses/
+
+# Binary plugins are installed during provisioning, not stored in Git
+back/services/mindgraph/mo-neo4j/plugins/*.jar
+
+# Runtime locks, process IDs, dumps, and temporary files
+back/services/mindgraph/mo-neo4j/**/*.pid
+back/services/mindgraph/mo-neo4j/**/*.lock
+back/services/mindgraph/mo-neo4j/**/*.hprof
+back/services/mindgraph/mo-neo4j/**/*.tmp
+back/services/mindgraph/mo-neo4j/**/*.bak
+back/services/mindgraph/mo-neo4j/**/*.backup
+back/services/mindgraph/mo-neo4j/conf/*.bak.*
+
+# Neo4j binary distribution (installed, not source-controlled)
+back/services/mindgraph/mo-neo4j/bin/
+back/services/mindgraph/mo-neo4j/labs/
+back/services/mindgraph/mo-neo4j/memory_layer/
+back/services/mindgraph/mo-neo4j/LICENSE.txt
+back/services/mindgraph/mo-neo4j/LICENSES.txt
+back/services/mindgraph/mo-neo4j/NOTICE.txt
+back/services/mindgraph/mo-neo4j/README.txt
+back/services/mindgraph/mo-neo4j/UPGRADE.txt
+back/services/mindgraph/mo-neo4j/neo4j.cer
+back/services/mindgraph/mo-neo4j/packaging_info
+back/services/mindgraph/mo-neo4j/start-neo4j.*
+
+# Local credentials and machine-specific overrides
+back/services/mindgraph/mo-neo4j/conf/*.local
+back/services/mindgraph/mo-neo4j/conf/*.secret
+back/services/mindgraph/mo-neo4j/conf/*credentials*
+back/services/mindgraph/mo-neo4j/conf/*password*
+back/services/mindgraph/mo-neo4j/conf/*token*
+
 # Neo4j runtime data - never commit
-back/services/mindgraph/mo-neo4j/
 back/services/mindgraph/neo4j-mindgraph/
 back/services/mindgraph/neo4j-mindgraph/**/transactions/
 back/services/mindgraph/neo4j-mindgraph/**/databases/
