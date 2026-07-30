@@ -1,0 +1,15 @@
+{
+  "name": "profit-council-grid0-scheduler",
+  "main": "src/index.js",
+  "compatibility_date": "2026-07-15",
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  },
+  "vars": {
+    "PROFIT_COUNCIL_BASE_URL": "https://profit-council-live.mostar1.chatgpt.site",
+    "GRID_SCHEDULER_PATH": "/api/grid0/scheduler/run",
+    "GRID_CRON_EXPRESSION": "*/5 * * * *",
+    "GRID_REQUEST_TIMEOUT_MS": "25000",
+    "GRID_SCHEDULER_VERSION": "1"
+  }
+}

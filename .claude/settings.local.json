@@ -240,7 +240,18 @@
       "Bash(cat \"\\\\\\\\wsl.localhost\\\\Ubuntu-24.04\\\\home\\\\idona\\\\MoStar\\\\_apps\\\\grid\\\\core\\\\engines\\\\semantic_grid\\\\layers.py\")",
       "Bash(cat \"\\\\\\\\wsl.localhost\\\\Ubuntu-24.04\\\\home\\\\idona\\\\MoStar\\\\_apps\\\\grid\\\\core\\\\engines\\\\semantic_grid\\\\router.py\")",
       "Bash(cat \"\\\\\\\\wsl.localhost\\\\Ubuntu-24.04\\\\home\\\\idona\\\\MoStar\\\\_apps\\\\grid\\\\grid\\\\README.md\")",
-      "Bash(cat \"\\\\\\\\wsl.localhost\\\\Ubuntu-24.04\\\\home\\\\idona\\\\MoStar\\\\_apps\\\\grid\\\\core\\\\engines\\\\semantic_grid\\\\contracts.py\")"
+      "Bash(cat \"\\\\\\\\wsl.localhost\\\\Ubuntu-24.04\\\\home\\\\idona\\\\MoStar\\\\_apps\\\\grid\\\\core\\\\engines\\\\semantic_grid\\\\contracts.py\")",
+      "Bash(conda --version)",
+      "Bash(pip --version)",
+      "Bash(pip show *)",
+      "PowerShell(& \"C:\\\\Users\\\\idona\\\\Downloads\\\\Anaconda3-2025.12-2-Windows-x86_64.exe\" /S /D=C:\\\\anaconda3)",
+      "PowerShell(C:\\\\anaconda3\\\\Scripts\\\\conda.exe --version)",
+      "PowerShell(Get-ChildItem \"C:\\\\anaconda3\" -ErrorAction SilentlyContinue | Select-Object Name; Get-ChildItem \"$env:USERPROFILE\\\\anaconda3\" -ErrorAction SilentlyContinue | Select-Object Name; Get-ChildItem \"$env:LOCALAPPDATA\\\\anaconda3\" -ErrorAction SilentlyContinue | Select-Object Name)",
+      "PowerShell(Read-Content \"C:\\\\Users\\\\idona\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\--wsl-localhost-Ubuntu-24-04-home-idona-MoStar--apps-grid\\\\f3b997c9-23e2-4d03-8c46-cf15486a6d55\\\\tasks\\\\bs47ofc11.output\" -ErrorAction SilentlyContinue)",
+      "PowerShell(Test-Path \"C:\\\\Users\\\\idona\\\\anaconda3\"; Test-Path \"C:\\\\Users\\\\idona\\\\Anaconda3\"; Test-Path \"C:\\\\anaconda3\"; Test-Path \"$env:LOCALAPPDATA\\\\anaconda3\")",
+      "PowerShell(micromamba --version 2>$null; \\(Get-Command micromamba -ErrorAction SilentlyContinue\\).Source)",
+      "PowerShell(& \"C:\\\\Users\\\\idona\\\\.micromamba\\\\Library\\\\bin\\\\micromamba.exe\" --version)",
+      "PowerShell(& \"C:\\\\Users\\\\idona\\\\.micromamba\\\\Library\\\\bin\\\\micromamba.exe\" install -c main anaconda-client -y 2>&1)"
     ],
     "deny": [],
     "additionalDirectories": [

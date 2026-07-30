@@ -55,6 +55,8 @@ from grid.config import (
 from grid.config import OLLAMA_BASE_URL, OLLAMA_KEEP_ALIVE, OLLAMA_REQUEST_TIMEOUT
 from grid.orchestrator import CommitFailedError, CommitForbiddenError, GridOrchestrator
 from grid.semantic_api import router as semantic_router
+from grid.mostar_artifacts import router as mostar_artifacts_router
+from grid.mostar_gap_register import router as mostar_gap_register_router
 from grid.telemetry import ClusterTelemetry
 from dcx import DCXLayer
 from grid.events import event_bus, GridEvent
@@ -140,6 +142,8 @@ app.add_middleware(
 )
 
 app.include_router(semantic_router)
+app.include_router(mostar_artifacts_router)
+app.include_router(mostar_gap_register_router)
 app.include_router(trading_router)
 
 

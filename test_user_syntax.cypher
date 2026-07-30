@@ -1,0 +1,1 @@
+CREATE USER grid_builder_test SET PASSWORD 'TestPassword123' CHANGE NOT REQUIRED;

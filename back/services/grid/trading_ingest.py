@@ -12,7 +12,6 @@ import hashlib
 import hmac
 import logging
 import os
-import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -90,33 +89,38 @@ async def ingest_tick(request: Request):
     # 3. Privacy — round timestamp to nearest 100 ms
     ts_private = (payload.timestamp // 100) * 100
 
-    tick_id  = f"TICK-{uuid.uuid4().hex[:12].upper()}"
+    identity = f"{payload.venue_id}|{payload.symbol}|{ts_private}".encode()
+    tick_id  = f"TICK-{hashlib.sha256(identity).hexdigest()[:16].upper()}"
     iso_now  = datetime.now(timezone.utc).isoformat()
+    deduped = False
 
     # 4. Commit to MindGraph
     orch = getattr(request.app.state, "orchestrator", None)
     if orch and orch.mindgraph.connected and orch.mindgraph._driver:
         try:
             async with orch.mindgraph._driver.session(database=NEO4J_DATABASE) as session:
-                await session.run(
+                result = await session.run(
                     """
-                    CREATE (t:TradingTick {
-                        id:                  $id,
-                        timestamp_ms:        $ts,
-                        venue_id:            $venue,
-                        symbol:              $symbol,
-                        last_trade_price:    $price,
-                        volatility_index:    $vol,
-                        volume_24h:          $vol24,
-                        jurisdiction:        $jurisdiction,
-                        regime:              $regime,
-                        gate:                $gate,
-                        side:                $side,
-                        logic_version:       $logic_v,
-                        config_version:      $config_v,
-                        ingested_at:         $now,
-                        source:              'idimikang_collector'
-                    })
+                    MERGE (t:TradingTick {id: $id})
+                    ON CREATE SET
+                        t.timestamp_ms        = $ts,
+                        t.venue_id            = $venue,
+                        t.symbol              = $symbol,
+                        t.last_trade_price    = $price,
+                        t.volatility_index    = $vol,
+                        t.volume_24h          = $vol24,
+                        t.jurisdiction        = $jurisdiction,
+                        t.regime              = $regime,
+                        t.gate                = $gate,
+                        t.side                = $side,
+                        t.logic_version       = $logic_v,
+                        t.config_version      = $config_v,
+                        t.ingested_at         = $now,
+                        t.source              = 'idimikang_collector',
+                        t.duplicate_count     = 0
+                    ON MATCH SET
+                        t.duplicate_count     = coalesce(t.duplicate_count, 0) + 1,
+                        t.last_seen_at        = $now
                     """,
                     id=tick_id,
                     ts=ts_private,
@@ -133,6 +137,8 @@ async def ingest_tick(request: Request):
                     config_v=payload.compliance_meta.config_version or "",
                     now=iso_now,
                 )
+                summary = await result.consume()
+                deduped = summary.counters.nodes_created == 0
         except Exception as exc:
             # Log and continue — don't block the collector on graph issues
             logger.warning("MindGraph write failed for %s: %s", tick_id, exc)
@@ -154,6 +160,7 @@ async def ingest_tick(request: Request):
         "venue_id":    payload.venue_id,
         "ts_private":  ts_private,
         "ingested_at": iso_now,
+        "deduped":     deduped,
     }
 
 

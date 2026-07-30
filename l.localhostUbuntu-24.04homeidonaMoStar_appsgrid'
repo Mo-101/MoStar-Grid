@@ -1,0 +1,252 @@
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mindex 7bb4f2f..cd43d9c 100644[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -1,123 +1,124 @@[m
+[31m-# === Secrets — never commit ===[m
+[31m-.env[m
+[31m-.env.*[m
+[31m-!.env.example[m
+[31m-*.key[m
+[31m-*.pem[m
+[31m-id_ed25519[m
+[31m-id_rsa[m
+[31m-id_*[m
+[31m-*credential*[m
+[31m-*secret*[m
+[31m-*token*[m
+[31m-core/engines/woo/new 1.txt[m
+[31m-*.QUARANTINED[m
+[31m-.ollama/[m
+[31m-.aws/[m
+[31m-.ssh/[m
+[31m-[m
+[31m-# === Build / runtime artifacts ===[m
+[31m-node_modules/[m
+[31m-.venv/[m
+[31m-.venv-wsl/[m
+[31m-__pycache__/[m
+[31m-*.pyc[m
+[31m-*.pyo[m
+[31m-dist/[m
+[31m-build/[m
+[31m-.next/[m
+[31m-.vercel/[m
+[31m-[m
+[31m-# === Database / data dumps ===[m
+[31m-*.dump[m
+[31m-*.backup[m
+[31m-*.bak[m
+[31m-data/[m
+[31m-import/data/[m
+[31m-*.cypher.gz[m
+[31m-[m
+[31m-# === Logs ===[m
+[31m-*.log[m
+[31m-logs/[m
+[31m-[m
+[31m-# === OS / IDE cruft ===[m
+[31m-.DS_Store[m
+[31m-Thumbs.db[m
+[31m-*:Zone.Identifier[m
+[31m-.idea/[m
+[31m-.vscode/[m
+[31m-*.swp[m
+[31m-[m
+[31m-# === Local-only ===[m
+[31m-local/[m
+[31m-scratch/[m
+[31m-tmp/[m
+[31m-[m
+[31m-# === Allow explicit overrides ===[m
+[31m-!docs/data/*.json[m
+[31m-[m
+[31m-# Runtime/generated Grid audio[m
+[31m-grid/.tmp/audio/[m
+[31m-.tmp/audio/[m
+[31m-[m
+[31m-# Local scratch audit scripts[m
+[31m-scratch/[m
+[31m-[m
+[31m-# Private local key material[m
+[31m-config/*-keys.json[m
+[31m-!config/*-keys.example.json[m
+[31m-[m
+[31m-# Local Neo4j instance files[m
+[31m-mindgraph/neo4j-mindgraph/data/[m
+[31m-mindgraph/neo4j-mindgraph/data_wired_default/[m
+[31m-mindgraph/neo4j-mindgraph/run/[m
+[31m-mindgraph/neo4j-mindgraph/logs/[m
+[31m-[m
+[31m-# Neo4j runtime state and generated artifacts[m
+[31m-back/services/mindgraph/mo-neo4j/data/[m
+[31m-back/services/mindgraph/mo-neo4j/data_wired_default/[m
+[31m-back/services/mindgraph/mo-neo4j/logs/[m
+[31m-back/services/mindgraph/mo-neo4j/run/[m
+[31m-back/services/mindgraph/mo-neo4j/lib/[m
+[31m-back/services/mindgraph/mo-neo4j/licenses/[m
+[31m-[m
+[31m-# Binary plugins are installed during provisioning, not stored in Git[m
+[31m-back/services/mindgraph/mo-neo4j/plugins/*.jar[m
+[31m-[m
+[31m-# Runtime locks, process IDs, dumps, and temporary files[m
+[31m-back/services/mindgraph/mo-neo4j/**/*.pid[m
+[31m-back/services/mindgraph/mo-neo4j/**/*.lock[m
+[31m-back/services/mindgraph/mo-neo4j/**/*.hprof[m
+[31m-back/services/mindgraph/mo-neo4j/**/*.tmp[m
+[31m-back/services/mindgraph/mo-neo4j/**/*.bak[m
+[31m-back/services/mindgraph/mo-neo4j/**/*.backup[m
+[31m-back/services/mindgraph/mo-neo4j/conf/*.bak.*[m
+[31m-[m
+[31m-# Neo4j binary distribution (installed, not source-controlled)[m
+[31m-back/services/mindgraph/mo-neo4j/bin/[m
+[31m-back/services/mindgraph/mo-neo4j/labs/[m
+[31m-back/services/mindgraph/mo-neo4j/memory_layer/[m
+[31m-back/services/mindgraph/mo-neo4j/LICENSE.txt[m
+[31m-back/services/mindgraph/mo-neo4j/LICENSES.txt[m
+[31m-back/services/mindgraph/mo-neo4j/NOTICE.txt[m
+[31m-back/services/mindgraph/mo-neo4j/README.txt[m
+[31m-back/services/mindgraph/mo-neo4j/UPGRADE.txt[m
+[31m-back/services/mindgraph/mo-neo4j/neo4j.cer[m
+[31m-back/services/mindgraph/mo-neo4j/packaging_info[m
+[31m-back/services/mindgraph/mo-neo4j/start-neo4j.*[m
+[31m-[m
+[31m-# Local credentials and machine-specific overrides[m
+[31m-back/services/mindgraph/mo-neo4j/conf/*.local[m
+[31m-back/services/mindgraph/mo-neo4j/conf/*.secret[m
+[31m-back/services/mindgraph/mo-neo4j/conf/*credentials*[m
+[31m-back/services/mindgraph/mo-neo4j/conf/*password*[m
+[31m-back/services/mindgraph/mo-neo4j/conf/*token*[m
+[31m-[m
+[31m-# Neo4j runtime data - never commit[m
+[31m-back/services/mindgraph/neo4j-mindgraph/[m
+[31m-back/services/mindgraph/neo4j-mindgraph/**/transactions/[m
+[31m-back/services/mindgraph/neo4j-mindgraph/**/databases/[m
+[31m-back/services/mindgraph/neo4j-mindgraph/**/data*/[m
+[31m-back/services/mindgraph/neo4j-mindgraph/**/logs/[m
+[31m-back/services/mindgraph/neo4j-mindgraph/**/store_lock[m
+[31m-*.transaction.db.*[m
+[32m+[m[32m# === Secrets — never commit ===[m
+[32m+[m[32m.env[m
+[32m+[m[32m.env.*[m
+[32m+[m[32m!.env.example[m
+[32m+[m[32m!.env.*.example[m
+[32m+[m[32m*.key[m
+[32m+[m[32m*.pem[m
+[32m+[m[32mid_ed25519[m
+[32m+[m[32mid_rsa[m
+[32m+[m[32mid_*[m
+[32m+[m[32m*credential*[m
+[32m+[m[32m*secret*[m
+[32m+[m[32m*token*[m
+[32m+[m[32mcore/engines/woo/new 1.txt[m
+[32m+[m[32m*.QUARANTINED[m
+[32m+[m[32m.ollama/[m
+[32m+[m[32m.aws/[m
+[32m+[m[32m.ssh/[m
+[32m+[m
+[32m+[m[32m# === Build / runtime artifacts ===[m
+[32m+[m[32mnode_modules/[m
+[32m+[m[32m.venv/[m
+[32m+[m[32m.venv-wsl/[m
+[32m+[m[32m__pycache__/[m
+[32m+[m[32m*.pyc[m
+[32m+[m[32m*.pyo[m
+[32m+[m[32mdist/[m
+[32m+[m[32mbuild/[m
+[32m+[m[32m.next/[m
+[32m+[m[32m.vercel/[m
+[32m+[m
+[32m+[m[32m# === Database / data dumps ===[m
+[32m+[m[32m*.dump[m
+[32m+[m[32m*.backup[m
+[32m+[m[32m*.bak[m
+[32m+[m[32mdata/[m
+[32m+[m[32mimport/data/[m
+[32m+[m[32m*.cypher.gz[m
+[32m+[m
+[32m+[m[32m# === Logs ===[m
+[32m+[m[32m*.log[m
+[32m+[m[32mlogs/[m
+[32m+[m
+[32m+[m[32m# === OS / IDE cruft ===[m
+[32m+[m[32m.DS_Store[m
+[32m+[m[32mThumbs.db[m
+[32m+[m[32m*:Zone.Identifier[m
+[32m+[m[32m.idea/[m
+[32m+[m[32m.vscode/[m
+[32m+[m[32m*.swp[m
+[32m+[m
+[32m+[m[32m# === Local-only ===[m
+[32m+[m[32mlocal/[m
+[32m+[m[32mscratch/[m
+[32m+[m[32mtmp/[m
+[32m+[m
+[32m+[m[32m# === Allow explicit overrides ===[m
+[32m+[m[32m!docs/data/*.json[m
+[32m+[m
+[32m+[m[32m# Runtime/generated Grid audio[m
+[32m+[m[32mgrid/.tmp/audio/[m
+[32m+[m[32m.tmp/audio/[m
+[32m+[m
+[32m+[m[32m# Local scratch audit scripts[m
+[32m+[m[32mscratch/[m
+[32m+[m
+[32m+[m[32m# Private local key material[m
+[32m+[m[32mconfig/*-keys.json[m
+[32m+[m[32m!config/*-keys.example.json[m
+[32m+[m
+[32m+[m[32m# Local Neo4j instance files[m
+[32m+[m[32mmindgraph/neo4j-mindgraph/data/[m
+[32m+[m[32mmindgraph/neo4j-mindgraph/data_wired_default/[m
+[32m+[m[32mmindgraph/neo4j-mindgraph/run/[m
+[32m+[m[32mmindgraph/neo4j-mindgraph/logs/[m
+[32m+[m
+[32m+[m[32m# Neo4j runtime state and generated artifacts[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/data/[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/data_wired_default/[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/logs/[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/run/[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/lib/[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/licenses/[m
+[32m+[m
+[32m+[m[32m# Binary plugins are installed during provisioning, not stored in Git[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/plugins/*.jar[m
+[32m+[m
+[32m+[m[32m# Runtime locks, process IDs, dumps, and temporary files[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/**/*.pid[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/**/*.lock[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/**/*.hprof[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/**/*.tmp[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/**/*.bak[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/**/*.backup[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/conf/*.bak.*[m
+[32m+[m
+[32m+[m[32m# Neo4j binary distribution (installed, not source-controlled)[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/bin/[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/labs/[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/memory_layer/[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/LICENSE.txt[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/LICENSES.txt[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/NOTICE.txt[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/README.txt[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/UPGRADE.txt[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/neo4j.cer[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/packaging_info[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/start-neo4j.*[m
+[32m+[m
+[32m+[m[32m# Local credentials and machine-specific overrides[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/conf/*.local[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/conf/*.secret[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/conf/*credentials*[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/conf/*password*[m
+[32m+[m[32mback/services/mindgraph/mo-neo4j/conf/*token*[m
+[32m+[m
+[32m+[m[32m# Neo4j runtime data - never commit[m
+[32m+[m[32mback/services/mindgraph/neo4j-mindgraph/[m
+[32m+[m[32mback/services/mindgraph/neo4j-mindgraph/**/transactions/[m
+[32m+[m[32mback/services/mindgraph/neo4j-mindgraph/**/databases/[m
+[32m+[m[32mback/services/mindgraph/neo4j-mindgraph/**/data*/[m
+[32m+[m[32mback/services/mindgraph/neo4j-mindgraph/**/logs/[m
+[32m+[m[32mback/services/mindgraph/neo4j-mindgraph/**/store_lock[m
+[32m+[m[32m*.transaction.db.*[m
