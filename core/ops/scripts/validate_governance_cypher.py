@@ -134,22 +134,43 @@ def main(argv: list[str]) -> int:
     if argv and argv[0] == "--all":
         paths = governance_files()
     else:
-        paths = [Path(a) for a in argv]
+        # A directory argument must expand, not silently skip. Treating an
+        # unreadable/unexpanded argument as "nothing to check" would exit 0
+        # having verified nothing — a passing check that asserts nothing.
+        paths = []
+        for a in argv:
+            p = Path(a)
+            if p.is_dir():
+                paths.extend(sorted(p.rglob("*.cypher")))
+            else:
+                paths.append(p)
 
     if not paths:
-        print("usage: validate_governance_cypher.py [--all | FILE ...]", file=sys.stderr)
+        print("usage: validate_governance_cypher.py [--all | FILE|DIR ...]", file=sys.stderr)
         return 2
 
     problems: list[str] = []
     scanned = 0
+    missing: list[Path] = []
     for path in paths:
         if not path.is_file():
+            missing.append(path)
             continue
         if _is_exempt(path):
             print(f"  exempt (audit path): {path}")
             continue
         scanned += 1
         problems.extend(check_file(path))
+
+    # Never exit 0 on a run that inspected nothing.
+    if missing:
+        for m in missing:
+            print(f"ERROR: not a file or directory: {m}", file=sys.stderr)
+        return 2
+    if scanned == 0:
+        print("ERROR: no governance .cypher files were scanned — refusing to "
+              "report success for an empty run.", file=sys.stderr)
+        return 2
 
     for p in problems:
         print(p)
