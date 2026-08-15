@@ -1,36 +1,39 @@
 #!/usr/bin/env python3
-"""Governance Cypher integrity guard — relationship types must be explicit.
+"""Governance Cypher constitutional guard.
 
-INVARIANT
-    Every bracketed relationship pattern must declare a relationship type.
+TWO INVARIANTS, both enforced on governance source only:
 
-WHY THIS EXISTS
-    Valid Cypher is not sufficient here. Neo4j's grammar permits a
-    relationship variable with no type expression, so `-[r]->` and even
-    `-[_TO]->` parse and execute happily — while matching EVERY relationship
-    type in the graph. In a constitutional/governance query that is not a
-    style problem, it is a correctness problem: an untyped pattern will
-    silently accept a path the constitution never authorised.
+    1. TYPED        every bracketed relationship pattern declares a type
+    2. VOCABULARY   that type is in the closed constitutional vocabulary
 
-        (a)-[:PROMOTED]->(b)      constrains to PROMOTED
-        (a)-[_TO]->(b)            matches ANY relationship
+    untyped        -> reject   (a)-[]->(b)  (a)-[r]->(b)  (a)-[_TO]->(b)
+    unknown typed  -> reject   (a)-[:PROMOTES]->(b)
+    known typed    -> accept   (a)-[:PROMOTED]->(b)
 
-    A promotion gate written with the second form can report "no illegal
-    promotions" while proving nothing at all.
+WHY BOTH
+    Valid Cypher is not sufficient. Neo4j permits a relationship variable
+    with no type expression, so `-[r]->` matches EVERY relationship type in
+    the graph: a promotion gate written that way reports "no illegal
+    promotions" while proving nothing. And `PROMOTES` for `PROMOTED` parses
+    perfectly while asserting something that does not exist — the gate runs
+    green over an empty match. Rule 1 catches the first, rule 2 the second.
 
-FAILS
-    (a)-[]->(b)          (a)-[r]->(b)          (a)-[_TO]->(b)
-PASSES
-    (a)-[:PROMOTED]->(b)  (a)-[r:ASSIGNED_TO]->(b)  (a)<-[r:AUTHORIZED_BY]-(b)
-    (a)-[r:A|B*1..3]->(b)                     (typed, incl. alternation/varlen)
+SCOPE — this matters
+    Applied repo-wide, rule 1 flags ~20 legitimate census/discovery queries
+    (`MATCH ()-[r]->() RETURN type(r), count(*)`) which MUST stay untyped.
+    Failing those would train people to bypass the hook. So the guard runs
+    on GOVERNANCE_PATHS only; deliberate untyped discovery lives under
+    core/ops/audit/ and is explicitly exempt.
+
+LIMITS
+    A regex guard, deliberately — replace with parser/AST validation later.
+    It also cannot see relationships created out-of-band against the live
+    database; that is covered by
+    core/ops/audit/neo4j/governance_vocabulary_drift.cypher
 
 USAGE
-    python3 core/ops/scripts/validate_governance_cypher.py FILE [FILE...]
-    # exit 0 = clean, exit 1 = untyped pattern found
-
-NOTE
-    This is a regex guard, deliberately. It should eventually be replaced by
-    parser/AST validation, but the invariant is worth enforcing today.
+    validate_governance_cypher.py FILE [FILE...]   # explicit files
+    validate_governance_cypher.py --all            # scan governance paths
 """
 from __future__ import annotations
 
@@ -38,78 +41,130 @@ import re
 import sys
 from pathlib import Path
 
-# Bracketed relationship patterns in either direction, or undirected.
-REL_PATTERN = re.compile(r"<-\[[^\]]*\]-|-\[[^\]]*\]->|-\[[^\]]*\]-")
+REPO_ROOT = Path(__file__).resolve().parents[3]
 
-# Comments must be stripped first: a commented-out example must not fail CI,
-# and a `//` containing a bracket must not be mistaken for a live pattern.
+# Source trees under constitutional enforcement.
+GOVERNANCE_PATHS = (
+    "core/ops/governance/",
+)
+
+# Exempt: intentionally untyped discovery/census queries.
+EXEMPT_PATHS = (
+    "core/ops/audit/",
+)
+
+try:
+    sys.path.insert(0, str(REPO_ROOT / "core" / "ops" / "governance" / "neo4j"))
+    from constitution.relationship_types import GOVERNANCE_RELATIONSHIPS
+except Exception:  # pragma: no cover - vocabulary must never be silently empty
+    print(
+        "FATAL: cannot import GOVERNANCE_RELATIONSHIPS from "
+        "core/ops/governance/neo4j/constitution/relationship_types.py",
+        file=sys.stderr,
+    )
+    raise
+
+REL_PATTERN = re.compile(r"<-\[[^\]]*\]-|-\[[^\]]*\]->|-\[[^\]]*\]-")
 BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
 LINE_COMMENT = re.compile(r"//[^\n]*")
+# Type expression: :A, r:A, r:A|B, :A*1..3, with optional whitespace.
+TYPE_TOKENS = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 
 
 def _strip_comments(text: str) -> str:
-    """Blank out comments while preserving newline positions for line numbers."""
+    """Blank comments, preserving newlines so line numbers stay correct."""
 
-    def _blank(match: re.Match) -> str:
-        return re.sub(r"[^\n]", " ", match.group(0))
+    def blank(m: re.Match) -> str:
+        return re.sub(r"[^\n]", " ", m.group(0))
 
-    return LINE_COMMENT.sub(_blank, BLOCK_COMMENT.sub(_blank, text))
+    return LINE_COMMENT.sub(blank, BLOCK_COMMENT.sub(blank, text))
 
 
-def assert_governance_relationship_types(path: Path) -> int:
-    raw_text = path.read_text(encoding="utf-8")
-    text = _strip_comments(raw_text)
+def _is_exempt(path: Path) -> bool:
+    rel = path.resolve().as_posix()
+    return any(f"/{p}" in rel or rel.startswith(p) for p in EXEMPT_PATHS)
 
-    failures: list[tuple[int, str]] = []
+
+def check_file(path: Path) -> list[str]:
+    text = _strip_comments(path.read_text(encoding="utf-8"))
+    problems: list[str] = []
 
     for match in REL_PATTERN.finditer(text):
         raw = match.group(0)
-
-        inside_match = re.search(r"\[([^\]]*)\]", raw)
-        if not inside_match:
+        inside = re.search(r"\[([^\]]*)\]", raw)
+        if not inside:
             continue
 
-        inside = inside_match.group(1).strip()
-
-        # Only the declaration portion carries the type. Inline property maps
-        # and WHERE predicates may legitimately contain ':' characters, so
-        # they must not be allowed to satisfy the check.
-        declaration = re.split(r"\{|\bWHERE\b", inside, maxsplit=1)[0].strip()
+        # Only the declaration carries the type; property maps and WHERE
+        # predicates legitimately contain ':' and must not satisfy the check.
+        declaration = re.split(r"\{|\bWHERE\b", inside.group(1), maxsplit=1)[0].strip()
+        line = text.count("\n", 0, match.start()) + 1
 
         if ":" not in declaration:
-            line = text.count("\n", 0, match.start()) + 1
-            failures.append((line, raw))
+            problems.append(f"{path}:{line}: UNTYPED GOVERNANCE RELATIONSHIP: {raw}")
+            continue
 
-    for line, pattern in failures:
-        print(f"{path}:{line}: UNTYPED GOVERNANCE RELATIONSHIP: {pattern}")
+        # Everything after the first ':' is the type expression. Variable
+        # length (*1..3) and alternation (A|B) are permitted; each named
+        # alternative must be constitutional.
+        type_expr = declaration.split(":", 1)[1]
+        type_expr = type_expr.split("*", 1)[0]
+        for token in TYPE_TOKENS.findall(type_expr):
+            if token not in GOVERNANCE_RELATIONSHIPS:
+                problems.append(
+                    f"{path}:{line}: NON-CONSTITUTIONAL RELATIONSHIP TYPE "
+                    f"{token!r} in {raw} — not in the closed vocabulary "
+                    f"({len(GOVERNANCE_RELATIONSHIPS)} members). Adding one is "
+                    f"a constitutional amendment."
+                )
 
-    return len(failures)
+    return problems
+
+
+def governance_files() -> list[Path]:
+    out: list[Path] = []
+    for base in GOVERNANCE_PATHS:
+        root = REPO_ROOT / base
+        if root.is_dir():
+            out.extend(sorted(root.rglob("*.cypher")))
+    return [p for p in out if not _is_exempt(p)]
 
 
 def main(argv: list[str]) -> int:
-    paths = [Path(a) for a in argv]
+    if argv and argv[0] == "--all":
+        paths = governance_files()
+    else:
+        paths = [Path(a) for a in argv]
+
     if not paths:
-        print("usage: validate_governance_cypher.py FILE [FILE...]", file=sys.stderr)
+        print("usage: validate_governance_cypher.py [--all | FILE ...]", file=sys.stderr)
         return 2
 
-    total = 0
+    problems: list[str] = []
     scanned = 0
     for path in paths:
         if not path.is_file():
-            print(f"{path}: not a file — skipped", file=sys.stderr)
+            continue
+        if _is_exempt(path):
+            print(f"  exempt (audit path): {path}")
             continue
         scanned += 1
-        total += assert_governance_relationship_types(path)
+        problems.extend(check_file(path))
 
-    if total:
+    for p in problems:
+        print(p)
+
+    if problems:
         print(
-            f"\nFAILED: {total} untyped relationship pattern(s) across "
-            f"{scanned} file(s). Declare an explicit :TYPE.",
+            f"\nFAILED: {len(problems)} violation(s) across {scanned} governance file(s).",
             file=sys.stderr,
         )
         return 1
 
-    print(f"OK: {scanned} file(s) scanned, all relationship patterns typed.")
+    print(
+        f"OK: {scanned} governance file(s) scanned; all relationships typed and "
+        f"within the {len(GOVERNANCE_RELATIONSHIPS)}-member constitutional vocabulary."
+    )
     return 0
 
 
