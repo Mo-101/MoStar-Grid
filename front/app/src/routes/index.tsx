@@ -1,14 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
-  KpiCard, CouncilList, GlyphPanel, CodeConduit,
-  GridFeed, GridHealth, QuickCommands, CovenantOath,
-  useGridStream, KPI, FEED_SEED, PageShell,
+  CouncilList, GlyphPanel, CodeConduit,
+  GridFeed,
+  useLiveFeed, KpiRow, PageShell,
 } from "@/components/grid/parts";
 import { AwakeningScreen } from "@/components/grid/awakening";
+import { GridSnapshotPanel } from "@/components/grid/grid-snapshot";
 import {
   ElementalCard, elementalToast, type Element,
 } from "@/components/grid/elemental-toast";
+import { elementByClassical, type ClassicalElement } from "@/lib/gridElements";
+
+// Body copy per classical element, written for the aspect (fire=spirit,
+// water=essence, air=mind, earth=body) — not for a name. The name is read
+// from GRID_ELEMENTS via elementByClassical() below so it can never rotate
+// out of sync with this copy again.
+const CLASSICAL_ORDER: ClassicalElement[] = ["fire", "water", "air", "earth"];
+const GREETING_VERB: Record<ClassicalElement, string> = {
+  fire: "IGNITED",
+  water: "FLOWING",
+  air: "BREATHING",
+  earth: "HOLDING",
+};
+const GREETING_BODY: Record<ClassicalElement, string> = {
+  fire: "Awakening · Change · Will to act.",
+  water: "Memory streams synchronised across the conduit.",
+  air: "Mind is open. The council is listening.",
+  earth: "Form is stable. The grid stands on covenant.",
+};
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,24 +43,32 @@ export const Route = createFileRoute("/")({
 const AWAKEN_KEY = "mostar.grid.awakened";
 
 function GridDashboard() {
-  const { items, pulse } = useGridStream(FEED_SEED);
+  const { items, pulse, reachable, newestAt } = useLiveFeed();
   const [awakened, setAwakened] = useState(true);
   const greeted = useRef(false);
 
   useEffect(() => {
-    const done = typeof window !== "undefined" && sessionStorage.getItem(AWAKEN_KEY) === "1";
+    const forceBoot =
+      typeof window !== "undefined"
+      && new URLSearchParams(window.location.search).get("boot") === "1";
+    const done =
+      typeof window !== "undefined"
+      && !forceBoot
+      && sessionStorage.getItem(AWAKEN_KEY) === "1";
     if (!done) setAwakened(false);
   }, []);
 
   useEffect(() => {
     if (!awakened || greeted.current) return;
     greeted.current = true;
-    const order: { e: Element; title: string; body: string }[] = [
-      { e: "fire",  title: "FIRE · ISONG IGNITED",      body: "Awakening · Change · Will to act." },
-      { e: "water", title: "WATER · M MỌNG FLOWING",    body: "Memory streams synchronised across the conduit." },
-      { e: "air",   title: "AIR · IKANG BREATHING",     body: "Mind is open. The council is listening." },
-      { e: "earth", title: "EARTH · AFIM HOLDING",      body: "Form is stable. The grid stands on covenant." },
-    ];
+    const order: { e: Element; title: string; body: string }[] = CLASSICAL_ORDER.map((cls) => {
+      const el = elementByClassical(cls);
+      return {
+        e: cls,
+        title: `${cls.toUpperCase()} · ${el.name} ${GREETING_VERB[cls]}`,
+        body: GREETING_BODY[cls],
+      };
+    });
     order.forEach((o, i) =>
       setTimeout(() => elementalToast(o.e, { title: o.title, body: o.body }), 600 + i * 1100),
     );
@@ -50,7 +78,7 @@ function GridDashboard() {
     return (
       <AwakeningScreen
         onComplete={() => {
-          try { sessionStorage.setItem(AWAKEN_KEY, "1"); } catch {}
+          try { sessionStorage.setItem(AWAKEN_KEY, "1"); } catch { }
           setAwakened(true);
         }}
       />
@@ -58,32 +86,39 @@ function GridDashboard() {
   }
 
   return (
-    <PageShell active="overview">
+    <PageShell active="overview" footerSlot={<GridSnapshotPanel />}>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-        {KPI.map((k) => <KpiCard key={k.label} k={k} />)}
+        <KpiRow />
       </div>
 
-      {/* Four elemental cards using looping gifs as backgrounds */}
+      {/* Four elemental cards using looping gifs as backgrounds. Name and
+          aspect come from GRID_ELEMENTS via elementByClassical() — never
+          hand-typed here, so they cannot rotate out of sync again. */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <ElementalCard element="fire"  title="ISONG · SPIRIT"  body="Awakening · Change · Fire"     height={130} />
-        <ElementalCard element="water" title="M MỌNG · ESSENCE" body="Pulse · Memory · Flow"        height={130} />
-        <ElementalCard element="air"   title="IKANG · MIND"    body="Logic · Will · Structure"       height={130} />
-        <ElementalCard element="earth" title="AFIM · BODY"     body="Form · Action · Creation"       height={130} />
+        {CLASSICAL_ORDER.map((cls) => {
+          const el = elementByClassical(cls);
+          return (
+            <ElementalCard
+              key={cls}
+              element={cls}
+              title={`${el.name} · ${el.aspect}`}
+              body={el.triad.join(" · ")}
+              height={130}
+            />
+          );
+        })}
       </div>
 
-      <div className="grid flex-1 grid-cols-12 gap-3">
+      <div className="grid grid-cols-12 gap-3">
         <div className="col-span-12 lg:col-span-3"><CouncilList /></div>
         <div className="col-span-12 flex flex-col gap-3 lg:col-span-6">
           <div className="min-h-[560px] flex-1"><GlyphPanel /></div>
-          <CodeConduit pulse={pulse} />
+          <CodeConduit pulse={pulse} connected={reachable} />
         </div>
         <div className="col-span-12 flex flex-col gap-3 lg:col-span-3">
-          <GridFeed items={items} />
-          <GridHealth />
-          <QuickCommands />
+          <GridFeed items={items} reachable={reachable} newestAt={newestAt} />
         </div>
       </div>
-      <CovenantOath />
     </PageShell>
   );
 }

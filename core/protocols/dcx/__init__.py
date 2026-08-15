@@ -9,6 +9,7 @@ DCX2 (Body/Mistral)  → Execution, action, operational tasks
 import logging
 import httpx
 import json
+from datetime import datetime, timezone
 from enum import Enum
 from dataclasses import dataclass
 from typing import Optional, AsyncIterator
@@ -118,6 +119,8 @@ class DCXTrinity:
             headers=headers,
         )
         self._available_models: set[str] = set()
+        self._reachable: bool = False
+        self._checked_at: Optional[str] = None
 
     async def connect(self):
         """Check which models are available in Ollama."""
@@ -128,15 +131,80 @@ class DCXTrinity:
                 self._available_models = {
                     m["name"] for m in data.get("models", [])
                 }
+                self._reachable = True
                 logger.info("Ollama models available: %s", self._available_models)
             else:
+                self._reachable = False
                 logger.warning("Ollama responded %s", resp.status_code)
         except Exception as e:
+            self._reachable = False
             logger.error("Cannot reach Ollama at %s: %s", OLLAMA_BASE_URL, e)
+        finally:
+            self._checked_at = datetime.now(timezone.utc).isoformat()
 
     @property
     def connected(self) -> bool:
-        return len(self._available_models) > 0
+        """Ollama is reachable.
+
+        This is a statement about the *transport*, not about the trinity.
+        It previously returned `len(self._available_models) > 0`, which meant
+        any unrelated model sitting in the same Ollama (e.g. another
+        project's qwen3:4b) satisfied it — so DCX could report "connected"
+        with zero DCX models pulled. Presence of the trinity is now asked
+        and answered separately via seal_state().
+        """
+        return self._reachable
+
+    @property
+    def expected_models(self) -> dict[str, str]:
+        """Layer -> model tag. The trinity is defined by all three."""
+        return {layer.value: self._models[layer] for layer in DCXLayer}
+
+    @property
+    def present_models(self) -> list[str]:
+        return sorted(
+            m for m in self.expected_models.values() if m in self._available_models
+        )
+
+    @property
+    def missing_models(self) -> list[str]:
+        return sorted(
+            m for m in self.expected_models.values() if m not in self._available_models
+        )
+
+    def seal_state(self) -> dict:
+        """Presence-only trinity state. Cheap — performs no generation.
+
+        This can never return SEALED. A pulled model is not a proven-working
+        model, so sealing requires a live per-model validation round-trip,
+        which is the Grid API's _probe_dcx (deep health) responsibility.
+        Presence is evidence; it is not proof. Callers must not promote
+        PARTIAL or LOADED to SEALED.
+        """
+        missing = self.missing_models
+        present = self.present_models
+
+        if not self._reachable:
+            state = "UNREACHABLE"
+        elif not present:
+            state = "ABSENT"
+        elif missing:
+            state = "PARTIAL"
+        else:
+            state = "LOADED"
+
+        return {
+            "state": state,
+            "sealed": False,
+            "seal_requires": "live validation of all three trinity models",
+            "reachable": self._reachable,
+            "expected_models": self.expected_models,
+            "present_models": present,
+            "missing_models": missing,
+            "validated_models": [],
+            "failed_models": [],
+            "checked_at": self._checked_at,
+        }
 
     def route(self, query: str) -> DCXLayer:
         """Determine which consciousness layer handles this query."""

@@ -158,28 +158,47 @@ export function GridVoiceConsole() {
       let res: SpeakResponse | null = null;
       if (backend !== "mock") {
         res = await speak({ text: dcxText, persona: finalPersona });
-        log({
-          kind: "voice",
-          text: `Generated · ${(res.duration_ms / 1000).toFixed(1)}s`,
-          meta: `${res.engine} · ${res.persona}${res.mock ? " · mock" : ""}`,
-        });
       } else {
         log({ kind: "system", text: "Mock backend — no audio synthesized." });
       }
 
-      // 4. Play if we got a URL
+      // 4. Play if we got a URL. The waveform's duration comes from the
+      // audio element's own measured metadata whenever one exists — never
+      // from a server-reported number rendered on faith. `audio_ms` /
+      // `synthesis_ms` are logged as labelled evidence, not as the ground
+      // truth for playback timing.
       if (res?.audio_url) {
         setPlaying(true);
         const a = audioRef.current;
         if (a) {
           a.src = res.audio_url;
           a.onended = () => setPlaying(false);
+          await new Promise<void>((resolve) => {
+            const onMeta = () => {
+              a.removeEventListener("loadedmetadata", onMeta);
+              log({
+                kind: "voice",
+                text: `Generated · ${a.duration.toFixed(1)}s measured`,
+                meta: `${res.engine} · ${res.persona}${res.mock ? " · mock" : ""}${
+                  res.synthesis_ms != null ? ` · ${(res.synthesis_ms / 1000).toFixed(1)}s synthesis` : ""
+                }`,
+              });
+              resolve();
+            };
+            a.addEventListener("loadedmetadata", onMeta);
+          });
           await a.play().catch((e) => { setError(`Audio play failed: ${e.message}`); setPlaying(false); });
         }
       } else if (res) {
-        // Simulate playback duration so waveform reacts even without audio_url
+        log({
+          kind: "voice",
+          text: res.audio_ms != null ? `Generated · ${(res.audio_ms / 1000).toFixed(1)}s` : "Generated · no audio",
+          meta: `${res.engine} · ${res.persona}${res.mock ? " · mock" : ""}`,
+        });
+        // No audio element to measure against — mime the waveform for a
+        // bounded window rather than trusting an unmeasured duration.
         setPlaying(true);
-        window.setTimeout(() => setPlaying(false), res.duration_ms);
+        window.setTimeout(() => setPlaying(false), res.audio_ms ?? 1_500);
       }
     } catch (e) {
       const msg = (e as Error).message;

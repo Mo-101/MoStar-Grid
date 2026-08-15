@@ -1,28 +1,367 @@
-.boot-screen {
+.awakening {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-rows: auto minmax(220px, 1fr) auto;
+  overflow: hidden;
+  padding: 2.5rem clamp(1.25rem, 4vw, 4rem) 2rem;
+  background: oklch(0.075 0.025 270);
+  color: oklch(0.9 0.025 235);
   opacity: 1;
-  transform: scale(1);
-  transition:
-    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 420ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.boot-screen--exit {
+.awakening[data-exiting="true"] {
   opacity: 0;
-  transform: scale(1.012);
   pointer-events: none;
 }
 
-.boot-image {
+.awakening__sky {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.62;
+}
+
+.awakening__veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    52% 48% at 50% 45%,
+    oklch(0.1 0.03 270 / 0.18) 0%,
+    oklch(0.09 0.04 270 / 0.78) 72%,
+    oklch(0.065 0.03 270 / 0.96) 100%
+  );
+}
+
+.awakening__header,
+.awakening__sigil,
+.awakening__console {
+  position: relative;
+  z-index: 1;
+}
+
+.awakening__header {
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  text-align: center;
+}
+
+.awakening__header span {
+  color: var(--color-neon-cyan);
+  font: 600 0.625rem/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.42em;
+}
+
+.awakening__header strong {
+  color: var(--color-neon-gold);
+  font-size: 1.45rem;
+  letter-spacing: 0.34em;
+  text-shadow: 0 0 20px color-mix(in oklab, var(--color-neon-gold) 35%, transparent);
+}
+
+.awakening__sigil {
+  align-self: center;
+  justify-self: center;
+  width: min(48vh, 42vw, 404px);
+  filter: drop-shadow(0 0 24px oklch(0.72 0.13 70 / 0.16));
+}
+
+.awakening__sigil > svg {
   display: block;
-  width: min(58vw, 404px);
-  max-width: 404px;
+  width: 100%;
   height: auto;
-  margin: 0 auto;
-  filter: drop-shadow(0 0 24px rgba(244, 141, 15, 0.18));
+  overflow: visible;
+}
+
+.awakening__sigil .boot-progress {
+  stroke-dashoffset: var(--boot-dashoffset, 100);
+  transition: stroke-dashoffset 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.awakening__sigil .boot-node,
+.awakening__sigil .boot-icon {
+  opacity: 0.2;
+  transition: opacity 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.awakening__sigil .boot-halo {
+  opacity: 0.08;
+  transition: opacity 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    stroke 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.boot-node-0--active [data-node-index="0"],
+.boot-node-1--active [data-node-index="1"],
+.boot-node-2--active [data-node-index="2"],
+.boot-node-3--active [data-node-index="3"],
+.boot-node-4--active [data-node-index="4"],
+.boot-node-5--active [data-node-index="5"],
+.boot-node-6--active [data-node-index="6"],
+.boot-node-7--active [data-node-index="7"] {
+  opacity: 1;
+}
+
+.boot-node-0--active .boot-halo[data-node-index="0"],
+.boot-node-1--active .boot-halo[data-node-index="1"],
+.boot-node-2--active .boot-halo[data-node-index="2"],
+.boot-node-3--active .boot-halo[data-node-index="3"],
+.boot-node-4--active .boot-halo[data-node-index="4"],
+.boot-node-5--active .boot-halo[data-node-index="5"],
+.boot-node-6--active .boot-halo[data-node-index="6"],
+.boot-node-7--active .boot-halo[data-node-index="7"] {
+  opacity: 0.72;
+  stroke: var(--color-neon-gold);
+  animation: awakening-active-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes awakening-active-pulse {
+  0%, 100% { opacity: 0.42; }
+  50% { opacity: 0.9; }
+}
+
+.boot-node-0--sealed [data-node-index="0"],
+.boot-node-1--sealed [data-node-index="1"],
+.boot-node-2--sealed [data-node-index="2"],
+.boot-node-3--sealed [data-node-index="3"],
+.boot-node-4--sealed [data-node-index="4"],
+.boot-node-5--sealed [data-node-index="5"],
+.boot-node-6--sealed [data-node-index="6"],
+.boot-node-7--sealed [data-node-index="7"] {
+  opacity: 1;
+}
+
+.boot-node-0--degraded [data-node-index="0"],
+.boot-node-1--degraded [data-node-index="1"],
+.boot-node-2--degraded [data-node-index="2"],
+.boot-node-3--degraded [data-node-index="3"],
+.boot-node-4--degraded [data-node-index="4"],
+.boot-node-5--degraded [data-node-index="5"],
+.boot-node-6--degraded [data-node-index="6"],
+.boot-node-7--degraded [data-node-index="7"] {
+  opacity: 0.72;
+  filter: sepia(1) saturate(1.6) hue-rotate(338deg);
+}
+
+.boot-node-0--sealed .boot-halo[data-node-index="0"],
+.boot-node-1--sealed .boot-halo[data-node-index="1"],
+.boot-node-2--sealed .boot-halo[data-node-index="2"],
+.boot-node-3--sealed .boot-halo[data-node-index="3"],
+.boot-node-4--sealed .boot-halo[data-node-index="4"],
+.boot-node-5--sealed .boot-halo[data-node-index="5"],
+.boot-node-6--sealed .boot-halo[data-node-index="6"],
+.boot-node-7--sealed .boot-halo[data-node-index="7"] {
+  opacity: 0.72;
+  stroke: var(--color-neon-cyan);
+}
+
+.boot-node-0--degraded .boot-halo[data-node-index="0"],
+.boot-node-1--degraded .boot-halo[data-node-index="1"],
+.boot-node-2--degraded .boot-halo[data-node-index="2"],
+.boot-node-3--degraded .boot-halo[data-node-index="3"],
+.boot-node-4--degraded .boot-halo[data-node-index="4"],
+.boot-node-5--degraded .boot-halo[data-node-index="5"],
+.boot-node-6--degraded .boot-halo[data-node-index="6"],
+.boot-node-7--degraded .boot-halo[data-node-index="7"] {
+  opacity: 0.6;
+  stroke: oklch(0.72 0.14 62);
+}
+
+.awakening__console {
+  align-self: end;
+  justify-self: center;
+  width: min(760px, 100%);
+  min-height: 13rem;
+}
+
+.awakening__preparing,
+.awakening__caption {
+  margin: 0 0 0.8rem;
+  color: var(--color-neon-cyan);
+  font: 500 0.75rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.26em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.awakening__caption {
+  animation: awakening-caption-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes awakening-caption-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.awakening__begin {
+  display: block;
+  margin: 2rem auto 0;
+  min-height: 44px;
+  border: 1px solid color-mix(in oklab, var(--color-neon-cyan) 58%, transparent);
+  border-radius: 0.375rem;
+  background: oklch(0.105 0.035 270 / 0.9);
+  padding: 0.8rem 2rem;
+  color: var(--color-neon-cyan);
+  font: 600 0.72rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.24em;
+  cursor: pointer;
+  transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.awakening__begin:hover,
+.awakening__begin:focus-visible {
+  border-color: var(--color-neon-cyan);
+  background: oklch(0.15 0.045 250 / 0.94);
+  outline: none;
+}
+
+.awakening__begin:focus-visible,
+.awakening__sound:focus-visible {
+  box-shadow: 0 0 0 2px oklch(0.72 0.12 220 / 0.34);
+}
+
+.awakening__progress {
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: oklch(0.19 0.035 250 / 0.72);
+}
+
+.awakening__progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-neon-cyan);
+  box-shadow: 0 0 16px var(--color-neon-cyan);
+  transform-origin: left center;
+}
+
+.awakening__manifest {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.3rem 0.65rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  font: 500 0.66rem/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.awakening__manifest li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 1.75rem;
+  gap: 0.55rem;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid oklch(0.47 0.07 240 / 0.18);
+  border-radius: 0.3rem;
+  color: oklch(0.58 0.025 240);
+}
+
+.awakening__manifest li > span:nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.awakening__manifest li strong {
+  color: inherit;
+  font-size: 0.54rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.awakening__manifest li em {
+  grid-column: 2 / -1;
+  color: oklch(0.71 0.13 62);
+  font-size: 0.53rem;
+  font-style: normal;
+  letter-spacing: 0.08em;
+}
+
+.awakening__glyph {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.awakening__manifest li[data-state="PENDING"] .awakening__glyph {
+  animation: awakening-awaiting 1.6s ease-in-out infinite;
+}
+
+.awakening__manifest li[data-state="ACTIVE"] {
+  border-color: oklch(0.78 0.15 85 / 0.42);
+  color: var(--color-neon-gold);
+}
+
+.awakening__manifest li[data-state="ACTIVE"] .awakening__glyph {
+  animation: awakening-awaiting 0.8s ease-in-out infinite;
+}
+
+.awakening__manifest li[data-state="SEALED"] {
+  border-color: oklch(0.73 0.13 220 / 0.36);
+  color: var(--color-neon-cyan);
+}
+
+.awakening__manifest li[data-state="DEGRADED"] {
+  border-color: oklch(0.66 0.14 58 / 0.38);
+  color: oklch(0.72 0.14 62);
+}
+
+@keyframes awakening-awaiting {
+  0%, 100% { opacity: 0.28; }
+  50% { opacity: 0.9; }
+}
+
+.awakening__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.65rem;
+  color: oklch(0.57 0.025 240);
+  font: 500 0.58rem/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.12em;
+}
+
+.awakening__sound {
+  min-height: 32px;
+  border: 0;
+  background: transparent;
+  padding: 0 0.25rem;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
 }
 
 @media (max-width: 640px) {
-  .boot-image {
-    width: min(82vw, 360px);
+  .awakening {
+    grid-template-rows: auto minmax(180px, 0.8fr) auto;
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .awakening__header span { letter-spacing: 0.22em; }
+  .awakening__header strong { font-size: 1.1rem; letter-spacing: 0.2em; }
+  .awakening__sigil { width: min(42vh, 78vw, 340px); }
+  .awakening__manifest { grid-template-columns: 1fr; }
+  .awakening__console { min-height: 20rem; }
+  .awakening__footer { flex-direction: column; align-items: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .awakening,
+  .awakening__caption,
+  .awakening__manifest li,
+  .awakening__glyph,
+  .awakening__sigil * {
+    animation: none !important;
+    transition: none !important;
   }
 }

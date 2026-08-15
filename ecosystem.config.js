@@ -171,13 +171,17 @@ module.exports = {
 
     {
       name: 'mostar-grid',
-      script: `${GRID_ROOT}/.venv/bin/python`,
+      script: '/bin/bash',
       // Loopback-only: reachability, not just authorization (First Wound
       // doctrine, mostar-doorman/README.md). Only the cockpit-app aggregator
       // and other local processes on this box need this port; the doorman
       // tunnel never proxies directly to it.
-      args: '-m uvicorn back.services.grid.api:app --host 127.0.0.1 --port 41010',
+      args: [
+        '-lc',
+        `exec ${GRID_ROOT}/.venv/bin/dotenv -f /home/idona/MoStar/_services/runtime/.env run -- /bin/bash -lc 'unset NEO4J_URI NEO4J_BOLT_URL NEO4J_HTTP_URL NEO4J_USERNAME NEO4J_USER NEO4J_PASSWORD NEO4J_DATABASE; exec ${GRID_ROOT}/.venv/bin/python -m uvicorn back.services.grid.api:app --host 127.0.0.1 --port 41010'`,
+      ],
       cwd: GRID_ROOT,
+      env_file: '/home/idona/MoStar/_services/runtime/.env',
       env: {
         PYTHONPATH: GRID_PYTHONPATH,
         GRID_PORT: '41010',
@@ -192,8 +196,12 @@ module.exports = {
       },
       watch: false,
       autorestart: true,
+      min_uptime: '30s',
       max_restarts: 5,
-      restart_delay: 3000,
+      restart_delay: 5000,
+      exp_backoff_restart_delay: 2000,
+      kill_timeout: 10000,
+      listen_timeout: 15000,
     },
 
     {
@@ -256,7 +264,7 @@ module.exports = {
     {
       name: 'mostar-frontend',
       script: '/bin/bash',
-      args: ['-lc', 'export NVM_DIR=/home/idona/.nvm; . /home/idona/.nvm/nvm.sh; nvm use 20; npm run dev'],
+      args: ['-lc', 'export NVM_DIR=/home/idona/.nvm; . /home/idona/.nvm/nvm.sh; nvm use 20; npm run dev -- --host 0.0.0.0 --port 41012'],
       interpreter: 'none',
       cwd: `${GRID_ROOT}/front/app`,
       env: {

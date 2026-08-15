@@ -1,0 +1,110 @@
+# MoStar Grid — app-service containers
+#
+# Lives at /opt/mostar/grid/docker-compose.yml on the VPS (rsynced by
+# deploy_grid_vps.sh), project name "grid" (from the directory name) so it
+# groups alongside the pre-existing `backend` (mostar-backend, legacy
+# core_engine build, port 8001) container in Hostinger's Docker Manager.
+# That container is NOT defined here — it's managed separately and this
+# file must never touch it.
+#
+# network_mode: host is used deliberately: Neo4j and Postgres run natively
+# on the VPS (PM2-managed, see deploy_grid_vps.sh) and are only reachable
+# on 127.0.0.1, matching how the PM2-managed services already reach them.
+# Ports below are the same ones the PM2 processes use — stop the matching
+# PM2 process before starting its container equivalent to avoid a bind
+# conflict (`pm2 stop mostar-grid mostar-voice mostar-frontend`).
+
+services:
+  grid-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.grid-api
+    container_name: mostar-grid-api
+    network_mode: host
+    env_file:
+      - .env
+      # VPS-only, gitignored — holds DATABASE_URL with the idona Postgres
+      # password. Unix socket auth from the old PM2 ecosystem config isn't
+      # reachable from inside the container (filesystem isn't shared under
+      # network_mode: host, only the network namespace is), so this uses TCP
+      # with scram-sha-256 auth against the same local Postgres instance
+      # instead. Regenerate via deploy/set_pg_pass.sh if this file is lost.
+      - .env.pg.local
+    environment:
+      PORT: "41010"
+      # localhost:41013 is the local Vite dev server (front/app/_start_dev.sh)
+      # run against this same VPS backend over an SSH tunnel — not baked
+      # into the app's hardcoded allowlist since it's a dev-only origin.
+      CORS_EXTRA_ORIGINS: "https://grid.mostarsystems.com,http://localhost:41013,http://127.0.0.1:41013"
+    restart: unless-stopped
+
+  voice:
+    build:
+      context: .
+      dockerfile: Dockerfile.voice
+    container_name: mostar-voice
+    network_mode: host
+    env_file:
+      - .env
+    environment:
+      PORT: "41071"
+      GRID_API_URL: "http://127.0.0.1:41010"
+    restart: unless-stopped
+
+  mcp-gateway:
+    # Reuses the grid-api image (same repo, same PYTHONPATH — mcp_gateway is
+    # just another importable package under back/services) instead of
+    # building a second copy of the same context.
+    image: grid-grid-api
+    container_name: mostar-mcp-gateway
+    network_mode: host
+    env_file:
+      - .env
+    environment:
+      MCP_TRANSPORT: sse
+      MCP_HOST: "127.0.0.1"
+      MCP_PORT: "41020"
+      GRID_API_URL: "http://127.0.0.1:41010"
+    command: ["uvicorn", "mcp_gateway.server:app", "--host", "127.0.0.1", "--port", "41020"]
+    restart: unless-stopped
+    depends_on:
+      - grid-api
+
+  neo4j-browser:
+    # Neo4j 2026.x dropped the bundled /browser/ web UI from the native
+    # (apt) distribution mostar-neo4j runs from. Rather than pull an
+    # unvetted third-party "neo4j-browser" image, this runs the official
+    # trusted `neo4j` image version-matched to mostar-neo4j purely to serve
+    # its bundled Browser webapp — NEO4J_AUTH=none and no volume, since its
+    # own embedded database is never used. Open the UI and connect it
+    # manually to bolt://localhost:47687 (mostar-neo4j, already tunneled);
+    # the bolt driver runs client-side in the browser tab and talks
+    # straight to the real instance.
+    image: neo4j:2026.07.1-community
+    container_name: mostar-neo4j-browser-ui
+    ports:
+      - "127.0.0.1:47476:7474"
+    environment:
+      NEO4J_AUTH: "none"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./front/app
+      dockerfile: Dockerfile
+      args:
+        # Loopback defaults so the container works today through an SSH
+        # tunnel while DNS for the public subdomains isn't live yet.
+        # Rebuild with --build-arg pointing at the public domain once
+        # grid./api./voice.mostarsystems.com resolve.
+        VITE_GRID_API_BASE: "http://127.0.0.1:41010"
+        VITE_MOSTAR_VOICE_URL: "http://127.0.0.1:41071"
+        VITE_ENABLE_LIVE_GRID_SERVICES: "true"
+    container_name: mostar-frontend
+    network_mode: host
+    environment:
+      PORT: "41012"
+    restart: unless-stopped
+    depends_on:
+      - grid-api
+      - voice

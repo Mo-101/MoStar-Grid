@@ -1,0 +1,32 @@
+# Server-owned persistent state that deploy syncs must NEVER overwrite or
+# delete on the VPS, regardless of what exists (or doesn't) in the git repo
+# at sync time. rsync --exclude-from this file.
+#
+# Incident 2026-08-15: an rsync of back/ (to push runtime_health.py) used a
+# narrower ad-hoc exclude list than this script's, and clobbered the VPS's
+# neo4j.conf with the local dev machine's copy — flipping Neo4j's data
+# directory to a stale path and taking the live graph offline. This file
+# exists so that mistake has exactly one place left to happen: here.
+#
+# Anything added under back/services/mindgraph/mo-neo4j/ on the VPS after
+# first boot (conf, data, logs, licenses, plugins, run) is runtime state,
+# not application code, and must be excluded even if a matching path also
+# exists in the repo checkout.
+back/services/mindgraph/mo-neo4j/conf/
+back/services/mindgraph/mo-neo4j/data/
+back/services/mindgraph/mo-neo4j/logs/
+back/services/mindgraph/mo-neo4j/licenses/
+back/services/mindgraph/mo-neo4j/plugins/
+back/services/mindgraph/mo-neo4j/run/
+
+# Secrets — never sourced from a local machine's copy, VPS-only.
+.env
+.env.*
+
+# Standard build/VCS hygiene.
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+.git/
+.pytest_cache/

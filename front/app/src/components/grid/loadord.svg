@@ -1,20 +1,10 @@
 <svg id="mostar-boot-loader" width="404" height="410" viewBox="0 0 404 410" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="MoStar sequential ring boot loader">
 <style>
-  #mostar-boot-loader {
-    --boot-step: 1s;
-    overflow: visible;
-  }
+  #mostar-boot-loader { overflow: visible; }
 
   .boot-node,
   .boot-icon {
     opacity: 0.22;
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: nodeBoot 0.82s cubic-bezier(.2,.86,.25,1.25) var(--delay) both;
-  }
-
-  .boot-icon {
-    animation-name: iconBoot;
   }
 
   .boot-halo {
@@ -22,9 +12,6 @@
     fill: none;
     stroke: #ffb12b;
     stroke-width: 2.2;
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: haloBoot 0.95s ease-out var(--delay) both;
     filter: url(#bootGlow);
     pointer-events: none;
   }
@@ -36,7 +23,6 @@
     stroke-linecap: round;
     stroke-dasharray: 100;
     stroke-dashoffset: 100;
-    animation: ringLoad 8s linear forwards;
     filter: url(#bootGlow);
     pointer-events: none;
   }
@@ -52,53 +38,6 @@
     opacity: 1;
   }
 
-  @keyframes ringLoad {
-    from { stroke-dashoffset: 100; opacity: 0.65; }
-    to   { stroke-dashoffset: 0; opacity: 1; }
-  }
-
-  @keyframes nodeBoot {
-    0%   { opacity: 0.22; transform: scale(1); }
-    42%  { opacity: 1; transform: scale(1); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-
-  @keyframes iconBoot {
-    0%   { opacity: 0.18; transform: scale(1) rotate(0deg); }
-    48%  { opacity: 1; transform: scale(1) rotate(0deg); }
-    100% { opacity: 1; transform: scale(1) rotate(0deg); }
-  }
-
-  @keyframes haloBoot {
-    0%   { opacity: 0; transform: scale(0.65); stroke-width: 4; }
-    38%  { opacity: 1; transform: scale(1.08); stroke-width: 2.6; }
-    100% { opacity: 0.16; transform: scale(1); stroke-width: 1.4; }
-  }
-
-  @keyframes coreBoot {
-    0%   { opacity: 0.35; transform: scale(0.9); }
-    45%  { opacity: 1; transform: scale(1.08); }
-    72%  { opacity: 0.88; transform: scale(0.98); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-
-  @keyframes coreSymbolBoot {
-    0%   { opacity: 0.22; transform: scale(0.72) rotate(-10deg); }
-    55%  { opacity: 1; transform: scale(1.1) rotate(3deg); }
-    100% { opacity: 1; transform: scale(1) rotate(0deg); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .boot-node,
-    .boot-icon,
-    .boot-halo,
-    .boot-progress,
-    .boot-core-shell,
-    .boot-core-symbol {
-      animation-duration: 0.001ms !important;
-      animation-delay: 0ms !important;
-    }
-  }
 </style>
 <g class="boot-core-shell">
 <ellipse cx="196.716" cy="204.899" rx="103.615" ry="109.924" transform="rotate(-0.271425 196.716 204.899)" fill="black"/>
@@ -109,7 +48,7 @@
 <circle cx="196.372" cy="203.302" r="73.5" transform="rotate(-0.271425 196.372 203.302)" fill="url(#paint1_linear_2006_41)" fill-opacity="0.5" style="mix-blend-mode:overlay"/>
 <circle cx="196.372" cy="203.302" r="73.5" transform="rotate(-0.271425 196.372 203.302)" stroke="url(#paint2_linear_2006_41)" style="mix-blend-mode:overlay" stroke-width="3"/>
 </g>
-<g class="boot-node" style="--delay:0s" filter="url(#filter2_di_2006_41)">
+<g class="boot-node" data-node-index="0" filter="url(#filter2_di_2006_41)">
 <ellipse cx="195.722" cy="35.3291" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 195.722 35.3291)" fill="#817C72" fill-opacity="0.24" shape-rendering="crispEdges"/>
 <ellipse cx="195.722" cy="35.3291" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 195.722 35.3291)" fill="url(#paint3_radial_2006_41)" fill-opacity="0.2" shape-rendering="crispEdges"/>
 <ellipse cx="195.722" cy="35.3291" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 195.722 35.3291)" stroke="#FF8D28" shape-rendering="crispEdges"/>
@@ -118,77 +57,77 @@
 <path d="M196.113 37.0906C286.079 36.6644 359.272 111.259 359.71 203.585C360.147 295.911 287.663 371.195 197.697 371.621C107.732 372.047 34.5378 297.453 34.1002 205.128C33.6628 112.801 106.147 37.5169 196.113 37.0906Z" stroke="#F4B62C" stroke-opacity="0.28" stroke-width="4"/>
 </g>
 
-<!-- Sequential boot progress. One full circuit = 8 seconds. -->
+<!-- Progress is supplied by BootConductor from measured narration time. -->
 <g id="boot-sequence-overlay" aria-hidden="true">
   <path class="boot-progress" pathLength="100" d="M196.113 37.0906C286.079 36.6644 359.272 111.259 359.71 203.585C360.147 295.911 287.663 371.195 197.697 371.621C107.732 372.047 34.5378 297.453 34.1002 205.128C33.6628 112.801 106.147 37.5169 196.113 37.0906Z"/>
 
-  <circle class="boot-halo" style="--delay:0s" cx="195.722" cy="35.3291" r="38"/>
-  <circle class="boot-halo" style="--delay:1s" cx="316.995" cy="92.7552" r="38"/>
-  <circle class="boot-halo" style="--delay:2s" cx="358.52" cy="203.56" r="38"/>
-  <circle class="boot-halo" style="--delay:3s" cx="316.066" cy="318.762" r="38"/>
-  <circle class="boot-halo" style="--delay:4s" cx="198.309" cy="370.321" r="38"/>
-  <circle class="boot-halo" style="--delay:5s" cx="79.0684" cy="319.885" r="38"/>
-  <circle class="boot-halo" style="--delay:6s" cx="34.5241" cy="205.095" r="38"/>
-  <circle class="boot-halo" style="--delay:7s" cx="70.0168" cy="97.9253" r="38"/>
+  <circle class="boot-halo" data-node-index="0" cx="195.722" cy="35.3291" r="38"/>
+  <circle class="boot-halo" data-node-index="1" cx="316.995" cy="92.7552" r="38"/>
+  <circle class="boot-halo" data-node-index="2" cx="358.52" cy="203.56" r="38"/>
+  <circle class="boot-halo" data-node-index="3" cx="316.066" cy="318.762" r="38"/>
+  <circle class="boot-halo" data-node-index="4" cx="198.309" cy="370.321" r="38"/>
+  <circle class="boot-halo" data-node-index="5" cx="79.0684" cy="319.885" r="38"/>
+  <circle class="boot-halo" data-node-index="6" cx="34.5241" cy="205.095" r="38"/>
+  <circle class="boot-halo" data-node-index="7" cx="70.0168" cy="97.9253" r="38"/>
 
 </g>
-<g class="boot-node" style="--delay:3s" filter="url(#filter4_di_2006_41)">
+<g class="boot-node" data-node-index="3" filter="url(#filter4_di_2006_41)">
 <ellipse cx="316.066" cy="318.762" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 316.066 318.762)" fill="#817C72" fill-opacity="0.24" shape-rendering="crispEdges"/>
 <ellipse cx="316.066" cy="318.762" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 316.066 318.762)" fill="url(#paint4_radial_2006_41)" fill-opacity="0.2" shape-rendering="crispEdges"/>
 <ellipse cx="316.066" cy="318.762" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 316.066 318.762)" stroke="#FF8D28" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-icon" style="--delay:3s" filter="url(#filter5_d_2006_41)">
+<g class="boot-icon" data-node-index="3" filter="url(#filter5_d_2006_41)">
 <rect x="277.479" y="284.593" width="76" height="76" transform="rotate(-0.271425 277.479 284.593)" fill="url(#pattern0_2006_41)" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-node" style="--delay:5s" filter="url(#filter6_di_2006_41)">
+<g class="boot-node" data-node-index="5" filter="url(#filter6_di_2006_41)">
 <ellipse cx="79.0684" cy="319.885" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 79.0684 319.885)" fill="#817C72" fill-opacity="0.24" shape-rendering="crispEdges"/>
 <ellipse cx="79.0684" cy="319.885" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 79.0684 319.885)" fill="url(#paint5_radial_2006_41)" fill-opacity="0.2" shape-rendering="crispEdges"/>
 <ellipse cx="79.0684" cy="319.885" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 79.0684 319.885)" stroke="#FF8D28" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-icon" style="--delay:5s" filter="url(#filter7_d_2006_41)">
+<g class="boot-icon" data-node-index="5" filter="url(#filter7_d_2006_41)">
 <rect width="62" height="62" transform="matrix(0.999989 -0.00473724 -0.00473724 -0.999989 47.7851 349.682)" fill="url(#pattern1_2006_41)"/>
 </g>
-<g class="boot-node" style="--delay:6s" filter="url(#filter8_di_2006_41)">
+<g class="boot-node" data-node-index="6" filter="url(#filter8_di_2006_41)">
 <ellipse cx="34.5241" cy="205.095" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 34.5241 205.095)" fill="#817C72" fill-opacity="0.24" shape-rendering="crispEdges"/>
 <ellipse cx="34.5241" cy="205.095" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 34.5241 205.095)" fill="url(#paint6_radial_2006_41)" fill-opacity="0.2" shape-rendering="crispEdges"/>
 <ellipse cx="34.5241" cy="205.095" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 34.5241 205.095)" stroke="#FF8D28" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-icon" style="--delay:6s" filter="url(#filter9_d_2006_41)">
+<g class="boot-icon" data-node-index="6" filter="url(#filter9_d_2006_41)">
 <rect x="10.9755" y="178.855" width="46" height="46" transform="rotate(-0.271425 10.9755 178.855)" fill="url(#pattern2_2006_41)" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-node" style="--delay:1s" filter="url(#filter10_di_2006_41)">
+<g class="boot-node" data-node-index="1" filter="url(#filter10_di_2006_41)">
 <ellipse cx="316.995" cy="92.7552" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 316.995 92.7552)" fill="#817C72" fill-opacity="0.24" shape-rendering="crispEdges"/>
 <ellipse cx="316.995" cy="92.7552" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 316.995 92.7552)" fill="url(#paint7_radial_2006_41)" fill-opacity="0.2" shape-rendering="crispEdges"/>
 <ellipse cx="316.995" cy="92.7552" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 316.995 92.7552)" stroke="#FF8D28" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-icon" style="--delay:1s" filter="url(#filter11_d_2006_41)">
+<g class="boot-icon" data-node-index="1" filter="url(#filter11_d_2006_41)">
 <rect x="286.432" y="63.5485" width="59" height="59" transform="rotate(-0.271425 286.432 63.5485)" fill="url(#pattern3_2006_41)" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-icon" style="--delay:0s" filter="url(#filter12_d_2006_41)">
+<g class="boot-icon" data-node-index="0" filter="url(#filter12_d_2006_41)">
 <rect x="166.159" y="6.11765" width="59" height="59" transform="rotate(-0.271425 166.159 6.11765)" fill="url(#pattern4_2006_41)" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-node" style="--delay:7s" filter="url(#filter13_di_2006_41)">
+<g class="boot-node" data-node-index="7" filter="url(#filter13_di_2006_41)">
 <ellipse cx="70.0168" cy="97.9253" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 70.0168 97.9253)" fill="#817C72" fill-opacity="0.24" shape-rendering="crispEdges"/>
 <ellipse cx="70.0168" cy="97.9253" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 70.0168 97.9253)" fill="url(#paint8_radial_2006_41)" fill-opacity="0.2" shape-rendering="crispEdges"/>
 <ellipse cx="70.0168" cy="97.9253" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 70.0168 97.9253)" stroke="#FF8D28" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-icon" style="--delay:7s" filter="url(#filter14_d_2006_41)">
+<g class="boot-icon" data-node-index="7" filter="url(#filter14_d_2006_41)">
 <rect x="37.4446" y="66.7281" width="65" height="65" transform="rotate(-0.271425 37.4446 66.7281)" fill="url(#pattern5_2006_41)" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-node" style="--delay:4s" filter="url(#filter15_di_2006_41)">
+<g class="boot-node" data-node-index="4" filter="url(#filter15_di_2006_41)">
 <ellipse cx="198.309" cy="370.321" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 198.309 370.321)" fill="#817C72" fill-opacity="0.24" shape-rendering="crispEdges"/>
 <ellipse cx="198.309" cy="370.321" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 198.309 370.321)" fill="url(#paint9_radial_2006_41)" fill-opacity="0.2" shape-rendering="crispEdges"/>
 <ellipse cx="198.309" cy="370.321" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 198.309 370.321)" stroke="#FF8D28" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-icon" style="--delay:4s" filter="url(#filter16_d_2006_41)">
+<g class="boot-icon" data-node-index="4" filter="url(#filter16_d_2006_41)">
 <rect x="168.751" y="342.109" width="57" height="57" transform="rotate(-0.271425 168.751 342.109)" fill="url(#pattern6_2006_41)" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-node" style="--delay:2s" filter="url(#filter17_di_2006_41)">
+<g class="boot-node" data-node-index="2" filter="url(#filter17_di_2006_41)">
 <ellipse cx="358.52" cy="203.56" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 358.52 203.56)" fill="#817C72" fill-opacity="0.24" shape-rendering="crispEdges"/>
 <ellipse cx="358.52" cy="203.56" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 358.52 203.56)" fill="url(#paint10_radial_2006_41)" fill-opacity="0.2" shape-rendering="crispEdges"/>
 <ellipse cx="358.52" cy="203.56" rx="33.4241" ry="34.3511" transform="rotate(-0.271425 358.52 203.56)" stroke="#FF8D28" shape-rendering="crispEdges"/>
 </g>
-<g class="boot-icon" style="--delay:2s" filter="url(#filter18_d_2006_41)">
+<g class="boot-icon" data-node-index="2" filter="url(#filter18_d_2006_41)">
 <rect x="335.996" y="182.315" width="45" height="45" transform="rotate(-0.271425 335.996 182.315)" fill="url(#pattern7_2006_41)" shape-rendering="crispEdges"/>
 </g>
 <g class="boot-core-symbol" filter="url(#filter19_d_2006_41)">

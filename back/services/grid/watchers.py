@@ -163,8 +163,24 @@ async def mindgraph_reconnect_watcher(orchestrator):
             try:
                 await orchestrator.mindgraph.connect()
                 await orchestrator.mindgraph.ensure_schema()
+                orchestrator.runtime_health.mark_up("neo4j")
                 logger.info("MindGraphReconnectWatcher: connection restored.")
             except Exception as e:
+                orchestrator.runtime_health.mark_down("neo4j", "NEO4J_UNAVAILABLE")
                 logger.warning(f"MindGraphReconnectWatcher: still unreachable ({e})")
 
         await asyncio.sleep(60)
+
+
+async def control_plane_reconnect_watcher(orchestrator):
+    """Retry sovereign local Postgres governance independently."""
+    logger.info("ControlPlaneReconnectWatcher started.")
+    attempt = 0
+    while True:
+        if orchestrator.probe_control_plane():
+            attempt = 0
+            delay = 30
+        else:
+            attempt += 1
+            delay = min(60, 5 * (2 ** min(attempt - 1, 4)))
+        await asyncio.sleep(delay)

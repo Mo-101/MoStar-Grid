@@ -14,6 +14,7 @@ import os
 import time
 import edge_tts
 import feedparser
+from datetime import datetime, timezone
 from pathlib import Path
 from contextlib import asynccontextmanager
 from urllib.parse import urlparse
@@ -40,6 +41,8 @@ sys.path.extend([
 
 from grid.config import (
     DCX0_MODEL,
+    DCX1_MODEL,
+    DCX2_MODEL,
     GRID_HOST,
     GRID_PORT,
     MOSTAR_CLUSTER_ID,
@@ -60,7 +63,14 @@ from grid.mostar_gap_register import router as mostar_gap_register_router
 from grid.telemetry import ClusterTelemetry
 from dcx import DCXLayer
 from grid.events import event_bus, GridEvent
-from grid.watchers import world_signal_watcher, telemetry_watcher, mood_engine, executor_watcher, mindgraph_reconnect_watcher
+from grid.watchers import (
+    world_signal_watcher,
+    telemetry_watcher,
+    mood_engine,
+    executor_watcher,
+    mindgraph_reconnect_watcher,
+    control_plane_reconnect_watcher,
+)
 from grid.memory import (
     MemoryLayer,
     get_recent_memory,
@@ -112,6 +122,7 @@ async def lifespan(app: FastAPI):
     asyncio.create_task(autonomous_announcer(app.state.memory_layer))
     asyncio.create_task(executor_watcher(orchestrator))
     asyncio.create_task(mindgraph_reconnect_watcher(orchestrator))
+    asyncio.create_task(control_plane_reconnect_watcher(orchestrator))
 
     yield
     await orchestrator.shutdown()
@@ -140,6 +151,36 @@ app.add_middleware(
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "X-MoStar-Token"],
 )
+
+SAFE_POST_PATHS = {
+    "/api/learn",
+    "/api/voice-command",
+    "/interpret",
+    "/grid/query",
+    "/grid/interaction/simulate",
+}
+
+
+@app.middleware("http")
+async def governance_readiness_gate(request: Request, call_next):
+    """Fail closed for mutations while keeping diagnostics and safe reads live."""
+    mutating = request.method in {"POST", "PUT", "PATCH", "DELETE"}
+    if (
+        mutating
+        and request.url.path not in SAFE_POST_PATHS
+        and not orchestrator.runtime_health.governance_ready
+    ):
+        return JSONResponse(
+            status_code=503,
+            content=_with_cluster({
+                "detail": {
+                    "code": "GOVERNANCE_NOT_READY",
+                    "dependency": "local_postgres",
+                    "retryable": True,
+                }
+            }),
+        )
+    return await call_next(request)
 
 app.include_router(semantic_router)
 app.include_router(mostar_artifacts_router)
@@ -357,8 +398,51 @@ async def _probe_mindgraph() -> dict:
 
 
 async def _probe_dcx() -> dict:
+    """Deep DCX validation. The ONLY place permitted to return SEALED.
+
+    The trinity is dcx0 + dcx1 + dcx2. A previous version validated dcx0
+    alone, so a host holding only dcx0 reported a sealed trinity while two
+    thirds of it was absent. Sealing now requires every expected model to be
+    both present AND to answer a live generation. The response carries the
+    evidence (present/validated/missing/failed), never just the verdict.
+
+    States:
+      DOWN       — Ollama unreachable, or reachable but no expected model works
+      ABSENT     — reachable, zero expected models pulled
+      PARTIAL    — some expected models pulled, others missing
+      DEGRADED   — all expected models pulled, but >=1 failed validation
+      SEALED     — all expected models pulled AND all validated live
+    """
     started = time.monotonic()
-    model_root = DCX0_MODEL.split(":")[0]
+    expected: dict[str, str] = {
+        DCXLayer.MIND.value: DCX0_MODEL,
+        DCXLayer.SOUL.value: DCX1_MODEL,
+        DCXLayer.BODY.value: DCX2_MODEL,
+    }
+    checked_at = datetime.now(timezone.utc).isoformat()
+
+    def _envelope(**overrides) -> dict:
+        base = {
+            "ok": False,
+            "connected": False,
+            "state": "DOWN",
+            "sealed": False,
+            "expected_models": expected,
+            "present_models": [],
+            "validated_models": [],
+            "missing_models": sorted(expected.values()),
+            "failed_models": [],
+            "base_url": OLLAMA_BASE_URL,
+            "keep_alive": OLLAMA_KEEP_ALIVE,
+            "timeout_s": OLLAMA_REQUEST_TIMEOUT,
+            "auth_configured": bool(OLLAMA_BEARER_TOKEN),
+            "checked_at": checked_at,
+            "duration_ms": int((time.monotonic() - started) * 1000),
+        }
+        base.update(overrides)
+        base["duration_ms"] = int((time.monotonic() - started) * 1000)
+        return base
+
     try:
         async with httpx.AsyncClient(
             base_url=OLLAMA_BASE_URL,
@@ -368,73 +452,79 @@ async def _probe_dcx() -> dict:
             tags_resp = await client.get("/api/tags")
             tags_resp.raise_for_status()
             tags = tags_resp.json()
-            models = [str(m.get("name", "")).split(":")[0] for m in tags.get("models", [])]
-            if model_root not in models:
-                return {
-                    "ok": False,
-                    "connected": True,
-                    "state": "NAKED",
-                    "model": DCX0_MODEL,
-                    "base_url": OLLAMA_BASE_URL,
-                    "present_models": models,
-                    "reason": f"DCX model {DCX0_MODEL!r} is not pulled",
-                    "duration_ms": int((time.monotonic() - started) * 1000),
-                }
+            # Compare on the full tag (name:variant). Comparing on the bare
+            # repository root made dcx0/dcx1/dcx2 indistinguishable, since
+            # all three share the "Mostar/mostar-ai" root.
+            available = {str(m.get("name", "")) for m in tags.get("models", [])}
 
-            payload = {
-                "model": DCX0_MODEL,
-                "prompt": "Reply with one word: alive",
-                "stream": False,
-                "keep_alive": OLLAMA_KEEP_ALIVE,
-                "options": {
-                    "temperature": 0,
-                    "num_predict": 8,
-                },
-            }
-            resp = await client.post("/api/generate", json=payload)
-            resp.raise_for_status()
-            data = resp.json()
+            present = sorted(m for m in expected.values() if m in available)
+            missing = sorted(m for m in expected.values() if m not in available)
+
+            if not present:
+                return _envelope(
+                    connected=True,
+                    state="ABSENT",
+                    missing_models=missing,
+                    reason="no DCX trinity model is pulled",
+                )
+
+            validated: list[str] = []
+            failed: list[dict] = []
+            previews: dict[str, str] = {}
+
+            for model in present:
+                try:
+                    resp = await client.post(
+                        "/api/generate",
+                        json={
+                            "model": model,
+                            "prompt": "Reply with one word: alive",
+                            "stream": False,
+                            "keep_alive": OLLAMA_KEEP_ALIVE,
+                            "options": {"temperature": 0, "num_predict": 8},
+                        },
+                    )
+                    resp.raise_for_status()
+                    text = str(resp.json().get("response", "")).strip()
+                    if text:
+                        validated.append(model)
+                        previews[model] = text[:80]
+                    else:
+                        failed.append(
+                            {"model": model, "reason": "200 with an empty generation body"}
+                        )
+                except Exception as exc:
+                    failed.append({"model": model, "reason": _format_probe_error(exc)})
+
     except Exception as exc:
-        return {
-            "ok": False,
-            "connected": False,
-            "state": "DOWN",
-            "model": DCX0_MODEL,
-            "base_url": OLLAMA_BASE_URL,
-            "keep_alive": OLLAMA_KEEP_ALIVE,
-            "timeout_s": OLLAMA_REQUEST_TIMEOUT,
-            "auth_configured": bool(OLLAMA_BEARER_TOKEN),
-            "error": _format_probe_error(exc),
-            "duration_ms": int((time.monotonic() - started) * 1000),
-        }
+        return _envelope(error=_format_probe_error(exc))
 
-    text = str(data.get("response", "")).strip()
-    tokens = data.get("eval_count")
-    if not text:
-        return {
-            "ok": False,
-            "connected": True,
-            "state": "DOWN",
-            "model": DCX0_MODEL,
-            "base_url": OLLAMA_BASE_URL,
-            "reason": "200 with an empty generation body",
-            "duration_ms": int((time.monotonic() - started) * 1000),
-        }
+    # Seal requires the FULL trinity present and every one of them validated.
+    sealed = not missing and not failed and len(validated) == len(expected)
+    if sealed:
+        state = "SEALED"
+    elif missing:
+        state = "PARTIAL"
+    elif failed:
+        state = "DEGRADED"
+    else:
+        state = "PARTIAL"
 
-    return {
-        "ok": True,
-        "connected": True,
-        "state": "THINKING",
-        "model": DCX0_MODEL,
-        "base_url": OLLAMA_BASE_URL,
-        "execution": "real_ollama_generation",
-        "keep_alive": OLLAMA_KEEP_ALIVE,
-        "timeout_s": OLLAMA_REQUEST_TIMEOUT,
-        "auth_configured": bool(OLLAMA_BEARER_TOKEN),
-        "tokens": tokens,
-        "response_preview": text[:80],
-        "duration_ms": int((time.monotonic() - started) * 1000),
-    }
+    return _envelope(
+        ok=sealed,
+        connected=True,
+        state=state,
+        sealed=sealed,
+        present_models=present,
+        validated_models=sorted(validated),
+        missing_models=missing,
+        failed_models=failed,
+        execution="real_ollama_generation",
+        response_previews=previews,
+        reason=None
+        if sealed
+        else f"trinity not sealed: {len(validated)}/{len(expected)} validated",
+    )
 
 
 async def _probe_mcp() -> dict:
@@ -584,6 +674,45 @@ async def live():
         "seal": SEAL_GLYPH,
         "phase": "4.0a",
     }
+
+
+@app.get("/health/live")
+async def health_live():
+    """Process liveness; never performs an external round-trip."""
+    return JSONResponse(
+        status_code=200,
+        content=_with_cluster({
+            "status": "alive",
+            "process_initialized": orchestrator.runtime_health.process_initialized,
+        }),
+    )
+
+
+@app.get("/health/ready")
+async def health_ready():
+    """Operational readiness; governance and graph must both be available."""
+    snapshot = orchestrator.runtime_health.snapshot()
+    reason = None
+    if not snapshot["ready"]:
+        reason = (
+            snapshot["dependencies"]["local_postgres"]["error_code"]
+            or snapshot["dependencies"]["neo4j"]["error_code"]
+            or "DEPENDENCIES_NOT_READY"
+        )
+    return JSONResponse(
+        status_code=200 if snapshot["ready"] else 503,
+        content=_with_cluster({
+            "status": "ready" if snapshot["ready"] else "not_ready",
+            "reason": reason,
+            **snapshot,
+        }),
+    )
+
+
+@app.get("/health/dependencies")
+async def health_dependencies():
+    """Sanitized dependency state for incident diagnostics."""
+    return _with_cluster(orchestrator.runtime_health.snapshot())
 
 
 @app.get("/api/health")

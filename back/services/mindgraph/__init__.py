@@ -139,22 +139,40 @@ class MindGraph:
             return [r["agent"] for r in await result.data()]
 
     async def get_graph_stats(self) -> dict:
-        """Basic graph statistics."""
+        """Return database-wide graph statistics and the local cluster subset.
+
+        The dashboard's primary counters describe the selected Neo4j database,
+        not only records stamped with this runtime's ``cluster_id``.  Keeping the
+        cluster counts alongside the database census makes that distinction
+        explicit for callers that need sovereign-cluster telemetry.
+        """
         if not self._driver:
             return {"status": "disconnected"}
         cypher = """
         CALL {
-            MATCH (n {cluster_id: $cluster_id}) RETURN count(n) AS nodes
+            MATCH (n) RETURN count(n) AS nodes
+        }
+        CALL {
+            MATCH ()-[r]->() RETURN count(r) AS relationships
+        }
+        CALL {
+            MATCH (n) UNWIND labels(n) AS lbl
+            RETURN collect(DISTINCT lbl) AS labels
+        }
+        CALL {
+            MATCH (n {cluster_id: $cluster_id})
+            RETURN count(n) AS cluster_nodes
         }
         CALL {
             MATCH (a {cluster_id: $cluster_id})-[r]->(b {cluster_id: $cluster_id})
-            RETURN count(r) AS relationships
+            RETURN count(r) AS cluster_relationships
         }
         CALL {
             MATCH (n {cluster_id: $cluster_id}) UNWIND labels(n) AS lbl
-            RETURN collect(DISTINCT lbl) AS labels
+            RETURN collect(DISTINCT lbl) AS cluster_labels
         }
-        RETURN nodes, relationships, labels
+        RETURN nodes, relationships, labels,
+               cluster_nodes, cluster_relationships, cluster_labels
         """
         async with self._driver.session(database=NEO4J_DATABASE) as session:
             result = await session.run(cypher, cluster_id=MOSTAR_CLUSTER_ID)
@@ -164,6 +182,14 @@ class MindGraph:
                     "nodes": record["nodes"],
                     "relationships": record["relationships"],
                     "labels": record["labels"],
+                    "scope": "database",
+                    "database": NEO4J_DATABASE,
+                    "cluster": {
+                        "cluster_id": MOSTAR_CLUSTER_ID,
+                        "nodes": record["cluster_nodes"],
+                        "relationships": record["cluster_relationships"],
+                        "labels": record["cluster_labels"],
+                    },
                     "status": "connected",
                 }
             return {"status": "empty"}

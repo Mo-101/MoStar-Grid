@@ -24,6 +24,7 @@ from decision_engine import DecisionEngine
 from density_telemetry import DensityTelemetry
 from control_plane_runtime import RuntimeEnforcementDenied, RuntimeEnforcementGate
 from federation.scrolls import SCROLL_VERSION
+from grid.runtime_health import RuntimeHealth, postgres_error_code
 
 logger = logging.getLogger("orchestrator")
 
@@ -143,6 +144,7 @@ class GridOrchestrator:
         self.decision_engine = DecisionEngine()
         self.density = DensityTelemetry(self.mindgraph)
         self.semantic_grid = SemanticGrid()
+        self.runtime_health = RuntimeHealth()
         self._conversation_history: list[dict] = []
         self._ready = False
 
@@ -164,18 +166,27 @@ class GridOrchestrator:
         """Initialize all subsystems."""
         logger.info("Grid booting...")
         ensure_cluster_dirs()
+        self.runtime_health.mark_process_initialized()
 
         # Connect MindGraph
+        self.runtime_health.mark_connecting("neo4j")
         try:
             await self.mindgraph.connect()
             await self.mindgraph.ensure_schema()
+            self.runtime_health.mark_up("neo4j")
         except Exception as e:
+            self.runtime_health.mark_down("neo4j", "NEO4J_UNAVAILABLE")
             logger.warning("MindGraph boot partial: %s", e)
 
         # Connect DCX Trinity
         try:
             await self.dcx.connect()
+            if self.dcx.connected:
+                self.runtime_health.mark_up("ollama")
+            else:
+                self.runtime_health.mark_down("ollama", "OLLAMA_UNAVAILABLE")
         except Exception as e:
+            self.runtime_health.mark_down("ollama", "OLLAMA_UNAVAILABLE")
             logger.warning("DCX Trinity boot partial: %s", e)
 
         # Fire startup MoScripts
@@ -184,19 +195,51 @@ class GridOrchestrator:
             "ollama_connected": self.dcx.connected,
             "soul": self.soul.to_dict(),
         }
-        startup_events = self.moscript.fire_trigger("on_startup", startup_ctx)
+        startup_events = []
+        self.runtime_health.mark_connecting("local_postgres")
+        try:
+            self.control_plane.connect()
+            self.control_plane.verify_schema()
+            startup_events = self.moscript.fire_trigger("on_startup", startup_ctx)
+            self.runtime_health.mark_governance_ready()
+        except Exception as exc:
+            error_code = postgres_error_code(exc)
+            self.runtime_health.mark_governance_blocked(error_code)
+            logger.error(
+                "Local Postgres governance unavailable; HTTP remains live "
+                "(error_code=%s)",
+                error_code,
+            )
 
-        self._ready = True
+        self.runtime_health.recompute_mode()
+        self._ready = self.runtime_health.ready
         logger.info("Grid ONLINE — MindGraph:%s DCX:%s %s",
                      self.mindgraph.connected, self.dcx.connected, SEAL_GLYPH)
         return {
             "status": "online",
+            **self.runtime_health.snapshot(),
             **cluster_metadata(),
             "mindgraph": self.mindgraph.connected,
             "dcx": self.dcx.connected,
             "soul": self.soul.declare(),
             "moscript_startup": startup_events,
         }
+
+    def probe_control_plane(self) -> bool:
+        """Refresh governance health without granting an operation."""
+        try:
+            self.control_plane.connect()
+            self.control_plane.verify_schema()
+            self.control_plane.provider.get_level("moscript_registry")
+        except Exception as exc:
+            error_code = postgres_error_code(exc)
+            self.runtime_health.mark_governance_blocked(error_code)
+            self._ready = False
+            logger.warning("Local Postgres probe failed (error_code=%s)", error_code)
+            return False
+        self.runtime_health.mark_governance_ready()
+        self._ready = self.runtime_health.ready
+        return True
 
     async def shutdown(self):
         await self.mindgraph.close()
@@ -611,13 +654,19 @@ class GridOrchestrator:
         readiness = await self.density.check_promotion_readiness()
         queue_stats = await self.approval_queue.stats()
         return {
-            "grid": "online" if self._ready else "offline",
+            "grid": self.runtime_health.mode.value.lower(),
+            "runtime": self.runtime_health.snapshot(),
             **cluster_metadata(),
             "soul": self.soul.declare(),
             "mindgraph": graph_stats,
+            # `connected` means Ollama is reachable — it is NOT a claim that
+            # the trinity is sealed. The seal state is reported alongside it
+            # so no consumer has to infer (or over-infer) one from the other.
+            # This endpoint is the cheap path: it never returns SEALED.
             "dcx": {
                 "connected": self.dcx.connected,
                 "models": {l.value: self.dcx._models[l] for l in DCXLayer},
+                **self.dcx.seal_state(),
             },
             "provenance": {
                 "total_cycles": self.provenance.total_cycles,

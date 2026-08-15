@@ -27,6 +27,25 @@ VPS_RUNTIME="${VPS_BASE}/runtime"
 VPS_NEO4J_DATA="${VPS_GRID}/back/services/mindgraph/mo-neo4j/data"
 VPS_NEO4J_CONF="${VPS_GRID}/back/services/mindgraph/mo-neo4j/conf"
 
+RSYNC_PROTECTED="${GRID_SRC}/deploy/rsync-protected.txt"
+
+# ── Fail closed: never let --delete run without the exclude list ──────
+# Incident 2026-08-15: an ad-hoc rsync of back/ that used a narrower,
+# inline exclude list overwrote the VPS's neo4j.conf with the local dev
+# machine's copy, taking the live graph offline. This check makes it
+# impossible for that class of mistake — or a future refactor that drops
+# the guard silently — to reach the --delete rsync below.
+if [ ! -s "${RSYNC_PROTECTED}" ]; then
+    echo "ABORT: ${RSYNC_PROTECTED} is missing or empty." >&2
+    echo "This file is the only thing standing between --delete and the VPS's" >&2
+    echo "live neo4j.conf/data/logs. Refusing to sync until it's restored." >&2
+    exit 1
+fi
+if ! grep -q "mo-neo4j/conf/" "${RSYNC_PROTECTED}"; then
+    echo "ABORT: ${RSYNC_PROTECTED} no longer protects mo-neo4j/conf/." >&2
+    exit 1
+fi
+
 echo "======================================================"
 echo "MOSTAR GRID VPS DEPLOYMENT — loopback-only"
 echo "======================================================"
@@ -63,9 +82,18 @@ REMOTE
 echo "[2/9] Copying grid codebase to VPS..."
 ${SSH_CMD} "mkdir -p ${VPS_GRID} ${VPS_RUNTIME}"
 
-RSYNC_EXCLUDES="--exclude=.venv --exclude=node_modules --exclude=__pycache__ --exclude=.git --exclude=*.pyc --exclude=.pytest_cache --exclude=back/services/mindgraph/mo-neo4j/data"
+echo "  Using exclude list: ${RSYNC_PROTECTED}"
+echo "  --- protected patterns ---"
+grep -vE '^\s*(#.*)?$' "${RSYNC_PROTECTED}" | sed 's/^/    /'
+echo "  --------------------------"
 
-rsync -az --delete ${RSYNC_EXCLUDES} \
+echo "  Dry run (preview of changes) — see plan before it lands:"
+rsync -az --delete --dry-run --itemize-changes --exclude-from="${RSYNC_PROTECTED}" \
+    -e "ssh ${SSH_OPTS}" \
+    "${GRID_SRC}/" "${VPS_USER}@${VPS_HOST}:${VPS_GRID}/" \
+    | sed 's/^/    /'
+
+rsync -az --delete --exclude-from="${RSYNC_PROTECTED}" \
     -e "ssh ${SSH_OPTS}" \
     "${GRID_SRC}/" "${VPS_USER}@${VPS_HOST}:${VPS_GRID}/"
 echo "  Grid codebase copied"
@@ -142,23 +170,33 @@ systemctl disable neo4j 2>/dev/null || true
 echo "  Neo4j binary installed (systemd unit disabled — managed by PM2 instead)"
 REMOTE
 
-# ── Step 6: Migrate Neo4j graph data (stop local source briefly) ─
-echo "[6/9] Migrating Neo4j graph data (stopping local mostar-neo4j)..."
-wsl.exe -d Ubuntu-24.04 -- pm2 stop mostar-neo4j >/dev/null 2>&1 || true
-sleep 2
+# ── Step 6: Migrate Neo4j graph data (one-time cutover, opt-in only) ─
+# This was the Aug 11 2026 WSL→VPS cutover. It must NOT run on ordinary
+# redeploys — the VPS's neo4j.conf and data are server-owned state at this
+# point (see deploy/rsync-protected.txt), and re-syncing from the local
+# machine here would silently reintroduce the exact incident that took
+# Neo4j offline on 2026-08-15 (local dev-machine paths overwriting the
+# VPS's conf). Skipped by default; only runs with an explicit opt-in.
+if [ "${MIGRATE_NEO4J:-0}" = "1" ]; then
+    echo "[6/9] MIGRATE_NEO4J=1 — migrating Neo4j graph data (stopping local mostar-neo4j)..."
+    wsl.exe -d Ubuntu-24.04 -- pm2 stop mostar-neo4j >/dev/null 2>&1 || true
+    sleep 2
 
-rsync -az --progress \
-    -e "ssh ${SSH_OPTS}" \
-    "${NEO4J_DATA_SRC}/" "${VPS_USER}@${VPS_HOST}:${VPS_NEO4J_DATA}/"
+    rsync -az --progress \
+        -e "ssh ${SSH_OPTS}" \
+        "${NEO4J_DATA_SRC}/" "${VPS_USER}@${VPS_HOST}:${VPS_NEO4J_DATA}/"
 
-rsync -az --progress \
-    -e "ssh ${SSH_OPTS}" \
-    "${NEO4J_CONF_SRC}/" "${VPS_USER}@${VPS_HOST}:${VPS_NEO4J_CONF}/"
+    rsync -az --progress \
+        -e "ssh ${SSH_OPTS}" \
+        "${NEO4J_CONF_SRC}/" "${VPS_USER}@${VPS_HOST}:${VPS_NEO4J_CONF}/"
 
-wsl.exe -d Ubuntu-24.04 -- pm2 start mostar-neo4j >/dev/null 2>&1 || true
-echo "  Neo4j data + conf migrated. Local mostar-neo4j restarted."
+    wsl.exe -d Ubuntu-24.04 -- pm2 start mostar-neo4j >/dev/null 2>&1 || true
+    echo "  Neo4j data + conf migrated. Local mostar-neo4j restarted."
 
-${SSH_CMD} "chown -R neo4j:neo4j ${VPS_NEO4J_DATA} 2>/dev/null || chown -R \$(id -u):\$(id -g) ${VPS_NEO4J_DATA}"
+    ${SSH_CMD} "chown -R neo4j:neo4j ${VPS_NEO4J_DATA} 2>/dev/null || chown -R \$(id -u):\$(id -g) ${VPS_NEO4J_DATA}"
+else
+    echo "[6/9] Skipping Neo4j data/conf migration (already cut over — set MIGRATE_NEO4J=1 to force)"
+fi
 
 # ── Step 7: Write VPS PM2 ecosystem file ─────────────────────
 echo "[7/9] Writing VPS ecosystem config..."

@@ -10,6 +10,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional, Protocol
+from urllib.parse import parse_qs, urlparse
 
 import yaml
 from dotenv import load_dotenv
@@ -51,21 +52,54 @@ class EnforcementStateProvider(Protocol):
     def audit(self, decision: RuntimeEnforcementDecision) -> str: ...
 
 
-class NeonEnforcementStateProvider:
+def validate_sovereign_database_url(database_url: str) -> None:
+    """Reject any relational control plane outside the local host."""
+    parsed = urlparse(database_url)
+    if parsed.scheme not in {"postgresql", "postgres"}:
+        raise RuntimeError("DATABASE_URL must use PostgreSQL")
+
+    query = parse_qs(parsed.query)
+    socket_host = query.get("host", [""])[0]
+    local_socket = bool(socket_host) and Path(socket_host).is_absolute()
+    if parsed.hostname not in {"127.0.0.1", "localhost", "::1", None}:
+        raise RuntimeError("Grid sovereign DATABASE_URL must target local Postgres")
+    if parsed.hostname is None and not local_socket:
+        raise RuntimeError(
+            "Grid sovereign DATABASE_URL must target localhost or a local Unix socket"
+        )
+
+
+class PostgresEnforcementStateProvider:
     def __init__(self, database_url: Optional[str] = None):
-        self.database_url = database_url or os.getenv("NEON_DATABASE_URL") or os.getenv("POSTGRES_URL_NON_POOLING") or os.getenv("POSTGRES_URL")
+        self.database_url = database_url or os.getenv("DATABASE_URL")
         if not self.database_url:
-            raise RuntimeError("NEON_DATABASE_URL (or POSTGRES_URL) is required")
+            raise RuntimeError("DATABASE_URL is required")
+        validate_sovereign_database_url(self.database_url)
         self._connection = None
 
-    def _connect(self):
+    def connect(self):
         import psycopg
         if self._connection is None or self._connection.closed:
             self._connection = psycopg.connect(self.database_url, connect_timeout=10, autocommit=True)
         return self._connection
 
+    def verify_schema(self) -> None:
+        required = {"control_plane_resonance_state", "graph_audit_event"}
+        with self.connect().cursor() as cur:
+            cur.execute(
+                """SELECT table_name FROM information_schema.tables
+                   WHERE table_schema='public' AND table_name = ANY(%s)""",
+                (list(required),),
+            )
+            present = {str(row[0]) for row in cur.fetchall()}
+        missing = sorted(required - present)
+        if missing:
+            raise RuntimeError(
+                "sovereign governance schema missing: " + ", ".join(missing)
+            )
+
     def get_level(self, component_id: str) -> str:
-        with self._connect().cursor() as cur:
+        with self.connect().cursor() as cur:
             cur.execute("SELECT level FROM control_plane_resonance_state WHERE component_id=%s", (component_id,))
             row = cur.fetchone()
         return str(row[0]).upper() if row else "INFO"
@@ -83,7 +117,7 @@ class NeonEnforcementStateProvider:
                   decision.component_id, decision.trace_id, decision.level, body,
                   hashlib.sha256(body.encode()).hexdigest(),
                   os.getenv("MOSTAR_ENV", os.getenv("ENVIRONMENT", "development")), utcnow())
-        with self._connect().cursor() as cur:
+        with self.connect().cursor() as cur:
             cur.execute(sql, params)
         return audit_id
 
@@ -98,13 +132,23 @@ class RuntimeEnforcementGate:
 
     def __init__(self, provider: Optional[EnforcementStateProvider] = None,
                  policy_path: Path | str = POLICY_PATH, enabled: Optional[bool] = None):
-        self.provider = provider or NeonEnforcementStateProvider()
+        self.provider = provider or PostgresEnforcementStateProvider()
         self.enabled = (os.getenv("ENFORCEMENT_ENABLED", "true").lower() == "true"
                         if enabled is None else enabled)
         with Path(policy_path).open(encoding="utf-8") as handle:
             document = yaml.safe_load(handle) or {}
         self.policy = document.get("policies", {})
         self.runtime_config = document.get("runtime_attachment", {})
+
+    def connect(self) -> None:
+        connect = getattr(self.provider, "connect", None)
+        if connect is not None:
+            connect()
+
+    def verify_schema(self) -> None:
+        verify = getattr(self.provider, "verify_schema", None)
+        if verify is not None:
+            verify()
 
     def evaluate(self, surface: str, operation: str,
                  context: Optional[Dict[str, Any]] = None) -> RuntimeEnforcementDecision:

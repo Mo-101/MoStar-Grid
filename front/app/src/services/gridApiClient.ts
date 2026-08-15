@@ -33,6 +33,14 @@ export type MindgraphStatus = {
   nodes: number;
   relationships: number;
   labels: string[];
+  scope: "database";
+  database: string;
+  cluster: {
+    cluster_id: string;
+    nodes: number;
+    relationships: number;
+    labels: string[];
+  };
   status: string;
 };
 
@@ -42,7 +50,26 @@ export type GridStatus = {
   cluster_name: string;
   cluster_region: string;
   mindgraph: MindgraphStatus;
-  dcx: { connected: boolean; models: Record<string, string> };
+  dcx: {
+    /** Ollama transport reachable. NOT a claim that the trinity is sealed. */
+    connected: boolean;
+    /** Configured layer -> model tag. Declared, not measured. */
+    models: Record<string, string>;
+    /**
+     * Measured trinity state. /api/status is the cheap path and can never
+     * report SEALED — sealing requires live per-model validation, which only
+     * the deep probe (/api/health) performs. Optional so an older server
+     * degrades to UNVERIFIED rather than being guessed at.
+     */
+    state?: "UNREACHABLE" | "ABSENT" | "PARTIAL" | "LOADED" | "DEGRADED" | "SEALED";
+    sealed?: boolean;
+    expected_models?: Record<string, string>;
+    present_models?: string[];
+    missing_models?: string[];
+    validated_models?: string[];
+    failed_models?: { model: string; reason: string }[];
+    checked_at?: string | null;
+  };
   density: {
     timestamp: string;
     total_nodes: number;
@@ -63,7 +90,7 @@ export type RecentMemory = {
   retrieved_at: string;
 };
 
-export type Advisor = { specialty: string[]; trigger_sample: string[] };
+export type Advisor = { specialty: string[]; trigger_sample: string[]; last_seen?: string };
 export type AdvisorMap = Record<string, Advisor>;
 
 export async function getGridStatus(): Promise<GridStatus | null> {

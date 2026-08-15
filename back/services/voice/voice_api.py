@@ -8,9 +8,13 @@ Seal: earth therefore fire
 """
 
 import hashlib
+import io
+import json
 import os
 import subprocess
+import tempfile
 import time
+import wave
 from pathlib import Path
 from typing import Optional
 
@@ -163,6 +167,30 @@ class SpeakResponse(BaseModel):
     text_spoken: str
     seal: str
     duration_ms: int
+    synthesis_ms: int
+    request_id: str
+
+
+class NarrateRequest(BaseModel):
+    segments: list[str] = Field(min_length=1, max_length=16)
+    mood: str = Field(default="ceremonial")
+    voice: str = Field(default=VOICE_NAME)
+
+
+class NarrationSegment(BaseModel):
+    text: str
+    start_ms: int
+    end_ms: int
+
+
+class NarrateResponse(BaseModel):
+    ok: bool
+    audio_url: str
+    audio_ms: int
+    synthesis_ms: int
+    segments: list[NarrationSegment]
+    engine: str
+    voice: str
     request_id: str
 
 
@@ -315,6 +343,43 @@ def synthesize(text: str, mood: str, voice_model: Path, out_file: Path) -> None:
         ) from exc
 
 
+def wav_duration_ms(path: Path) -> int:
+    """Read exact playback duration from a WAV header."""
+    with wave.open(str(path), "rb") as reader:
+        return int(round(reader.getnframes() / float(reader.getframerate()) * 1000))
+
+
+def concat_wavs(paths: list[Path], out_file: Path) -> None:
+    """Concatenate compatible WAV files without re-encoding them."""
+    output = io.BytesIO()
+    writer = None
+    expected_format = None
+    try:
+        for path in paths:
+            with wave.open(str(path), "rb") as reader:
+                audio_format = (
+                    reader.getnchannels(),
+                    reader.getsampwidth(),
+                    reader.getframerate(),
+                    reader.getcomptype(),
+                )
+                if expected_format is None:
+                    expected_format = audio_format
+                    writer = wave.open(output, "wb")
+                    writer.setnchannels(reader.getnchannels())
+                    writer.setsampwidth(reader.getsampwidth())
+                    writer.setframerate(reader.getframerate())
+                    writer.setcomptype(reader.getcomptype(), reader.getcompname())
+                elif audio_format != expected_format:
+                    raise HTTPException(status_code=500, detail="Piper returned incompatible WAV segments")
+                writer.writeframes(reader.readframes(reader.getnframes()))
+    finally:
+        if writer is not None:
+            writer.close()
+
+    out_file.write_bytes(output.getvalue())
+
+
 @app.get("/")
 async def root():
     return {
@@ -322,7 +387,7 @@ async def root():
         "engine": "piper",
         "voice": VOICE_NAME,
         "seal": SEAL,
-        "routes": ["/health", "/speak", "/speak/verify", "/voices", "/moods", "/cleanup"],
+        "routes": ["/health", "/speak", "/narrate", "/speak/verify", "/voices", "/moods", "/cleanup"],
     }
 
 
@@ -408,7 +473,8 @@ async def speak(req: SpeakRequest):
     if not cached:
         await run_in_threadpool(synthesize, text_to_speak, req.mood, voice_model, out_file)
 
-    duration_ms = int((time.monotonic() - started) * 1000)
+    synthesis_ms = int((time.monotonic() - started) * 1000)
+    duration_ms = wav_duration_ms(out_file)
 
     if req.return_file:
         return FileResponse(
@@ -429,9 +495,72 @@ async def speak(req: SpeakRequest):
         text_spoken=text_to_speak,
         seal=SEAL,
         duration_ms=duration_ms,
+        synthesis_ms=synthesis_ms,
         request_id=digest,
     )
     return response.model_dump()
+
+
+@app.post("/narrate", response_model=NarrateResponse)
+async def narrate(req: NarrateRequest):
+    """Synthesize measured segments and return their exact playback cues."""
+    if req.mood not in MOODS:
+        raise HTTPException(status_code=400, detail=f"Invalid mood: {req.mood}")
+
+    segments = [text.strip() for text in req.segments]
+    if any(not text for text in segments):
+        raise HTTPException(status_code=400, detail="Narration segments must not be empty")
+
+    voice_id, voice_model = resolve_voice(req.voice)
+    cache_str = f"narrate|{'|'.join(segments)}|{req.mood}|{voice_id}"
+    digest = hashlib.sha256(cache_str.encode("utf-8")).hexdigest()[:16]
+    out_file = AUDIO_OUT / f"narration-{digest}.wav"
+    cues_file = AUDIO_OUT / f"narration-{digest}.cues.json"
+    started = time.monotonic()
+
+    measured: list[NarrationSegment] = []
+    cursor = 0
+
+    if not out_file.exists() or not cues_file.exists():
+        with tempfile.TemporaryDirectory(prefix="mostar-narration-") as temp_dir:
+            paths: list[Path] = []
+            for index, text in enumerate(segments):
+                path = Path(temp_dir) / f"segment-{index}.wav"
+                await run_in_threadpool(synthesize, text, req.mood, voice_model, path)
+                paths.append(path)
+                span = wav_duration_ms(path)
+                measured.append(
+                    NarrationSegment(text=text, start_ms=cursor, end_ms=cursor + span)
+                )
+                cursor += span
+            await run_in_threadpool(concat_wavs, paths, out_file)
+        cues_file.write_text(
+            json.dumps([segment.model_dump() for segment in measured]),
+            encoding="utf-8",
+        )
+    else:
+        measured = [
+            NarrationSegment.model_validate(item)
+            for item in json.loads(cues_file.read_text(encoding="utf-8"))
+        ]
+
+    synthesis_ms = int((time.monotonic() - started) * 1000)
+    audio_ms = wav_duration_ms(out_file)
+    # WAV rounding can differ by a millisecond across joined chunks. The
+    # complete file is the final authority for the ceremony duration.
+    if measured:
+        measured[-1].end_ms = audio_ms
+
+    return NarrateResponse(
+        ok=True,
+        audio_url=f"/audio/{out_file.name}",
+        audio_ms=audio_ms,
+        synthesis_ms=synthesis_ms,
+        segments=measured,
+        engine="piper",
+        voice=voice_id,
+        request_id=digest,
+    )
 
 
 @app.api_route("/speak/verify", methods=["GET", "POST"], response_model=None)

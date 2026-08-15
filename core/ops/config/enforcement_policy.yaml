@@ -156,9 +156,8 @@ thresholds:
 # ThroneLock Configuration
 # ========================================================================
 thronelock:
-  authority_source: neo4j           # neo4j, neon, config
+  authority_source: local_postgres
   fallback_sources:
-    - neon
     - config
   staleness_warning_ms: 60000       # Warn if cache older than 1 min
   
