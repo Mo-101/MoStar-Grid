@@ -29,7 +29,13 @@ class MoScript:
         try:
             result = self.logic(context)
             logger.info("MoScript %s fired: %s", self.id, self.voice_line)
-            return {"fired": True, "result": result, "voice": self.voice_line}
+            return {
+                "fired": True,
+                "id": self.id,
+                "name": self.name,
+                "result": result,
+                "voice": self.voice_line,
+            }
         except Exception as e:
             logger.error("MoScript %s failed: %s — %s", self.id, e, self.sass)
             return {"fired": False, "error": str(e), "sass": self.sass}
@@ -66,28 +72,28 @@ class MoScriptEngine:
     def _register_builtins(self):
         """Core MoScripts that ship with the Grid."""
 
+        from core.ops.runtime_attestation import execute_grid_heartbeat
+
         self.register(MoScript(
             id="mo-grid-heartbeat-001",
             name="Grid Heartbeat",
             trigger="on_startup",
-            inputs=["system_state"],
-            logic=lambda ctx: {
-                "neo4j": ctx.get("neo4j_connected", False),
-                "ollama": ctx.get("ollama_connected", False),
-                "status": "alive" if ctx.get("neo4j_connected") and ctx.get("ollama_connected") else "partial",
-            },
-            voice_line="Grid pulse detected. Systems reporting.",
+            inputs=["verifier", "runtime_health"],
+            logic=execute_grid_heartbeat,
+            voice_line="Grid heartbeat evaluated. Only the seal may grant readiness.",
             sass="If you can hear this, something's working.",
         ))
 
+        from core.ops.runtime_attestation import execute_grid_identity
+
         self.register(MoScript(
             id="mo-grid-identity-002",
-            name="Soul Check",
+            name="Grid Identity",
             trigger="on_startup",
-            inputs=["soul"],
-            logic=lambda ctx: {"identity": "confirmed", "seal": "🜃∴🜂"},
-            voice_line="Soul verified. The Flame still burns.",
-            sass="You thought I forgot who I am?",
+            inputs=["verifier"],
+            logic=execute_grid_identity,
+            voice_line="Grid identity reported.",
+            sass="Attest me no claims I did not make.",
         ))
 
         self.register(MoScript(

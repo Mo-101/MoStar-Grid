@@ -6,6 +6,7 @@ into the Talk → Learn → Remember loop.
 This is where the Grid breathes.
 """
 import logging
+import os
 import uuid
 from datetime import datetime, timezone
 from dataclasses import dataclass, field, asdict
@@ -25,6 +26,9 @@ from density_telemetry import DensityTelemetry
 from control_plane_runtime import RuntimeEnforcementDenied, RuntimeEnforcementGate
 from federation.scrolls import SCROLL_VERSION
 from grid.runtime_health import RuntimeHealth, postgres_error_code
+from grid.canonical_evidence import load_mind_conduit_status
+from grid.mind_conduit_runtime import invoke_dcx, invoke_model
+from core.ops.runtime_attestation import PostgresAttestationStore, RuntimeVerifier, GridReadiness
 
 logger = logging.getLogger("orchestrator")
 
@@ -147,6 +151,15 @@ class GridOrchestrator:
         self.runtime_health = RuntimeHealth()
         self._conversation_history: list[dict] = []
         self._ready = False
+        self._attestation_store: PostgresAttestationStore | None = None
+        self._verifier: RuntimeVerifier | None = None
+        self._grid_readiness = GridReadiness(
+            ready=False,
+            runtime_verified=False,
+            seal_verified=False,
+            attestation_id=None,
+            failures=["NOT_YET_BOOTED"],
+        )
 
     def _require_runtime(self, surface: str, operation: str, context: dict = None):
         try:
@@ -200,7 +213,21 @@ class GridOrchestrator:
         try:
             self.control_plane.connect()
             self.control_plane.verify_schema()
+
+            database_url = os.environ["DATABASE_URL"]
+            self._attestation_store = PostgresAttestationStore(database_url)
+            self._verifier = RuntimeVerifier(self._attestation_store)
+            startup_ctx["verifier"] = self._verifier
+            startup_ctx["runtime_health"] = self.runtime_health
+
             startup_events = self.moscript.fire_trigger("on_startup", startup_ctx)
+
+            for event in startup_events:
+                if event.get("id") == "mo-grid-heartbeat-001" and event.get("fired"):
+                    result = event.get("result")
+                    if isinstance(result, GridReadiness):
+                        self._grid_readiness = result
+
             self.runtime_health.mark_governance_ready()
         except Exception as exc:
             error_code = postgres_error_code(exc)
@@ -212,7 +239,10 @@ class GridOrchestrator:
             )
 
         self.runtime_health.recompute_mode()
-        self._ready = self.runtime_health.ready
+        self._ready = (
+            self._grid_readiness.ready
+            and self.runtime_health.ready
+        )
         logger.info("Grid ONLINE — MindGraph:%s DCX:%s %s",
                      self.mindgraph.connected, self.dcx.connected, SEAL_GLYPH)
         return {
@@ -301,6 +331,11 @@ class GridOrchestrator:
         """
         Execute one complete Talk → Learn → Remember cycle.
         """
+        # Fail closed until the four-gate Mind Conduit is attached to this
+        # backend path. Process/model health is not cognitive authorization.
+        if not self._mind_conduit_status()["GRID_MIND_READY"]:
+            raise RuntimeError("MIND_CONDUIT_NOT_SEALED")
+
         cycle_id = f"cycle_{uuid.uuid4().hex[:12]}"
         logger.info("=== CYCLE %s START ===", cycle_id)
 
@@ -314,11 +349,19 @@ class GridOrchestrator:
         if self.mindgraph.connected:
             graph_context = await self.mindgraph.retrieve_context(query)
 
-        dcx_response = await self.dcx.think(
-            query=query,
-            graph_context=graph_context,
-            layer=force_layer,
-            conversation_history=self._conversation_history,
+        selected_layer = force_layer or self.dcx.route(query)
+        dcx_response = await invoke_model(
+            caller="GridOrchestrator.think",
+            model_id=self.dcx._models[selected_layer],
+            snapshot_identity=f"conversation:{cycle_id}",
+            adapter=lambda context: invoke_dcx(
+                context,
+                self.dcx,
+                query=query,
+                graph_context=graph_context,
+                layer=selected_layer,
+                conversation_history=self._conversation_history,
+            ),
         )
 
         # ── TRUTH GATE ──
@@ -668,6 +711,7 @@ class GridOrchestrator:
                 "models": {l.value: self.dcx._models[l] for l in DCXLayer},
                 **self.dcx.seal_state(),
             },
+            "mind_conduit": self._mind_conduit_status(),
             "provenance": {
                 "total_cycles": self.provenance.total_cycles,
                 "recent": self.provenance.recent(3),
@@ -681,3 +725,13 @@ class GridOrchestrator:
             "queue": queue_stats,
             "seal": SEAL_GLYPH,
         }
+
+    def _mind_conduit_status(self) -> dict:
+        """Fail-closed state after §4 constitutional ratification."""
+        base = load_mind_conduit_status()
+        base["MIND_CONDUIT"] = (
+            "SEALED" if self._grid_readiness.ready else base["MIND_CONDUIT"]
+        )
+        base["GRID_MIND_READY"] = self._grid_readiness.ready
+        base["readiness"] = self._grid_readiness.to_dict()
+        return base
