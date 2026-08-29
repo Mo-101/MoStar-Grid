@@ -23,6 +23,15 @@ entity.ecosystem canonical resolution
 Breda shadow confinement
   STATUS: IMPLEMENTED — shadow_agent / witness_only provenance, denied agent.execute
 
+Neo4j agent.id uniqueness constraint
+  STATUS: ADDED
+  NOTE:    core/sovereignty/entity/migrations/agent_projection_constraint.cypher
+
+mind.agent.project MoScript capability
+  STATUS: FROZEN in MOSCRIPT_CAPABILITY_ABI_V0_2.json
+  NOTE:    Payload limited to agent_id, canonical_hash, projection_template.
+           Go VM implementation still blocked on toolchain.
+
 Governance contract mo-mind-initiation-001
   STATUS: ADDED AS DECLARATIVE LAW
   NOTE:    Present as JSON contract. Not wired to a runtime evaluator.
@@ -120,6 +129,7 @@ provenance.open_adjudication
 attestation.resolve
 
 graph.template.execute
+mind.agent.project
 ```
 
 These must be added as **narrow, deny-by-default capabilities**, not generic escape hatches such as:
@@ -128,11 +138,27 @@ These must be added as **narrow, deny-by-default capabilities**, not generic esc
 conduit.call(anything)   -- forbidden pattern
 neo4j.project            -- host must not decide graph shape
 governance.evaluate      -- policy belongs in MoScript
+raw Cypher in MoScript payload
 ```
 
 Capability ABI schemas are frozen in:
 
 `core/protocols/moscript/MOSCRIPT_CAPABILITY_ABI_V0_2.json`
+
+## Acceptance tests for the `mind.agent.project` bridge
+
+Once the Go VM exposes `mind.agent.project`:
+
+1. canonical agent → projection succeeds
+2. same scroll twice → one graph identity
+3. forged hash → `MO008` / authorization failure
+4. unknown agent → denied
+5. Breda with `agent.execute` → denied
+6. raw Cypher payload → structurally impossible
+7. missing `mind.agent.project` capability → denied
+8. sealed-scroll tampering → rejected before projection
+9. all 14 canonical agents → deterministic projection
+10. two `FlameBorr` identities → remain distinct
 
 ## Next unblocked steps
 
@@ -143,5 +169,4 @@ Capability ABI schemas are frozen in:
    - `initiation_service.ms`
    - `mind_projector.ms`
 3. Bind each scroll to `mo-mind-initiation-001` by contract id and canonical hash in its seal metadata.
-4. Add sealed canonical Cypher templates for Neo4j projection, bound to `mo-mind-cypher-guard-001`.
-5. Verify the canonical 13-agent pantheon once the remaining 8 agents are sourced from the canonical corpus.
+4. Add `mind.agent.project` to the Go VM and Conduit bridge so the host-side `MindProjector` is invoked with `agent_id`, `canonical_hash`, `projection_template`.

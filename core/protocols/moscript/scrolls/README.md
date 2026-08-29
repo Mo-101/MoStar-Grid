@@ -57,7 +57,7 @@ This directory will contain the executable MoScript scrolls for the MoMind agent
 
 - Receives an `entity_id`.
 - Calls `entity.is_canonical`.
-- On `true`, calls `graph.template.execute` with a sealed template id and parameters derived from the canonical declaration.
+- On `true`, calls `mind.agent.project` with `agent_id`, `canonical_hash`, and `projection_template: "agent-projection-001"`.
 - Fails closed for non-canonical, held, or unknown entities.
 
 ## Capability manifests
@@ -89,7 +89,7 @@ attestation.resolve
 ```text
 entity.lookup
 entity.is_canonical
-graph.template.execute
+mind.agent.project
 ```
 
 ## Contract binding

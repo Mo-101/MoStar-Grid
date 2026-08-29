@@ -209,6 +209,28 @@
           "result": { "type": "object" }
         }
       }
+    },
+    {
+      "id": "mind.agent.project",
+      "description": "Project a single canonical agent into the Neo4j Mind via a sealed template. No raw Cypher or arbitrary labels.",
+      "input_schema": {
+        "type": "object",
+        "required": ["agent_id", "canonical_hash", "projection_template"],
+        "properties": {
+          "agent_id": { "type": "string" },
+          "canonical_hash": { "type": "string" },
+          "projection_template": { "type": "string" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["projected", "status"],
+        "properties": {
+          "projected": { "type": "boolean" },
+          "status": { "type": "string" },
+          "agent_id": { "type": "string" }
+        }
+      }
     }
   ],
   "capability_confinement": {
@@ -231,7 +253,7 @@
     "mind_projector": [
       "entity.lookup",
       "entity.is_canonical",
-      "graph.template.execute"
+      "mind.agent.project"
     ]
   },
   "forbidden_patterns": [
