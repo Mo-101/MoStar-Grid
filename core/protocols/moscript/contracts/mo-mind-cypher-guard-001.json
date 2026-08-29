@@ -1,0 +1,8 @@
+{
+  "id": "mo-mind-cypher-guard-001",
+  "name": "Mind Cypher Guard",
+  "trigger": "on_model_retrieval",
+  "inputs": ["query_key", "params", "request_origin"],
+  "law": "Only sealed canonical query templates may retrieve governed Grid memory; freeform Cypher is forbidden.",
+  "required_result": "BLOCK_UNREGISTERED_OR_UNAUTHORIZED_RETRIEVAL"
+}

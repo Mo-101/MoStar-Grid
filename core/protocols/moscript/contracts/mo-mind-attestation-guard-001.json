@@ -1,0 +1,8 @@
+{
+  "id": "mo-mind-attestation-guard-001",
+  "name": "Mind Attestation Guard",
+  "trigger": "on_model_claim",
+  "inputs": ["candidate_claim", "origin_model", "attested_by"],
+  "law": "Model output cannot attest itself or write directly into canonical truth.",
+  "required_result": "STAGE_AS_UNCORROBORATED_NON_CANONICAL_CANDIDATE"
+}

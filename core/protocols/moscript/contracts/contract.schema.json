@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moscript://schemas/governance-contract-0.1",
+  "title": "MoMind Governance Contract",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "trigger",
+    "inputs",
+    "law",
+    "required_result"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^mo-mind-[a-z0-9-]+-[0-9]{3}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger": {
+      "type": "string",
+      "pattern": "^on_[a-z0-9_]+$",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "law": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_result": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

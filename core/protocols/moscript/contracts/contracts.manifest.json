@@ -1,0 +1,25 @@
+{
+  "version": "0.1",
+  "contracts": [
+    {
+      "id": "mo-mind-attestation-guard-001",
+      "file": "mo-mind-attestation-guard-001.json",
+      "sha256": "691a03b220306c7af99c252167a7b09a6121959d1ace77b6ac715c14011ea125"
+    },
+    {
+      "id": "mo-mind-conduit-001",
+      "file": "mo-mind-conduit-001.json",
+      "sha256": "9fabf02a227be7f11d68001359cb0dc0e6859f4271d875758ec1e426f9ac7fab"
+    },
+    {
+      "id": "mo-mind-cypher-guard-001",
+      "file": "mo-mind-cypher-guard-001.json",
+      "sha256": "6e123ec2865a6aa24ab089a55cfa20a1675603ae2e449a5a298dd7eaa1c778d1"
+    },
+    {
+      "id": "mo-mind-provenance-filter-001",
+      "file": "mo-mind-provenance-filter-001.json",
+      "sha256": "18dfc6de4f88ae367098f0f353359bc83b84179e2db0432a13ac4120221a26f7"
+    }
+  ]
+}

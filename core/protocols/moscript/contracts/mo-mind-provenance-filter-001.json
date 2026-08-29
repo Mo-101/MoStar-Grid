@@ -1,0 +1,8 @@
+{
+  "id": "mo-mind-provenance-filter-001",
+  "name": "Mind Provenance Filter",
+  "trigger": "on_snapshot_context",
+  "inputs": ["candidate_claims", "candidate_moments", "inference_purpose"],
+  "law": "Only licensed, consented, derivation-permitted, non-withdrawn evidence may enter a model snapshot.",
+  "required_result": "ISSUE_PROVENANCE_FILTERED_MEMORY_OR_BLOCK"
+}

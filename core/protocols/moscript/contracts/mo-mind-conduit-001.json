@@ -1,0 +1,8 @@
+{
+  "id": "mo-mind-conduit-001",
+  "name": "Mind Conduit",
+  "trigger": "on_model_invocation",
+  "inputs": ["caller", "model_runtime", "binding", "authority", "snapshot", "request"],
+  "law": "Every production model invocation passes through binding and applicable Grid controls before a governed adapter receives authority.",
+  "required_result": "GOVERNED_INVOCATION_OR_DIRECT_MODEL_INVOCATION_FORBIDDEN"
+}
