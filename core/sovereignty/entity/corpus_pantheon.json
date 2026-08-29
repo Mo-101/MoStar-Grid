@@ -1,25 +1,151 @@
 {
-  "note": "Inventory discovered from the existing canonical corpus only. No fields were invented for agents not explicitly described.",
-  "expected_total": 13,
-  "found_in_corpus": 5,
-  "status": "INCOMPLETE",
+  "note": "Canonical pantheon evidence. Cardinality is not a security invariant; unique entity_id is. Operational agents come from the image-derived spreadsheet and the corpus. Breda is a shadow/constitutional agent from the corpus only.",
+  "no_cardinality_invariant": true,
   "source_files": [
     "core/ops/governance/GRID_MIND_CONSTITUTION.md",
     "core/ops/governance/SOVEREIGN_PASS.md",
     "core/sovereignty/provenance/MSG-02_BREDA_PROVENANCE_DOCTRINE.md",
     "core/sovereignty/provenance/README.md",
-    "migrate_cycle1_sovereign_core.cypher"
+    "migrate_cycle1_sovereign_core.cypher",
+    "core/sovereignty/entity/entity_ecosystem.csv"
   ],
-  "canonical_agents_found": [
+  "shadow_agents": [
+    {
+      "id": "breda",
+      "name": "Breda",
+      "agent_class": "shadow_agent",
+      "visibility": "shadow",
+      "role": "Provenance Witness",
+      "title": "Provenance Witness",
+      "execution_authority": "none",
+      "approval_authority": "none",
+      "registration_authority": "none",
+      "graph_write_authority": "none",
+      "provenance_authority": "witness_only",
+      "doctrine_note": "Does not execute. Does not approve. Does not register. Witnesses provenance and reports trust fitness.",
+      "known_from": [
+        "GRID_MIND_CONSTITUTION.md §6",
+        "MSG-02_BREDA_PROVENANCE_DOCTRINE.md"
+      ]
+    }
+  ],
+  "operational_agents_from_image": [
+    {
+      "id": "alpha_mo",
+      "name": "AlphaMos",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "woo_tak",
+      "name": "Woo-Tak",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "altimo",
+      "name": "Altimo",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "deepcal",
+      "name": "DeepCAL",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "molink",
+      "name": "Molink",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "sigma",
+      "name": "Sigma",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "flameborr_catalyst",
+      "name": "FlameBorr",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "data_conc",
+      "name": "Data Conduit",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "code_conc",
+      "name": "Code Conduit",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "rad_x_flb",
+      "name": "RAD-X FLE",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "tstsee_fly",
+      "name": "TsaTse Fly",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "flameborr_narrative",
+      "name": "FlameBorr",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    },
+    {
+      "id": "mostar_ai",
+      "name": "Mo",
+      "agent_class": "operational",
+      "visibility": "visible",
+      "source": "entity_ecosystem.csv (image transcription)",
+      "completeness": "from_image"
+    }
+  ],
+  "operational_agents_from_corpus": [
     {
       "id": "mo",
       "name": "Mo",
+      "agent_class": "operational",
+      "visibility": "visible",
       "role": "Executor",
-      "known_relationships": [
-        "(:Agent {name:'Mo'})-[:REQUIRES_SEAL]->(:Agent {name:'Woo'})",
-        "(:MoStarMoment)-[:PERFORMED_BY]->(:Agent {name:'Mo'})"
+      "known_from": [
+        "GRID_MIND_CONSTITUTION.md §5",
+        "GRID_MIND_CONSTITUTION.md §9.3"
       ],
-      "known_from": "GRID_MIND_CONSTITUTION.md §5, §9.3",
       "missing_fields": [
         "permissions",
         "element",
@@ -33,28 +159,13 @@
     {
       "id": "woo",
       "name": "Woo",
+      "agent_class": "operational",
+      "visibility": "visible",
       "role": "Sealer",
-      "known_relationships": [
-        "(:Agent {name:'Woo'})-[:SEAL_FOR]->(:TruthEngine)",
-        "(:MoStarMoment)-[:SEALED_BY]->(:Agent {name:'Woo'})"
+      "known_from": [
+        "GRID_MIND_CONSTITUTION.md §5",
+        "GRID_MIND_CONSTITUTION.md §9.3"
       ],
-      "known_from": "GRID_MIND_CONSTITUTION.md §5, §9.3",
-      "missing_fields": [
-        "permissions",
-        "element",
-        "owner",
-        "truth_threshold",
-        "provenance",
-        "attested_by",
-        "origin_model"
-      ]
-    },
-    {
-      "id": "breda",
-      "name": "Breda",
-      "role": "Provenance Witness",
-      "doctrine_note": "Does not execute. Does not approve. Witnesses provenance and reports trust fitness.",
-      "known_from": "GRID_MIND_CONSTITUTION.md §6, MSG-02_BREDA_PROVENANCE_DOCTRINE.md",
       "missing_fields": [
         "permissions",
         "element",
@@ -68,8 +179,13 @@
     {
       "id": "code_conduit",
       "name": "CodeConduit",
+      "agent_class": "operational",
+      "visibility": "visible",
       "role": "META Gateway",
-      "known_from": "GRID_MIND_CONSTITUTION.md §5, §9.2",
+      "known_from": [
+        "GRID_MIND_CONSTITUTION.md §5",
+        "GRID_MIND_CONSTITUTION.md §9.2"
+      ],
       "missing_fields": [
         "permissions",
         "element",
@@ -83,10 +199,14 @@
     {
       "id": "woo_tak",
       "name": "Woo-Tak",
+      "agent_class": "operational",
+      "visibility": "visible",
       "agent_type": "operational_guardian",
       "origin_model": "codex",
       "attested_by": "grid_builder",
-      "known_from": "migrate_cycle1_sovereign_core.cypher",
+      "known_from": [
+        "migrate_cycle1_sovereign_core.cypher"
+      ],
       "missing_fields": [
         "permissions",
         "element",
@@ -96,9 +216,12 @@
       ]
     }
   ],
-  "remaining_agents": {
-    "count": 8,
-    "status": "NOT_IN_CORPUS",
-    "note": "An external spreadsheet lists additional agents, but those rows are not part of the canonical text/cypher corpus. They are not registered here because the rule is to not invent fields."
-  }
+  "invariants": [
+    "All canonical ecosystem entities must have a unique entity_id.",
+    "All visible agents must resolve canonically.",
+    "Breda must resolve canonically as a shadow_agent.",
+    "Breda must not expose execution, approval, registration, or graph_write authority.",
+    "Unknown or forged entities must fail canonical resolution.",
+    "Cardinality (e.g. exactly 13) is not a security invariant."
+  ]
 }
