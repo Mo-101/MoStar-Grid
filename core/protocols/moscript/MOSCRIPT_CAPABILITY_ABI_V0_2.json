@@ -1,0 +1,244 @@
+{
+  "name": "MOSCRIPT_CAPABILITY_ABI_V0_2",
+  "note": "Substrate capabilities for governed agent initiation. Host code provides mechanism only; meaning is authored in MoScript .ms scrolls.",
+  "base_capabilities": [
+    "gate.execute",
+    "clock.read",
+    "filesystem.read",
+    "filesystem.write"
+  ],
+  "governance_capabilities": [
+    {
+      "id": "contract.resolve",
+      "description": "Resolve a manifest-authorized contract by id and return its validated payload. No contract-specific branching in host.",
+      "input_schema": {
+        "type": "object",
+        "required": ["contract_id"],
+        "properties": {
+          "contract_id": { "type": "string" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["id", "hash", "payload"],
+        "properties": {
+          "id": { "type": "string" },
+          "hash": { "type": "string" },
+          "payload": { "type": "object" }
+        }
+      }
+    }
+  ],
+  "entity_capabilities": [
+    {
+      "id": "entity.lookup",
+      "description": "Return the canonical AgentDeclaration for an entity_id, or a canonical-missing signal.",
+      "input_schema": {
+        "type": "object",
+        "required": ["entity_id"],
+        "properties": {
+          "entity_id": { "type": "string" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["found"],
+        "properties": {
+          "found": { "type": "boolean" },
+          "declaration": { "type": "object" }
+        }
+      }
+    },
+    {
+      "id": "entity.is_canonical",
+      "description": "Return whether an entity_id is present and non-held in the canonical pantheon.",
+      "input_schema": {
+        "type": "object",
+        "required": ["entity_id"],
+        "properties": {
+          "entity_id": { "type": "string" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["canonical", "held"],
+        "properties": {
+          "canonical": { "type": "boolean" },
+          "held": { "type": "boolean" }
+        }
+      }
+    },
+    {
+      "id": "entity.register",
+      "description": "Persist an AgentDeclaration as canonical. Host performs only mechanical write; admission logic is in calling scroll.",
+      "input_schema": {
+        "type": "object",
+        "required": ["declaration"],
+        "properties": {
+          "declaration": { "type": "object" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["registered"],
+        "properties": {
+          "registered": { "type": "boolean" },
+          "entity_id": { "type": "string" }
+        }
+      }
+    },
+    {
+      "id": "entity.seal",
+      "description": "Produce an immutable canonical seal for a registered entity.",
+      "input_schema": {
+        "type": "object",
+        "required": ["entity_id"],
+        "properties": {
+          "entity_id": { "type": "string" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["sealed"],
+        "properties": {
+          "sealed": { "type": "boolean" },
+          "seal": { "type": "string" }
+        }
+      }
+    }
+  ],
+  "provenance_capabilities": [
+    {
+      "id": "provenance.read",
+      "description": "Read the provenance record for a candidate.",
+      "input_schema": {
+        "type": "object",
+        "required": ["candidate_id"],
+        "properties": {
+          "candidate_id": { "type": "string" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["provenance"],
+        "properties": {
+          "provenance": { "type": "object" }
+        }
+      }
+    },
+    {
+      "id": "provenance.write",
+      "description": "Append an immutable provenance event.",
+      "input_schema": {
+        "type": "object",
+        "required": ["candidate_id", "event"],
+        "properties": {
+          "candidate_id": { "type": "string" },
+          "event": { "type": "object" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["written"],
+        "properties": {
+          "written": { "type": "boolean" },
+          "event_id": { "type": "string" }
+        }
+      }
+    },
+    {
+      "id": "provenance.open_adjudication",
+      "description": "Create an AdjudicationCase for CONFLICTED provenance.",
+      "input_schema": {
+        "type": "object",
+        "required": ["candidate_id", "conflicts"],
+        "properties": {
+          "candidate_id": { "type": "string" },
+          "conflicts": { "type": "array" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["opened", "case_id"],
+        "properties": {
+          "opened": { "type": "boolean" },
+          "case_id": { "type": "string" }
+        }
+      }
+    }
+  ],
+  "attestation_capabilities": [
+    {
+      "id": "attestation.resolve",
+      "description": "Resolve an attestation certificate and verify origin/attestor independence mechanically.",
+      "input_schema": {
+        "type": "object",
+        "required": ["certificate"],
+        "properties": {
+          "certificate": { "type": "object" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["independent"],
+        "properties": {
+          "independent": { "type": "boolean" },
+          "origin_runtime": { "type": "string" },
+          "attestor_runtime": { "type": "string" }
+        }
+      }
+    }
+  ],
+  "graph_capabilities": [
+    {
+      "id": "graph.template.execute",
+      "description": "Execute a sealed, manifest-authorized Cypher template with parameters. No free-form Cypher.",
+      "input_schema": {
+        "type": "object",
+        "required": ["template_id", "parameters"],
+        "properties": {
+          "template_id": { "type": "string" },
+          "parameters": { "type": "object" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["executed"],
+        "properties": {
+          "executed": { "type": "boolean" },
+          "result": { "type": "object" }
+        }
+      }
+    }
+  ],
+  "capability_confinement": {
+    "breda_witness": [
+      "contract.resolve",
+      "entity.lookup",
+      "provenance.read",
+      "attestation.resolve"
+    ],
+    "initiation_service": [
+      "contract.resolve",
+      "entity.lookup",
+      "provenance.read",
+      "provenance.write",
+      "provenance.open_adjudication",
+      "entity.register",
+      "entity.seal",
+      "attestation.resolve"
+    ],
+    "mind_projector": [
+      "entity.lookup",
+      "entity.is_canonical",
+      "graph.template.execute"
+    ]
+  },
+  "forbidden_patterns": [
+    "conduit.call(anything)",
+    "neo4j.project",
+    "governance.evaluate",
+    "entity.register deciding admission",
+    "graph.template.execute accepting raw Cypher"
+  ]
+}

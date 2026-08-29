@@ -75,6 +75,12 @@ These invariants are asserted as architecture, not yet enforced by executable co
 8. No subsystem may bypass `entity.ecosystem`.
 9. Every initiation outcome leaves provenance.
 
+## Chosen path
+
+**Option 2** — extend the Go MoScript VM with generic, narrow substrate capabilities and author all initiation/governance semantics in MoScript.
+
+The Go VM remains the **execution substrate only**. It may not contain Breda rules, initiation policy, or contract-specific branches. All meaning lives in `.ms` scrolls.
+
 ## MoScript runtime capability gap
 
 The v0.1.1 MoScript runtime only exposes:
@@ -86,39 +92,45 @@ filesystem.read
 filesystem.write
 ```
 
-The following narrow primitives are required before the initiation workflow can be expressed as MoScript:
+The following narrow substrate capabilities are required before the initiation workflow can be expressed as MoScript:
 
 ```text
+contract.resolve
+
 entity.lookup
-entity.register
 entity.is_canonical
+entity.register
+entity.seal
 
-governance.evaluate
-
-provenance.witness
+provenance.read
 provenance.write
 provenance.open_adjudication
 
-conduit.invoke
+attestation.resolve
 
-neo4j.project
-neo4j.template.execute
+graph.template.execute
 ```
 
 These must be added as **narrow, deny-by-default capabilities**, not generic escape hatches such as:
 
 ```text
 conduit.call(anything)   -- forbidden pattern
+neo4j.project            -- host must not decide graph shape
+governance.evaluate      -- policy belongs in MoScript
 ```
+
+Capability ABI schemas are frozen in:
+
+`core/protocols/moscript/MOSCRIPT_CAPABILITY_ABI_V0_2.json`
 
 ## Next unblocked steps
 
-1. Extend the MoScript runtime with the listed narrow capabilities.
-2. Author the following `.ms` scrolls:
-   - `breda-witness.ms`
-   - `initiation-service.ms`
-   - `governance-invocation.ms`
-   - `mind-projector.ms`
-3. Add a compiled `mo-mind-initiation-001` evaluator if the runtime continues to use the existing contract engine, or implement the law directly in MoScript if the runtime moves to a contract-as-scroll model.
+1. Add the v0.2 substrate capabilities to the Go MoScript VM (`core/protocols/moscript/main.go`) without policy logic.
+2. Author the following `.ms` scrolls (architecture in `core/protocols/moscript/scrolls/README.md`):
+   - `breda_witness.ms`
+   - `governance_dispatch.ms`
+   - `initiation_service.ms`
+   - `mind_projector.ms`
+3. Bind each scroll to `mo-mind-initiation-001` by contract id and canonical hash in its seal metadata.
 4. Add sealed canonical Cypher templates for Neo4j projection, bound to `mo-mind-cypher-guard-001`.
 5. Verify the canonical 13-agent pantheon once the remaining 8 agents are sourced from the canonical corpus.
