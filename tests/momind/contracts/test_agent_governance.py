@@ -5,7 +5,13 @@ from pathlib import Path
 
 import pytest
 
-from entity.ecosystem import AgentDeclaration, AgentNotFound, Ecosystem, GovernanceViolation
+from entity import (
+    AgentDeclaration,
+    AgentNotFound,
+    Ecosystem,
+    GovernanceViolation,
+    MindProjector,
+)
 from moscript import MoScript, MoScriptEngine
 from moscript.runtime import GovernanceEngine
 
@@ -196,3 +202,113 @@ def test_unknown_forge_denied():
     dec = g.govern("forge-agent-999", "agent.execute", ecosystem=eco)
     assert dec.decision == "DENY"
     assert "UNKNOWN_AGENT" in dec.reason_codes
+
+
+class _FakeNode:
+    def __init__(self, data):
+        self._data = data
+
+    def __getitem__(self, key):
+        return self._data[key]
+
+    def get(self, key, default=None):
+        return self._data.get(key, default)
+
+
+class _FakeRecord:
+    def __init__(self, data):
+        self._data = data
+
+    def __getitem__(self, key):
+        return _FakeNode(self._data) if key == "a" else self._data.get(key)
+
+
+class _FakeResult:
+    def __init__(self, params):
+        self._params = params
+
+    def single(self):
+        return _FakeRecord(self._params)
+
+
+class _FakeSession:
+    def __init__(self, driver):
+        self._driver = driver
+
+    def run(self, query, params):
+        self._driver.calls.append((query, params))
+        return _FakeResult(params)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return None
+
+
+class _FakeDriver:
+    def __init__(self):
+        self.calls = []
+
+    def session(self):
+        return _FakeSession(self)
+
+
+def test_mind_projector_ready_without_driver(engine):
+    eco = Ecosystem.from_csv(ECOSYSTEM_CSV)
+    projector = MindProjector(eco, engine)
+    res = projector.project("alpha_mo")
+    assert res.status == "READY"
+    assert res.query and "MERGE (a:Agent" in res.query
+    assert res.params["entity_id"] == "alpha_mo"
+
+
+def test_mind_projector_unknown_denied(engine):
+    eco = Ecosystem.from_csv(ECOSYSTEM_CSV)
+    projector = MindProjector(eco, engine)
+    res = projector.project("forge-agent-999", driver=_FakeDriver())
+    assert res.status == "DENY"
+    assert "UNKNOWN_AGENT" in res.reason_codes
+
+
+def test_mind_projector_projects_all_14(engine):
+    eco = Ecosystem.from_csv(ECOSYSTEM_CSV)
+    projector = MindProjector(eco, engine)
+    driver = _FakeDriver()
+    results = projector.project_all(driver=driver)
+
+    assert len(results) == 14
+    assert all(r.status == "PROJECTED" for r in results.values())
+
+    # Canonical identity uniqueness
+    assert len(driver.calls) == 14
+    ids_projected = {c[1]["entity_id"] for c in driver.calls}
+    assert ids_projected == set(eco.ids())
+
+    # Breda is projected as shadow with no execution authority
+    breda = results["breda"]
+    assert breda.node is not None
+    assert breda.node["agent_class"] == "shadow_agent"
+    assert breda.node["visibility"] == "shadow"
+    assert "agent.execute" not in breda.node["permissions"]
+
+    # Two FlameBorr identities stay distinct
+    assert "flameborr_catalyst" in ids_projected
+    assert "flameborr_narrative" in ids_projected
+
+    # An operational agent carries the canonical flag and execution permission
+    alpha = results["alpha_mo"].node
+    assert alpha["canonical"] is True
+    assert "agent.execute" in alpha["permissions"]
+
+
+def test_mind_projector_idempotent(engine):
+    eco = Ecosystem.from_csv(ECOSYSTEM_CSV)
+    projector = MindProjector(eco, engine)
+    driver = _FakeDriver()
+
+    r1 = projector.project("alpha_mo", driver=driver)
+    r2 = projector.project("alpha_mo", driver=driver)
+    assert r1.status == "PROJECTED"
+    assert r2.status == "PROJECTED"
+    assert len([c for c in driver.calls if c[1]["entity_id"] == "alpha_mo"]) == 2

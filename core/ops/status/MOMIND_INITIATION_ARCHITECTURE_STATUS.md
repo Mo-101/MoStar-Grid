@@ -11,14 +11,31 @@ MoMind Initiation Architecture
   STATUS: SPECIFIED
 
 Canonical pantheon
-  STATUS: VERIFIED FROM CORPUS
-  NOTE:    Only 5 canonical agents are present in the existing corpus.
-           The 13-agent spreadsheet is not in the canonical text/cypher corpus.
-           Breda is the 13th agent in doctrine, but her complete fields are not in corpus.
+  STATUS: REGISTERED (14 agents)
+  NOTE:    13 operational/visible agents from image + Breda as shadow/constitutional.
+
+entity.ecosystem canonical resolution
+  STATUS: IMPLEMENTED — Ecosystem.from_csv() loads 14 AgentDeclarations
+
+14-agent governance
+  STATUS: IMPLEMENTED — GovernanceEngine allows agent.execute for operational, denies Breda
+
+Breda shadow confinement
+  STATUS: IMPLEMENTED — shadow_agent / witness_only provenance, denied agent.execute
 
 Governance contract mo-mind-initiation-001
   STATUS: ADDED AS DECLARATIVE LAW
   NOTE:    Present as JSON contract. Not wired to a runtime evaluator.
+
+MindProjector (host adapter)
+  STATUS: IMPLEMENTED
+  NOTE:    Sealed `agent-projection-001` template registered with mo-mind-cypher-guard-001.
+           Host adapter `core/sovereignty/entity/mind_projector.py` projects canonical
+           declarations to `(:Agent {id, canonical: true})`. Graph integration tests
+           use a fake driver; real Neo4j run requires the configured NEO4J_PASSWORD.
+
+Neo4j Mind projection scroll
+  STATUS: BLOCKED — MoScript capability gap
 
 InitiationService
   STATUS: BLOCKED — MoScript capability gap
@@ -27,12 +44,6 @@ Breda witness scroll
   STATUS: BLOCKED — MoScript capability gap
 
 Governance invocation scroll
-  STATUS: BLOCKED — MoScript capability gap
-
-Neo4j Mind projection scroll
-  STATUS: BLOCKED — MoScript capability gap
-
-MindProjector
   STATUS: BLOCKED — MoScript capability gap
 ```
 
