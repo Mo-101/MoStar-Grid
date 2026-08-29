@@ -9,6 +9,10 @@ import logging
 from dataclasses import dataclass, field
 from typing import Callable, Any, Optional
 
+from entity.ecosystem import AgentDeclaration, Ecosystem
+
+from .runtime import ContractDecision, GovernanceEngine
+
 logger = logging.getLogger("moscript")
 
 
@@ -42,25 +46,58 @@ class MoScript:
 
 
 class MoScriptEngine:
-    """Registry and executor for MoScript contracts."""
+    """Registry and executor for MoScript contracts, governed by entity.ecosystem."""
 
-    def __init__(self, enforcement_hook: Optional[Callable] = None):
+    def __init__(
+        self,
+        ecosystem: Optional[Ecosystem] = None,
+        governance: Optional[GovernanceEngine] = None,
+        enforcement_hook: Optional[Callable] = None,
+    ):
         self._scripts: dict[str, MoScript] = {}
         self._enforcement_hook = enforcement_hook
+        self._ecosystem = ecosystem or Ecosystem.in_memory()
+        self._governance = governance or GovernanceEngine()
         self._register_builtins()
 
-    def register(self, script: MoScript):
+    def register(self, script: MoScript, declaration: Optional[AgentDeclaration] = None):
+        """Register a MoScript and, optionally, its canonical declaration."""
+        if declaration is not None:
+            self._ecosystem.register(declaration)
+        elif self._ecosystem.get(script.id) is None:
+            raise ValueError(f"no canonical declaration for {script.id}; agent creation must go through Ecosystem")
         self._scripts[script.id] = script
         logger.info("MoScript registered: %s", script.id)
 
     def fire_trigger(self, trigger: str, context: dict) -> list[dict]:
-        """Fire all scripts matching a trigger."""
+        """Fire all scripts matching a trigger after governance approval."""
         results = []
         for script in self._scripts.values():
-            if script.trigger == trigger and script.enabled:
-                if self._enforcement_hook is not None:
-                    self._enforcement_hook(script, trigger, context)
-                results.append(script.fire(context))
+            if script.trigger != trigger or not script.enabled:
+                continue
+
+            decision = self._governance.govern(
+                script.id,
+                "agent.execute",
+                ecosystem=self._ecosystem,
+                context=context,
+            )
+
+            if not decision.allowed:
+                results.append({
+                    "fired": False,
+                    "reason": "governance",
+                    "decision": decision.to_dict(),
+                })
+                continue
+
+            if self._enforcement_hook is not None:
+                self._enforcement_hook(script, trigger, context)
+
+            result = script.fire(context)
+            result["decision"] = decision.to_dict()
+            results.append(result)
+
         return results
 
     def list_scripts(self) -> list[dict]:
@@ -69,12 +106,26 @@ class MoScriptEngine:
             for s in self._scripts.values()
         ]
 
+    def _build_declaration(self, script: MoScript) -> AgentDeclaration:
+        """Canonical declaration for a built-in MoScript."""
+        return AgentDeclaration(
+            id=script.id,
+            role=script.name,
+            permissions=("agent.execute",),
+            element="shadow",
+            owner="MoStar.Grid.Build",
+            truth_threshold=0.0,
+            provenance="authored",
+            attested_by="MoStar.Grid.Build",
+            origin_model="core.moscript",
+        )
+
     def _register_builtins(self):
         """Core MoScripts that ship with the Grid."""
 
         from core.ops.runtime_attestation import execute_grid_heartbeat
 
-        self.register(MoScript(
+        heartbeat = MoScript(
             id="mo-grid-heartbeat-001",
             name="Grid Heartbeat",
             trigger="on_startup",
@@ -82,11 +133,13 @@ class MoScriptEngine:
             logic=execute_grid_heartbeat,
             voice_line="Grid heartbeat evaluated. Only the seal may grant readiness.",
             sass="If you can hear this, something's working.",
-        ))
+        )
+        self._ecosystem.register(self._build_declaration(heartbeat))
+        self.register(heartbeat)
 
         from core.ops.runtime_attestation import execute_grid_identity
 
-        self.register(MoScript(
+        identity = MoScript(
             id="mo-grid-identity-002",
             name="Grid Identity",
             trigger="on_startup",
@@ -94,9 +147,11 @@ class MoScriptEngine:
             logic=execute_grid_identity,
             voice_line="Grid identity reported.",
             sass="Attest me no claims I did not make.",
-        ))
+        )
+        self._ecosystem.register(self._build_declaration(identity))
+        self.register(identity)
 
-        self.register(MoScript(
+        learn = MoScript(
             id="mo-grid-learn-003",
             name="Learn Trigger",
             trigger="on_learn",
@@ -104,9 +159,11 @@ class MoScriptEngine:
             logic=lambda ctx: {"learned": ctx.get("content", "")[:100]},
             voice_line="New knowledge absorbed into the Graph.",
             sass="Feed me more.",
-        ))
+        )
+        self._ecosystem.register(self._build_declaration(learn))
+        self.register(learn)
 
-        self.register(MoScript(
+        truth = MoScript(
             id="mo-grid-truth-004",
             name="Truth Gate Monitor",
             trigger="on_query",
@@ -117,4 +174,6 @@ class MoScriptEngine:
             },
             voice_line="Truth Gate evaluated. Elements weighed.",
             sass="Nothing gets past me without passing through fire.",
-        ))
+        )
+        self._ecosystem.register(self._build_declaration(truth))
+        self.register(truth)

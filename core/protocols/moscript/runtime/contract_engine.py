@@ -8,6 +8,8 @@ import re
 from dataclasses import dataclass
 from typing import Any, Callable
 
+from entity.ecosystem import AgentDeclaration, AgentNotFound, Ecosystem
+
 from .contract_decision import ContractDecision, GovernanceFailure
 from .contract_registry import ContractRegistry, SealedContract
 
@@ -270,3 +272,65 @@ class GovernanceEngine:
         if compiled is None:
             raise GovernanceFailure(f"no compiled evaluator for {contract_id}")
         return compiled(self, contract, event, principal, context, input_hash)
+
+    def govern(
+        self,
+        agent_id: str,
+        action: str,
+        *,
+        ecosystem: Ecosystem,
+        context: dict | None = None,
+    ) -> ContractDecision:
+        """Fail-closed agent action evaluation against the canonical ecosystem."""
+        context = context or {}
+        contract_id = "entity.agent.execution"
+        event = {"agent_id": agent_id, "action": action}
+
+        if ecosystem is None:
+            return _decision(contract_id, "DENY", ["MISSING_ECOSYSTEM"], _hash_event(event))
+
+        try:
+            agent = ecosystem.require_agent(agent_id)
+        except AgentNotFound:
+            return _decision(
+                contract_id,
+                "DENY",
+                ["UNKNOWN_AGENT"],
+                _hash_event(event),
+            )
+
+        try:
+            # Re-validate the declaration at enforcement time.
+            AgentDeclaration(**agent.to_dict())
+        except Exception as exc:
+            return _decision(
+                contract_id,
+                "DENY",
+                ["INVALID_DECLARATION"],
+                _hash_event(agent.to_dict()),
+            )
+
+        if not agent.has_permission(action):
+            return _decision(
+                contract_id,
+                "DENY",
+                ["PERMISSION_DENIED"],
+                _hash_event(agent.to_dict()),
+            )
+
+        truth_score = context.get("truth_score", 1.0)
+        if truth_score < agent.truth_threshold:
+            return _decision(
+                contract_id,
+                "DENY",
+                ["TRUTH_THRESHOLD"],
+                _hash_event(agent.to_dict()),
+            )
+
+        return _decision(
+            contract_id,
+            "ALLOW",
+            [],
+            _hash_event(agent.to_dict()),
+            {"agent_id": agent.id, "role": agent.role, "owner": agent.owner},
+        )

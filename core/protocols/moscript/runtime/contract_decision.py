@@ -22,3 +22,16 @@ class ContractDecision:
     def __post_init__(self):
         if self.decision not in VALID_DECISIONS:
             raise ValueError(f"invalid decision {self.decision!r}")
+
+    @property
+    def allowed(self) -> bool:
+        return self.decision == "ALLOW"
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "contract_id": self.contract_id,
+            "decision": self.decision,
+            "reason_codes": list(self.reason_codes),
+            "input_hash": self.input_hash,
+            "result": self.result,
+        }
