@@ -1,11 +1,15 @@
 """Governance tests for canonical AgentDeclaration, Ecosystem, and MoScript."""
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from entity.ecosystem import AgentDeclaration, AgentNotFound, Ecosystem, GovernanceViolation
 from moscript import MoScript, MoScriptEngine
 from moscript.runtime import GovernanceEngine
+
+ECOSYSTEM_CSV = Path("core/sovereignty/entity/entity_ecosystem.csv")
 
 
 def _declaration(**overrides) -> AgentDeclaration:
@@ -136,3 +140,59 @@ def test_moscript_engine_custom_script_governed():
     assert len(results) == 1
     assert results[0]["fired"]
     assert results[0]["decision"]["decision"] == "ALLOW"
+
+
+def test_canonical_pantheon_loads_from_csv():
+    eco = Ecosystem.from_csv(ECOSYSTEM_CSV)
+    assert len(eco.ids()) == 14
+    assert set(eco.ids()) == {
+        "alpha_mo",
+        "woo_tak",
+        "altimo",
+        "deepcal",
+        "molink",
+        "sigma",
+        "flameborr_catalyst",
+        "data_conc",
+        "code_conc",
+        "rad_x_flb",
+        "tstsee_fly",
+        "flameborr_narrative",
+        "mostar_ai",
+        "breda",
+    }
+    breda = eco.require_agent("breda")
+    assert breda.agent_class == "shadow_agent"
+    assert breda.visibility == "shadow"
+
+
+def test_operational_agents_allowed_to_execute():
+    g = GovernanceEngine()
+    eco = Ecosystem.from_csv(ECOSYSTEM_CSV)
+    for agent_id in eco.ids():
+        if eco.require_agent(agent_id).agent_class != "shadow_agent":
+            dec = g.govern(agent_id, "agent.execute", ecosystem=eco)
+            assert dec.decision == "ALLOW", f"{agent_id} should be allowed to execute"
+
+
+def test_breda_denied_execution():
+    g = GovernanceEngine()
+    eco = Ecosystem.from_csv(ECOSYSTEM_CSV)
+    dec = g.govern("breda", "agent.execute", ecosystem=eco)
+    assert dec.decision == "DENY"
+    assert "PERMISSION_DENIED" in dec.reason_codes
+
+
+def test_breda_allowed_to_witness():
+    g = GovernanceEngine()
+    eco = Ecosystem.from_csv(ECOSYSTEM_CSV)
+    dec = g.govern("breda", "provenance.witness", ecosystem=eco)
+    assert dec.decision == "ALLOW"
+
+
+def test_unknown_forge_denied():
+    g = GovernanceEngine()
+    eco = Ecosystem.from_csv(ECOSYSTEM_CSV)
+    dec = g.govern("forge-agent-999", "agent.execute", ecosystem=eco)
+    assert dec.decision == "DENY"
+    assert "UNKNOWN_AGENT" in dec.reason_codes

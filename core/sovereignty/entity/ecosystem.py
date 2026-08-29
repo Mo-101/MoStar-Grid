@@ -1,6 +1,7 @@
 """Canonical agent registry and constitutional declarations."""
 from __future__ import annotations
 
+import csv
 import json
 import pathlib
 from dataclasses import asdict, dataclass
@@ -17,6 +18,18 @@ class AgentNotFound(KeyError):
 
 ELEMENTS = frozenset({"ikang", "mmong", "afim", "isong", "shadow"})
 PROVENANCE = frozenset({"authored", "detected", "derived"})
+AGENT_CLASSES = frozenset({"operational", "shadow_agent"})
+VISIBILITIES = frozenset({"visible", "shadow"})
+
+
+def _blank(value: str) -> bool:
+    return not value or value.upper() in {"UNKNOWN", "NONE"}
+
+
+def _split_abilities(value: str) -> tuple[str, ...]:
+    if _blank(value):
+        return ()
+    return tuple(part.strip() for part in value.split(",") if part.strip())
 
 
 @dataclass(frozen=True)
@@ -32,6 +45,8 @@ class AgentDeclaration:
     provenance: str
     attested_by: str
     origin_model: str
+    agent_class: str = "operational"
+    visibility: str = "visible"
 
     def __post_init__(self):
         if not self.id:
@@ -54,6 +69,10 @@ class AgentDeclaration:
             raise GovernanceViolation("truth_threshold must be between 0.0 and 1.0")
         if not self.permissions or not all(isinstance(p, str) and p for p in self.permissions):
             raise GovernanceViolation("permissions must be a non-empty list of strings")
+        if self.agent_class not in AGENT_CLASSES:
+            raise GovernanceViolation(f"invalid agent_class: {self.agent_class}")
+        if self.visibility not in VISIBILITIES:
+            raise GovernanceViolation(f"invalid visibility: {self.visibility}")
 
     def has_permission(self, action: str) -> bool:
         return action in self.permissions or "*" in self.permissions
@@ -69,6 +88,8 @@ class AgentDeclaration:
             "provenance": self.provenance,
             "attested_by": self.attested_by,
             "origin_model": self.origin_model,
+            "agent_class": self.agent_class,
+            "visibility": self.visibility,
         }
 
     @classmethod
@@ -83,6 +104,61 @@ class AgentDeclaration:
             provenance=str(data.get("provenance", "detected")),
             attested_by=str(data["attested_by"]),
             origin_model=str(data["origin_model"]),
+            agent_class=str(data.get("agent_class", "operational")),
+            visibility=str(data.get("visibility", "visible")),
+        )
+
+    @classmethod
+    def from_csv_row(cls, row: dict[str, str]) -> "AgentDeclaration":
+        """Derive a canonical declaration from an entity_ecosystem.csv row.
+
+        Missing/UNKNOWN values are filled with conservative defaults.
+        This is mechanical mapping only; it does not invent doctrine.
+        """
+        entity_id = row["entity_id"].strip()
+        name = row["name"].strip()
+        agent_class = row.get("agent_class", "operational").strip()
+        visibility = row.get("visibility", "visible").strip()
+
+        role = row.get("role", "").strip() or name
+        essence = row.get("essence", "shadow").strip()
+        element = essence if essence in ELEMENTS else "shadow"
+
+        owner = row.get("origin", "").strip() if not _blank(row.get("origin")) else "canonical_pantheon"
+
+        raw_attestor = row.get("bonded_to", "").strip()
+        attested_by = raw_attestor if not _blank(raw_attestor) else "canonical_pantheon"
+
+        raw_origin = row.get("origin", "").strip()
+        origin_model = raw_origin if not _blank(raw_origin) else f"origin:{entity_id}"
+
+        # Enforce independence even when defaults collide.
+        if attested_by == origin_model:
+            attested_by = "canonical_pantheon"
+
+        truth_threshold = 0.0
+        provenance = "authored" if agent_class == "shadow_agent" else "detected"
+
+        abilities = _split_abilities(row.get("abilities", ""))
+        if agent_class == "shadow_agent":
+            # Breda does not get agent.execute.
+            perms = ["provenance.witness" if a == "witness_provenance" else a for a in abilities]
+            permissions = tuple(perms) or ("provenance.witness",)
+        else:
+            permissions = abilities + ("agent.execute",)
+
+        return cls(
+            id=entity_id,
+            role=role,
+            permissions=permissions,
+            element=element,
+            owner=owner,
+            truth_threshold=truth_threshold,
+            provenance=provenance,
+            attested_by=attested_by,
+            origin_model=origin_model,
+            agent_class=agent_class,
+            visibility=visibility,
         )
 
 
@@ -99,6 +175,22 @@ class Ecosystem:
     @classmethod
     def in_memory(cls) -> "Ecosystem":
         return cls()
+
+    @classmethod
+    def from_csv(cls, csv_path: pathlib.Path | str) -> "Ecosystem":
+        """Load canonical agent declarations from entity_ecosystem.csv."""
+        inst = cls()
+        with open(csv_path, "r", encoding="utf-8", newline="") as f:
+            for row in csv.DictReader(f):
+                if not row.get("entity_id", "").strip():
+                    continue
+                try:
+                    declaration = AgentDeclaration.from_csv_row(row)
+                except GovernanceViolation:
+                    # Fail closed: skip malformed rows.
+                    continue
+                inst.register(declaration)
+        return inst
 
     def _load(self) -> None:
         if self._registry_path is None or not self._registry_path.exists():
