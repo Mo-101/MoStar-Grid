@@ -1,0 +1,124 @@
+# MoMind Initiation Architecture — Build Status
+
+**Scope:** canonical agent admission through capability confinement, provenance witnessing, governance adjudication, and guarded Neo4j projection.
+
+**Central constraint:** all *new executable project logic* must be authored in MoScript. Host-language components remain adapters behind MoScript/Conduit boundaries.
+
+## Component Status
+
+```text
+MoMind Initiation Architecture
+  STATUS: SPECIFIED
+
+Canonical pantheon
+  STATUS: VERIFIED FROM CORPUS
+  NOTE:    Only 5 canonical agents are present in the existing corpus.
+           The 13-agent spreadsheet is not in the canonical text/cypher corpus.
+           Breda is the 13th agent in doctrine, but her complete fields are not in corpus.
+
+Governance contract mo-mind-initiation-001
+  STATUS: ADDED AS DECLARATIVE LAW
+  NOTE:    Present as JSON contract. Not wired to a runtime evaluator.
+
+InitiationService
+  STATUS: BLOCKED — MoScript capability gap
+
+Breda witness scroll
+  STATUS: BLOCKED — MoScript capability gap
+
+Governance invocation scroll
+  STATUS: BLOCKED — MoScript capability gap
+
+Neo4j Mind projection scroll
+  STATUS: BLOCKED — MoScript capability gap
+
+MindProjector
+  STATUS: BLOCKED — MoScript capability gap
+```
+
+## Canonical pantheon inventory
+
+Discovered from the existing canonical corpus only:
+
+| id          | name          | role                  | source                                               |
+| ----------- | ------------- | --------------------- | ---------------------------------------------------- |
+| `mo`        | Mo            | Executor              | `core/ops/governance/GRID_MIND_CONSTITUTION.md`      |
+| `woo`       | Woo           | Sealer                | `core/ops/governance/GRID_MIND_CONSTITUTION.md`      |
+| `breda`     | Breda         | Provenance Witness    | `core/ops/governance/GRID_MIND_CONSTITUTION.md`, `MSG-02_BREDA_PROVENANCE_DOCTRINE.md` |
+| `code_conduit` | CodeConduit | META Gateway          | `core/ops/governance/GRID_MIND_CONSTITUTION.md`      |
+| `woo_tak`   | Woo-Tak       | operational_guardian  | `migrate_cycle1_sovereign_core.cypher`               |
+
+The remaining 8 agents referenced in the external spreadsheet are **not registered** because they do not appear in the canonical corpus and the rule is to not invent fields.
+
+Full inventory, missing fields, and corpus source locations:
+
+`core/sovereignty/entity/corpus_pantheon.json`
+
+## Declarative law
+
+`core/protocols/moscript/contracts/mo-mind-initiation-001.json` is checked in as declarative law. It is not yet an executable runtime contract because:
+
+- no compiled evaluator exists in `contract_engine.py`, and
+- the MoScript runtime has no primitives to express the workflow.
+
+## Static invariants
+
+These invariants are asserted as architecture, not yet enforced by executable code:
+
+1. `attested_by != origin_model` at the canonical declaration/governance boundary.
+2. Breda does not execute, approve, register, or write Neo4j.
+3. `GovernanceEngine` cannot persist an entity itself.
+4. `InitiationService` cannot admit without `SUFFICIENT` provenance and `ALLOW`.
+5. `CONFLICTED` provenance becomes `HELD_FOR_ADJUDICATION`; it is not denied and not admitted.
+6. `MindProjector` refuses projection for non-canonical entities, held candidates, and unknown `entity_id`s.
+7. Neo4j may only project canonical identity, never establish it.
+8. No subsystem may bypass `entity.ecosystem`.
+9. Every initiation outcome leaves provenance.
+
+## MoScript runtime capability gap
+
+The v0.1.1 MoScript runtime only exposes:
+
+```text
+gate.execute
+clock.read
+filesystem.read
+filesystem.write
+```
+
+The following narrow primitives are required before the initiation workflow can be expressed as MoScript:
+
+```text
+entity.lookup
+entity.register
+entity.is_canonical
+
+governance.evaluate
+
+provenance.witness
+provenance.write
+provenance.open_adjudication
+
+conduit.invoke
+
+neo4j.project
+neo4j.template.execute
+```
+
+These must be added as **narrow, deny-by-default capabilities**, not generic escape hatches such as:
+
+```text
+conduit.call(anything)   -- forbidden pattern
+```
+
+## Next unblocked steps
+
+1. Extend the MoScript runtime with the listed narrow capabilities.
+2. Author the following `.ms` scrolls:
+   - `breda-witness.ms`
+   - `initiation-service.ms`
+   - `governance-invocation.ms`
+   - `mind-projector.ms`
+3. Add a compiled `mo-mind-initiation-001` evaluator if the runtime continues to use the existing contract engine, or implement the law directly in MoScript if the runtime moves to a contract-as-scroll model.
+4. Add sealed canonical Cypher templates for Neo4j projection, bound to `mo-mind-cypher-guard-001`.
+5. Verify the canonical 13-agent pantheon once the remaining 8 agents are sourced from the canonical corpus.

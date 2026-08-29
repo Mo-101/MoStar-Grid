@@ -1,0 +1,8 @@
+{
+  "id": "mo-mind-initiation-001",
+  "name": "Agent Initiation Law",
+  "trigger": "on_initiation",
+  "inputs": ["candidate", "provenance", "attestation", "origin_model"],
+  "law": "A candidate may only become canonical after a SUFFICIENT provenance witness from Breda, an independent attestation (attested_by != origin_model), a complete constitutional AgentDeclaration, and an ALLOW from GovernanceEngine. CONFLICTED provenance is routed to adjudication and held, not denied. INSUFFICIENT, INDETERMINATE, and WITHDRAWN assessments deny. Non-canonical, held, or forged entities may not be projected into Neo4j. Breda does not execute, approve, register, or write to Neo4j.",
+  "required_result": "DENY_NON_CANONICAL"
+}
