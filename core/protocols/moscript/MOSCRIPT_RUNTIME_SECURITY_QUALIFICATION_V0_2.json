@@ -1,0 +1,51 @@
+{
+  "qualification_version": "0.2",
+  "status": "candidate",
+  "status_note": "Pending durable provenance and chain-integrity qualification.",
+  "qualified_at": null,
+  "glyph_abi": "MOSCRIPT_GLYPH_ABI_V0_1",
+  "capability_abi": "MOSCRIPT_CAPABILITY_ABI_V0_2",
+  "runtime_binary": "moscript-v0.1.1-linux-amd64",
+  "test_suite": "tests/momind/runtime/",
+  "tests_total": 28,
+  "tests_passed": 28,
+  "required_properties": {
+    "governance_fail_closed": true,
+    "deny_prevents_execution": true,
+    "sealed_scroll_verification": true,
+    "receipt_signature_mutation_detected": true,
+    "receipt_signature_splice_detected": true,
+    "scroll_signature_mutation_detected": true,
+    "scroll_signature_splice_detected": true,
+    "scroll_signature_truncation_detected": true,
+    "capability_boundary_exact": true,
+    "runtime_budget_enforced": true,
+    "manager_output_bound_enforced": true,
+    "external_sigkill_handled_without_false_receipt": true,
+    "sigkill_emits_signed_failed_receipt": true,
+    "output_limit_emits_signed_failed_receipt": true,
+    "staged_execution_toctou_eliminated": true,
+    "receipt_canonical_and_payload_bound": true,
+    "executed_byte_identity_preserved": true,
+    "verified_path_equals_executed_path": true,
+    "verified_bytes_match_attested_bytes": true,
+    "registry_duplicate_id_blocking": true,
+    "replay_idempotency_enforced": true,
+    "execution_monopoly_ci_enforced": true
+  },
+  "pending_qualifications": [
+    "durable_signed_provenance",
+    "chain_continuity",
+    "concurrent_writer_safety"
+  ],
+  "not_implemented_in_runtime": [
+    "soulprint_authorship_binding",
+    "immutable_script_id",
+    "burn_refusal_behavior"
+  ],
+  "not_implemented_notes": {
+    "soulprint_authorship_binding": "No runtime hook in core/protocols/moscript/runtime; legacy SoulPrints are not wired here.",
+    "immutable_script_id": "No runtime hook; existing contract id is used but not enforced as immutable script ID.",
+    "burn_refusal_behavior": "Burn/refusal is represented as DENIED/FAILED execution with a persisted trace, not destructive deletion."
+  }
+}
