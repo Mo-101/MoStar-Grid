@@ -617,6 +617,7 @@ class RuntimeManager:
         public_key: pathlib.Path | str | None = None,
         cleanup: bool = True,
         execution_id: str | None = None,
+        woo_judgment: dict[str, Any] | None = None,
     ) -> RuntimeResult:
         """Run the full fail-closed lifecycle."""
         self._transitions = []
@@ -712,7 +713,44 @@ class RuntimeManager:
                 )
                 return result
 
-            # 5. Resolve effective capabilities.
+            # 5. Optional pre-execution Woo gate.
+            if woo_judgment is not None and not woo_judgment.get("approved"):
+                woo_decision = ContractDecision(
+                    contract_id="woo.gate",
+                    decision="DENY",
+                    reason_codes=("WOO_DENIED",),
+                    input_hash="",
+                    result={"woo_judgment": woo_judgment},
+                )
+                self._log(RuntimeState.DENIED, {"woo_judgment": woo_judgment})
+                result.state = RuntimeState.DENIED
+                result.decision = woo_decision
+                result.artifact_hash = artifact.program_hash
+                result.transitions = list(self._transitions)
+                result.audit_evidence = {
+                    "program_hash": artifact.program_hash,
+                    "governance": decision.to_dict(),
+                    "woo_judgment": woo_judgment,
+                }
+                result.evidence = _build_evidence(
+                    execution_id, artifact, woo_decision, result.transitions,
+                    None, result.audit_evidence,
+                )
+                result.provenance = self.provenance.record_receipt_builder(
+                    lambda previous: self._build_unsigned_receipt_from_denial(
+                        execution_id,
+                        attestation_id,
+                        artifact,
+                        woo_decision,
+                        result.audit_evidence,
+                        previous,
+                    )
+                )
+                result.attestation = result.provenance.receipt
+                result.attestation_id = result.attestation.attestation_id
+                return result
+
+            # 6. Resolve effective capabilities.
             effective = self._effective_capabilities(artifact, allow)
             self._log(RuntimeState.RUNNING, {"staged": str(artifact.path), "capabilities": effective})
 

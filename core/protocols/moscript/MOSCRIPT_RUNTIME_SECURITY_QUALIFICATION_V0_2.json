@@ -7,8 +7,8 @@
   "capability_abi": "MOSCRIPT_CAPABILITY_ABI_V0_2",
   "runtime_binary": "moscript-v0.1.1-linux-amd64",
   "test_suite": "tests/momind/runtime/",
-  "tests_total": 28,
-  "tests_passed": 28,
+  "tests_total": 33,
+  "tests_passed": 33,
   "required_properties": {
     "governance_fail_closed": true,
     "deny_prevents_execution": true,
@@ -31,7 +31,10 @@
     "verified_bytes_match_attested_bytes": true,
     "registry_duplicate_id_blocking": true,
     "replay_idempotency_enforced": true,
-    "execution_monopoly_ci_enforced": true
+    "execution_monopoly_ci_enforced": true,
+    "woo_judgment_pre_execution_gate": true,
+    "woo_denial_persisted_in_provenance": true,
+    "woo_replay_protection": true
   },
   "pending_qualifications": [
     "durable_signed_provenance",
