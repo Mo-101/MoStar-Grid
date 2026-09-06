@@ -1,0 +1,454 @@
+{
+  "name": "MOSCRIPT_GLYPH_ABI_V0_1",
+  "range": "U+1F700-U+1F73F",
+  "entries": [
+    {
+      "index": 0,
+      "codepoint": "U+1F700",
+      "glyph": "🜀",
+      "class": "letter",
+      "meaning": "A"
+    },
+    {
+      "index": 1,
+      "codepoint": "U+1F701",
+      "glyph": "🜁",
+      "class": "letter",
+      "meaning": "B"
+    },
+    {
+      "index": 2,
+      "codepoint": "U+1F702",
+      "glyph": "🜂",
+      "class": "letter",
+      "meaning": "C"
+    },
+    {
+      "index": 3,
+      "codepoint": "U+1F703",
+      "glyph": "🜃",
+      "class": "letter",
+      "meaning": "D"
+    },
+    {
+      "index": 4,
+      "codepoint": "U+1F704",
+      "glyph": "🜄",
+      "class": "letter",
+      "meaning": "E"
+    },
+    {
+      "index": 5,
+      "codepoint": "U+1F705",
+      "glyph": "🜅",
+      "class": "letter",
+      "meaning": "F"
+    },
+    {
+      "index": 6,
+      "codepoint": "U+1F706",
+      "glyph": "🜆",
+      "class": "letter",
+      "meaning": "G"
+    },
+    {
+      "index": 7,
+      "codepoint": "U+1F707",
+      "glyph": "🜇",
+      "class": "letter",
+      "meaning": "H"
+    },
+    {
+      "index": 8,
+      "codepoint": "U+1F708",
+      "glyph": "🜈",
+      "class": "letter",
+      "meaning": "I"
+    },
+    {
+      "index": 9,
+      "codepoint": "U+1F709",
+      "glyph": "🜉",
+      "class": "letter",
+      "meaning": "J"
+    },
+    {
+      "index": 10,
+      "codepoint": "U+1F70A",
+      "glyph": "🜊",
+      "class": "letter",
+      "meaning": "K"
+    },
+    {
+      "index": 11,
+      "codepoint": "U+1F70B",
+      "glyph": "🜋",
+      "class": "letter",
+      "meaning": "L"
+    },
+    {
+      "index": 12,
+      "codepoint": "U+1F70C",
+      "glyph": "🜌",
+      "class": "letter",
+      "meaning": "M"
+    },
+    {
+      "index": 13,
+      "codepoint": "U+1F70D",
+      "glyph": "🜍",
+      "class": "letter",
+      "meaning": "N"
+    },
+    {
+      "index": 14,
+      "codepoint": "U+1F70E",
+      "glyph": "🜎",
+      "class": "letter",
+      "meaning": "O"
+    },
+    {
+      "index": 15,
+      "codepoint": "U+1F70F",
+      "glyph": "🜏",
+      "class": "letter",
+      "meaning": "P"
+    },
+    {
+      "index": 16,
+      "codepoint": "U+1F710",
+      "glyph": "🜐",
+      "class": "letter",
+      "meaning": "Q"
+    },
+    {
+      "index": 17,
+      "codepoint": "U+1F711",
+      "glyph": "🜑",
+      "class": "letter",
+      "meaning": "R"
+    },
+    {
+      "index": 18,
+      "codepoint": "U+1F712",
+      "glyph": "🜒",
+      "class": "letter",
+      "meaning": "S"
+    },
+    {
+      "index": 19,
+      "codepoint": "U+1F713",
+      "glyph": "🜓",
+      "class": "letter",
+      "meaning": "T"
+    },
+    {
+      "index": 20,
+      "codepoint": "U+1F714",
+      "glyph": "🜔",
+      "class": "letter",
+      "meaning": "U"
+    },
+    {
+      "index": 21,
+      "codepoint": "U+1F715",
+      "glyph": "🜕",
+      "class": "letter",
+      "meaning": "V"
+    },
+    {
+      "index": 22,
+      "codepoint": "U+1F716",
+      "glyph": "🜖",
+      "class": "letter",
+      "meaning": "W"
+    },
+    {
+      "index": 23,
+      "codepoint": "U+1F717",
+      "glyph": "🜗",
+      "class": "letter",
+      "meaning": "X"
+    },
+    {
+      "index": 24,
+      "codepoint": "U+1F718",
+      "glyph": "🜘",
+      "class": "letter",
+      "meaning": "Y"
+    },
+    {
+      "index": 25,
+      "codepoint": "U+1F719",
+      "glyph": "🜙",
+      "class": "letter",
+      "meaning": "Z"
+    },
+    {
+      "index": 26,
+      "codepoint": "U+1F71A",
+      "glyph": "🜚",
+      "class": "digit",
+      "meaning": "0"
+    },
+    {
+      "index": 27,
+      "codepoint": "U+1F71B",
+      "glyph": "🜛",
+      "class": "digit",
+      "meaning": "1"
+    },
+    {
+      "index": 28,
+      "codepoint": "U+1F71C",
+      "glyph": "🜜",
+      "class": "digit",
+      "meaning": "2"
+    },
+    {
+      "index": 29,
+      "codepoint": "U+1F71D",
+      "glyph": "🜝",
+      "class": "digit",
+      "meaning": "3"
+    },
+    {
+      "index": 30,
+      "codepoint": "U+1F71E",
+      "glyph": "🜞",
+      "class": "digit",
+      "meaning": "4"
+    },
+    {
+      "index": 31,
+      "codepoint": "U+1F71F",
+      "glyph": "🜟",
+      "class": "digit",
+      "meaning": "5"
+    },
+    {
+      "index": 32,
+      "codepoint": "U+1F720",
+      "glyph": "🜠",
+      "class": "digit",
+      "meaning": "6"
+    },
+    {
+      "index": 33,
+      "codepoint": "U+1F721",
+      "glyph": "🜡",
+      "class": "digit",
+      "meaning": "7"
+    },
+    {
+      "index": 34,
+      "codepoint": "U+1F722",
+      "glyph": "🜢",
+      "class": "digit",
+      "meaning": "8"
+    },
+    {
+      "index": 35,
+      "codepoint": "U+1F723",
+      "glyph": "🜣",
+      "class": "digit",
+      "meaning": "9"
+    },
+    {
+      "index": 36,
+      "codepoint": "U+1F724",
+      "glyph": "🜤",
+      "class": "structural",
+      "meaning": "GATE"
+    },
+    {
+      "index": 37,
+      "codepoint": "U+1F725",
+      "glyph": "🜥",
+      "class": "structural",
+      "meaning": "GTE"
+    },
+    {
+      "index": 38,
+      "codepoint": "U+1F726",
+      "glyph": "🜦",
+      "class": "structural",
+      "meaning": "DECIMAL_JOIN"
+    },
+    {
+      "index": 39,
+      "codepoint": "U+1F727",
+      "glyph": "🜧",
+      "class": "structural",
+      "meaning": "LBRACKET"
+    },
+    {
+      "index": 40,
+      "codepoint": "U+1F728",
+      "glyph": "🜨",
+      "class": "structural",
+      "meaning": "RBRACKET"
+    },
+    {
+      "index": 41,
+      "codepoint": "U+1F729",
+      "glyph": "🜩",
+      "class": "structural",
+      "meaning": "DEFINE"
+    },
+    {
+      "index": 42,
+      "codepoint": "U+1F72A",
+      "glyph": "🜪",
+      "class": "structural",
+      "meaning": "LPAREN"
+    },
+    {
+      "index": 43,
+      "codepoint": "U+1F72B",
+      "glyph": "🜫",
+      "class": "structural",
+      "meaning": "RPAREN"
+    },
+    {
+      "index": 44,
+      "codepoint": "U+1F72C",
+      "glyph": "🜬",
+      "class": "structural",
+      "meaning": "LBRACE"
+    },
+    {
+      "index": 45,
+      "codepoint": "U+1F72D",
+      "glyph": "🜭",
+      "class": "structural",
+      "meaning": "RBRACE"
+    },
+    {
+      "index": 46,
+      "codepoint": "U+1F72E",
+      "glyph": "🜮",
+      "class": "structural",
+      "meaning": "COMMA"
+    },
+    {
+      "index": 47,
+      "codepoint": "U+1F72F",
+      "glyph": "🜯",
+      "class": "structural",
+      "meaning": "SEMICOLON"
+    },
+    {
+      "index": 48,
+      "codepoint": "U+1F730",
+      "glyph": "🜰",
+      "class": "structural",
+      "meaning": "ASSIGN"
+    },
+    {
+      "index": 49,
+      "codepoint": "U+1F731",
+      "glyph": "🜱",
+      "class": "structural",
+      "meaning": "PLUS"
+    },
+    {
+      "index": 50,
+      "codepoint": "U+1F732",
+      "glyph": "🜲",
+      "class": "structural",
+      "meaning": "MINUS"
+    },
+    {
+      "index": 51,
+      "codepoint": "U+1F733",
+      "glyph": "🜳",
+      "class": "structural",
+      "meaning": "STAR"
+    },
+    {
+      "index": 52,
+      "codepoint": "U+1F734",
+      "glyph": "🜴",
+      "class": "structural",
+      "meaning": "SLASH"
+    },
+    {
+      "index": 53,
+      "codepoint": "U+1F735",
+      "glyph": "🜵",
+      "class": "structural",
+      "meaning": "MOD"
+    },
+    {
+      "index": 54,
+      "codepoint": "U+1F736",
+      "glyph": "🜶",
+      "class": "structural",
+      "meaning": "LT"
+    },
+    {
+      "index": 55,
+      "codepoint": "U+1F737",
+      "glyph": "🜷",
+      "class": "structural",
+      "meaning": "GT"
+    },
+    {
+      "index": 56,
+      "codepoint": "U+1F738",
+      "glyph": "🜸",
+      "class": "structural",
+      "meaning": "LTE"
+    },
+    {
+      "index": 57,
+      "codepoint": "U+1F739",
+      "glyph": "🜹",
+      "class": "structural",
+      "meaning": "EQ"
+    },
+    {
+      "index": 58,
+      "codepoint": "U+1F73A",
+      "glyph": "🜺",
+      "class": "structural",
+      "meaning": "NE"
+    },
+    {
+      "index": 59,
+      "codepoint": "U+1F73B",
+      "glyph": "🜻",
+      "class": "structural",
+      "meaning": "NOT"
+    },
+    {
+      "index": 60,
+      "codepoint": "U+1F73C",
+      "glyph": "🜼",
+      "class": "structural",
+      "meaning": "STRING"
+    },
+    {
+      "index": 61,
+      "codepoint": "U+1F73D",
+      "glyph": "🜽",
+      "class": "structural",
+      "meaning": "COMMENT"
+    },
+    {
+      "index": 62,
+      "codepoint": "U+1F73E",
+      "glyph": "🜾",
+      "class": "structural",
+      "meaning": "AND"
+    },
+    {
+      "index": 63,
+      "codepoint": "U+1F73F",
+      "glyph": "🜿",
+      "class": "structural",
+      "meaning": "OR"
+    }
+  ]
+}

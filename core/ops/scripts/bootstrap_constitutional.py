@@ -135,7 +135,7 @@ def bootstrap_constitutional(driver):
         # === 2. Identity Stubs (6 nodes) ===
         print("Creating identity stubs...")
         identities = [
-            ("MoStar Industries", "Organization"),
+            ("MoStar Intelligent Systems", "Organization"),
             ("African Flame Initiative", "Initiative"),
             ("MoStar AI", "System"),
             ("DCX Soul", "Layer"),
@@ -245,7 +245,7 @@ def bootstrap_constitutional(driver):
         # Canon root to identities
         session.run("""
             MATCH (root:CanonRoot {id: 'mostar-canon-root', cluster_id: $cluster_id})
-            MATCH (id:Identity {name: 'MoStar Industries', cluster_id: $cluster_id})
+            MATCH (id:Identity {name: 'MoStar Intelligent Systems', cluster_id: $cluster_id})
             MERGE (root)-[:HAS_IDENTITY]->(id)
         """, cluster_id=MOSTAR_CLUSTER_ID)
         
@@ -390,7 +390,7 @@ Canon root: mostar-canon-root
 Status: sealed_foundation (cluster-scoped runtime primitives)
 
 Identities (6):
-- MoStar Industries
+- MoStar Intelligent Systems
 - African Flame Initiative
 - MoStar AI
 - DCX Soul

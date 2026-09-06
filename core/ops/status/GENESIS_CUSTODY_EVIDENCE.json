@@ -1,0 +1,1293 @@
+{
+  "schema": "mostar.genesis-custody-evidence.v1",
+  "recorded_at": "2026-08-31T15:02:59.545156+00:00",
+  "action": "GENESIS_CONSTITUTION_BOOTSTRAP",
+  "environment": "bolt://127.0.0.1/neo4j",
+  "canonicalization_algorithm": "UTF8_BOM_STRIP+NEWLINE_LF+UNICODE_NFC+SINGLE_TRAILING_LF",
+  "canonicalization_version": "1",
+  "digest_algorithm": "SHA-256",
+  "constitution_hash": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+  "lineage": "GENESIS",
+  "previous_hash": null,
+  "commit": "9086d73aad5b961fb0983ca59b3a751c41dd110e",
+  "worktree_state": "WORKTREE_UNCOMMITTED",
+  "preflight": {
+    "outcome": "READY_FOR_DIGEST_BOUND_HUMAN_AUTHORIZATION",
+    "dbms": [
+      {
+        "name": "Neo4j Kernel",
+        "versions": [
+          "2026.04.0"
+        ],
+        "edition": "community"
+      },
+      {
+        "name": "Cypher",
+        "versions": [
+          "5",
+          "25"
+        ],
+        "edition": ""
+      }
+    ],
+    "constraints": [
+      {
+        "name": "activation_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Activation"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "activation_protocol_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "ActivationProtocol"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "activation_state_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "ActivationState"
+        ],
+        "properties": [
+          "activation_id"
+        ]
+      },
+      {
+        "name": "activation_step_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "ActivationStep"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "actor_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "GridActor"
+        ],
+        "properties": [
+          "actor_id"
+        ]
+      },
+      {
+        "name": "agent_canonical_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Agent"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "agent_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Agent"
+        ],
+        "properties": [
+          "agent_id"
+        ]
+      },
+      {
+        "name": "api_endpoint_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "APIEndpoint"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "application_reference_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "ApplicationReference"
+        ],
+        "properties": [
+          "application_id"
+        ]
+      },
+      {
+        "name": "auth_scope_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "AuthScope"
+        ],
+        "properties": [
+          "scope_id"
+        ]
+      },
+      {
+        "name": "canonical_activation_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Activation"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_agent_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Agent"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "canonical_api_endpoint_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "APIEndpoint"
+        ],
+        "properties": [
+          "endpoint_id"
+        ]
+      },
+      {
+        "name": "canonical_component_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CanonicalComponent"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_covenant_seal_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CovenantSeal"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_decision_intelligence_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DecisionIntelligence"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_decision_outcome_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DecisionOutcome"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_decision_run_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DecisionRun"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_execution_event_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "ExecutionEvent"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_gap_register_item_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "GapRegisterItem"
+        ],
+        "properties": [
+          "gap_id"
+        ]
+      },
+      {
+        "name": "canonical_grid_knowledge_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "GridKnowledge"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_ibibiolexeme_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "IbibioLexeme"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "canonical_integrity_audit_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "IntegrityAudit"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_lifestage_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "LifeStage"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "canonical_mostar_api_doc_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "MoStarAPIDoc"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_openapi_operation_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "OpenAPIOperation"
+        ],
+        "properties": [
+          "operation_id"
+        ]
+      },
+      {
+        "name": "canonical_persona_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Persona"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_persona_trait_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "PersonaTrait"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "canonical_principle_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Principle"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "canonical_remediation_task_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "RemediationTask"
+        ],
+        "properties": [
+          "gap_id",
+          "title"
+        ]
+      },
+      {
+        "name": "canonical_remediation_track_name",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "RemediationTrack"
+        ],
+        "properties": [
+          "name"
+        ]
+      },
+      {
+        "name": "canonical_resonance_profile_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "ResonanceProfile"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_runtime_event_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "RuntimeEvent"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "canonical_system_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "System"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "capability_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Capability"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "catalog_claim_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CatalogMetricClaim"
+        ],
+        "properties": [
+          "claim_id"
+        ]
+      },
+      {
+        "name": "consciousness_layer_canonical_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "ConsciousnessLayer"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "constitution_hash_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Constitution"
+        ],
+        "properties": [
+          "constitution_hash"
+        ]
+      },
+      {
+        "name": "core_runtime_artifact_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CoreRuntime"
+        ],
+        "properties": [
+          "artifact_id"
+        ]
+      },
+      {
+        "name": "corridor_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Corridor"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "covenant_review_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CovenantReview"
+        ],
+        "properties": [
+          "review_id"
+        ]
+      },
+      {
+        "name": "covenant_seal_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CovenantSeal"
+        ],
+        "properties": [
+          "seal_id"
+        ]
+      },
+      {
+        "name": "crosswalk_approval_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CrosswalkApproval"
+        ],
+        "properties": [
+          "approval_id"
+        ]
+      },
+      {
+        "name": "crosswalk_bit_position_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CrosswalkBitDecision"
+        ],
+        "properties": [
+          "mapping_id",
+          "bit_position"
+        ]
+      },
+      {
+        "name": "curation_assertion_canonical_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CurationAssertion"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "curation_source_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CurationSource"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "dataset_canonical_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Dataset"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "dataset_version_canonical_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DatasetVersion"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "decision_framework_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DecisionFramework"
+        ],
+        "properties": [
+          "framework_id"
+        ]
+      },
+      {
+        "name": "decision_method_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DecisionMethod"
+        ],
+        "properties": [
+          "method_id"
+        ]
+      },
+      {
+        "name": "decision_outcome_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DecisionOutcome"
+        ],
+        "properties": [
+          "outcome_id"
+        ]
+      },
+      {
+        "name": "decision_predicate_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DecisionPredicate"
+        ],
+        "properties": [
+          "assertion_id"
+        ]
+      },
+      {
+        "name": "decision_problem_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DecisionProblem"
+        ],
+        "properties": [
+          "problem_id"
+        ]
+      },
+      {
+        "name": "decision_run_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DecisionRun"
+        ],
+        "properties": [
+          "run_id"
+        ]
+      },
+      {
+        "name": "deployment_lock_scope",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "DeploymentLock"
+        ],
+        "properties": [
+          "scope"
+        ]
+      },
+      {
+        "name": "entity_canonical_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "MoStarEntity"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "event_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Event"
+        ],
+        "properties": [
+          "event_id"
+        ]
+      },
+      {
+        "name": "evidence_atom_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "EvidenceAtom"
+        ],
+        "properties": [
+          "evidence_id"
+        ]
+      },
+      {
+        "name": "execution_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Execution"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "human_actor_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "HumanActor"
+        ],
+        "properties": [
+          "human_id"
+        ]
+      },
+      {
+        "name": "identity_canonical_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "CanonicalComponent"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "integrity_audit_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "IntegrityAudit"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "legacy_identity_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "LegacyIdentity"
+        ],
+        "properties": [
+          "entity_id"
+        ]
+      },
+      {
+        "name": "life_stage_canonical_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "LifeStage"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "lifestage_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "LifeStage"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "lifestage_stage_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "LifeStage"
+        ],
+        "properties": [
+          "stage_id"
+        ]
+      },
+      {
+        "name": "mapping_signature_version_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "OduComputationalMapping"
+        ],
+        "properties": [
+          "mapping_version",
+          "signature_bits"
+        ]
+      },
+      {
+        "name": "memory_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Memory"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "metadata_migration_canonical_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "MetadataMigration"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "method_execution_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "MethodExecution"
+        ],
+        "properties": [
+          "execution_id"
+        ]
+      },
+      {
+        "name": "metric_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Metric"
+        ],
+        "properties": [
+          "metric_id"
+        ]
+      },
+      {
+        "name": "mostar_signature_id_unique_v2",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "MoStarSignature"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "neural_inference_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "NeuralInference"
+        ],
+        "properties": [
+          "inference_id"
+        ]
+      },
+      {
+        "name": "neutrosophic_result_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "NeutrosophicResult"
+        ],
+        "properties": [
+          "result_id"
+        ]
+      },
+      {
+        "name": "neutrosophic_scale_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "NeutrosophicScale"
+        ],
+        "properties": [
+          "scale_id"
+        ]
+      },
+      {
+        "name": "odu_canonical_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "OduCanonical"
+        ],
+        "properties": [
+          "odu_key"
+        ]
+      },
+      {
+        "name": "odu_mapping_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "OduComputationalMapping"
+        ],
+        "properties": [
+          "mapping_id"
+        ]
+      },
+      {
+        "name": "odu_principal_bits",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "OduPrincipal"
+        ],
+        "properties": [
+          "bits4"
+        ]
+      },
+      {
+        "name": "odu_principle_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "OduPrinciple"
+        ],
+        "properties": [
+          "principle_id"
+        ]
+      },
+      {
+        "name": "odu_rule_execution_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "OduRuleExecution"
+        ],
+        "properties": [
+          "execution_id"
+        ]
+      },
+      {
+        "name": "odu_rule_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "OduRule"
+        ],
+        "properties": [
+          "rule_id"
+        ]
+      },
+      {
+        "name": "openapi_operation_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "OpenAPIOperation"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "operational_agent_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "OperationalAgent"
+        ],
+        "properties": [
+          "agent_id"
+        ]
+      },
+      {
+        "name": "persona_config_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "PersonaConfig"
+        ],
+        "properties": [
+          "config_id"
+        ]
+      },
+      {
+        "name": "phantom_node_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "PhantomNode"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "predicate_definition_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "PredicateDefinition"
+        ],
+        "properties": [
+          "predicate_key"
+        ]
+      },
+      {
+        "name": "provenance_correction_assertion_canonical_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "ProvenanceCorrectionAssertion"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "reconciliation_task_canonical_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "ReconciliationTask"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "relationship_type_name_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "RelationshipType"
+        ],
+        "properties": [
+          "type_name"
+        ]
+      },
+      {
+        "name": "rule_condition_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "RuleCondition"
+        ],
+        "properties": [
+          "condition_id"
+        ]
+      },
+      {
+        "name": "rule_evaluation_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "RuleConditionEvaluation"
+        ],
+        "properties": [
+          "evaluation_id"
+        ]
+      },
+      {
+        "name": "rule_translation_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "RuleTranslation"
+        ],
+        "properties": [
+          "translation_id"
+        ]
+      },
+      {
+        "name": "runtime_constraint_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Constraint"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "runtime_event_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "RuntimeEvent"
+        ],
+        "properties": [
+          "event_id"
+        ]
+      },
+      {
+        "name": "sanctuary_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Sanctuary"
+        ],
+        "properties": [
+          "sanctuary_id"
+        ]
+      },
+      {
+        "name": "schema_migration_run_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "SchemaMigrationRun"
+        ],
+        "properties": [
+          "run_id"
+        ]
+      },
+      {
+        "name": "seal_event_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "SealEvent"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "signal_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Signal"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "signature_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "MoStarSignature"
+        ],
+        "properties": [
+          "signature_id"
+        ]
+      },
+      {
+        "name": "soulprint_event_key",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "SoulprintEvent"
+        ],
+        "properties": [
+          "key"
+        ]
+      },
+      {
+        "name": "soulprint_id_unique_v2",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "SoulPrint"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "sovereign_core_entity_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "SovereignCore"
+        ],
+        "properties": [
+          "entity_id"
+        ]
+      },
+      {
+        "name": "stage_profile_canonical_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "StageProfile"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      },
+      {
+        "name": "task_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Task"
+        ],
+        "properties": [
+          "task_id"
+        ]
+      },
+      {
+        "name": "unique_analysisreport_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "AnalysisReport"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "unique_mostar_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "MoStarMoment"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "unique_retentionpolicy_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "RetentionPolicy"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "unique_storagebackend_id",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "StorageBackend"
+        ],
+        "properties": [
+          "id"
+        ]
+      },
+      {
+        "name": "use_policy_canonical_id_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "UsePolicy"
+        ],
+        "properties": [
+          "canonical_id"
+        ]
+      }
+    ],
+    "required_constitution_constraint": [
+      {
+        "name": "constitution_hash_unique",
+        "type": "UNIQUENESS",
+        "entityType": "NODE",
+        "labelsOrTypes": [
+          "Constitution"
+        ],
+        "properties": [
+          "constitution_hash"
+        ]
+      }
+    ],
+    "governance_counts": {
+      "constitution_count": 0,
+      "provenance_count": 0,
+      "attestation_count": 0
+    },
+    "target_digest_state": {
+      "roots": 0,
+      "chains": 0,
+      "valid": 0
+    }
+  },
+  "bootstrap_executed": true,
+  "bootstrap_event_id": "a85f7e10-376e-4d25-9912-1a503fa7d5c9",
+  "human_authorization": "PRESENT",
+  "authorization": {
+    "authorization_id": "genesis-auth:293aebd1-e7a9-410f-a528-4c45efdf8abf",
+    "issued_at": "2026-08-31T15:02:54.259887Z",
+    "valid_until": "2026-08-31T16:02:54.259887Z",
+    "nonce": "abc2371d-de15-4ef6-84d9-683a13953b8c",
+    "actor_ref": "idona"
+  },
+  "dispositions": {
+    "constitution": "CREATED",
+    "provenance": "CREATED",
+    "attestation": "CREATED",
+    "relationships": "CREATED"
+  },
+  "execution": {
+    "safe_graph_identifiers": {
+      "constitution_id": "4:2eaf44cd-4f36-40a7-9a3b-f8622e7eb95c:136310",
+      "provenance_id": "4:2eaf44cd-4f36-40a7-9a3b-f8622e7eb95c:136311",
+      "attestation_id": "4:2eaf44cd-4f36-40a7-9a3b-f8622e7eb95c:136312"
+    },
+    "result_rows": [
+      {
+        "constitution_hash": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+        "provenance_hash": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+        "attestation_hash": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+        "attestation_subject_digest": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87"
+      }
+    ]
+  },
+  "result": "UNIQUE_GENESIS_CHAIN_VERIFIED"
+}

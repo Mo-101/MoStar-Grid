@@ -17,6 +17,7 @@ import logging
 import re
 
 import httpx
+from grid.mind_conduit_runtime import OLLAMA_GENERATE_PATH, governed_http_post, invoke_model
 
 logger = logging.getLogger("semantic_grid.layers")
 
@@ -147,15 +148,20 @@ async def extract_layers(
     prompt = _LAYER_PROMPT.format(input=raw_input.replace('"', "'"))
 
     try:
-        async with httpx.AsyncClient(timeout=20.0) as client:
-            resp = await client.post(
-                f"{ollama_url}/api/generate",
-                json={
+        async with httpx.AsyncClient(base_url=ollama_url, timeout=20.0) as client:
+            payload = {
                     "model": model,
                     "prompt": prompt,
                     "stream": False,
                     "options": {"temperature": 0.1, "num_predict": 512},
-                },
+                }
+            resp = await invoke_model(
+                caller="semantic_grid.extract_layers",
+                model_id=model,
+                snapshot_identity="semantic-input:no-memory",
+                adapter=lambda context: governed_http_post(
+                    context, client, OLLAMA_GENERATE_PATH, payload
+                ),
             )
             resp.raise_for_status()
             raw_text = resp.json().get("response", "").strip()

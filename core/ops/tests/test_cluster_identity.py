@@ -11,11 +11,14 @@ from grid.config import (
     APPROVAL_QUEUE_PATH,
     MOSTAR_CLUSTER_ID,
     MOSTAR_CLUSTER_NAME,
-    NEO4J_PASSWORD,
     NEO4J_URI,
     NEO4J_USER,
     PROVENANCE_PATH,
     ensure_cluster_dirs,
+    # The password is no longer a module constant — it is released from the
+    # attested vault (back/services/grid/credentials.py). Importing the old
+    # NEO4J_PASSWORD name made this whole module fail at collection.
+    get_neo4j_password,
 )
 from grid.orchestrator import CommitResult, GridOrchestrator
 
@@ -81,7 +84,7 @@ def test_multiple_sequential_clusters_can_coexist_on_same_machine(tmp_path):
 
 def test_neo4j_nodes_include_cluster_id_property():
     try:
-        driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
+        driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, get_neo4j_password()))
         driver.verify_connectivity()
     except Exception as exc:
         pytest.skip(f"Neo4j unavailable for cluster identity check: {exc}")
@@ -103,7 +106,7 @@ def test_neo4j_nodes_include_cluster_id_property():
 
 def test_neo4j_foundation_nodes_are_sealed_grid_components():
     try:
-        driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
+        driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, get_neo4j_password()))
         driver.verify_connectivity()
     except Exception as exc:
         pytest.skip(f"Neo4j unavailable for foundation seal check: {exc}")

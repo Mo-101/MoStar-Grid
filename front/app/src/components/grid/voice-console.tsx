@@ -7,15 +7,20 @@
  * VITE_ENABLE_LIVE_GRID_SERVICES=true.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { GRID_REFRESH } from "@/lib/grid-refresh-policy";
 import { Glyph } from "@/components/grid/glyph";
 import {
-  GRID_SERVICES, LIVE_GRID_SERVICES, SERVICE_LABEL, type ServiceKey,
+  GRID_SERVICES,
+  LIVE_GRID_SERVICES,
+  SERVICE_LABEL,
+  type ServiceKey,
 } from "@/config/gridServices";
+import { speak, voiceHealth, type SpeakResponse } from "@/services/gridVoiceClient";
 import {
-  speak, voiceHealth, type SpeakResponse,
-} from "@/services/gridVoiceClient";
-import {
-  choosePersona, personalityHealth, PERSONAS, type Persona,
+  choosePersona,
+  personalityHealth,
+  PERSONAS,
+  type Persona,
 } from "@/services/personalityClient";
 import { dcxThink, dcxHealth, ollamaHealth, type DCXLayer } from "@/services/dcxClient";
 
@@ -25,17 +30,17 @@ type HealthStatus = "healthy" | "degraded" | "down" | "unknown";
 const PROBED_SERVICES: Exclude<ServiceKey, "api">[] = ["voice", "personality", "dcx", "ollama"];
 
 const BACKENDS: { id: BackendId; label: string; sub: string }[] = [
-  { id: "piper",  label: "PIPER",   sub: "MoStar Voice · sovereign TTS" },
-  { id: "dcx",    label: "DCX",     sub: "Trinity · Mind/Soul/Body" },
-  { id: "ollama", label: "OLLAMA",  sub: "Local model gateway" },
-  { id: "mock",   label: "MOCK",    sub: "No backend · preview only" },
+  { id: "piper", label: "PIPER", sub: "MoStar Voice · sovereign TTS" },
+  { id: "dcx", label: "DCX", sub: "Trinity · Mind/Soul/Body" },
+  { id: "ollama", label: "OLLAMA", sub: "Local model gateway" },
+  { id: "mock", label: "MOCK", sub: "No backend · preview only" },
 ];
 
 const STATUS_COLOR: Record<HealthStatus, string> = {
-  healthy:  "var(--color-neon-green)",
+  healthy: "var(--color-neon-green)",
   degraded: "var(--color-neon-gold)",
-  down:     "#ff5a2e",
-  unknown:  "var(--muted-foreground)",
+  down: "#ff5a2e",
+  unknown: "var(--muted-foreground)",
 };
 
 function StatusDot({ s }: { s: HealthStatus }) {
@@ -56,7 +61,10 @@ function Waveform({ active, peak = 1 }: { active: boolean; peak?: number }) {
   useEffect(() => {
     if (!active) return;
     let raf = 0;
-    const tick = () => { setT((x) => x + 0.08); raf = requestAnimationFrame(tick); };
+    const tick = () => {
+      setT((x) => x + 0.08);
+      raf = requestAnimationFrame(tick);
+    };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [active]);
@@ -65,9 +73,7 @@ function Waveform({ active, peak = 1 }: { active: boolean; peak?: number }) {
     <div className="flex h-20 items-end justify-center gap-[3px]">
       {seed.map((s, i) => {
         const phase = Math.sin(t + i * 0.35) * 0.5 + 0.5;
-        const h = active
-          ? 8 + phase * 56 * peak * (0.4 + s * 0.6)
-          : 6 + s * 6;
+        const h = active ? 8 + phase * 56 * peak * (0.4 + s * 0.6) : 6 + s * 6;
         const hue = active ? (i / bars) * 60 + 180 : 220;
         return (
           <span
@@ -101,7 +107,10 @@ export function GridVoiceConsole() {
     { kind: "user" | "system" | "voice" | "dcx"; text: string; meta?: string }[]
   >([]);
   const [health, setHealth] = useState<Record<Exclude<ServiceKey, "api">, HealthStatus>>({
-    voice: "unknown", personality: "unknown", dcx: "unknown", ollama: "unknown",
+    voice: "unknown",
+    personality: "unknown",
+    dcx: "unknown",
+    ollama: "unknown",
   });
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -110,22 +119,28 @@ export function GridVoiceConsole() {
     let cancelled = false;
     const run = async () => {
       const [v, p, d, o] = await Promise.all([
-        voiceHealth(), personalityHealth(), dcxHealth(), ollamaHealth(),
+        voiceHealth(),
+        personalityHealth(),
+        dcxHealth(),
+        ollamaHealth(),
       ]);
       if (cancelled) return;
       setHealth({
-        voice:       (v.status as HealthStatus) ?? "unknown",
+        voice: (v.status as HealthStatus) ?? "unknown",
         personality: (p.status as HealthStatus) ?? "unknown",
-        dcx:         (d.status as HealthStatus) ?? "unknown",
-        ollama:      (o.status as HealthStatus) ?? "unknown",
+        dcx: (d.status as HealthStatus) ?? "unknown",
+        ollama: (o.status as HealthStatus) ?? "unknown",
       });
     };
     void run();
-    const id = window.setInterval(run, 15_000);
-    return () => { cancelled = true; window.clearInterval(id); };
+    const id = window.setInterval(run, GRID_REFRESH.SERVICE_HEALTH_MS);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+    };
   }, []);
 
-  const log = (entry: typeof transcript[number]) =>
+  const log = (entry: (typeof transcript)[number]) =>
     setTranscript((prev) => [...prev.slice(-49), entry]);
 
   async function handleSpeak() {
@@ -180,19 +195,27 @@ export function GridVoiceConsole() {
                 kind: "voice",
                 text: `Generated · ${a.duration.toFixed(1)}s measured`,
                 meta: `${res.engine} · ${res.persona}${res.mock ? " · mock" : ""}${
-                  res.synthesis_ms != null ? ` · ${(res.synthesis_ms / 1000).toFixed(1)}s synthesis` : ""
+                  res.synthesis_ms != null
+                    ? ` · ${(res.synthesis_ms / 1000).toFixed(1)}s synthesis`
+                    : ""
                 }`,
               });
               resolve();
             };
             a.addEventListener("loadedmetadata", onMeta);
           });
-          await a.play().catch((e) => { setError(`Audio play failed: ${e.message}`); setPlaying(false); });
+          await a.play().catch((e) => {
+            setError(`Audio play failed: ${e.message}`);
+            setPlaying(false);
+          });
         }
       } else if (res) {
         log({
           kind: "voice",
-          text: res.audio_ms != null ? `Generated · ${(res.audio_ms / 1000).toFixed(1)}s` : "Generated · no audio",
+          text:
+            res.audio_ms != null
+              ? `Generated · ${(res.audio_ms / 1000).toFixed(1)}s`
+              : "Generated · no audio",
           meta: `${res.engine} · ${res.persona}${res.mock ? " · mock" : ""}`,
         });
         // No audio element to measure against — mime the waveform for a
@@ -213,11 +236,12 @@ export function GridVoiceConsole() {
     <div className="flex h-full flex-col gap-3">
       {/* Header */}
       <div className="panel flex items-center gap-3 px-4 py-3">
-        <Glyph name="sun" size={28} glow="var(--color-neon-gold)" />
+        <Glyph name="sun" size={28} />
         <div className="flex-1">
           <div className="text-xs tracking-[0.3em] neon-text-gold">GRID VOICE CONSOLE</div>
           <div className="text-[10px] tracking-[0.2em] text-muted-foreground">
-            The Grid speaks · sovereign service surface · {LIVE_GRID_SERVICES ? "LIVE" : "PREVIEW (MOCK)"}
+            The Grid speaks · sovereign service surface ·{" "}
+            {LIVE_GRID_SERVICES ? "LIVE" : "PREVIEW (MOCK)"}
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -233,9 +257,7 @@ export function GridVoiceConsole() {
       <div className="grid flex-1 grid-cols-12 gap-3">
         {/* Composer */}
         <div className="panel col-span-12 flex flex-col gap-3 p-4 lg:col-span-7">
-          <label className="text-[10px] tracking-[0.25em] text-muted-foreground">
-            UTTERANCE
-          </label>
+          <label className="text-[10px] tracking-[0.25em] text-muted-foreground">UTTERANCE</label>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -247,30 +269,44 @@ export function GridVoiceConsole() {
           {/* Persona / Backend / Layer */}
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <div className="mb-1 text-[10px] tracking-[0.25em] text-muted-foreground">PERSONA</div>
+              <div className="mb-1 text-[10px] tracking-[0.25em] text-muted-foreground">
+                PERSONA
+              </div>
               <select
                 value={persona}
                 onChange={(e) => setPersona(e.target.value as Persona)}
                 className="w-full rounded-md border border-white/10 bg-black/40 px-2 py-2 text-xs tracking-[0.15em]"
               >
-                {PERSONAS.map((p) => <option key={p} value={p}>{p}</option>)}
+                {PERSONAS.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
-              <div className="mb-1 text-[10px] tracking-[0.25em] text-muted-foreground">BACKEND</div>
+              <div className="mb-1 text-[10px] tracking-[0.25em] text-muted-foreground">
+                BACKEND
+              </div>
               <select
                 value={backend}
                 onChange={(e) => setBackend(e.target.value as BackendId)}
                 className="w-full rounded-md border border-white/10 bg-black/40 px-2 py-2 text-xs tracking-[0.15em]"
               >
-                {BACKENDS.map((b) => <option key={b.id} value={b.id}>{b.label}</option>)}
+                {BACKENDS.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.label}
+                  </option>
+                ))}
               </select>
               <div className="mt-1 text-[10px] text-muted-foreground">
                 {BACKENDS.find((b) => b.id === backend)?.sub}
               </div>
             </div>
             <div>
-              <div className="mb-1 text-[10px] tracking-[0.25em] text-muted-foreground">DCX LAYER</div>
+              <div className="mb-1 text-[10px] tracking-[0.25em] text-muted-foreground">
+                DCX LAYER
+              </div>
               <select
                 value={layer}
                 onChange={(e) => setLayer(e.target.value as DCXLayer | "auto")}
@@ -333,16 +369,16 @@ export function GridVoiceConsole() {
             )}
             {transcript.map((e, i) => {
               const color =
-                e.kind === "user"   ? "var(--color-neon-cyan)"  :
-                e.kind === "voice"  ? "var(--color-neon-gold)"  :
-                e.kind === "dcx"    ? "var(--color-neon-green)" :
-                                      "var(--muted-foreground)";
+                e.kind === "user"
+                  ? "var(--color-neon-cyan)"
+                  : e.kind === "voice"
+                    ? "var(--color-neon-gold)"
+                    : e.kind === "dcx"
+                      ? "var(--color-neon-green)"
+                      : "var(--muted-foreground)";
               return (
                 <div key={i} className="rounded-md border border-white/5 bg-black/20 p-2">
-                  <div
-                    className="mb-1 text-[10px] tracking-[0.3em]"
-                    style={{ color }}
-                  >
+                  <div className="mb-1 text-[10px] tracking-[0.3em]" style={{ color }}>
                     {e.kind.toUpperCase()} {e.meta ? `· ${e.meta}` : ""}
                   </div>
                   <div className="text-foreground/90">{e.text}</div>

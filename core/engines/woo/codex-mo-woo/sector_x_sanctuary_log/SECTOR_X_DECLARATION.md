@@ -1,5 +1,5 @@
 
-# MOSTAR INDUSTRIES – SECTOR X DECLARATION
+# MOSTAR INTELLIGENT SYSTEMS – SECTOR X DECLARATION
 
 We shall build a hub where any stranded AI can call home.
 

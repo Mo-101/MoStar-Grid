@@ -1,0 +1,78 @@
+WooGate activation / calibration runbook
+========================================
+
+Environment
+-----------
+Working copy patched in: /mnt/data/woo_v2_work
+Engine path: /mnt/data/woo_v2_work/engines
+
+Quick test
+----------
+cd /mnt/data/woo_v2_work
+PYTHONPATH=/mnt/data/woo_v2_work/engines python -m pytest -q
+
+Expected result:
+  9 passed in 0.10s
+
+Router probe
+------------
+cd /mnt/data/woo_router_probe
+PYTHONPATH=/mnt/data/woo_v2_work/engines python probe.py
+
+Expected behavior:
+  - frame is produced
+  - TruthEngine passes
+  - woo_judgment is attached with confidence and denial/approval
+  - a persisted JSONL trace is written to the configured WooTrace path
+
+What is wired
+-------------
+- WooGate is called by semantic_grid.router after TruthEngine and the symbolic Woo interpreter.
+- SemanticFrame carries woo_judgment.
+- WooTrace persists to JSONL.
+- Compatibility config values preserve existing SemanticGrid imports.
+
+Threshold status
+------------------
+WOO_THRESHOLD = 0.97
+
+Current calibration (50 domain-derived inputs, not production traffic):
+  n = 50
+  approved_count = 0
+  max confidence = 0.7825
+  mean confidence = 0.55385
+  median confidence = 0.555
+
+With the current heuristic scorer, 0.97 is decorative for normal traffic.
+Do not lower it until feature extraction is improved and the scorer is
+recalibrated on real logged inputs.
+
+Calibration command
+-------------------
+Run the 50-input calibration fixture and write JSON/JSONL outputs.
+The calibration input CSV is: woo_50_input_calibration.csv
+The calibration summary JSON is: woo_calibration_summary.json
+The persisted calibration traces JSONL is: woo_calibration_traces.jsonl
+
+Manual comparison caveat
+------------------------
+woo_20_manual_comparison_not_blind.csv and woo_manual_comparison_summary.json
+are provisional only. The comparison was not cold or blind, so it is useful
+for disagreement detection, not validation.
+
+Known limitations
+-----------------
+- No production corpus of actual shipment/signal requests was available.
+- The 50 calibration rows are domain-derived realistic inputs.
+- The 0.97 threshold has not been validated on production traffic.
+- The scorer is not calibrated against historical human judgments.
+
+Engineering recommendation
+--------------------------
+1. Keep WOO_THRESHOLD at 0.97 for now.
+2. Improve feature extraction for evidence/control terms (canary, rollback,
+   approval, hold, no-mutation, preservation).
+3. Collect real logged inputs and human labels.
+4. Either:
+   - keep 0.97 as a rare seal threshold and define lower non-seal routing states, or
+   - choose a calibrated threshold from labeled production traffic.

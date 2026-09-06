@@ -1,0 +1,9 @@
+{
+  "schema": "mostar.constitution-amendment-manifest.v1",
+  "constitution_hash": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+  "previous_hash": "02913f525e263737d87a8625bdc97efc940ffcfb6e6e58f09cb5cbbe573be0b2",
+  "lineage": "GENESIS",
+  "cypher_file": "core/ops/governance/neo4j/migrations/001_constitution_amendment.cypher",
+  "amended_at": "2026-08-19T17:37:37.4577428+03:00",
+  "status": "PENDING"
+}

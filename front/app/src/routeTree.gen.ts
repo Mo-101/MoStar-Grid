@@ -15,7 +15,9 @@ import { Route as MindgraphRouteImport } from './routes/mindgraph'
 import { Route as MemoryRouteImport } from './routes/memory'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as CouncilRouteImport } from './routes/council'
+import { Route as ContinentOpticsRouteImport } from './routes/continent-optics'
 import { Route as ConduitRouteImport } from './routes/conduit'
+import { Route as BootRouteImport } from './routes/boot'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -49,9 +51,19 @@ const CouncilRoute = CouncilRouteImport.update({
   path: '/council',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContinentOpticsRoute = ContinentOpticsRouteImport.update({
+  id: '/continent-optics',
+  path: '/continent-optics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConduitRoute = ConduitRouteImport.update({
   id: '/conduit',
   path: '/conduit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BootRoute = BootRouteImport.update({
+  id: '/boot',
+  path: '/boot',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SplatRoute = SplatRouteImport.update({
@@ -68,7 +80,9 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/boot': typeof BootRoute
   '/conduit': typeof ConduitRoute
+  '/continent-optics': typeof ContinentOpticsRoute
   '/council': typeof CouncilRoute
   '/events': typeof EventsRoute
   '/memory': typeof MemoryRoute
@@ -79,7 +93,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/boot': typeof BootRoute
   '/conduit': typeof ConduitRoute
+  '/continent-optics': typeof ContinentOpticsRoute
   '/council': typeof CouncilRoute
   '/events': typeof EventsRoute
   '/memory': typeof MemoryRoute
@@ -91,7 +107,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/boot': typeof BootRoute
   '/conduit': typeof ConduitRoute
+  '/continent-optics': typeof ContinentOpticsRoute
   '/council': typeof CouncilRoute
   '/events': typeof EventsRoute
   '/memory': typeof MemoryRoute
@@ -104,7 +122,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$'
+    | '/boot'
     | '/conduit'
+    | '/continent-optics'
     | '/council'
     | '/events'
     | '/memory'
@@ -115,7 +135,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$'
+    | '/boot'
     | '/conduit'
+    | '/continent-optics'
     | '/council'
     | '/events'
     | '/memory'
@@ -126,7 +148,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/$'
+    | '/boot'
     | '/conduit'
+    | '/continent-optics'
     | '/council'
     | '/events'
     | '/memory'
@@ -138,7 +162,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SplatRoute: typeof SplatRoute
+  BootRoute: typeof BootRoute
   ConduitRoute: typeof ConduitRoute
+  ContinentOpticsRoute: typeof ContinentOpticsRoute
   CouncilRoute: typeof CouncilRoute
   EventsRoute: typeof EventsRoute
   MemoryRoute: typeof MemoryRoute
@@ -191,11 +217,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CouncilRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/continent-optics': {
+      id: '/continent-optics'
+      path: '/continent-optics'
+      fullPath: '/continent-optics'
+      preLoaderRoute: typeof ContinentOpticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/conduit': {
       id: '/conduit'
       path: '/conduit'
       fullPath: '/conduit'
       preLoaderRoute: typeof ConduitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/boot': {
+      id: '/boot'
+      path: '/boot'
+      fullPath: '/boot'
+      preLoaderRoute: typeof BootRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$': {
@@ -218,7 +258,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SplatRoute: SplatRoute,
+  BootRoute: BootRoute,
   ConduitRoute: ConduitRoute,
+  ContinentOpticsRoute: ContinentOpticsRoute,
   CouncilRoute: CouncilRoute,
   EventsRoute: EventsRoute,
   MemoryRoute: MemoryRoute,

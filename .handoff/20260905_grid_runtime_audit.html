@@ -1,0 +1,951 @@
+<title>Grid Runtime Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+  :root {
+    /* Neutrals carry a blue bias toward the console cyan, not flat grey. */
+    --paper:        #f3f5f7;
+    --surface:      #ffffff;
+    --surface-sunk: #e9edf1;
+    --rule:         #d3dae1;
+    --rule-soft:    #e4e9ee;
+    --text:         #101a26;
+    --text-soft:    #47566a;
+    --text-faint:   #6b7d92;
+
+    /* The seal's gold and the console's cyan. */
+    --gold:         #8a6410;
+    --gold-mark:    #c9971f;
+    --gold-wash:    #f7edd6;
+    --cyan:         #0e6f89;
+    --cyan-wash:    #dcecf1;
+
+    /* Semantic, kept separate from the accent. */
+    --ok:           #1a6b3c;
+    --ok-wash:      #dcefe3;
+    --warn:         #9a5b06;
+    --warn-wash:    #f8e9d3;
+    --crit:         #a3231d;
+    --crit-wash:    #f7dedc;
+
+    --measure: 68ch;
+    --step-0: 1.0625rem;
+    --step-1: 1.1875rem;
+    --step-2: 1.5rem;
+    --step-3: 2rem;
+    --step-4: 2.75rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:        #0a1119;
+      --surface:      #101a24;
+      --surface-sunk: #0c151e;
+      --rule:         #24333f;
+      --rule-soft:    #1a2733;
+      --text:         #e2eaf1;
+      --text-soft:    #a4b5c5;
+      --text-faint:   #7d90a2;
+
+      --gold:         #f0c464;
+      --gold-mark:    #f6c453;
+      --gold-wash:    #2b2314;
+      --cyan:         #4fc7e3;
+      --cyan-wash:    #122730;
+
+      --ok:           #6ddb9b;
+      --ok-wash:      #10241a;
+      --warn:         #f0b95e;
+      --warn-wash:    #2a1f0e;
+      --crit:         #f58b84;
+      --crit-wash:    #2c1414;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:        #0a1119;
+    --surface:      #101a24;
+    --surface-sunk: #0c151e;
+    --rule:         #24333f;
+    --rule-soft:    #1a2733;
+    --text:         #e2eaf1;
+    --text-soft:    #a4b5c5;
+    --text-faint:   #7d90a2;
+
+    --gold:         #f0c464;
+    --gold-mark:    #f6c453;
+    --gold-wash:    #2b2314;
+    --cyan:         #4fc7e3;
+    --cyan-wash:    #122730;
+
+    --ok:           #6ddb9b;
+    --ok-wash:      #10241a;
+    --warn:         #f0b95e;
+    --warn-wash:    #2a1f0e;
+    --crit:         #f58b84;
+    --crit-wash:    #2c1414;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--text);
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+    font-size: var(--step-0);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1.1rem, 4vw, 2.5rem) 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.25rem;
+  }
+
+  .measure { max-width: var(--measure); }
+
+  h1, h2, h3, .label, th, .pill, .btn {
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  code, kbd, .mono, .num {
+    font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+
+  /* ── Masthead ───────────────────────────────────────────── */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 2px solid var(--text);
+  }
+
+  .seal {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.735rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .seal b {
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.32em;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: var(--step-4);
+    font-weight: 700;
+    line-height: 1.04;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    margin: 0;
+    max-width: var(--measure);
+    font-size: var(--step-1);
+    color: var(--text-soft);
+  }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 2.25rem;
+    margin-top: 0.4rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.79rem;
+    color: var(--text-faint);
+  }
+
+  .facts span b {
+    color: var(--text-soft);
+    font-weight: 500;
+  }
+
+  /* ── Sections ───────────────────────────────────────────── */
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: var(--step-2);
+    font-weight: 600;
+    letter-spacing: -0.014em;
+    text-wrap: balance;
+  }
+
+  h2 .idx {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72em;
+    font-weight: 500;
+    color: var(--gold-mark);
+    margin-right: 0.6rem;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: var(--step-1);
+    font-weight: 600;
+    letter-spacing: -0.008em;
+    text-wrap: balance;
+  }
+
+  p { margin: 0; max-width: var(--measure); }
+  p + p { margin-top: 0.75rem; }
+
+  .lede { color: var(--text-soft); }
+
+  a { color: var(--cyan); text-underline-offset: 2px; }
+  a:focus-visible,
+  .row:focus-visible { outline: 2px solid var(--gold-mark); outline-offset: 3px; }
+
+  code {
+    font-size: 0.855em;
+    background: var(--surface-sunk);
+    border: 1px solid var(--rule-soft);
+    border-radius: 3px;
+    padding: 0.08em 0.34em;
+    word-break: break-word;
+  }
+
+  /* ── Findings: the only elements that get a stripe ──────── */
+
+  .findings {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    counter-reset: finding;
+  }
+
+  .finding {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 1.15rem;
+    padding: 1.25rem 1.35rem;
+    background: var(--surface);
+    border: 1px solid var(--rule-soft);
+    border-left: 4px solid var(--stripe, var(--rule));
+  }
+
+  .finding[data-sev="crit"] { --stripe: var(--crit); }
+  .finding[data-sev="warn"] { --stripe: var(--warn); }
+  .finding[data-sev="info"] { --stripe: var(--cyan); }
+  .finding[data-sev="done"] { --stripe: var(--ok); }
+
+  .finding .rank {
+    counter-increment: finding;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-faint);
+    padding-top: 0.28rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .finding .rank::before { content: counter(finding, decimal-leading-zero); }
+
+  .finding .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    min-width: 0;
+  }
+
+  .finding .body > p { max-width: 62ch; }
+
+  .head-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.55rem 0.8rem;
+  }
+
+  .pill {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    padding: 0.16rem 0.5rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .pill.crit { color: var(--crit); background: var(--crit-wash); }
+  .pill.warn { color: var(--warn); background: var(--warn-wash); }
+  .pill.info { color: var(--cyan); background: var(--cyan-wash); }
+  .pill.done { color: var(--ok);   background: var(--ok-wash); }
+
+  .evidence {
+    margin: 0.15rem 0 0;
+    padding: 0.75rem 0.9rem;
+    background: var(--surface-sunk);
+    border-left: 2px solid var(--rule);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.775rem;
+    line-height: 1.62;
+    color: var(--text-soft);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .verdict {
+    display: flex;
+    gap: 0.55rem;
+    align-items: baseline;
+    font-size: 0.95rem;
+    max-width: 62ch;
+  }
+
+  .verdict .k {
+    font-family: Archivo, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    flex: 0 0 4.6rem;
+    padding-top: 0.28rem;
+  }
+
+  .verdict .v { color: var(--text-soft); }
+
+  /* ── Tables ─────────────────────────────────────────────── */
+
+  .scroller {
+    overflow-x: auto;
+    border: 1px solid var(--rule-soft);
+    background: var(--surface);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.775rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  th {
+    text-align: left;
+    font-family: Archivo, sans-serif;
+    font-size: 0.665rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 0.7rem 0.85rem;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+  }
+
+  td {
+    padding: 0.44rem 0.85rem;
+    border-bottom: 1px solid var(--rule-soft);
+    color: var(--text-soft);
+    white-space: nowrap;
+  }
+
+  tr:last-child td { border-bottom: 0; }
+  td.path { color: var(--text); }
+  td.n { text-align: right; }
+
+  .tag {
+    font-family: Archivo, sans-serif;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.38rem;
+    border-radius: 2px;
+  }
+
+  .t-ok    { color: var(--ok);   background: var(--ok-wash); }
+  .t-warn  { color: var(--warn); background: var(--warn-wash); }
+  .t-crit  { color: var(--crit); background: var(--crit-wash); }
+  .t-mute  { color: var(--text-faint); background: var(--surface-sunk); }
+
+  .caption {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.735rem;
+    color: var(--text-faint);
+    max-width: var(--measure);
+  }
+
+  /* ── Changed-files list ─────────────────────────────────── */
+
+  .files {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.05rem;
+  }
+
+  .files li {
+    display: grid;
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    gap: 0.2rem 1.3rem;
+    padding: 0.62rem 0;
+    border-bottom: 1px solid var(--rule-soft);
+    align-items: baseline;
+  }
+
+  .files li:first-child { border-top: 1px solid var(--rule); }
+
+  .files .f {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.79rem;
+    color: var(--text);
+    word-break: break-all;
+  }
+
+  .files .why { font-size: 0.95rem; color: var(--text-soft); }
+
+  @media (max-width: 640px) {
+    .files li { grid-template-columns: minmax(0, 1fr); }
+    .finding { grid-template-columns: minmax(0, 1fr); }
+    .finding .rank { display: none; }
+  }
+
+  /* ── Decisions ──────────────────────────────────────────── */
+
+  .decisions {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 2px solid var(--gold-mark);
+  }
+
+  .decision {
+    display: grid;
+    grid-template-columns: 2.1rem minmax(0, 1fr);
+    gap: 0 0.9rem;
+    padding: 1.05rem 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  .decision .q {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .decision .t { display: flex; flex-direction: column; gap: 0.35rem; }
+  .decision p { max-width: 62ch; }
+
+  .footer {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.4rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.735rem;
+    color: var(--text-faint);
+    max-width: var(--measure);
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="seal">
+      <b>🜃∴🜂</b>
+      <span>MoStar Grid · nairobi-alpha · phase 4.0a</span>
+    </div>
+    <h1>Grid Runtime Audit</h1>
+    <p class="standfirst">
+      Every active endpoint probed against the running service, every startup
+      configuration traced to the file it actually loads. The Grid was carrying
+      three Neo4j configurations for a graph that answers to one — and the two
+      that lost were pointing at an instance that no longer exists.
+    </p>
+    <div class="facts">
+      <span><b>2026-09-05</b> · audit run</span>
+      <span><b>79</b> live routes</span>
+      <span><b>35</b> probed</span>
+      <span><b>136,551</b> nodes</span>
+      <span><b>58,638</b> relationships</span>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="idx">01</span>The finding under the finding</h2>
+    <p class="lede measure">
+      <code>ecosystem.config.js</code> defined a shared <code>NEO4J_ENV</code> block
+      and spread it into eight apps. PM2 merges <code>env</code> on top of
+      <code>env_file</code>, so that block overrode every app's own settings. It
+      named the Aura instance <code>2f88895b</code>. That hostname no longer resolves.
+    </p>
+    <div class="evidence">$ python3 -c "resolve 2f88895b.databases.neo4j.io"
+  user='neo4j'    db='neo4j'    -> ServiceUnavailable: Failed to DNS resolve
+  user='2f88895b' db='2f88895b' -> ServiceUnavailable: Failed to DNS resolve</div>
+    <p class="measure">
+      The Grid stayed up only because its PM2 start command loaded that block and
+      then unset it again, variable by variable, before <code>exec</code>-ing uvicorn.
+      Downstream apps had no such escape: CrypSide's own <code>.env</code> holds the
+      correct <code>bolt://127.0.0.1:47687</code> and was being overwritten by the
+      dead host on every boot.
+    </p>
+    <p class="measure">
+      The live graph is the local Neo4j on the sovereign band — 136,551 nodes, and
+      the holder of the Genesis constitution chain bootstrapped on 2026-08-31. Both
+      halves of the workaround are now gone: no shared block, no unset list. Each
+      service resolves Neo4j from its own env file and nothing overrides it.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="idx">02</span>What changed</h2>
+    <p class="lede measure">
+      Eight files. No migration, evidence artifact, or log was modified or deleted;
+      retired values were commented in place with the reason and the date rather
+      than removed.
+    </p>
+    <ul class="files">
+      <li>
+        <span class="f">ecosystem.config.js</span>
+        <span class="why">Shared Aura <code>NEO4J_ENV</code> block deleted along with all eight spreads; grid-api's <code>unset</code> wrapper removed with it; frontend <code>VITE_GRID_API_URL</code> corrected to <code>VITE_GRID_API_BASE</code> (nothing reads the former) and dead <code>VITE_NEO4J_BOLT_URL</code> dropped.</span>
+      </li>
+      <li>
+        <span class="f">_apps/grid/.env</span>
+        <span class="why"><code>NEO4J_EXPECTED_HOST/PORT</code> pointed at Aura while <code>NEO4J_URI</code> pointed at localhost, so the health probe compared the live endpoint to a host the Grid never connects to. Expectation now names the real endpoint.</span>
+      </li>
+      <li>
+        <span class="f">_services/runtime/.env</span>
+        <span class="why">Four dead Aura variables commented out, so grid-api no longer has to unset what it just loaded. A stray bare password line that python-dotenv skipped with a warning on every load is now a commented key.</span>
+      </li>
+      <li>
+        <span class="f">core/engines/cypher_guard.py</span>
+        <span class="why">Scoped subqueries <code>CALL (v) { … }</code> were classified UNKNOWN and denied — including the Grid's own health probe. Folded onto the <code>CALL { … }</code> form the classifier already handles. Parsing widened, policy unchanged.</span>
+      </li>
+      <li>
+        <span class="f">scripts/run_live_constitution_composition.py</span>
+        <span class="why">Read <code>NEO4J_PASSWORD</code> straight from the environment and fell back to a dotenv path that does not exist; with the password in the vault it raised <code>KeyError</code> and the proof could not be run. Now resolves through <code>grid.config</code> and the attested vault.</span>
+      </li>
+      <li>
+        <span class="f">core/ops/tests/test_cluster_identity.py</span>
+        <span class="why">Imported <code>NEO4J_PASSWORD</code> from <code>grid.config</code>, where it no longer exists, failing the whole module at collection. Switched to <code>get_neo4j_password()</code>.</span>
+      </li>
+      <li>
+        <span class="f">run.sh</span>
+        <span class="why">Started <code>grid.api:app</code> with a PYTHONPATH that cannot resolve it, and checked Neo4j on <code>7474</code> instead of <code>47474</code>. Both corrected; bind changed to loopback to match the PM2 unit.</span>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="idx">03</span>Findings, ranked</h2>
+    <p class="lede measure">
+      Ordered by how much they cost you right now. The first three explain the
+      symptoms you reported.
+    </p>
+
+    <div class="findings">
+
+      <article class="finding" data-sev="crit">
+        <div class="rank"></div>
+        <div class="body">
+          <div class="head-row">
+            <h3>The DCX trinity cannot seal, by construction</h3>
+            <span class="pill crit">needs your call</span>
+          </div>
+          <p>
+            All three models are present and Ollama answers in 65 ms, but every
+            invocation fails <code>MIND_CONDUIT_NOT_SEALED</code>. The gate reads
+            <code>MIND_CONDUIT_CANONICAL_EVIDENCE.json</code>, and in the generator
+            that writes it, five of the six gate values are string literals — not
+            measurements. <code>fully_sealed</code> can never evaluate true.
+          </p>
+          <div class="evidence">scripts/check_mind_invocation_surface.py:392
+  gates = {
+    "MODEL_BINDING":     "CONSTITUTION_DRIFT",   # literal
+    "CYPHER_GUARD":      "UNVERIFIED",           # literal
+    "PROVENANCE_FILTER": "UNVERIFIED",           # literal
+    "ATTESTATION_GUARD": "UNVERIFIED",           # literal
+    "INVOCATION_SURFACE_GUARD": invocation_state,# computed
+    "HOSTILE_PATH_TEST": "UNVERIFIED",           # literal
+  }</div>
+          <p>
+            <code>MODEL_BINDING</code>'s blocker is now demonstrably stale. The
+            evidence file pins the constitution at digest <code>02913f52…</code>;
+            the document on disk hashes to <code>e797c19c…</code>, and that is
+            exactly what the graph holds. With the credential path repaired, the
+            live composition proof passes against the running graph:
+          </p>
+          <div class="evidence">$ python scripts/run_live_constitution_composition.py
+{"result": "PASS", "constitution_root_count": 1, "valid_chain_count": 1,
+ "competing_valid_chain_count": 0, "topology_chain_count": 1,
+ "digest_conflict_count": 0}</div>
+          <div class="verdict">
+            <span class="k">Left as is</span>
+            <span class="v">
+              I did not touch the gate values. The four <code>UNVERIFIED</code>
+              literals carry a deliberate rationale in the hostile-path evidence —
+              <em>isolated HP cases pass; system composition guards remain
+              unverified</em> — and flipping them is sealing the mind conduit, which
+              HP-9 says requires human authorization. That is your decision, not a
+              config cleanup.
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding" data-sev="crit">
+        <div class="rank"></div>
+        <div class="body">
+          <div class="head-row">
+            <h3>The council is empty because of a cluster filter</h3>
+            <span class="pill crit">needs your call</span>
+          </div>
+          <p>
+            <code>/api/agents</code> returns <code>[]</code> while
+            <code>/watchtower/stats</code> counts 13 and
+            <code>/watchtower/agents</code> lists them by name. The graph holds
+            14 <code>:Agent</code> nodes. Every one of them has
+            <code>cluster_id = null</code>, and <code>get_agents()</code> matches
+            <code>(a:Agent {cluster_id: 'nairobi-alpha'})</code>.
+          </p>
+          <div class="evidence">Agent total:          14
+Agent by cluster_id:  [{'cid': None, 'c': 14}]
+Agent names:          AlphaMostar, Altimo, Code Conduit, Data Conduit (DCX001),
+                      DeepCAL, FlameBorn Writer, Flameborn, Mo, MoLink,
+                      RAD-X-FLB, Sigma, TsaTse Fly, Woo-Tak, Woo-Tak</div>
+          <p>
+            The last commit — <em>load canonical pantheon and govern all 14
+            agents</em> — projected the pantheon without stamping cluster identity.
+            <code>test_neo4j_nodes_include_cluster_id_property</code> asserts no node
+            lacks <code>cluster_id</code>, and now that the module collects again,
+            it fails on exactly this.
+          </p>
+          <div class="verdict">
+            <span class="k">Left as is</span>
+            <span class="v">
+              Two honest fixes: stamp <code>cluster_id</code> on the pantheon
+              projection, or make agent identity explicitly cluster-neutral.
+              Widening the query to match null would be the third, and it is the
+              fallback this codebase keeps refusing elsewhere. Either real fix is a
+              governed graph write, so I left the graph untouched.
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding" data-sev="done">
+        <div class="rank"></div>
+        <div class="body">
+          <div class="head-row">
+            <h3>The guard was denying the Grid's own health probe</h3>
+            <span class="pill done">fixed</span>
+          </div>
+          <p>
+            <code>/api/health</code> reported <code>mindgraph.ok: false</code> on a
+            connected, healthy graph. The sentinel-label query uses the scoped
+            subquery form your Neo4j requires; <code>CypherGuard.classify()</code>
+            read the token after <code>call</code> as a procedure name, got
+            <code>(label)</code>, took the empty string before the paren, matched no
+            whitelisted procedure, and failed closed.
+          </p>
+          <div class="evidence">"error": "Unclassifiable Cypher denied (fail closed, hash=0bc63366…):
+   UNWIND $labels AS label
+   CALL (label) { MATCH (n) WHERE label IN labels(n) RETURN n LIMIT 1 }
+   RETURN label, count(n) AS present"</div>
+          <div class="verdict">
+            <span class="k">Verified</span>
+            <span class="v">
+              Scoped calls now classify READ; a <code>SET</code> inside one still
+              classifies WRITE and a <code>DETACH DELETE</code> still DESTRUCTIVE.
+              Both guard suites pass — 31 in <code>core/ops</code>, 75 in
+              <code>tests/momind</code>.
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding" data-sev="warn">
+        <div class="rank"></div>
+        <div class="body">
+          <div class="head-row">
+            <h3>PM2's running set and this file describe different systems</h3>
+            <span class="pill warn">do not reload blindly</span>
+          </div>
+          <p>
+            Seventeen apps are running. Twenty-one are defined. Only seven names
+            appear in both. The Idim and CrypSide tiers in the file are not running
+            under those names — their ports are held by processes called
+            <code>mostar-fengine-1</code> and <code>-2</code>.
+          </p>
+          <div class="evidence">port 41050 (idim-api in file)     -> pid 15149 = mostar-fengine-1
+port 41060 (crypside-api in file) -> pid 15112 = mostar-fengine-2
+
+running, not in file (10): mostar-fengine-1, mostar-fengine-2, mostar-scaffs,
+  mostar-scanner, mostar-idim-bridge, mostar-funding-collector,
+  mostar-oi-collector, mostar-ls-ratio-collector,
+  mostar-microstructure-collector, mostar-outcome-tracker
+in file, not running (14): idim-* (7), crypside-* (7)</div>
+          <div class="verdict">
+            <span class="k">Warning</span>
+            <span class="v">
+              <code>pm2 start ecosystem.config.js</code> would launch fourteen apps
+              that are not running today and still not manage the ten that are. Do
+              not reload the whole file. Restart the four apps I changed by name.
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding" data-sev="warn">
+        <div class="rank"></div>
+        <div class="body">
+          <div class="head-row">
+            <h3>grid-api has restarted 11,430 times</h3>
+            <span class="pill warn">watch</span>
+          </div>
+          <p>
+            <code>max_restarts</code> is 5 with a 30-second <code>min_uptime</code>,
+            so the counter is cumulative across resurrections rather than a live
+            crash loop — it is stable now at eleven minutes up. But provenance is
+            worth noting against that number: <code>/api/provenance</code> reports
+            <code>"store": "orchestrator-memory"</code> and
+            <code>"persistent_graph_backed": false</code>. Every restart discards it.
+          </p>
+        </div>
+      </article>
+
+      <article class="finding" data-sev="warn">
+        <div class="rank"></div>
+        <div class="body">
+          <div class="head-row">
+            <h3>Two endpoints the voice waits on take over ten seconds</h3>
+            <span class="pill warn">watch</span>
+          </div>
+          <p>
+            The dashboard briefing composes from these on mount and on every refresh
+            interval, which is where a slow read becomes a silent one.
+          </p>
+          <div class="evidence">/api/briefing        12,863 ms
+/api/senses/africa   10,749 ms
+/api/telemetry        4,681 ms
+/api/density          2,891 ms
+/api/status           2,075 ms</div>
+        </div>
+      </article>
+
+      <article class="finding" data-sev="info">
+        <div class="rank"></div>
+        <div class="body">
+          <div class="head-row">
+            <h3>Two config leftovers outside this repo</h3>
+            <span class="pill info">for later</span>
+          </div>
+          <p>
+            Idim's own <code>observer_bundle/.env</code> still names the retired Aura
+            instance in <code>NEO4J_BOLT_URL</code>, <code>NEO4J_USERNAME</code> and
+            <code>NEO4J_DATABASE</code>. PM2 used to mask this by overriding it with
+            the same dead values; now that nothing overrides it, that file is the one
+            that decides. It needs repointing at
+            <code>bolt://127.0.0.1:47687</code> in its own repo.
+          </p>
+          <p>
+            <code>FRONTEND_DIR</code> in <code>api.py</code> resolves to
+            <code>front/app/out</code>, which does not exist — the Vite build writes
+            to <code>dist/</code>. The catch-all route has nothing to serve.
+          </p>
+        </div>
+      </article>
+
+      <article class="finding" data-sev="info">
+        <div class="rank"></div>
+        <div class="body">
+          <div class="head-row">
+            <h3>The Council Chamber page is a static mock</h3>
+            <span class="pill info">for later</span>
+          </div>
+          <p>
+            <code>front/app/src/routes/council.tsx</code> is 14 KB of inline HTML
+            with no API calls — as is <code>memory.tsx</code>, which renders
+            "12,843 memories" and "VAULT INTEGRITY 100%" as literal text. Worth
+            knowing which surfaces are wired before trusting a panel that looks
+            healthy.
+          </p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="idx">04</span>Endpoint inventory</h2>
+    <p class="lede measure">
+      All 79 routes on the live service, of which 35 parameterless GETs were probed
+      against the running process. Nothing here is dead — the empties are real
+      queries returning real zeroes.
+    </p>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th class="n">Status</th>
+            <th class="n">Latency</th>
+            <th>Reading</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="path">/api/agents</td><td class="n">200</td><td class="n">28 ms</td><td><span class="tag t-crit">empty</span> 14 agents excluded by cluster filter</td></tr>
+          <tr><td class="path">/api/health</td><td class="n">200</td><td class="n">81 ms</td><td><span class="tag t-warn">degraded</span> guard denial + endpoint mismatch, both fixed</td></tr>
+          <tr><td class="path">/api/briefing</td><td class="n">200</td><td class="n">12,863 ms</td><td><span class="tag t-warn">slow</span> composes from external senses</td></tr>
+          <tr><td class="path">/api/senses/africa</td><td class="n">200</td><td class="n">10,749 ms</td><td><span class="tag t-warn">slow</span> live weather + flight APIs</td></tr>
+          <tr><td class="path">/api/telemetry</td><td class="n">200</td><td class="n">4,681 ms</td><td><span class="tag t-warn">slow</span> full label census</td></tr>
+          <tr><td class="path">/api/density</td><td class="n">200</td><td class="n">2,891 ms</td><td><span class="tag t-mute">ok</span></td></tr>
+          <tr><td class="path">/api/status</td><td class="n">200</td><td class="n">2,075 ms</td><td><span class="tag t-mute">ok</span> deep probe, DCX state PARTIAL</td></tr>
+          <tr><td class="path">/api/grid/startup-reports</td><td class="n">200</td><td class="n">1,423 ms</td><td><span class="tag t-mute">ok</span> registry fallback path available</td></tr>
+          <tr><td class="path">/api/grid/census</td><td class="n">200</td><td class="n">1,135 ms</td><td><span class="tag t-warn">note</span> <code>sealed_agents: 0</code></td></tr>
+          <tr><td class="path">/watchtower/stats</td><td class="n">200</td><td class="n">620 ms</td><td><span class="tag t-ok">live</span> 13 agents by status</td></tr>
+          <tr><td class="path">/api/mindgraph/status</td><td class="n">200</td><td class="n">501 ms</td><td><span class="tag t-ok">live</span> 136,550 nodes</td></tr>
+          <tr><td class="path">/lifestages</td><td class="n">200</td><td class="n">424 ms</td><td><span class="tag t-ok">live</span></td></tr>
+          <tr><td class="path">/api/trading/ticks/summary</td><td class="n">200</td><td class="n">388 ms</td><td><span class="tag t-mute">empty</span> no symbols ingested</td></tr>
+          <tr><td class="path">/api/endpoints</td><td class="n">200</td><td class="n">356 ms</td><td><span class="tag t-ok">live</span></td></tr>
+          <tr><td class="path">/watchtower/sanctuary</td><td class="n">200</td><td class="n">311 ms</td><td><span class="tag t-mute">empty</span></td></tr>
+          <tr><td class="path">/api/trading/ticks</td><td class="n">200</td><td class="n">275 ms</td><td><span class="tag t-mute">empty</span> count 0</td></tr>
+          <tr><td class="path">/api/memory/foundational</td><td class="n">200</td><td class="n">185 ms</td><td><span class="tag t-mute">empty</span> no results</td></tr>
+          <tr><td class="path">/api/memory/recent</td><td class="n">200</td><td class="n">78 ms</td><td><span class="tag t-ok">live</span> 1 world signal, feed_state LIVE</td></tr>
+          <tr><td class="path">/watchtower/agents</td><td class="n">200</td><td class="n">68 ms</td><td><span class="tag t-ok">live</span> the agents /api/agents cannot see</td></tr>
+          <tr><td class="path">/</td><td class="n">200</td><td class="n">55 ms</td><td><span class="tag t-ok">live</span></td></tr>
+          <tr><td class="path">/api/agents … /api/soul</td><td class="n">200</td><td class="n">11 ms</td><td><span class="tag t-ok">live</span> static soul manifest</td></tr>
+          <tr><td class="path">/mostar/gaps</td><td class="n">200</td><td class="n">14 ms</td><td><span class="tag t-ok">live</span> 18 registered gaps</td></tr>
+          <tr><td class="path">/api/truthgate/report</td><td class="n">401</td><td class="n">14 ms</td><td><span class="tag t-mute">by design</span> auth required</td></tr>
+          <tr><td class="path">/api/memory/recall</td><td class="n">422</td><td class="n">14 ms</td><td><span class="tag t-mute">by design</span> query param required</td></tr>
+          <tr><td class="path">/api/semantic/personas</td><td class="n">200</td><td class="n">17 ms</td><td><span class="tag t-ok">live</span></td></tr>
+          <tr><td class="path">/api/proposals</td><td class="n">200</td><td class="n">16 ms</td><td><span class="tag t-mute">empty</span> queue clear</td></tr>
+          <tr><td class="path">/api/moscripts</td><td class="n">200</td><td class="n">10 ms</td><td><span class="tag t-ok">live</span></td></tr>
+          <tr><td class="path">/mostar/schema</td><td class="n">200</td><td class="n">10 ms</td><td><span class="tag t-ok">live</span></td></tr>
+          <tr><td class="path">/api/grid/event</td><td class="n">200</td><td class="n">6 ms</td><td><span class="tag t-mute">empty</span> <code>data: []</code></td></tr>
+          <tr><td class="path">/api/semantic/advisors</td><td class="n">200</td><td class="n">5 ms</td><td><span class="tag t-ok">live</span> 6 advisors — the council channel is reachable</td></tr>
+          <tr><td class="path">/api/provenance</td><td class="n">200</td><td class="n">5 ms</td><td><span class="tag t-warn">note</span> memory-only, not graph-backed</td></tr>
+          <tr><td class="path">/health/dependencies</td><td class="n">200</td><td class="n">3 ms</td><td><span class="tag t-ok">ready</span> postgres, neo4j, ollama</td></tr>
+          <tr><td class="path">/health/live · /health/ready · /api/live</td><td class="n">200</td><td class="n">2 ms</td><td><span class="tag t-ok">ready</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption">
+      Note the disagreement: /health/ready reports neo4j <em>ready</em> while
+      /api/health reports the same dependency <em>degraded</em>. The shallow probe
+      checks reachability; the deep probe checks reachability, the endpoint
+      assertion, and sentinel labels. Both were right — the deep one was failing on
+      two defects now fixed.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="idx">05</span>Verification</h2>
+    <p class="lede measure">
+      What I ran, and what it said. The ops-suite failure count is identical before
+      and after every change in this audit.
+    </p>
+    <div class="evidence">tests/momind                          75 passed
+core/ops/tests/test_cypher_guard.py   31 passed
+core/ops/tests (rest)                 17 failed, 161 passed   [unchanged]
+
+effective config through the new start command:
+  NEO4J_URI       bolt://127.0.0.1:47687
+  NEO4J_USER      grid_builder
+  NEO4J_DATABASE  neo4j
+  expected host   127.0.0.1:47687      assertion holds: True
+  NEO4J_PASSWORD in env: False         (vault-released, as designed)
+  attestor / session token / conduit ingest url: all still present</div>
+    <p class="measure">
+      Of the 17 ops failures, 15 predate this work and none of them import a file I
+      touched — they fail on the governance-readiness gate returning 503 under
+      <code>TestClient</code>, on DCX call ordering, and on absent external
+      credentials. The other two are
+      <code>test_cluster_identity</code>'s, which could not run at all before the
+      import fix and now fail truthfully on the missing <code>cluster_id</code>.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="idx">06</span>Yours to decide</h2>
+    <div class="decisions">
+      <div class="decision">
+        <span class="q">?</span>
+        <div class="t">
+          <h3>Restart the four changed services</h3>
+          <p>
+            Nothing I changed is live yet. PM2 keeps the arguments an app was added
+            with, so nothing will pick up the new config on its own — and nothing
+            will break on its own either. By name, never the whole file:
+          </p>
+          <div class="evidence">pm2 restart ecosystem.config.js --only mostar-grid
+pm2 restart ecosystem.config.js --only mostar-mcp-gateway
+pm2 restart ecosystem.config.js --only mostar-voice
+pm2 restart ecosystem.config.js --only mostar-frontend
+pm2 save</div>
+        </div>
+      </div>
+      <div class="decision">
+        <span class="q">?</span>
+        <div class="t">
+          <h3>The mind conduit gates</h3>
+          <p>
+            Do you want the five literal gate values wired to the verifiers that
+            already exist — the composition proof, the hostile-path suite, the
+            contract tests — so the seal reflects measurement? That is the only path
+            to a sealed trinity, and it is a governance change, so I stopped short
+            of it.
+          </p>
+        </div>
+      </div>
+      <div class="decision">
+        <span class="q">?</span>
+        <div class="t">
+          <h3>Agent cluster identity</h3>
+          <p>
+            Stamp <code>cluster_id</code> on the 14 pantheon agents, or make agents
+            cluster-neutral by design? The first is a graph write and needs your
+            authorization; the second is a code change to
+            <code>get_agents()</code> and its test.
+          </p>
+        </div>
+      </div>
+      <div class="decision">
+        <span class="q">?</span>
+        <div class="t">
+          <h3>Reconcile PM2 with the ecosystem file</h3>
+          <p>
+            Ten running apps are undeclared and fourteen declared apps are not
+            running. Until those agree, this file documents an intention rather than
+            the system. Worth a session of its own.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="footer">
+    Audit performed against the running Grid on 2026-09-05 · working tree carried
+    129 uncommitted changes before this work began and nothing here was committed ·
+    no migration, evidence artifact, or log was altered · 🜃∴🜂
+  </p>
+
+</div>

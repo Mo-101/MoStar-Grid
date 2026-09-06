@@ -1,0 +1,55 @@
+name: Mind Conduit Seal
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  invocation-surface:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Reject unauthorized model invocation surfaces
+        id: invocation_surface
+        continue-on-error: true
+        run: >-
+          python scripts/check_mind_invocation_surface.py
+          --json core/ops/status/INVOCATION_SURFACE_LEDGER.json
+          --report core/ops/status/MIND_CONDUIT_REMEDIATION_EVIDENCE.md
+          --evidence core/ops/status/MIND_CONDUIT_CANONICAL_EVIDENCE.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: front/app/package-lock.json
+      - name: Run hostile-path seal suite
+        working-directory: front/app
+        run: |
+          npm ci
+          npm exec vitest -- run src/lib/mind src/components/grid/bootConductor.test.ts --reporter=json --outputFile=/tmp/mind-conduit-vitest.json
+          python ../../scripts/build_hostile_path_evidence.py /tmp/mind-conduit-vitest.json ../../core/ops/status/HOSTILE_PATH_POST_CLOSURE_EVIDENCE.json
+      - name: Refresh evidence with HP-9 result
+        if: success()
+        run: >-
+          python scripts/check_mind_invocation_surface.py
+          --json core/ops/status/INVOCATION_SURFACE_LEDGER.json
+          --report core/ops/status/MIND_CONDUIT_REMEDIATION_EVIDENCE.md
+          --evidence core/ops/status/MIND_CONDUIT_CANONICAL_EVIDENCE.json
+          --hp9-result PASS
+      - name: Upload invocation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mind-conduit-invocation-evidence
+          path: |
+            core/ops/status/INVOCATION_SURFACE_LEDGER.json
+            core/ops/status/MIND_CONDUIT_REMEDIATION_EVIDENCE.md
+            core/ops/status/MIND_CONDUIT_CANONICAL_EVIDENCE.json
+            core/ops/status/HOSTILE_PATH_POST_CLOSURE_EVIDENCE.json
+      - name: Enforce invocation-surface result
+        if: always()
+        run: |
+          test "${{ steps.invocation_surface.outcome }}" = "success"

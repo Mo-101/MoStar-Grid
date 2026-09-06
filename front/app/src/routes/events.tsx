@@ -135,7 +135,7 @@ function EventsPage() {
                     className="absolute left-3 top-3 grid h-9 w-9 place-items-center rounded-full border bg-black/60"
                     style={{ borderColor: `var(--color-${e.color})`, boxShadow: `0 0 14px var(--color-${e.color})` }}
                   >
-                    <Glyph name="spark" size={20} glow={`var(--color-${e.color})`} />
+                    <Glyph name="spark" size={20} />
                   </span>
                   <div className="flex items-start justify-between gap-2">
                     <div className="text-xs tracking-[0.1em]" style={{ color: `var(--color-${e.color})` }}>{e.title}</div>
@@ -159,7 +159,7 @@ function EventsPage() {
               <span className="neon-text-cyan">{sel.impact} IMPACT</span>
             </div>
             <div className="mt-3 flex h-24 items-center justify-center rounded border border-[var(--color-neon-gold)]/30 bg-[oklch(0.22_0.10_80/0.18)]">
-              <Glyph name="spark" size={56} glow={`var(--color-${sel.color})`} />
+              <Glyph name="spark" size={56} />
             </div>
             <div className="mt-3 space-y-1.5 text-[11px]">
               {[

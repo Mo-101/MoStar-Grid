@@ -122,3 +122,5 @@ back/services/mindgraph/neo4j-mindgraph/**/data*/
 back/services/mindgraph/neo4j-mindgraph/**/logs/
 back/services/mindgraph/neo4j-mindgraph/**/store_lock
 *.transaction.db.*
+*.patch
+*.zip

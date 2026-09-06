@@ -1,0 +1,59 @@
+{
+  "n": 20,
+  "method_warning": "Manual baseline was produced in-session, not after a one-day cold/blind interval. Treat as provisional disagreement analysis, not validation.",
+  "mean_abs_confidence_delta": 0.2222,
+  "mean_signed_confidence_delta": -0.13645000000000002,
+  "dimension_mean_abs_delta": {
+    "ikang": 0.20750000000000002,
+    "mmong": 0.2595,
+    "afim": 0.2585,
+    "isong": 0.20049999999999998
+  },
+  "largest_confidence_disagreements": [
+    {
+      "id": "cal_012",
+      "domain": "DeepCAL",
+      "action_type": "deployment",
+      "manual_confidence": 0.855,
+      "code_confidence": 0.4925,
+      "confidence_delta_code_minus_manual": -0.3625,
+      "input": "Deploy the new route ranking weights to production with canary rollout, monitoring, and rollback criteria."
+    },
+    {
+      "id": "cal_014",
+      "domain": "DeepCAL",
+      "action_type": "execution",
+      "manual_confidence": 0.786,
+      "code_confidence": 0.455,
+      "confidence_delta_code_minus_manual": -0.331,
+      "input": "Notify the warehouse to hold dispatch until the cold-chain logger file is checked."
+    },
+    {
+      "id": "cal_009",
+      "domain": "DeepCAL",
+      "action_type": "execution",
+      "manual_confidence": 0.8415,
+      "code_confidence": 0.5225,
+      "confidence_delta_code_minus_manual": -0.319,
+      "input": "Publish the final route decision to partners after commander approval, rollback plan, and notification list are attached."
+    },
+    {
+      "id": "cal_019",
+      "domain": "Surveillance",
+      "action_type": "analysis",
+      "manual_confidence": 0.8535,
+      "code_confidence": 0.54,
+      "confidence_delta_code_minus_manual": -0.3135,
+      "input": "Compare satellite flood alerts with facility access reports for the last 72 hours; do not notify field teams yet."
+    },
+    {
+      "id": "cal_008",
+      "domain": "DeepCAL",
+      "action_type": "data_mutation",
+      "manual_confidence": 0.8455,
+      "code_confidence": 0.555,
+      "confidence_delta_code_minus_manual": -0.2905,
+      "input": "Update the shipment record with the corrected arrival timestamp from the signed POD and keep the original value in audit history."
+    }
+  ]
+}

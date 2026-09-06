@@ -1,15 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
-  CouncilList, GlyphPanel, CodeConduit,
+  CouncilList,
+  GlyphPanel,
+  CodeConduit,
   GridFeed,
-  useLiveFeed, KpiRow, PageShell,
+  useLiveFeed,
+  KpiRow,
+  PageShell,
 } from "@/components/grid/parts";
 import { AwakeningScreen } from "@/components/grid/awakening";
 import { GridSnapshotPanel } from "@/components/grid/grid-snapshot";
-import {
-  ElementalCard, elementalToast, type Element,
-} from "@/components/grid/elemental-toast";
+import { ElementalCard, elementalToast, type Element } from "@/components/grid/elemental-toast";
 import { elementByClassical, type ClassicalElement } from "@/lib/gridElements";
 
 // Body copy per classical element, written for the aspect (fire=spirit,
@@ -34,7 +36,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "MoStar GRID — Covenant Command Center" },
-      { name: "description", content: "Real-time command center for the MoStar GRID covenant: agents, mind graph, conduits, and grid health." },
+      {
+        name: "description",
+        content:
+          "Real-time command center for the MoStar GRID covenant: agents, mind graph, conduits, and grid health.",
+      },
     ],
   }),
   component: GridDashboard,
@@ -49,12 +55,10 @@ function GridDashboard() {
 
   useEffect(() => {
     const forceBoot =
-      typeof window !== "undefined"
-      && new URLSearchParams(window.location.search).get("boot") === "1";
+      typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("boot") === "1";
     const done =
-      typeof window !== "undefined"
-      && !forceBoot
-      && sessionStorage.getItem(AWAKEN_KEY) === "1";
+      typeof window !== "undefined" && !forceBoot && sessionStorage.getItem(AWAKEN_KEY) === "1";
     if (!done) setAwakened(false);
   }, []);
 
@@ -78,7 +82,9 @@ function GridDashboard() {
     return (
       <AwakeningScreen
         onComplete={() => {
-          try { sessionStorage.setItem(AWAKEN_KEY, "1"); } catch { }
+          try {
+            sessionStorage.setItem(AWAKEN_KEY, "1");
+          } catch {}
           setAwakened(true);
         }}
       />
@@ -86,7 +92,7 @@ function GridDashboard() {
   }
 
   return (
-    <PageShell active="overview" footerSlot={<GridSnapshotPanel />}>
+    <PageShell active="overview" footerSlot={<GridSnapshotPanel source="operational" />}>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
         <KpiRow />
       </div>
@@ -110,9 +116,13 @@ function GridDashboard() {
       </div>
 
       <div className="grid grid-cols-12 gap-3">
-        <div className="col-span-12 lg:col-span-3"><CouncilList /></div>
+        <div className="col-span-12 lg:col-span-3">
+          <CouncilList />
+        </div>
         <div className="col-span-12 flex flex-col gap-3 lg:col-span-6">
-          <div className="min-h-[560px] flex-1"><GlyphPanel /></div>
+          <div className="min-h-[560px] flex-1">
+            <GlyphPanel />
+          </div>
           <CodeConduit pulse={pulse} connected={reachable} />
         </div>
         <div className="col-span-12 flex flex-col gap-3 lg:col-span-3">

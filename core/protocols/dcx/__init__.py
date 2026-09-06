@@ -12,7 +12,8 @@ import json
 from datetime import datetime, timezone
 from enum import Enum
 from dataclasses import dataclass
-from typing import Optional, AsyncIterator
+from typing import Any, Optional, AsyncIterator
+from grid.mind_conduit_runtime import OLLAMA_GENERATE_PATH, governed_http_post
 
 from grid.config import (
     DCX0_MODEL,
@@ -196,7 +197,9 @@ class DCXTrinity:
         return {
             "state": state,
             "sealed": False,
-            "seal_requires": "live validation of all three trinity models",
+            "binding": "UNVERIFIED",
+            "required_tags": ["MoScripts"],
+            "seal_requires": "live validation plus a signed Mind Conduit manifest carrying the MoScripts tag",
             "reachable": self._reachable,
             "expected_models": self.expected_models,
             "present_models": present,
@@ -230,8 +233,12 @@ class DCXTrinity:
         graph_context: Optional[list[dict]] = None,
         layer: Optional[DCXLayer] = None,
         conversation_history: Optional[list[dict]] = None,
+        invocation_context: Any = None,
     ) -> DCXResponse:
         """Send a query through the appropriate DCX layer."""
+        if invocation_context is None:
+            raise RuntimeError("DIRECT_MODEL_INVOCATION_FORBIDDEN")
+        invocation_context.assert_valid()
         if layer is None:
             layer = self.route(query)
 
@@ -260,7 +267,7 @@ class DCXTrinity:
         prompt = "\n\n".join(prompt_parts)
 
         try:
-            resp = await self._client.post("/api/generate", json={
+            payload = {
                 "model": model,
                 "prompt": prompt,
                 "raw": True,
@@ -271,7 +278,10 @@ class DCXTrinity:
                     "num_ctx": 2048,
                     "num_predict": 48,
                 },
-            })
+            }
+            resp = await governed_http_post(
+                invocation_context, self._client, OLLAMA_GENERATE_PATH, payload
+            )
             resp.raise_for_status()
             data = resp.json()
             content = data.get("response", "")

@@ -1,6 +1,6 @@
 #!/bin/bash
 # MoStar Grid — Start
-# The Flame Architect · MoStar Industries
+# The Flame Architect · MoStar Intelligent Systems
 
 set -e
 
@@ -33,12 +33,13 @@ if [ ! -f ".env" ]; then
     echo "  → Edit .env with your Neo4j password and model names"
 fi
 
-# Check Neo4j
+# Check Neo4j — 47474/47687 is the sovereign band the local server binds,
+# not the 7474/7687 defaults. See ecosystem.config.js DB PORTS.
 echo "🜃 Checking Neo4j..."
-if curl -s http://localhost:7474 >/dev/null 2>&1; then
+if curl -s http://localhost:47474 >/dev/null 2>&1; then
     echo "  ✓ Neo4j reachable"
 else
-    echo "  ✗ Neo4j not reachable at localhost:7474 — Grid will run in degraded mode"
+    echo "  ✗ Neo4j not reachable at localhost:47474 — Grid will run in degraded mode"
 fi
 
 # Check Ollama
@@ -58,8 +59,17 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 
 # Run
-PYTHONPATH="$SCRIPT_DIR" python3 -m uvicorn grid.api:app \
-    --host 0.0.0.0 \
+#
+# The app is back.services.grid.api:app. This said `grid.api:app` with
+# PYTHONPATH set to the repo root only, so the import failed before uvicorn
+# ever bound a port. PYTHONPATH matches GRID_PYTHONPATH in ecosystem.config.js
+# so a foreground run resolves the same packages PM2 does.
+#
+# --host 127.0.0.1 matches the loopback-only rule the PM2 unit follows: the
+# port is for local processes and the doorman tunnel, never a direct listener.
+PYTHONPATH="$SCRIPT_DIR:$SCRIPT_DIR/back/services:$SCRIPT_DIR/core/engines:$SCRIPT_DIR/core/sovereignty:$SCRIPT_DIR/core/protocols:$SCRIPT_DIR/core/ops" \
+    python3 -m uvicorn back.services.grid.api:app \
+    --host 127.0.0.1 \
     --port 41010 \
     --reload \
     --log-level info

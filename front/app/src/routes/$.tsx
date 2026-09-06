@@ -22,7 +22,7 @@ function ComingSoon() {
     <PageShell active={meta.id}>
       <div className="panel flex flex-1 flex-col items-center justify-center gap-4 p-12">
         <div className="grid h-24 w-24 place-items-center rounded-full border border-[var(--color-neon-gold)]/40 shadow-[0_0_40px_var(--color-neon-gold)]">
-          <Glyph name="covenant" size={56} glow="var(--color-neon-gold)" />
+          <Glyph name="covenant" size={56} />
         </div>
         <div className="text-center">
           <div className="text-2xl tracking-[0.32em] neon-text-gold">{meta.title}</div>

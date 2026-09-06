@@ -11,13 +11,14 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from neo4j import AsyncGraphDatabase, AsyncDriver, Query
+from cypher_guard import GuardedAsyncDriver, CypherGuard
 from grid.config import (
     MOSTAR_CLUSTER_ID,
     NEO4J_DATABASE,
-    NEO4J_PASSWORD,
     NEO4J_URI,
     NEO4J_USER,
     SEAL_GLYPH,
+    get_neo4j_password,
 )
 
 logger = logging.getLogger("mindgraph")
@@ -25,6 +26,13 @@ logger = logging.getLogger("mindgraph")
 
 class CommitForbiddenError(RuntimeError):
     """Raised when graph writes are attempted outside commit_after_seal."""
+
+
+class GovernedRetrievalUnavailable(RuntimeError):
+    """Raised when Grid-governed context retrieval fails at the infrastructure
+    level. Must never be conflated with a successful zero-match retrieval —
+    callers rely on this distinction to avoid presenting an ungrounded
+    response as Grid-grounded."""
 
 
 class MindGraph:
@@ -38,11 +46,14 @@ class MindGraph:
         """Connect to Neo4j, retrying if not ready yet (handles startup race)."""
         for attempt in range(1, retries + 1):
             try:
-                driver = AsyncGraphDatabase.driver(
-                    NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD)
+                raw_driver = AsyncGraphDatabase.driver(
+                    NEO4J_URI, auth=(NEO4J_USER, get_neo4j_password())
                 )
-                await driver.verify_connectivity()
-                self._driver = driver
+                await raw_driver.verify_connectivity()
+                self._driver = GuardedAsyncDriver(
+                    raw_driver,
+                    guard=CypherGuard(allow_write=True),
+                )
                 logger.info("MindGraph connected to Neo4j at %s (attempt %d)", NEO4J_URI, attempt)
                 return
             except Exception as e:
@@ -78,9 +89,18 @@ class MindGraph:
     # ── Context Retrieval ──────────────────────────────────────────
 
     async def retrieve_context(self, query: str, limit: int = 10) -> list[dict]:
-        """Full-text + label search for relevant nodes."""
+        """Full-text search for relevant nodes.
+
+        Fails closed: infrastructure failures raise GovernedRetrievalUnavailable
+        rather than being conflated with a successful zero-match result. There
+        is no unbounded MATCH fallback — a broad, un-ranked graph scan
+        presented as retrieval would be a false-grounding risk (see Phase 0
+        retrieval incident). If a fallback strategy is needed, it must be
+        implemented as an explicit, separately-labeled retrieval_path, not a
+        silent substitute for full-text search.
+        """
         if not self._driver:
-            return []
+            raise GovernedRetrievalUnavailable("MindGraph has no active driver connection")
 
         cypher = """
         CALL db.index.fulltext.queryNodes('gridSearch', $query)
@@ -90,40 +110,24 @@ class MindGraph:
         ORDER BY score DESC
         LIMIT $limit
         """
-        # Fallback if fulltext index doesn't exist yet
-        fallback = """
-        MATCH (n)
-        WHERE n.cluster_id = $cluster_id
-          AND any(prop IN keys(n) WHERE toString(n[prop]) CONTAINS $query)
-        RETURN n {.*, _labels: labels(n), _score: 1.0} AS node
-        LIMIT $limit
-        """
         async with self._driver.session(database=NEO4J_DATABASE) as session:
             try:
                 result = await session.run(
                     cypher,
-                    query_param=query,
+                    query=query,
                     limit=limit,
                     cluster_id=MOSTAR_CLUSTER_ID,
                 )
                 records = await result.data()
-                if records:
-                    return [r["node"] for r in records]
-            except Exception:
-                pass
-
-            try:
-                result = await session.run(
-                    fallback,
-                    query_param=query,
-                    limit=limit,
-                    cluster_id=MOSTAR_CLUSTER_ID,
+            except Exception as exc:
+                logger.exception(
+                    "MindGraph retrieval failed",
+                    extra={"operation": "retrieve_context"},
                 )
-                records = await result.data()
-                return [r["node"] for r in records]
-            except Exception as e:
-                logger.warning("Context retrieval failed: %s", e)
-                return []
+                raise GovernedRetrievalUnavailable(
+                    f"retrieve_context failed: {type(exc).__name__}: {exc}"
+                ) from exc
+        return [r["node"] for r in records]
 
     async def get_agents(self) -> list[dict]:
         """Return all sovereign agents."""

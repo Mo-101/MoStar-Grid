@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101b22">
+<title>MoVoKaL — A little more human in the conversation</title>
+<style>:root{color-scheme:dark;--bg:oklch(21% .02 235);--panel:oklch(24% .019 235);--line:oklch(35% .018 235);--text:oklch(93% .014 80);--muted:oklch(73% .02 225);--accent:oklch(81% .09 72);--danger:oklch(80% .1 28)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select{font:inherit}button,a,select,input{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}[hidden]{display:none!important}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+.masthead{max-width:1440px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 48px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:14px;color:var(--text);text-decoration:none;font-size:20px;letter-spacing:-.7px}.brand strong{font-weight:400;color:var(--accent)}.brand-mark{font-family:Georgia,serif;font-size:36px;letter-spacing:-7px;margin-right:8px}.brand-mark span{color:var(--accent)}.header-note,footer,.eyebrow{font-size:10px;font-weight:600;letter-spacing:2px}.header-note{color:var(--muted)}.ai-badge{font-size:11px;border:1px solid var(--line);border-radius:30px;padding:9px 12px;color:var(--muted)}
+main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.8fr);max-width:1250px;margin:auto;min-height:calc(100dvh - 165px);padding:54px 48px 42px;gap:80px}.conversation{max-width:640px}.eyebrow{color:var(--accent);display:flex;align-items:center;gap:9px}.status-dot{width:6px;height:6px;background:var(--muted);border-radius:50%}.status-dot.connected{background:oklch(80% .1 155)}h1{font-size:60px;font-weight:400;line-height:1.08;letter-spacing:-2.7px;margin:24px 0}h1 em{font-family:Georgia,"Times New Roman",serif;font-weight:400;color:var(--accent);letter-spacing:-2px}.intro{font-size:15px;line-height:1.8;color:var(--muted);max-width:400px;margin:0}.voice-stage{display:flex;align-items:center;gap:28px;height:118px;margin-top:24px}.voice-ring{height:86px;width:86px;border:1px solid var(--accent);border-radius:50%;display:grid;place-items:center;flex-shrink:0;transition:background .2s}.voice-monogram{font-family:Georgia,serif;font-size:44px;letter-spacing:-9px;transform:translateX(-4px);color:var(--accent)}.voice-monogram span{font-style:italic}.wave{display:flex;gap:5px;align-items:center;height:48px}.wave span{display:block;width:3px;height:5px;border-radius:3px;background:var(--accent);opacity:.35;transition:height .1s,opacity .1s}.call-status{color:var(--text);font-size:13px;margin:0 0 18px}.controls{display:flex;align-items:center;flex-wrap:wrap;gap:10px}.controls button{min-height:48px;border-radius:8px;padding:12px 18px;border:1px solid var(--line);font-size:13px;font-weight:600;transition:background .15s,transform .15s}.controls button:active{transform:translateY(1px)}.controls .primary{display:flex;align-items:center;gap:10px;background:var(--accent);border-color:var(--accent);color:var(--bg)}.primary:hover:enabled{background:oklch(87% .08 72)}.primary svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8}.secondary{background:var(--panel);color:var(--text)}.secondary:hover{background:var(--line)}.end{color:var(--danger);background:transparent}.end:hover{background:oklch(30% .035 28)}.hint{font-size:11px;line-height:1.8;color:var(--muted);margin-top:14px}.privacy{max-width:420px;color:var(--muted);font-size:10px;line-height:1.8;margin-top:24px}.error{border-left:2px solid var(--danger);padding:10px 14px;color:var(--danger);font-size:13px;line-height:1.6;margin-top:16px}.setup{font-size:12px;color:var(--muted);line-height:1.8;margin-top:12px}.setup summary{cursor:pointer;color:var(--text)}
+.side-panel{display:flex;flex-direction:column;border-left:1px solid var(--line);padding-left:36px;min-width:0}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0 20px;border-bottom:1px solid var(--line)}.panel-heading .eyebrow{font-size:9px;letter-spacing:1.5px;color:var(--muted)}.text-button{padding:6px 0;border:0;background:none;color:var(--accent);font-size:10px}.text-button:hover:enabled{text-decoration:underline}.transcript{height:410px;overflow:auto;overscroll-behavior:contain;padding:22px 12px 22px 0;scrollbar-color:var(--line) transparent}.empty{padding-top:22px}.quote-mark{font-family:Georgia,serif;font-size:70px;line-height:1;color:var(--accent)}h2{font-weight:400;letter-spacing:-.5px;font-size:25px;margin:6px 0 12px}.empty p{color:var(--muted);font-size:13px;line-height:1.9}.prompts{display:flex;flex-direction:column;gap:15px;color:var(--muted);font-size:12px;margin-top:28px}.caption{margin-bottom:24px;overflow-wrap:anywhere}.caption .speaker{font-size:10px;letter-spacing:1.3px;color:var(--accent);text-transform:uppercase}.caption.user .speaker{color:var(--muted)}.caption p{font-size:14px;line-height:1.75;margin:7px 0}.caption small{color:var(--muted);font-size:10px}.settings{border-top:1px solid var(--line);padding-top:24px;margin-top:auto}.settings label{display:block;font-size:12px;margin-bottom:10px}.settings select,.settings input{width:100%;min-height:43px;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:6px;padding:10px 12px}.settings select:disabled{opacity:.6}.settings p{color:var(--muted);font-size:10px;line-height:1.7;margin:10px 0 18px}footer{display:flex;justify-content:space-between;gap:18px;max-width:1440px;margin:auto;border-top:1px solid var(--line);padding:22px 48px;color:var(--muted);font-size:9px;letter-spacing:1.4px}footer span:first-child{text-transform:uppercase}audio{display:none}
+@media(min-width:1500px){main{padding-top:80px;padding-bottom:60px}h1{font-size:68px}.transcript{height:460px}}
+@media(max-width:900px){.header-note{display:none}main{gap:35px;padding:38px 28px;grid-template-columns:minmax(0,1fr) minmax(270px,.8fr)}h1{font-size:48px}.masthead,footer{padding-left:28px;padding-right:28px}.side-panel{padding-left:24px}}
+@media(max-width:660px){.masthead{padding:18px 22px}.brand{font-size:18px}.ai-badge{font-size:9px}main{display:block;padding:32px 24px}h1{font-size:48px}.intro{max-width:340px}.side-panel{border-left:0;border-top:1px solid var(--line);padding:24px 0 0;margin-top:36px}.transcript{height:280px}.empty{padding-top:0}.quote-mark{display:none}.prompts{margin-top:18px;gap:10px}footer{padding:20px 24px}footer span:nth-child(2){display:none}.voice-stage{margin-top:12px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+#composer{display:flex;gap:10px;margin-top:22px;max-width:460px;align-items:stretch}#message{font:inherit;font-size:13px;line-height:1.6;resize:vertical;min-width:0;flex:1;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:12px}#message::placeholder{color:var(--muted)}#send{background:var(--accent);color:var(--bg);border:0;border-radius:8px;padding:12px 17px;font-size:13px;font-weight:600}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+<script type="module">const $ = id => document.getElementById(id);
+const ui = Object.fromEntries(["start","start-label","end","preview","play","voice","access","access-wrap","message","composer","send","error","setup","transcript","empty","clear","call-status","connection-label","status-dot","audio","wave","hint"].map(id=>[id,$(id)]));
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition, listening = false, generation = 0, controller, audioUrl, history = [], sessionId = crypto.randomUUID();
+let busy = false, audioContext, analyser, frame, locked = false;
+const bars = Array.from({length:25},()=>{const bar=document.createElement("span");ui.wave.append(bar);return bar;});
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+function status(text){ui["call-status"].textContent=text;}
+function error(text){ui.error.textContent=text || "";ui.error.hidden=!text;}
+function headers(){return {"Content-Type":"application/json",...(locked?{Authorization:"Bearer "+ui.access.value}:{})};}
+async function jsonFetch(path, options={}){
+  const response=await fetch(path,{...options,headers:{...headers(),...options.headers}});
+  const body=await response.json();
+  if(!response.ok)throw new Error(body.error || "MoStar could not connect.");
+  return body;
+}
+function update(){
+  ui.end.hidden=!busy&&!listening&&!history.length&&!audioUrl;
+  ui["start-label"].textContent=listening?"Stop listening":busy?"Interrupt & speak":"Talk to MoStar";
+  ui.start.disabled=!Recognition;
+  ui.preview.disabled=!ui.voice.value||busy||listening;
+  ui.voice.disabled=busy||listening;
+  ui.clear.disabled=!history.length;
+  ui.send.disabled=!ui.message.value.trim();
+}
+function stopAudio(){
+  ui.audio.pause();ui.audio.removeAttribute("src");ui.audio.load();
+  if(audioUrl){URL.revokeObjectURL(audioUrl);audioUrl=null;}
+  cancelAnimationFrame(frame);
+  bars.forEach(bar=>{bar.style.height="5px";bar.style.opacity=".35";});
+  ui.play.hidden=true;
+}
+function cancel(){
+  generation++;controller?.abort();controller=null;
+  if(recognition){recognition.onend=null;recognition.abort();recognition=null;}
+  listening=false;busy=false;stopAudio();update();
+}
+function caption(role,text){
+  ui.empty.hidden=true;
+  const article=document.createElement("article");article.className="caption "+role;
+  const speaker=document.createElement("span");speaker.className="speaker";speaker.textContent=role==="user"?"You":"MoStar";
+  const p=document.createElement("p");p.textContent=text;article.append(speaker,p);ui.transcript.append(article);
+  ui.transcript.scrollTop=ui.transcript.scrollHeight;
+  return article;
+}
+function animate(){
+  if(!analyser||reducedMotion.matches)return;
+  const data=new Uint8Array(analyser.frequencyBinCount);
+  const draw=()=>{
+    analyser.getByteFrequencyData(data);
+    bars.forEach((bar,i)=>{const level=data[Math.floor(i*data.length/50)]/255;bar.style.height=(5+level*40)+"px";bar.style.opacity=String(.35+level*.65);});
+    if(!ui.audio.paused)frame=requestAnimationFrame(draw);
+  };draw();
+}
+async function play(){
+  try{
+    if(!audioContext){
+      audioContext=new AudioContext();analyser=audioContext.createAnalyser();analyser.fftSize=256;
+      const source=audioContext.createMediaElementSource(ui.audio);source.connect(analyser);analyser.connect(audioContext.destination);
+    }
+    await audioContext.resume();await ui.audio.play();ui.play.hidden=true;animate();status("MoStar is speaking. You can interrupt.");
+  }catch{ui.play.hidden=false;status("Your reply is ready. Tap Enable audio to listen.");}
+}
+async function speak(text,turn,signal){
+  if(!ui.voice.value)throw new Error("No voice model is available. The reply is in your captions.");
+  const response=await fetch("/api/speak",{method:"POST",headers:headers(),body:JSON.stringify({text,voice:ui.voice.value}),signal});
+  if(!response.ok){const data=await response.json();throw new Error(data.error);}
+  const blob=await response.blob();
+  if(turn!==generation)return;
+  audioUrl=URL.createObjectURL(blob);ui.audio.src=audioUrl;await play();
+}
+ui.audio.addEventListener("ended",()=>{stopAudio();busy=false;status("Your turn. Take your time.");update();});
+ui.audio.addEventListener("error",()=>{if(audioUrl){stopAudio();busy=false;error("The audio could not play. Your reply is still in the captions.");update();}});
+ui.play.addEventListener("click",play);
+ui.message.addEventListener("input",update);
+ui.start.addEventListener("click",()=>{
+  if(listening){recognition?.stop();return;}
+  cancel();error("");
+  if(!Recognition)return;
+  recognition=new Recognition();recognition.lang=navigator.language||"en-US";
+  recognition.continuous=true;recognition.interimResults=true;
+  const prefix=ui.message.value.trim();
+  recognition.onresult=event=>{
+    let words="";
+    for(let i=0;i<event.results.length;i++)words+=event.results[i][0].transcript+" ";
+    ui.message.value=(prefix+" "+words).trim().slice(0,4000);update();
+  };
+  recognition.onerror=event=>{
+    listening=false;
+    error(event.error==="not-allowed"?"Microphone permission was denied. Allow it in your browser, or type your message.":event.error==="no-speech"?"I didn’t catch that. Try again, or type your message.":"Speech recognition stopped. You can still type your message.");
+    update();
+  };
+  recognition.onend=()=>{listening=false;status("Edit your words if needed, then press Send.");update();};
+  try{recognition.start();listening=true;status("Listening. Pause freely — Send when you’re ready.");update();}
+  catch{error("Couldn’t start the microphone. Try again or type your message.");}
+});
+ui.composer.addEventListener("submit",async event=>{
+  event.preventDefault();
+  const text=ui.message.value.trim();if(!text)return;
+  cancel();error("");const turn=generation;controller=new AbortController();busy=true;
+  const previous=history.slice(-12);
+  caption("user",text);history.push({role:"user",content:text});ui.message.value="";status("MoStar is thinking it through…");update();
+  try{
+    const data=await jsonFetch("/api/turn",{method:"POST",body:JSON.stringify({text,history:previous,sessionId}),signal:controller.signal});
+    if(turn!==generation)return;
+    const article=caption("assistant",data.text);
+    history.push({role:"assistant",content:data.text});history=history.slice(-12);
+    if(!data.semanticAvailable||data.semanticSource!=="llm"){
+      const note=document.createElement("small");note.textContent=data.semanticAvailable?"Semantic cues used Grid’s fallback analysis.":"Semantic context unavailable for this turn.";article.append(note);
+    }
+    status("Giving the words a voice…");update();
+    await speak(data.text,turn,controller.signal);
+  }catch(cause){if(turn!==generation)return;busy=false;error(cause.message);status("Let’s try that again when you’re ready.");update();}
+});
+ui.preview.addEventListener("click",async()=>{
+  cancel();error("");const turn=generation;controller=new AbortController();busy=true;update();status("Preparing a voice sample…");
+  try{await speak("Hey, I'm MoStar. Bring the big idea, the tangled thought, or just yourself. We'll take it one sentence at a time.",turn,controller.signal);}
+  catch(cause){if(turn!==generation)return;busy=false;error(cause.message);status("Voice preview unavailable.");update();}
+});
+function reset(){cancel();history=[];sessionId=crypto.randomUUID();ui.transcript.querySelectorAll(".caption").forEach(node=>node.remove());ui.empty.hidden=false;ui.message.value="";error("");status("A fresh conversation. Make yourself comfortable.");update();}
+ui.end.addEventListener("click",reset);ui.clear.addEventListener("click",reset);
+ui.access.addEventListener("change",check);
+async function check(){
+  try{
+    const config=await jsonFetch("/api/config");locked=config.locked;ui["access-wrap"].hidden=!locked;
+    if(locked&&!ui.access.value){status("Enter your access key below to connect.");update();return;}
+    const data=await jsonFetch("/api/status");
+    ui.voice.replaceChildren();
+    for(const voice of data.voices){const option=document.createElement("option");option.value=voice.id;option.textContent=voice.label;ui.voice.append(option);}
+    if(data.voices.some(v=>v.id==="mostar-clear-v1"))ui.voice.value="mostar-clear-v1";
+    ui["connection-label"].textContent=data.voiceReady?"MOSTAR VOICE CONNECTED":"VOICE SERVICE OFFLINE";
+    ui["status-dot"].classList.toggle("connected",data.voiceReady);
+    ui.setup.hidden=data.voiceReady&&data.gridReachable;
+    if(!data.gridReachable)error("MoStar Voice is available, but Grid health could not be verified. You can preview the voice; conversation needs a ready Grid mind.");
+    else if(!data.voiceReady)error("MoStar Voice is offline. Start the voice service, then reload this page.");
+    status(data.voiceReady?"Make yourself comfortable.":"Waiting for MoStar Voice.");
+  }catch(cause){error(cause.message);status("Connection needs attention.");}
+  if(!Recognition)ui.hint.textContent="This browser has no speech recognition. Type below, or use a browser that supports it.";
+  update();
+}
+window.addEventListener("pagehide",cancel);
+check();
+</script>
+</head>
+<body>
+<header class="masthead"><a href="/" class="brand" aria-label="MoVoKaL home"><span class="brand-mark">m<span>o</span></span><span><strong>MoVoKaL</strong></span></a><span class="header-note">GOOD CONVERSATION. REAL PRESENCE.</span><span class="ai-badge">AI voice companion</span></header>
+<main>
+<section class="conversation" aria-labelledby="title">
+<div class="eyebrow"><span class="status-dot" id="status-dot"></span><span id="connection-label">YOUR SPACE TO TALK</span></div>
+<h1 id="title">A voice.<br>A little wit.<br><em>Room to be you.</em></h1>
+<p class="intro">Big ideas, small victories, or a day that needs talking through. MoStar is here for the conversation.</p>
+<div class="voice-stage" aria-hidden="true"><div class="voice-ring"><span class="voice-monogram">m<span>o</span></span></div><div class="wave" id="wave"></div></div>
+<p class="call-status" id="call-status" role="status" aria-live="polite">Make yourself comfortable.</p>
+<div class="controls">
+<button class="primary" id="start" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/></svg><span id="start-label">Checking voice…</span></button>
+<button class="secondary" id="preview">Hear this voice</button>
+<button class="end" id="end" hidden>Stop &amp; reset</button>
+<button class="secondary" id="play" hidden>Enable audio</button>
+</div>
+<form id="composer"><label class="sr-only" for="message">Your message to MoStar</label><textarea id="message" rows="2" maxlength="4000" placeholder="Or type what’s on your mind…"></textarea><button id="send" type="submit">Send</button></form><p class="hint" id="hint">Tap the mic to speak. Send when you’re ready.</p>
+<div class="error" id="error" role="alert" hidden></div>
+<details class="setup" id="setup" hidden><summary>Set up your voice connection</summary><p>Start MoStar Grid and MoStar Voice. Set <code>GRID_API_URL</code> and <code>VOICE_API_URL</code> in the server’s <code>.env</code> file if they run elsewhere.</p></details>
+<p class="privacy">Your microphone starts only when you connect. Speech recognition may use your browser provider. Replies come from MoStar Grid; voice comes from MoStar Voice. Grid may retain conversation data.</p>
+</section>
+<aside class="side-panel">
+<div class="panel-heading"><span class="eyebrow">THE CONVERSATION</span><button id="clear" class="text-button" disabled>Clear conversation</button></div>
+<div id="transcript" class="transcript" role="log" aria-label="Conversation captions" aria-live="polite" aria-relevant="additions text">
+<div class="empty" id="empty"><span class="quote-mark" aria-hidden="true">“</span><h2>Start anywhere.</h2><p>No perfect question needed.<br>Just something on your mind.</p><div class="prompts"><span>“Help me untangle an idea.”</span><span>“I could use a little perspective.”</span><span>“Tell me something unexpected.”</span></div></div>
+</div>
+<div class="settings">
+<label for="voice">Voice</label><select id="voice"><option value="">Loading MoStar voices…</option></select>
+<p>Warm, witty, and easy to talk to. Choose a voice before connecting.</p>
+<div id="access-wrap" hidden><label for="access">Access key</label><input id="access" type="password" autocomplete="off" placeholder="Your MoVoKaL access key"><p>For this private instance. Kept only in this page’s memory.</p></div>
+</div>
+</aside>
+</main>
+<footer><span>MoStar Industries</span><span>WARMTH IN THE WORDS. SPACE BETWEEN THEM.</span><span>MoVoKaL / 01</span></footer>
+<audio id="audio" autoplay></audio>
+</body></html>

@@ -44,15 +44,15 @@ SEAL = "earth therefore fire"
 # Models live in VOICE_ROOT/models; add new entries here once a .onnx is
 # downloaded there. Gender/character notes are best-effort (Piper voice
 # names come from their training datasets, not a verified gender label).
-VOICE_NAME = os.getenv("VOICE_NAME", "mostar-sovereign-v1")
+VOICE_NAME = os.getenv("VOICE_NAME", "mostar-clear-v1")
 VOICES: dict[str, dict[str, str]] = {
     "mostar-sovereign-v1": {
         "model": str(VOICE_MODEL_DIR / "en_GB-cori-high.onnx"),
-        "label": "Cori (en-GB) — ceremonial, the default Grid voice",
+        "label": "Cori (en-GB) — ceremonial",
     },
     "mostar-clear-v1": {
         "model": str(VOICE_MODEL_DIR / "en_US-lessac-high.onnx"),
-        "label": "Lessac (en-US) — clearer, less formal pacing",
+        "label": "Lessac (en-US) — default, natural conversational pacing",
     },
     "mostar-libritts-v1": {
         "model": str(VOICE_MODEL_DIR / "en_US-libritts-high.onnx"),
@@ -100,6 +100,7 @@ CODEX_SUFFIXES = {
 }
 
 MOODS = {
+    "conversational": {"length_scale": "1.0", "sentence_silence": "0.2"},
     "stable": {"length_scale": "1.0", "sentence_silence": "0.4"},
     "ceremonial": {"length_scale": "1.15", "sentence_silence": "0.6"},
     "alert": {"length_scale": "0.9", "sentence_silence": "0.2"},
@@ -112,7 +113,7 @@ MOODS = {
 app = FastAPI(
     title="MoStar Voice API",
     version="1.0.0",
-    description="Sovereign TTS runtime for MoStar Industries and all its Artifacts.",
+    description="Sovereign TTS runtime for MoStar Intelligent Systems and all its Artifacts.",
 )
 
 app.add_middleware(
@@ -129,7 +130,7 @@ app.mount("/audio", StaticFiles(directory=str(AUDIO_OUT)), name="audio")
 class SpeakRequest(BaseModel):
     text: str = Field(default="", description="Text to speak.")
     mood: str = Field(
-        default="ceremonial",
+        default="conversational",
         description="stable, ceremonial, alert, reflective, prophecy, whisper",
     )
     voice: str = Field(
@@ -146,7 +147,7 @@ class SpeakRequest(BaseModel):
         description="Optional MoStarMoment ID from Grid.",
     )
     codex: bool = Field(
-        default=True,
+        default=False,
         description="Apply Codex prefix/suffix and glyph speech.",
     )
     return_file: bool = Field(
@@ -173,7 +174,7 @@ class SpeakResponse(BaseModel):
 
 class NarrateRequest(BaseModel):
     segments: list[str] = Field(min_length=1, max_length=16)
-    mood: str = Field(default="ceremonial")
+    mood: str = Field(default="conversational")
     voice: str = Field(default=VOICE_NAME)
 
 
@@ -308,8 +309,10 @@ def assert_piper_ready(voice_model: Path) -> None:
 def synthesize(text: str, mood: str, voice_model: Path, out_file: Path) -> None:
     assert_piper_ready(voice_model)
 
-    params = MOODS.get(mood, MOODS["ceremonial"])
-    processed_text = breath_process(text)
+    params = MOODS.get(mood, MOODS["conversational"])
+    # Piper treats each input line as a separate utterance/output file.
+    # Send one complete utterance, retaining punctuation and every word.
+    processed_text = " ".join(text.split())
 
     cmd = [
         str(PIPER_BIN),
@@ -323,6 +326,10 @@ def synthesize(text: str, mood: str, voice_model: Path, out_file: Path) -> None:
         str(out_file),
     ]
 
+    # Publish only a complete WAV; concurrent readers must never see partial audio.
+    with tempfile.NamedTemporaryFile(suffix=".wav", dir=out_file.parent, delete=False) as handle:
+        pending = Path(handle.name)
+    cmd[-1] = str(pending)
     try:
         result = subprocess.run(
             cmd,
@@ -336,11 +343,18 @@ def synthesize(text: str, mood: str, voice_model: Path, out_file: Path) -> None:
             err = result.stderr.decode("utf-8", errors="ignore")
             raise HTTPException(status_code=500, detail=f"Piper failed: {err[:300]}")
 
+        with wave.open(str(pending), "rb") as audio:
+            if audio.getnframes() == 0:
+                raise HTTPException(status_code=500, detail="Piper returned empty audio")
+        pending.replace(out_file)
+
     except subprocess.TimeoutExpired as exc:
         raise HTTPException(
             status_code=504,
             detail=f"Piper synthesis timed out after {SYNTHESIS_TIMEOUT_SECONDS}s",
         ) from exc
+    finally:
+        pending.unlink(missing_ok=True)
 
 
 def wav_duration_ms(path: Path) -> int:
@@ -463,7 +477,7 @@ async def speak(req: SpeakRequest):
 
     voice_id, voice_model = resolve_voice(req.voice)
 
-    cache_str = f"{text_to_speak}|{req.mood}|{voice_id}|{speaker or ''}|{req.moment_id or ''}"
+    cache_str = f"natural-v2|{text_to_speak}|{req.mood}|{voice_id}|{speaker or chr(0)}|{req.moment_id or chr(0)}"
     digest = hashlib.sha256(cache_str.encode("utf-8")).hexdigest()[:16]
     out_file = AUDIO_OUT / f"woo-{digest}.wav"
 
@@ -512,7 +526,10 @@ async def narrate(req: NarrateRequest):
         raise HTTPException(status_code=400, detail="Narration segments must not be empty")
 
     voice_id, voice_model = resolve_voice(req.voice)
-    cache_str = f"narrate|{'|'.join(segments)}|{req.mood}|{voice_id}"
+    # Key on the segment list itself, not a joined string: the cues file records
+    # per-segment boundaries, so two different segmentations of the same words
+    # must not share a digest.
+    cache_str = f"narration-v2|{json.dumps(segments, ensure_ascii=False)}|{req.mood}|{voice_id}"
     digest = hashlib.sha256(cache_str.encode("utf-8")).hexdigest()[:16]
     out_file = AUDIO_OUT / f"narration-{digest}.wav"
     cues_file = AUDIO_OUT / f"narration-{digest}.cues.json"

@@ -10,6 +10,7 @@ from __future__ import annotations
 import logging
 from datetime import datetime, timezone
 
+from cypher_guard import get_guarded_sync_driver
 from .contracts import SemanticState
 
 logger = logging.getLogger("semantic_grid.state")
@@ -27,9 +28,9 @@ class SemanticStateManager:
 
     def __init__(self, uri: str | None = None, auth: tuple[str, str] | None = None):
         if uri is None or auth is None:
-            from grid.config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+            from grid.config import NEO4J_URI, NEO4J_USER, get_neo4j_password
             uri = uri if uri is not None else NEO4J_URI
-            auth = auth if auth is not None else (NEO4J_USER, NEO4J_PASSWORD)
+            auth = auth if auth is not None else (NEO4J_USER, get_neo4j_password())
         self._uri = uri
         self._auth = auth
         self._driver = None
@@ -37,8 +38,9 @@ class SemanticStateManager:
     def _connect(self):
         if self._driver is None:
             try:
-                from neo4j import GraphDatabase
-                self._driver = GraphDatabase.driver(self._uri, auth=self._auth)
+                self._driver = get_guarded_sync_driver(
+                    self._uri, auth=self._auth, allow_write=True
+                )
             except Exception as exc:
                 logger.warning("SemanticStateManager: Neo4j unavailable (%s)", exc)
         return self._driver
@@ -81,28 +83,26 @@ class SemanticStateManager:
         try:
             now = _now()
             with driver.session() as session:
-                session.execute_write(
-                    lambda tx: tx.run(
-                        """
-                        MERGE (s:SemanticState {user_id: $user_id})
-                        SET s.current_mission = $current_mission,
-                            s.current_emotion = $current_emotion,
-                            s.urgency_level    = $urgency_level,
-                            s.trust_level      = $trust_level,
-                            s.decision_mode    = $decision_mode,
-                            s.focus_area       = $focus_area,
-                            s.updated_at       = $updated_at
-                        """,
-                        user_id=state.user_id,
-                        current_mission=state.current_mission,
-                        current_emotion=state.current_emotion,
-                        urgency_level=state.urgency_level,
-                        trust_level=state.trust_level,
-                        decision_mode=state.decision_mode,
-                        focus_area=state.focus_area,
-                        updated_at=now,
-                    ).consume()
-                )
+                session.run(
+                    """
+                    MERGE (s:SemanticState {user_id: $user_id})
+                    SET s.current_mission = $current_mission,
+                        s.current_emotion = $current_emotion,
+                        s.urgency_level    = $urgency_level,
+                        s.trust_level      = $trust_level,
+                        s.decision_mode    = $decision_mode,
+                        s.focus_area       = $focus_area,
+                        s.updated_at       = $updated_at
+                    """,
+                    user_id=state.user_id,
+                    current_mission=state.current_mission,
+                    current_emotion=state.current_emotion,
+                    urgency_level=state.urgency_level,
+                    trust_level=state.trust_level,
+                    decision_mode=state.decision_mode,
+                    focus_area=state.focus_area,
+                    updated_at=now,
+                ).consume()
             return True
         except Exception as exc:
             logger.warning("SemanticStateManager.save failed: %s", exc)
@@ -116,25 +116,23 @@ class SemanticStateManager:
         try:
             now = _now()
             with driver.session() as session:
-                session.execute_write(
-                    lambda tx: tx.run(
-                        """
-                        MERGE (e:SemanticEvent {event_id: $frame_id})
-                        SET e.user_id         = $user_id,
-                            e.raw_input_hash  = $raw_input_hash,
-                            e.created_at      = $created_at,
-                            e.source          = 'semantic_grid',
-                            e.provenance_status = 'interpreted'
-                        WITH e
-                        MATCH (s:SemanticState {user_id: $user_id})
-                        MERGE (e)-[:UPDATED_STATE]->(s)
-                        """,
-                        frame_id=frame_id,
-                        user_id=user_id,
-                        raw_input_hash=raw_input_hash,
-                        created_at=now,
-                    ).consume()
-                )
+                session.run(
+                    """
+                    MERGE (e:SemanticEvent {event_id: $frame_id})
+                    SET e.user_id         = $user_id,
+                        e.raw_input_hash  = $raw_input_hash,
+                        e.created_at      = $created_at,
+                        e.source          = 'semantic_grid',
+                        e.provenance_status = 'interpreted'
+                    WITH e
+                    MATCH (s:SemanticState {user_id: $user_id})
+                    MERGE (e)-[:UPDATED_STATE]->(s)
+                    """,
+                    frame_id=frame_id,
+                    user_id=user_id,
+                    raw_input_hash=raw_input_hash,
+                    created_at=now,
+                ).consume()
             return True
         except Exception as exc:
             logger.warning("SemanticStateManager.log_event failed: %s", exc)

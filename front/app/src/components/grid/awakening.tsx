@@ -10,19 +10,11 @@ import {
 import loadordRaw from "./loadord.svg?raw";
 import "./awakening.css";
 
-const BOOT_NARRATION = [
-  "Covenant core. Verifying sovereign runtime.",
-  "Council of Eleven. Verifying the sealed advisory council.",
-  "Neo four J soulprint. Verifying graph memory.",
-  "Elemental quadrants. Verifying Grid readiness.",
-  "Code conduit. Verifying process liveness.",
-  "Woo oracle. Verifying sovereign voice.",
-  "D C X trinity. Verifying mind, soul, and body.",
-  "Grid perimeter. Verifying local relational authority.",
-] as const;
+const BOOT_HANDOFF_MS = 30_000;
+const BOOT_EXIT_MS = 420;
 
-async function fetchNarration(): Promise<NarrationPlan> {
-  const response = await narrate([...BOOT_NARRATION], "ceremonial");
+async function fetchNarration(labels: string[]): Promise<NarrationPlan> {
+  const response = await narrate(labels, "ceremonial");
   return {
     audioUrl: response.audio_url,
     audioMs: response.audio_ms,
@@ -42,11 +34,23 @@ type BootLoaderProps = {
 export function AwakeningScreen({ className = "", onComplete }: BootLoaderProps) {
   const conductorRef = useRef<BootConductor | null>(null);
   const onCompleteRef = useRef(onComplete);
+  const completedRef = useRef(false);
   const [frame, setFrame] = useState<BootFrame | null>(null);
   const [muted, setMuted] = useState(false);
+  const [handoffExiting, setHandoffExiting] = useState(false);
+  const [started, setStarted] = useState(false);
 
   onCompleteRef.current = onComplete;
 
+  const completeOnce = () => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    onCompleteRef.current?.();
+  };
+
+  // Arming only gathers narration and builds the clock; it must never start
+  // the ceremony. The Grid waits to be woken deliberately — the operator
+  // presses START AWAKENING, and nothing before that point is on a timer.
   useEffect(() => {
     const conductor = new BootConductor(GRID_BOOT_NODES, fetchNarration);
     conductorRef.current = conductor;
@@ -59,9 +63,27 @@ export function AwakeningScreen({ className = "", onComplete }: BootLoaderProps)
     };
   }, []);
 
+  // The 30s handoff window is measured from the operator's press, not from
+  // mount. Arming latency (narration fetch) therefore never eats into the
+  // visible ceremony.
   useEffect(() => {
-    if (frame?.phase === "COMPLETE") onCompleteRef.current?.();
-  }, [frame?.phase]);
+    if (!started) return;
+    const exitTimer = window.setTimeout(
+      () => setHandoffExiting(true),
+      BOOT_HANDOFF_MS - BOOT_EXIT_MS,
+    );
+    const handoffTimer = window.setTimeout(completeOnce, BOOT_HANDOFF_MS);
+    return () => {
+      window.clearTimeout(exitTimer);
+      window.clearTimeout(handoffTimer);
+    };
+  }, [started]);
+
+  const beginAwakening = () => {
+    if (started) return;
+    setStarted(true);
+    void conductorRef.current?.begin();
+  };
 
   const sigilStyle = useMemo(() => {
     const progress = frame?.progress ?? 0;
@@ -77,14 +99,14 @@ export function AwakeningScreen({ className = "", onComplete }: BootLoaderProps)
 
   const phase = frame?.phase ?? "IDLE";
   const armed = phase === "ARMED";
-  const running = ["RUNNING", "HOLDING", "EXITING"].includes(phase);
+  const running = ["RUNNING", "HOLDING", "EXITING", "COMPLETE"].includes(phase);
   const preparing = phase === "IDLE";
 
   return (
     <section
       className={`awakening ${sigilStateClasses} ${className}`.trim()}
       data-phase={phase}
-      data-exiting={phase === "EXITING" || phase === "COMPLETE"}
+      data-exiting={handoffExiting}
       aria-label="Grid initialization"
       aria-busy={phase !== "COMPLETE"}
     >
@@ -119,11 +141,7 @@ export function AwakeningScreen({ className = "", onComplete }: BootLoaderProps)
         )}
 
         {armed && (
-          <button
-            className="awakening__begin"
-            type="button"
-            onClick={() => void conductorRef.current?.begin()}
-          >
+          <button className="awakening__begin" type="button" onClick={beginAwakening} autoFocus>
             START AWAKENING
           </button>
         )}

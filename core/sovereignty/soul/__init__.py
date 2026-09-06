@@ -21,7 +21,7 @@ SACRED = {
 IDENTITY = {
     "name": "MoStar Grid",
     "architect": "The Flame Architect",
-    "organization": "MoStar Industries",
+    "organization": "MoStar Intelligent Systems",
     "initiative": "African Flame Initiative",
     "soul_language": "Ibibio",
     "origin": "Akwa Ibom State, Nigeria",

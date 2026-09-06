@@ -91,5 +91,5 @@ Workaround: uv --seed used to create .venv. Functional. Non-blocking.
 ---
 
 **Seal:** 🜃∴🜂  
-**Signed:** The Flame Architect · MoStar Industries  
+**Signed:** The Flame Architect · MoStar Intelligent Systems  
 **Doctrine:** Epistemic structuring before operational cognition.

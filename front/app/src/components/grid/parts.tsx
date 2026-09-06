@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Glyph, type GlyphName } from "./glyph";
+import logoImg from "../../assets/elements/MStarLg.png";
 import {
   getGridStatus,
   getRecentMemory,
@@ -11,6 +12,7 @@ import {
 } from "@/services/gridApiClient";
 import { voiceHealth } from "@/services/gridVoiceClient";
 import { GRID_ELEMENTS } from "@/lib/gridElements";
+import { GRID_REFRESH } from "@/lib/grid-refresh-policy";
 import {
   worst,
   timeAgo,
@@ -29,11 +31,23 @@ const KPI_META = [
 ] as const;
 
 const COUNCIL_GLYPHS: GlyphName[] = ["covenant", "spark", "target", "eye", "sun", "venus"];
-const COUNCIL_TINTS = ["neon-gold", "neon-blue", "neon-cyan", "neon-green", "neon-purple", "neon-orange"];
+const COUNCIL_TINTS = [
+  "neon-gold",
+  "neon-blue",
+  "neon-cyan",
+  "neon-green",
+  "neon-purple",
+  "neon-orange",
+];
 
 type FeedItem = {
-  agent: string; text: string; sev: "INFO" | "WARNING" | "ALERT";
-  color: string; glyph: GlyphName; at: string; intensity: number;
+  agent: string;
+  text: string;
+  sev: "INFO" | "WARNING" | "ALERT";
+  color: string;
+  glyph: GlyphName;
+  at: string;
+  intensity: number;
 };
 
 const FEED_GLYPHS: GlyphName[] = ["target", "eye", "spark", "venus", "ban"];
@@ -42,8 +56,21 @@ const ALERT_PATTERN = /attack|killed|gunmen|crisis|outbreak|breach/i;
 
 const SIDEBAR: { id: string; to: string; label: string; sub: string; glyph: GlyphName }[] = [
   { id: "overview", to: "/", label: "OVERVIEW", sub: "Command Center", glyph: "covenant" },
+  {
+    id: "continent-optics",
+    to: "/continent-optics",
+    label: "CONTINENT OPTICS",
+    sub: "Africa Sensing",
+    glyph: "eyeLight",
+  },
   { id: "council", to: "/council", label: "COUNCIL", sub: "Live Agents", glyph: "sun" },
-  { id: "mindgraph", to: "/mindgraph", label: "MIND GRAPH", sub: "Knowledge Network", glyph: "target" },
+  {
+    id: "mindgraph",
+    to: "/mindgraph",
+    label: "MIND GRAPH",
+    sub: "Knowledge Network",
+    glyph: "target",
+  },
   { id: "events", to: "/events", label: "EVENTS", sub: "Real-time Feed", glyph: "spark" },
   { id: "voice", to: "/voice", label: "VOICE", sub: "Grid Voice Console", glyph: "venus" },
   { id: "conduit", to: "/conduit", label: "CONDUIT", sub: "System Comms", glyph: "eye" },
@@ -51,15 +78,18 @@ const SIDEBAR: { id: string; to: string; label: string; sub: string; glyph: Glyp
   { id: "moscript", to: "/moscript", label: "MOSCRIPT", sub: "MS Parking Lot", glyph: "ban" },
 ];
 
-function fmt(n: number) { return n.toLocaleString("en-US"); }
+function fmt(n: number) {
+  return n.toLocaleString("en-US");
+}
 
 /* ============================ LIVE GRID DATA ============================ */
 export function useGridStatus() {
   return useQuery({
     queryKey: ["grid-status"],
     queryFn: getGridStatus,
-    refetchInterval: 20_000,
-    staleTime: 10_000,
+    refetchInterval: GRID_REFRESH.CANONICAL_MS,
+    staleTime: GRID_REFRESH.CANONICAL_STALE_MS,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -67,8 +97,9 @@ export function useAdvisors() {
   return useQuery({
     queryKey: ["grid-advisors"],
     queryFn: getAdvisors,
-    refetchInterval: 60_000,
-    staleTime: 30_000,
+    refetchInterval: GRID_REFRESH.CANONICAL_MS,
+    staleTime: GRID_REFRESH.CANONICAL_STALE_MS,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -76,8 +107,8 @@ export function useLiveFeed() {
   const { data } = useQuery({
     queryKey: ["grid-recent-memory"],
     queryFn: () => getRecentMemory(8),
-    refetchInterval: 15_000,
-    staleTime: 5_000,
+    refetchInterval: GRID_REFRESH.SIGNAL_FEED_MS,
+    staleTime: GRID_REFRESH.SIGNAL_STALE_MS,
   });
 
   const items: FeedItem[] = [];
@@ -110,7 +141,11 @@ export function useLiveFeed() {
   }
 
   const pulse: Pulse | null = data?.retrieved_at
-    ? { t: new Date(data.retrieved_at).getTime(), amp: items[0]?.intensity ?? 0.5, color: "var(--color-neon-cyan)" }
+    ? {
+        t: new Date(data.retrieved_at).getTime(),
+        amp: items[0]?.intensity ?? 0.5,
+        color: "var(--color-neon-cyan)",
+      }
     : null;
 
   return {
@@ -144,8 +179,8 @@ export function useHealthChecks() {
   const { data: voice } = useQuery({
     queryKey: ["voice-health"],
     queryFn: voiceHealth,
-    refetchInterval: 30_000,
-    staleTime: 15_000,
+    refetchInterval: GRID_REFRESH.SERVICE_HEALTH_MS,
+    staleTime: GRID_REFRESH.SERVICE_HEALTH_STALE_MS,
   });
 
   // Model counts must come from what the server actually FOUND, never from
@@ -170,34 +205,52 @@ export function useHealthChecks() {
         return { label, status: "SEALED", severity: "SEALED", critical: true };
       case "LOADED":
         return {
-          label, status: "LOADED", severity: "DEGRADED", critical: true,
+          label,
+          status: "LOADED",
+          severity: "DEGRADED",
+          critical: true,
           note: `${presentCount}/${expectedCount} present, live validation pending`,
         };
       case "PARTIAL":
         return {
-          label, status: "PARTIAL", severity: "DEGRADED", critical: true,
+          label,
+          status: "PARTIAL",
+          severity: "DEGRADED",
+          critical: true,
           note: `${presentCount}/${expectedCount} present — missing ${missing.map(shortName).join(", ")}`,
         };
       case "DEGRADED":
         return {
-          label, status: "DEGRADED", severity: "DEGRADED", critical: true,
+          label,
+          status: "DEGRADED",
+          severity: "DEGRADED",
+          critical: true,
           note: `${presentCount}/${expectedCount} present, validation failed`,
         };
       case "ABSENT":
         return {
-          label, status: "ABSENT", severity: "DOWN", critical: true,
+          label,
+          status: "ABSENT",
+          severity: "DOWN",
+          critical: true,
           note: "no trinity model pulled",
         };
       case "UNREACHABLE":
         return {
-          label, status: "UNREACHABLE", severity: "DOWN", critical: true,
+          label,
+          status: "UNREACHABLE",
+          severity: "DOWN",
+          critical: true,
           note: "Ollama not reachable",
         };
       default:
         // Server predates the seal-state contract. Report the gap rather
         // than guessing a verdict from `connected`.
         return {
-          label, status: "UNVERIFIED", severity: "UNKNOWN", critical: true,
+          label,
+          status: "UNVERIFIED",
+          severity: "UNKNOWN",
+          critical: true,
           note: "server did not report a trinity seal state",
         };
     }
@@ -214,16 +267,29 @@ export function useHealthChecks() {
     {
       // Was `${modelCount} LOADED` where modelCount was the CONFIGURED
       // count — it printed "3 LOADED" on a host holding one model.
+      //
+      // Then it printed "0/3 PULLED" whenever Ollama was unreachable,
+      // which is a different lie: an unanswered host was rendered as an
+      // empty one. present_models is only evidence about what is pulled
+      // when the transport was up long enough to ask. When it is down we
+      // know nothing about the models, and NOT KNOWN is the honest word.
       label: "OLLAMA MODELS",
-      status: status ? `${presentCount}/${expectedCount} PULLED` : "—",
+      status: !status
+        ? "—"
+        : !status.dcx.connected
+          ? "NOT KNOWN"
+          : `${presentCount}/${expectedCount} PULLED`,
       severity: !status
         ? "UNKNOWN"
-        : presentCount === expectedCount && expectedCount > 0
-          ? "SEALED"
-          : presentCount > 0
-            ? "DEGRADED"
-            : "DOWN",
+        : !status.dcx.connected
+          ? "UNKNOWN"
+          : presentCount === expectedCount && expectedCount > 0
+            ? "SEALED"
+            : presentCount > 0
+              ? "DEGRADED"
+              : "DOWN",
       critical: false,
+      note: status && !status.dcx.connected ? "Ollama unreachable — model presence unverified" : undefined,
     },
     {
       label: "PIPER TTS",
@@ -239,7 +305,11 @@ export function useHealthChecks() {
     },
     {
       label: "QUEUE",
-      status: status ? (status.queue.pending === 0 ? "CLEAR" : `${status.queue.pending} PENDING`) : "—",
+      status: status
+        ? status.queue.pending === 0
+          ? "CLEAR"
+          : `${status.queue.pending} PENDING`
+        : "—",
       severity: !status ? "UNKNOWN" : status.queue.pending === 0 ? "SEALED" : "DEGRADED",
       critical: false,
     },
@@ -268,11 +338,23 @@ export function GridHealth({ compact = false }: { compact?: boolean }) {
 
   const ring = (
     <svg viewBox={compact ? "0 0 88 88" : "0 0 120 120"} className="h-full w-full -rotate-90">
-      <circle cx={compact ? 44 : 60} cy={compact ? 44 : 60} r={r} stroke="oklch(1 0 0 / 0.08)" strokeWidth={compact ? 6 : 8} fill="none" />
       <circle
-        cx={compact ? 44 : 60} cy={compact ? 44 : 60} r={r}
-        stroke={color} strokeWidth={compact ? 6 : 8} fill="none"
-        strokeDasharray={c} strokeDashoffset={c * (1 - fill)}
+        cx={compact ? 44 : 60}
+        cy={compact ? 44 : 60}
+        r={r}
+        stroke="oklch(1 0 0 / 0.08)"
+        strokeWidth={compact ? 6 : 8}
+        fill="none"
+      />
+      <circle
+        cx={compact ? 44 : 60}
+        cy={compact ? 44 : 60}
+        r={r}
+        stroke={color}
+        strokeWidth={compact ? 6 : 8}
+        fill="none"
+        strokeDasharray={c}
+        strokeDashoffset={c * (1 - fill)}
         strokeLinecap="round"
         style={{ filter: `drop-shadow(0 0 ${compact ? 6 : 8}px ${color})` }}
       />
@@ -296,8 +378,12 @@ export function GridHealth({ compact = false }: { compact?: boolean }) {
         <div className="relative mx-auto mt-2 h-20 w-20">
           {ring}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-sm font-semibold tabular-nums" style={{ color }}>{sealed}/{total}</div>
-            <div className="text-[8px] tracking-[0.12em]" style={{ color }}>{SEVERITY_VERDICT[verdict]}</div>
+            <div className="text-sm font-semibold tabular-nums" style={{ color }}>
+              {sealed}/{total}
+            </div>
+            <div className="text-[8px] tracking-[0.12em]" style={{ color }}>
+              {SEVERITY_VERDICT[verdict]}
+            </div>
           </div>
         </div>
         <div className="mt-2 space-y-1 text-[9px]">{rows}</div>
@@ -313,8 +399,12 @@ export function GridHealth({ compact = false }: { compact?: boolean }) {
         <div className="relative h-28 w-28 shrink-0">
           {ring}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-2xl font-semibold tabular-nums" style={{ color }}>{sealed}/{total}</div>
-            <div className="text-[10px] tracking-[0.2em]" style={{ color }}>{SEVERITY_VERDICT[verdict]}</div>
+            <div className="text-2xl font-semibold tabular-nums" style={{ color }}>
+              {sealed}/{total}
+            </div>
+            <div className="text-[10px] tracking-[0.2em]" style={{ color }}>
+              {SEVERITY_VERDICT[verdict]}
+            </div>
           </div>
         </div>
         <div className="flex-1 space-y-1.5 text-xs">
@@ -322,7 +412,9 @@ export function GridHealth({ compact = false }: { compact?: boolean }) {
             <div key={h.label}>
               <div className="flex items-center justify-between">
                 <span className="tracking-[0.18em] text-foreground/85">{h.label}</span>
-                <span className="tracking-[0.18em]" style={{ color: SEVERITY_COLOR[h.severity] }}>{h.status}</span>
+                <span className="tracking-[0.18em]" style={{ color: SEVERITY_COLOR[h.severity] }}>
+                  {h.status}
+                </span>
               </div>
               {h.note && <div className="text-[10px] text-muted-foreground">{h.note}</div>}
             </div>
@@ -343,17 +435,28 @@ export function Sidebar({ active }: { active: string }) {
       <div className="flex flex-col gap-1">
         {SIDEBAR.map(({ id, to, label, sub, glyph }) => {
           const isActive = id === active;
-          const subLabel = id === "council" && advisorCount != null ? `${advisorCount} Agents` : sub;
+          const subLabel =
+            id === "council" && advisorCount != null ? `${advisorCount} Agents` : sub;
           return (
             <Link
               key={id}
               to={to}
-              className={`group flex items-center gap-3 rounded-md px-3 py-2.5 text-left transition ${isActive ? "bg-[oklch(0.25_0.08_260/0.6)] ring-1 ring-[var(--color-neon-gold)]/40" : "hover:bg-white/5"
-                }`}
+              className={`group flex items-center gap-3 rounded-md px-3 py-2.5 text-left transition ${
+                isActive
+                  ? "bg-[oklch(0.25_0.08_260/0.6)] ring-1 ring-[var(--color-neon-gold)]/40"
+                  : "hover:bg-white/5"
+              }`}
             >
-              <Glyph name={glyph} size={28} glow={isActive ? "var(--color-neon-gold)" : undefined} />
+              <Glyph
+                name={glyph}
+                size={28}
+              />
               <div className="leading-tight">
-                <div className={`text-xs tracking-[0.18em] ${isActive ? "neon-text-gold" : "text-foreground/85"}`}>{label}</div>
+                <div
+                  className={`text-xs tracking-[0.18em] ${isActive ? "neon-text-gold" : "text-foreground/85"}`}
+                >
+                  {label}
+                </div>
                 <div className="text-[10px] text-muted-foreground">{subLabel}</div>
               </div>
             </Link>
@@ -365,7 +468,7 @@ export function Sidebar({ active }: { active: string }) {
 
       <div className="mt-auto flex flex-col items-center gap-2 pt-4">
         <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[var(--color-neon-gold)]/20 bg-[oklch(0.22_0.08_80/0.25)]">
-          <Glyph name="covenant" size={36} glow="var(--color-neon-gold)" />
+          <Glyph name="covenant" size={36} />
         </div>
         <div className="text-[10px] tracking-[0.25em] neon-text-gold">COVENANT MODE</div>
         <div className="text-[10px] tracking-[0.25em] text-[var(--color-neon-green)]">ENGAGED</div>
@@ -376,8 +479,14 @@ export function Sidebar({ active }: { active: string }) {
 
 /* ============================ PAGE SHELL ============================ */
 export function PageShell({
-  active, children, footerSlot,
-}: { active: string; children: ReactNode; footerSlot?: ReactNode }) {
+  active,
+  children,
+  footerSlot,
+}: {
+  active: string;
+  children: ReactNode;
+  footerSlot?: ReactNode;
+}) {
   const { clock, dateLabel } = useClock();
   return (
     <div className="h-screen w-full overflow-hidden">
@@ -401,12 +510,16 @@ export function TopBar({ clock, dateLabel }: { clock: string; dateLabel: string 
   return (
     <header className="panel flex shrink-0 items-center gap-6 px-5 py-3">
       <div className="flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-md border border-[var(--color-neon-gold)]/40">
-          <Glyph name="covenant" size={28} glow="var(--color-neon-gold)" />
-        </div>
+        <img
+          src={logoImg}
+          alt="MoStar"
+          className="h-12 w-12 rounded-md border border-[var(--color-neon-gold)]/40 object-contain p-1"
+        />
         <div className="leading-tight">
           <div className="text-lg font-semibold tracking-wider neon-text-gold">MoStar GRID</div>
-          <div className="text-[10px] tracking-[0.25em] text-muted-foreground">COVENANT COMMAND CENTER</div>
+          <div className="text-[10px] tracking-[0.25em] text-muted-foreground">
+            COVENANT COMMAND CENTER
+          </div>
         </div>
       </div>
 
@@ -415,9 +528,12 @@ export function TopBar({ clock, dateLabel }: { clock: string; dateLabel: string 
           MOSTAR GRID: <span className="neon-text-gold">COVENANT MODE ACTIVE</span>
         </div>
         <div className="mt-1 flex items-center gap-3 text-[10px] tracking-[0.25em] text-muted-foreground">
-          <span className="neon-text-cyan">TRUTH</span><span className="opacity-50">•</span>
-          <span className="neon-text-green">PROTECTION</span><span className="opacity-50">•</span>
-          <span className="neon-text-gold">LEGACY</span><span className="opacity-50">•</span>
+          <span className="neon-text-cyan">TRUTH</span>
+          <span className="opacity-50">•</span>
+          <span className="neon-text-green">PROTECTION</span>
+          <span className="opacity-50">•</span>
+          <span className="neon-text-gold">LEGACY</span>
+          <span className="opacity-50">•</span>
           <span className="neon-text-purple">EVOLUTION</span>
         </div>
       </div>
@@ -425,18 +541,33 @@ export function TopBar({ clock, dateLabel }: { clock: string; dateLabel: string 
       <div className="flex items-center gap-6">
         <div className="text-right leading-tight" suppressHydrationWarning>
           <div className="text-[10px] tracking-[0.25em] text-muted-foreground">GRID TIME</div>
-          <div className="text-2xl font-mono neon-text-cyan tabular-nums" suppressHydrationWarning>{clock || "--:--:--"}</div>
-          <div className="text-[10px] tracking-[0.25em] text-muted-foreground" suppressHydrationWarning>{dateLabel}</div>
+          <div className="text-2xl font-mono neon-text-cyan tabular-nums" suppressHydrationWarning>
+            {clock || "--:--:--"}
+          </div>
+          <div
+            className="text-[10px] tracking-[0.25em] text-muted-foreground"
+            suppressHydrationWarning
+          >
+            {dateLabel}
+          </div>
         </div>
         <div className="text-right leading-tight">
           <div className="text-[10px] tracking-[0.25em] text-muted-foreground">GRID STATUS</div>
-          <div className="text-base tracking-[0.25em]" style={{ color }}>{SEVERITY_VERDICT[verdict]}</div>
+          <div className="text-base tracking-[0.25em]" style={{ color }}>
+            {SEVERITY_VERDICT[verdict]}
+          </div>
           <div className="mt-1 h-2 w-28 overflow-hidden rounded bg-white/5">
-            <div className="h-full transition-[width]" style={{ width: `${(sealed / total) * 100}%`, background: color }} />
+            <div
+              className="h-full transition-[width]"
+              style={{ width: `${(sealed / total) * 100}%`, background: color }}
+            />
           </div>
         </div>
-        <div className="flex h-12 w-12 items-center justify-center rounded-md border" style={{ borderColor: `color-mix(in oklab, ${color} 40%, transparent)` }}>
-          <Glyph name="target" size={28} glow={color} />
+        <div
+          className="flex h-12 w-12 items-center justify-center rounded-md border"
+          style={{ borderColor: `color-mix(in oklab, ${color} 40%, transparent)` }}
+        >
+          <Glyph name="target" size={28} />
         </div>
       </div>
     </header>
@@ -445,8 +576,18 @@ export function TopBar({ clock, dateLabel }: { clock: string; dateLabel: string 
 
 /* ============================ KPI ============================ */
 export function KpiCard({
-  label, value, color, glyph, asOf,
-}: { label: string; value: number | null; color: string; glyph: GlyphName; asOf: string | null }) {
+  label,
+  value,
+  color,
+  glyph,
+  asOf,
+}: {
+  label: string;
+  value: number | null;
+  color: string;
+  glyph: GlyphName;
+  asOf: string | null;
+}) {
   const badge = liveBadge(asOf);
   return (
     <div className="panel relative overflow-hidden p-4">
@@ -458,15 +599,20 @@ export function KpiCard({
             background: `color-mix(in oklab, var(--color-${color}) 14%, transparent)`,
           }}
         >
-          <Glyph name={glyph} size={32} glow={`var(--color-${color})`} />
+          <Glyph name={glyph} size={32} />
         </div>
         <div className="flex-1">
           <div className="text-[10px] tracking-[0.28em] text-muted-foreground">{label}</div>
-          <div className="mt-1 text-3xl font-semibold tabular-nums" style={{ color: `var(--color-${color})` }}>
+          <div
+            className="mt-1 text-3xl font-semibold tabular-nums"
+            style={{ color: `var(--color-${color})` }}
+          >
             {value == null ? "—" : fmt(value)}
           </div>
           {/* LIVE is earned by a timestamp, never printed by default. */}
-          <div className="text-[10px] tracking-[0.2em]" style={{ color: badge.color }}>{badge.text}</div>
+          <div className="text-[10px] tracking-[0.2em]" style={{ color: badge.color }}>
+            {badge.text}
+          </div>
         </div>
       </div>
     </div>
@@ -485,7 +631,14 @@ export function KpiRow() {
   return (
     <>
       {KPI_META.map((k) => (
-        <KpiCard key={k.key} label={k.label} value={values[k.key]} color={k.color} glyph={k.glyph} asOf={asOf} />
+        <KpiCard
+          key={k.key}
+          label={k.label}
+          value={values[k.key]}
+          color={k.color}
+          glyph={k.glyph}
+          asOf={asOf}
+        />
       ))}
     </>
   );
@@ -497,17 +650,23 @@ export function CouncilList() {
   const entries = advisors ? Object.entries(advisors) : [];
 
   return (
-    <div className="panel flex h-180 flex-col p-4">
+    <div className="panel flex h-195 flex-col p-4">
       <div className="mb-1 text-sm font-semibold tracking-[0.18em] neon-text-cyan">
         THE COUNCIL{entries.length ? ` · ${entries.length} AGENTS` : ""}
       </div>
-      <div className="mb-3 text-[10px] tracking-[0.25em] text-muted-foreground">GUARDIANS OF THE GRID</div>
+      <div className="mb-3 text-[10px] tracking-[0.25em] text-muted-foreground">
+        GUARDIANS OF THE GRID
+      </div>
       <div className="flex-1 space-y-1.5 overflow-auto pr-1">
         {isLoading && (
-          <div className="py-6 text-center text-[11px] tracking-[0.2em] text-muted-foreground">CONNECTING TO COUNCIL…</div>
+          <div className="py-6 text-center text-[11px] tracking-[0.2em] text-muted-foreground">
+            CONNECTING TO COUNCIL…
+          </div>
         )}
         {!isLoading && entries.length === 0 && (
-          <div className="py-6 text-center text-[11px] tracking-[0.2em] text-muted-foreground">COUNCIL OFFLINE — GRID API UNREACHABLE</div>
+          <div className="py-6 text-center text-[11px] tracking-[0.2em] text-muted-foreground">
+            COUNCIL OFFLINE — GRID API UNREACHABLE
+          </div>
         )}
         {entries.map(([name, advisor], i) => {
           const glyph = COUNCIL_GLYPHS[i % COUNCIL_GLYPHS.length];
@@ -520,7 +679,11 @@ export function CouncilList() {
           const lastSeen = (advisor as { last_seen?: string }).last_seen ?? null;
           const fresh = freshnessOf(lastSeen);
           const live = fresh === "LIVE" || fresh === "RECENT";
-          const stateLabel = lastSeen ? (live ? "ACTIVE" : timeAgo(lastSeen).toUpperCase()) : "REGISTERED";
+          const stateLabel = lastSeen
+            ? live
+              ? "ACTIVE"
+              : timeAgo(lastSeen).toUpperCase()
+            : "REGISTERED";
           const stateColor = lastSeen
             ? live
               ? "var(--color-neon-green)"
@@ -528,7 +691,10 @@ export function CouncilList() {
             : "oklch(0.62 0.02 260)";
 
           return (
-            <div key={name} className="flex items-center gap-3 rounded-md border border-white/5 bg-white/[0.02] px-3 py-2 hover:bg-white/5">
+            <div
+              key={name}
+              className="flex items-center gap-3 rounded-md border border-white/5 bg-white/[0.02] px-3 py-2 hover:bg-white/5"
+            >
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-md border"
                 style={{
@@ -536,7 +702,7 @@ export function CouncilList() {
                   background: `color-mix(in oklab, var(--color-${tint}) 14%, transparent)`,
                 }}
               >
-                <Glyph name={glyph} size={24} glow={`var(--color-${tint})`} />
+                <Glyph name={glyph} size={30} />
               </div>
               <div className="flex-1 leading-tight">
                 <div className="text-sm tracking-wider text-foreground">{name.toUpperCase()}</div>
@@ -546,7 +712,9 @@ export function CouncilList() {
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full" style={{ background: stateColor }} />
-                <span className="text-[10px] tracking-[0.2em]" style={{ color: stateColor }}>{stateLabel}</span>
+                <span className="text-[10px] tracking-[0.2em]" style={{ color: stateColor }}>
+                  {stateLabel}
+                </span>
               </div>
             </div>
           );
@@ -569,17 +737,24 @@ function Quadrant({ pos, element }: { pos: string; element: (typeof GRID_ELEMENT
   return (
     <div className={`absolute ${pos} flex w-40 flex-col items-start gap-1`}>
       <div className="flex items-center gap-2">
-        <Glyph name={element.glyph} size={28} glow={`var(--color-${element.tint})`} />
-        <div className="text-lg font-semibold tracking-[0.2em]" style={{ color: `var(--color-${element.tint})` }}>
+        <Glyph name={element.glyph} size={68} />
+        <div
+          className="text-lg font-semibold tracking-[0.2em]"
+          style={{ color: `var(--color-${element.tint})` }}
+        >
           {element.name}
         </div>
       </div>
       <div className="text-[10px] tracking-[0.25em] text-muted-foreground">
         <span aria-hidden>{element.sigil}</span> {element.element} · {element.aspect}
       </div>
-      <div className="text-[10px] tracking-[0.2em] text-foreground/70">{element.triad.join(" · ")}</div>
+      <div className="text-[10px] tracking-[0.2em] text-foreground/70">
+        {element.triad.join(" · ")}
+      </div>
       {element.reverence && (
-        <div className="text-[9px] tracking-[0.16em] text-muted-foreground/70">{element.reverence}</div>
+        <div className="text-[9px] tracking-[0.16em] text-muted-foreground/70">
+          {element.reverence}
+        </div>
       )}
     </div>
   );
@@ -590,7 +765,7 @@ export function GlyphPanel() {
   const [ikang, mmong, afim, isong] = GRID_ELEMENTS;
 
   return (
-    <div className="panel relative h-140 overflow-hidden p-4">
+    <div className="panel relative h-150 overflow-hidden p-4">
       <Quadrant pos="top-6 left-6 items-start" element={afim} />
       <Quadrant pos="top-6 right-6 items-end text-right" element={mmong} />
       <Quadrant pos="bottom-6 left-6" element={ikang} />
@@ -603,7 +778,9 @@ export function GlyphPanel() {
               <div
                 key={i}
                 className="absolute left-1/2 top-1/2 h-3 w-px bg-[var(--color-neon-cyan)]/80"
-                style={{ transform: `translate(-50%,-50%) rotate(${(i / ticks.length) * 360}deg) translateY(-185px)` }}
+                style={{
+                  transform: `translate(-50%,-50%) rotate(${(i / ticks.length) * 360}deg) translateY(-185px)`,
+                }}
               />
             ))}
           </div>
@@ -613,8 +790,8 @@ export function GlyphPanel() {
           <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[var(--color-neon-cyan)]/30 to-transparent" />
           <div className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-gradient-to-r from-transparent via-[var(--color-neon-cyan)]/30 to-transparent" />
           <div className="absolute inset-0 grid place-items-center">
-            <div className="flex h-28 w-28 items-center justify-center rounded-full border border-[var(--color-neon-gold)]/60 bg-[oklch(0.18_0.06_270/0.7)] shadow-[0_0_40px_oklch(0.82_0.16_85/0.35)]">
-              <Glyph name="covenant" size={68} glow="var(--color-neon-blue)" />
+            <div className="flex h-40 w-40 items-center justify-center rounded-full border border-[var(--color-neon-gold)]/60 bg-[oklch(0.18_0.06_270/0.7)] shadow-[0_0_40px_oklch(0.82_0.16_85/0.35)]">
+              <Glyph name="core" size={112} />
             </div>
           </div>
         </div>
@@ -672,29 +849,46 @@ export function CodeConduit({ pulse, connected }: { pulse: Pulse | null; connect
   const active = pulsesRef.current.length;
 
   return (
-    <div className="panel h-40 p-4">
+    <div className="panel h-40 p-2">
       <div className="flex items-center h-8 justify-between">
         <div>
           <div className="text-sm tracking-[0.3em] neon-text-cyan">CODE CONDUIT</div>
-          <div className="text-[10px] tracking-[0.3em] text-muted-foreground">ALL GLYPHS · ALL LAYERS · ALL TIME</div>
+          <div className="text-[10px] tracking-[0.3em] text-muted-foreground">
+            ALL GLYPHS · ALL LAYERS · ALL TIME
+          </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center h-3 gap-3">
           {(["sun", "spark", "target", "eye", "ban", "venus"] as GlyphName[]).map((g, i) => (
             <div key={g} className="flex items-center gap-2">
-              <Glyph name={g} size={22} glow={`var(--color-neon-${["gold", "cyan", "blue", "purple", "red", "gold"][i]})`} />
-              {i < 5 && <ChevronRight className="h-4 w-4 text-muted-foreground" />}
+              <Glyph
+                name={g}
+                size={22}
+              />
+              {i < 5 && <ChevronRight className="h-3 w-3 text-muted-foreground" />}
             </div>
           ))}
         </div>
       </div>
 
-      <div className="relative mt-3 h-24 overflow-hidden rounded-md border border-white/5 bg-[oklch(0.14_0.05_270/0.55)] px-2">
+      <div className="relative mt-4 h-18 overflow-hidden rounded-md border border-white/5 bg-[oklch(0.14_0.05_270/0.55)] px-2">
         <div className="pointer-events-none absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[var(--color-neon-cyan)]/40 to-transparent" />
         <div className="flex h-full items-center gap-[2px]">
           {heights.map((h, i) => (
-            <div key={i} className="flex h-full flex-1 flex-col items-stretch justify-center gap-[1px]">
-              <div className="rounded-sm bg-[var(--color-neon-cyan)]/80" style={{ height: `${h * 0.45}%`, boxShadow: h > 70 ? "0 0 6px var(--color-neon-cyan)" : undefined }} />
-              <div className="rounded-sm bg-[var(--color-neon-blue)]/70" style={{ height: `${h * 0.45}%` }} />
+            <div
+              key={i}
+              className="flex h-full flex-1 flex-col items-stretch justify-center gap-[1px]"
+            >
+              <div
+                className="rounded-sm bg-[var(--color-neon-green)]/90"
+                style={{
+                  height: `${h * 0.65}%`,
+                  boxShadow: h > 70 ? "0 0 6px var(--color-neon-cyan)" : undefined,
+                }}
+              />
+              <div
+                className="rounded-sm bg-[var(--color-neon-blue)]/70"
+                style={{ height: `${h * 0.65}%` }}
+              />
             </div>
           ))}
         </div>
@@ -705,7 +899,9 @@ export function CodeConduit({ pulse, connected }: { pulse: Pulse | null; connect
           not measured in hertz. A fabricated unit on a command center is
           worse than no unit. */}
       <div className="mt-2 flex items-center justify-between text-[10px] tracking-[0.25em] text-muted-foreground">
-        <span>{active} SIGNAL{active === 1 ? "" : "S"} IN FLIGHT · AMBIENT CARRIER</span>
+        <span>
+          {active} SIGNAL{active === 1 ? "" : "S"} IN FLIGHT · AMBIENT CARRIER
+        </span>
         <span style={{ color: connected ? "var(--color-neon-cyan)" : "var(--color-neon-orange)" }}>
           {connected ? "LISTENING" : "NO SOURCE"}
         </span>
@@ -716,8 +912,14 @@ export function CodeConduit({ pulse, connected }: { pulse: Pulse | null; connect
 
 /* ============================ GRID FEED ============================ */
 export function GridFeed({
-  items, reachable, newestAt,
-}: { items: FeedItem[]; reachable: boolean; newestAt: string | null }) {
+  items,
+  reachable,
+  newestAt,
+}: {
+  items: FeedItem[];
+  reachable: boolean;
+  newestAt: string | null;
+}) {
   const fresh = freshnessOf(newestAt);
 
   // "REAL-TIME GRID FEED" over seventeen-day-old items is a claim the data
@@ -740,7 +942,9 @@ export function GridFeed({
   return (
     <div className="panel flex min-h-[280px] flex-1 flex-col p-4">
       <div className="text-sm font-semibold tracking-[0.18em] neon-text-cyan">GRID SIGNAL FEED</div>
-      <div className="text-[10px] tracking-[0.25em]" style={{ color: subtitleColor }}>{subtitle}</div>
+      <div className="text-[10px] tracking-[0.25em]" style={{ color: subtitleColor }}>
+        {subtitle}
+      </div>
       <div className="mt-3 min-h-0 flex-1 space-y-2.5 overflow-y-auto pr-1">
         {items.length === 0 && (
           <div className="py-6 text-center text-[11px] tracking-[0.2em] text-muted-foreground">
@@ -748,7 +952,10 @@ export function GridFeed({
           </div>
         )}
         {items.map((f, i) => (
-          <div key={i} className="flex items-start gap-3 rounded-md border border-white/5 bg-white/[0.02] px-3 py-2">
+          <div
+            key={i}
+            className="flex items-start gap-3 rounded-md border border-white/5 bg-white/[0.02] px-3 py-2"
+          >
             <div
               className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-md border"
               style={{
@@ -756,11 +963,13 @@ export function GridFeed({
                 background: `color-mix(in oklab, var(--color-${f.color}) 14%, transparent)`,
               }}
             >
-              <Glyph name={f.glyph} size={22} glow={`var(--color-${f.color})`} />
+              <Glyph name={f.glyph} size={22} />
             </div>
             <div className="min-w-0 flex-1 leading-tight">
               <div className="text-sm break-words">
-                <span className="font-semibold" style={{ color: `var(--color-${f.color})` }}>{f.agent}</span>{" "}
+                <span className="font-semibold" style={{ color: `var(--color-${f.color})` }}>
+                  {f.agent}
+                </span>{" "}
                 <span className="text-foreground/85">{f.text}</span>
               </div>
               <div className="text-[10px] tracking-[0.2em] text-muted-foreground">
@@ -786,12 +995,20 @@ export function FooterBar({ voiceSlot }: { voiceSlot?: ReactNode }) {
         <p className="min-w-0 flex-1 truncate text-xs leading-tight text-foreground/85">
           <span className="font-semibold tracking-[0.2em] neon-text-gold">COVENANT OATH · </span>
           We observe what is real. We protect what matters. We evolve what is next.{" "}
-          <span className="font-semibold tracking-[0.18em] neon-text-cyan">WE ARE THE MOSTAR GRID.</span>
+          <span className="font-semibold tracking-[0.18em] neon-text-cyan">
+            WE ARE THE MOSTAR GRID.
+          </span>
         </p>
         <div className="flex shrink-0 items-center gap-6 text-[10px] tracking-[0.25em] text-muted-foreground">
-          <span>COVENANT MODE: <span className="neon-text-green">ENGAGED</span></span>
-          <span>MSG-01 ALIGNMENT: <span className="neon-text-cyan">TRUE</span></span>
-          <span>GRID PROTOCOL: <span className="neon-text-gold">v1.0.0</span></span>
+          <span>
+            COVENANT MODE: <span className="neon-text-green">ENGAGED</span>
+          </span>
+          <span>
+            MSG-01 ALIGNMENT: <span className="neon-text-cyan">TRUE</span>
+          </span>
+          <span>
+            GRID PROTOCOL: <span className="neon-text-gold">v1.0.0</span>
+          </span>
         </div>
       </div>
     </div>
@@ -808,7 +1025,11 @@ export function useClock() {
   }, []);
   return {
     clock: t ? t.toLocaleTimeString("en-US", { hour12: false }) : "",
-    dateLabel: t ? t.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toUpperCase() : "",
+    dateLabel: t
+      ? t
+          .toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+          .toUpperCase()
+      : "",
   };
 }
 

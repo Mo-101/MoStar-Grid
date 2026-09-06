@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "product": "MoScript",
+  "producer": "MoStar Intelligent System LTD",
+  "registration": "RC: 9753604",
+  "language_version": "0.1.0",
+  "product_build_version": "0.1.1",
+  "abi": "MOSCRIPT_GLYPH_ABI_V0_1",
+  "abi_hash": "5f46bfad5ac51b04ea60c71cd6fc94457b288726d617c3f45c28a19ba20690e4",
+  "compatibility": "Frozen MoScript v0.1 glyph ABI and existing program identity rules preserved.",
+  "tests": {
+    "go_vet": "PASS",
+    "go_test": "PASS",
+    "embedded_product_metadata": "PASS",
+    "existing_glyph_program_execution": "PASS (14)"
+  },
+  "sha256": {
+    "moscript-v0.1.1-linux-amd64": "071a34c43d23f24a55a3076f184244eaf45262029316abade774abf6c28a0a28",
+    "moscript-v0.1.1-windows-amd64.exe": "818538978a367d4b97f7f779031d40a23b1fce4e3facd90e0734610ff338ec86",
+    "moscript-v0.1.1-source.zip": "2822f62064219d0bc534ffa03fe79314094cace890735b160bb9141af72866bb",
+    "MOSCRIPT_README_v0.1.1.md": "19bbd40e1bd74be0be78f30795dab5e5248976e25a24856979c253019f3125c0"
+  }
+}

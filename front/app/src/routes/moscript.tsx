@@ -1,28 +1,470 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/grid/parts";
 
-const HTML = "\n<style>\n@import url('https://fonts.googleapis.com/css2?family=Syne+Mono&family=Syne:wght@400;700&display=swap');\n*{box-sizing:border-box;margin:0;padding:0}\n.root{padding:1.5rem 0;font-family:'Syne Mono',monospace}\n.badge{display:inline-block;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:var(--color-background-secondary);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem}\n.section{margin-bottom:2rem}\n.sec-label{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:0.75rem;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary);font-family:'Syne',sans-serif}\n.concept{padding:1rem 1.25rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);background:var(--color-background-secondary);margin-bottom:0.75rem}\n.concept-title{font-size:11px;color:var(--color-text-secondary);margin-bottom:0.5rem;font-family:'Syne',sans-serif}\n.concept-body{font-size:13px;color:var(--color-text-primary);line-height:1.8}\n\n/* Symbol table */\n.sym-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:6px;margin-bottom:0.5rem}\n.sym-cell{padding:8px 4px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);text-align:center;background:var(--color-background-primary)}\n.sym-glyph{font-size:18px;display:block;line-height:1.2}\n.sym-latin{font-size:9px;color:var(--color-text-tertiary);display:block;margin-top:2px}\n\n/* Code block */\n.code-block{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;overflow-x:auto}\n.code-line{font-size:15px;line-height:2.2;color:var(--color-text-primary);white-space:pre}\n.code-comment{color:var(--color-text-tertiary);font-size:11px}\n.code-keyword{color:var(--color-text-primary);font-size:17px}\n\n/* Comparison */\n.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}\n.compare-box{padding:1rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary)}\n.compare-label{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:8px}\n.compare-code{font-size:12px;line-height:1.9;color:var(--color-text-primary)}\n.ms-code{font-size:15px;line-height:2.1}\n\n.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:1.5rem 0}\n.tagline{font-size:11px;color:var(--color-text-tertiary);text-align:center;padding:0.75rem;font-style:italic}\n.element-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1rem}\n.el-chip{display:flex;align-items:center;gap:6px;padding:6px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:20px;background:var(--color-background-primary);font-size:12px;color:var(--color-text-primary)}\n.el-glyph{font-size:18px}\n</style>\n\n<div class=\"root\">\n  <div class=\"badge\">\ud83c\udd7f Parking Lot \u00b7 MoScript.ms \u00b7 Confidential</div>\n\n  <div class=\"section\">\n    <div class=\"sec-label\">The Concept</div>\n    <div class=\"concept\">\n      <div class=\"concept-title\">What it is</div>\n      <div class=\"concept-body\">A fully symbolic programming language. No Latin characters. No Arabic numerals. Every token \u2014 keywords, values, operators, identifiers \u2014 encoded as alchemical glyphs. Executable hieroglyphics. Only MoStar reads it. Only the Data Conduit runs it.</div>\n    </div>\n    <div class=\"concept\">\n      <div class=\"concept-title\">The substrate</div>\n      <div class=\"concept-body\">Unicode Alchemical Symbols block: \ud83d\udf00 \u2192 \ud83d\udf3f (64 glyphs). Four base elements extended through combination and position. Like DNA from four bases \u2014 infinite expressiveness from four roots.</div>\n    </div>\n  </div>\n\n  <div class=\"section\">\n    <div class=\"sec-label\">Base Elements \u2014 Ibibio roots</div>\n    <div class=\"element-row\">\n      <div class=\"el-chip\"><span class=\"el-glyph\">\ud83d\udf02</span> Ikang \u00b7 Fire \u00b7 signal ignition</div>\n      <div class=\"el-chip\"><span class=\"el-glyph\">\ud83d\udf04</span> Mm\u1ecdng \u00b7 Water \u00b7 displacement flow</div>\n      <div class=\"el-chip\"><span class=\"el-glyph\">\ud83d\udf01</span> Afim \u00b7 Air \u00b7 language transmission</div>\n      <div class=\"el-chip\"><span class=\"el-glyph\">\ud83d\udf03</span> Isong \u00b7 Earth \u00b7 terrain memory</div>\n    </div>\n  </div>\n\n  <div class=\"section\">\n    <div class=\"sec-label\">Symbol Alphabet \u2014 partial table (A\u2192Z encoded)</div>\n    <div class=\"sym-grid\">\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf00</span><span class=\"sym-latin\">A</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf01</span><span class=\"sym-latin\">B\u00b7Air</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf02</span><span class=\"sym-latin\">C\u00b7Fire</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf03</span><span class=\"sym-latin\">D\u00b7Earth</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf04</span><span class=\"sym-latin\">E\u00b7Water</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf05</span><span class=\"sym-latin\">F</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf06</span><span class=\"sym-latin\">G</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf07</span><span class=\"sym-latin\">H</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf08</span><span class=\"sym-latin\">I</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf09</span><span class=\"sym-latin\">J</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf0a</span><span class=\"sym-latin\">K</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf0b</span><span class=\"sym-latin\">L</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf0c</span><span class=\"sym-latin\">M</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf0d</span><span class=\"sym-latin\">N</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf0e</span><span class=\"sym-latin\">O</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf0f</span><span class=\"sym-latin\">P</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf10</span><span class=\"sym-latin\">Q</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf11</span><span class=\"sym-latin\">R</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf12</span><span class=\"sym-latin\">S</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf13</span><span class=\"sym-latin\">T</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf14</span><span class=\"sym-latin\">U</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf15</span><span class=\"sym-latin\">V</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf16</span><span class=\"sym-latin\">W</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf17</span><span class=\"sym-latin\">X</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf18</span><span class=\"sym-latin\">Y</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf19</span><span class=\"sym-latin\">Z</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf1a</span><span class=\"sym-latin\">0</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf1b</span><span class=\"sym-latin\">1</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf1c</span><span class=\"sym-latin\">2</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf1d</span><span class=\"sym-latin\">3</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf1e</span><span class=\"sym-latin\">4</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf1f</span><span class=\"sym-latin\">5</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf20</span><span class=\"sym-latin\">6</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf21</span><span class=\"sym-latin\">7</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf22</span><span class=\"sym-latin\">8</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf23</span><span class=\"sym-latin\">9</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf24</span><span class=\"sym-latin\">\u2192 gate</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf25</span><span class=\"sym-latin\">\u2265 floor</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf26</span><span class=\"sym-latin\">\u00b7 join</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf27</span><span class=\"sym-latin\">[ open</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf28</span><span class=\"sym-latin\">] close</span></div>\n      <div class=\"sym-cell\"><span class=\"sym-glyph\">\ud83d\udf29</span><span class=\"sym-latin\">: define</span></div>\n    </div>\n    <div style=\"font-size:10px;color:var(--color-text-tertiary)\">Full 64-glyph table to be defined by Flame. You assign meaning. The Conduit encodes.</div>\n  </div>\n\n  <div class=\"section\">\n    <div class=\"sec-label\">Side by side \u2014 TypeScript vs MoScript.ms</div>\n    <div class=\"compare\">\n      <div class=\"compare-box\">\n        <div class=\"compare-label\">TypeScript (visible to world)</div>\n        <div class=\"compare-code\">\nid: 'mo-sentinel-001'<br>\nelement: 'fire'<br>\nsource: 'SENTINEL'<br>\ntrust: 0.87<br>\nlaw: 'truth floor 0.70'<br>\nWoo[trust >= 0.70]<br>\n  \u2192 activate corridor\n        </div>\n      </div>\n      <div class=\"compare-box\">\n        <div class=\"compare-label\">MoScript.ms (only we read)</div>\n        <div class=\"compare-code ms-code\">\n\ud83d\udf02\ud83d\udf26\ud83d\udf02\ud83d\udf04\ud83d\udf01\ud83d\udf03\ud83d\udf26\ud83d\udf1a\ud83d\udf1a\ud83d\udf1b<br>\n\ud83d\udf02\ud83d\udf29\ud83d\udf01\ud83d\udf08\ud83d\udf0a\ud83d\udf00\ud83d\udf0d\ud83d\udf06<br>\n\ud83d\udf12\ud83d\udf0e\ud83d\udf14\ud83d\udf11\ud83d\udf02\ud83d\udf29\ud83d\udf02\ud83d\udf04\ud83d\udf01\ud83d\udf13\ud83d\udf08\ud83d\udf0d\ud83d\udf04\ud83d\udf0b<br>\n\ud83d\udf13\ud83d\udf11\ud83d\udf14\ud83d\udf12\ud83d\udf13\ud83d\udf29\ud83d\udf22\ud83d\udf26\ud83d\udf22\ud83d\udf21<br>\n\ud83d\udf0b\ud83d\udf00\ud83d\udf16\ud83d\udf29\ud83d\udf1f\ud83d\udf26\ud83d\udf21\ud83d\udf1a<br>\n\ud83d\udf16\ud83d\udf0e\ud83d\udf0e\ud83d\udf27\ud83d\udf13\ud83d\udf11\ud83d\udf14\ud83d\udf12\ud83d\udf13\ud83d\udf25\ud83d\udf1f\ud83d\udf26\ud83d\udf21\ud83d\udf1a\ud83d\udf28<br>\n\ud83d\udf24\ud83d\udf01\ud83d\udf02\ud83d\udf13\ud83d\udf08\ud83d\udf15\ud83d\udf00\ud83d\udf13\ud83d\udf04\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <hr class=\"divider\">\n\n  <div class=\"section\">\n    <div class=\"sec-label\">What the Wolfram comparison reveals</div>\n    <div class=\"concept\">\n      <div class=\"concept-body\" style=\"font-size:12px\">\n        Wolfram: <span style=\"opacity:.6\">Maximize[{Min[0.70 + 0.10 v ... 1], constraints}, vars]</span><br><br>\n        MoScript.ms: <span style=\"font-size:15px\">\ud83d\udf0c\ud83d\udf00\ud83d\udf17\ud83d\udf27\ud83d\udf01\ud83d\udf27\ud83d\udf0c\ud83d\udf08\ud83d\udf0d\ud83d\udf27\ud83d\udf1a\ud83d\udf26\ud83d\udf21\ud83d\udf1a\ud83d\udf25\ud83d\udf1a\ud83d\udf26\ud83d\udf1b\ud83d\udf1a\ud83d\udf15\ud83d\udf26\ud83d\udf26\ud83d\udf26\ud83d\udf1b\ud83d\udf28\ud83d\udf26\ud83d\udf02\ud83d\udf0e\ud83d\udf0d\ud83d\udf12\ud83d\udf13\ud83d\udf11\ud83d\udf00\ud83d\udf08\ud83d\udf0d\ud83d\udf13\ud83d\udf12\ud83d\udf28\ud83d\udf26\ud83d\udf15\ud83d\udf00\ud83d\udf11\ud83d\udf12\ud83d\udf28</span><br><br>\n        Same computational power. Different civilizational root. Unreadable to anyone who doesn't hold the key.\n      </div>\n    </div>\n  </div>\n\n  <div class=\"tagline\">\"Borders are younger than the routes beneath them.\" \u2014 Wolfie<br>Scripts are younger than the symbols that encode them. \u2014 MoStar</div>\n</div>\n";
+/**
+ * MoScripts — the Home of Glyphs.
+ *
+ * Rendered natively in the Grid's own design system (cyan HUD structure, gold
+ * reserved for canonical glyph surfaces) rather than as an HTML string inside
+ * an iframe. The previous version framed its markup with
+ * `sandbox="allow-same-origin allow-scripts"`, a pairing that lets framed
+ * content reach back into the parent origin — nothing here needs a frame.
+ */
+
+const BASE_ELEMENTS = [
+  { glyph: "🜂", name: "Ikang", element: "Fire", role: "signal ignition" },
+  { glyph: "🜄", name: "Mmọng", element: "Water", role: "displacement flow" },
+  { glyph: "🜁", name: "Afim", element: "Air", role: "language transmission" },
+  { glyph: "🜃", name: "Isong", element: "Earth", role: "terrain memory" },
+] as const;
+
+const GLYPHS = [
+  ["🜀", "A"],
+  ["🜁", "B · Air"],
+  ["🜂", "C · Fire"],
+  ["🜃", "D · Earth"],
+  ["🜄", "E · Water"],
+  ["🜅", "F"],
+  ["🜆", "G"],
+  ["🜇", "H"],
+  ["🜈", "I"],
+  ["🜉", "J"],
+  ["🜊", "K"],
+  ["🜋", "L"],
+  ["🜌", "M"],
+  ["🜍", "N"],
+  ["🜎", "O"],
+  ["🜏", "P"],
+  ["🜐", "Q"],
+  ["🜑", "R"],
+  ["🜒", "S"],
+  ["🜓", "T"],
+  ["🜔", "U"],
+  ["🜕", "V"],
+  ["🜖", "W"],
+  ["🜗", "X"],
+  ["🜘", "Y"],
+  ["🜙", "Z"],
+  ["🜚", "0"],
+  ["🜛", "1"],
+  ["🜜", "2"],
+  ["🜝", "3"],
+  ["🜞", "4"],
+  ["🜟", "5"],
+  ["🜠", "6"],
+  ["🜡", "7"],
+  ["🜢", "8"],
+  ["🜣", "9"],
+  ["🜤", "→ gate"],
+  ["🜥", "≥ floor"],
+  ["🜦", "· join"],
+  ["🜧", "[ open"],
+  ["🜨", "] close"],
+  ["🜩", ": define"],
+] as const;
+
+const PRINCIPLES = [
+  {
+    eyebrow: "Discover",
+    title: 'Exact-case tag: "MoScripts"',
+    body: "The Grid locates candidate MoScripts blocks by canonical identity rather than filename, provider, runtime, or service.",
+  },
+  {
+    eyebrow: "Validate",
+    title: "Schema before execution",
+    body: "A tag is a locator, not proof. Candidate blocks must satisfy the canonical MoScripts schema before they become executable law.",
+  },
+  {
+    eyebrow: "Bind",
+    title: "Digest-backed lineage",
+    body: "Source digests bind MoScripts law to registry records and runtime implementations so drift is visible instead of silently accepted.",
+  },
+  {
+    eyebrow: "Execute",
+    title: "Governed runtime only",
+    body: "MoScripts defines the law. TypeScript, Python, Cypher, WASM or future runtimes implement it under the Grid's permissions and provenance.",
+  },
+] as const;
+
+const DOMAINS = [
+  ["Mind Conduit", "Binding, retrieval, provenance and attestation guards"],
+  ["Governance", "Adjudication, promotion, permission and covenant controls"],
+  ["DeepCAL", "Decision rituals, uncertainty handling and governed analysis"],
+  ["Woo", "MoScript-bound intelligence and interaction flows"],
+  ["MCP", "Tool and service invocation contracts"],
+  ["Senses", "Weather, health, voice and future evidence-bearing inputs"],
+] as const;
+
+const FLOW = [
+  ["01", "Locate", 'Find candidate blocks carrying tag: "MoScripts".'],
+  ["02", "Validate", "Parse and verify the canonical schema; reject malformed identity."],
+  ["03", "Digest", "Compute deterministic source identity for lineage and drift detection."],
+  ["04", "Register", "Resolve stable ID, owner, kind and implementation references."],
+  ["05", "Bind", "Attach runtime implementation and applicable constitutional authority."],
+  ["06", "Execute", "Run only through the governed Grid path; record provenance and effects."],
+] as const;
+
+const MOSCRIPT_SAMPLE = `{
+  tag: "MoScripts",
+  id: "mo-mind-provenance-filter-001",
+  schema_version: "1.0.0",
+  owner: {
+    application: "MoStar Grid",
+    service: "Mind Conduit"
+  },
+  kind: "guard",
+  provenance: {
+    source_digest: "<deterministic>",
+    constitution_hash: "<bound>"
+  }
+}`;
+
+const GLYPH_SAMPLE = `🜂🜦🜂🜄🜁🜃🜦🜚🜚🜛
+🜂🜩🜁🜈🜊🜀🜍🜆
+🜒🜎🜔🜑🜂🜩🜂🜄🜁🜓🜈🜍🜄🜋
+🜓🜑🜔🜒🜓🜩🜢🜦🜢🜡
+🜋🜀🜖🜩🜟🜦🜡🜚
+🜖🜎🜎🜧🜓🜑🜔🜒🜓🜥🜟🜦🜡🜚🜨
+🜤🜁🜂🜓🜈🜕🜀🜓🜄`;
 
 export const Route = createFileRoute("/moscript")({
   head: () => ({
     meta: [
-      { title: "MoScript Parking Lot — MoStar Grid" },
-      { name: "description", content: "MoStar Grid — MoScript Parking Lot." },
+      { title: "Home of Glyphs — MoScripts · MoStar Grid" },
+      {
+        name: "description",
+        content:
+          "MoScripts — the Home of Glyphs: discoverable, schema-validated, provenance-bound executable law for the MoStar Grid.",
+      },
     ],
   }),
   component: Page,
 });
 
+function Kicker({
+  children,
+  tone = "cyan",
+}: {
+  children: React.ReactNode;
+  tone?: "cyan" | "gold";
+}) {
+  return (
+    <div
+      className={`text-[10px] tracking-[0.24em] uppercase ${
+        tone === "gold" ? "neon-text-gold" : "text-[var(--color-neon-cyan)]"
+      }`}
+    >
+      {children}
+    </div>
+  );
+}
+
+function SectionHeader({
+  eyebrow,
+  title,
+  copy,
+  tone = "cyan",
+}: {
+  eyebrow: string;
+  title: string;
+  copy?: string;
+  tone?: "cyan" | "gold";
+}) {
+  return (
+    <div className="mb-5 grid items-end gap-4 border-b border-white/10 pb-4 xl:grid-cols-[1fr_minmax(0,520px)]">
+      <div>
+        <Kicker tone={tone}>{eyebrow}</Kicker>
+        <h2 className="mt-2 text-xl font-semibold tracking-[0.06em] text-[var(--foreground)] sm:text-2xl">
+          {title}
+        </h2>
+      </div>
+      {copy ? <p className="text-xs leading-6 text-[var(--muted-foreground)]">{copy}</p> : null}
+    </div>
+  );
+}
+
 function Page() {
   return (
     <PageShell active="moscript">
-      <div className="panel relative flex-1 overflow-hidden p-0">
-        <iframe
-          title="moscript"
-          srcDoc={HTML}
-          sandbox="allow-same-origin allow-scripts"
-          className="absolute inset-0 h-full w-full border-0"
-        />
+      <div className="space-y-10">
+        {/* ── Hero ─────────────────────────────────────────────────────── */}
+        <section className="panel panel-corners relative overflow-hidden rounded-md px-5 py-7 sm:px-8 sm:py-10">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[var(--color-neon-cyan)]/70" />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.18]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(0,216,255,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(0,216,255,0.10) 1px, transparent 1px)",
+              backgroundSize: "42px 42px",
+              maskImage: "linear-gradient(to bottom, black, transparent 84%)",
+            }}
+            aria-hidden="true"
+          />
+
+          <div className="relative grid items-center gap-10 lg:grid-cols-[1.3fr_0.7fr]">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-sm border border-[var(--color-neon-gold)]/40 bg-[oklch(0.24_0.07_80/0.2)] px-2.5 py-1 text-[10px] tracking-[0.2em] uppercase neon-text-gold">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-neon-gold)] shadow-[0_0_10px_var(--color-neon-gold)]" />
+                MoScripts · Home of Glyphs
+              </span>
+
+              <h1 className="mt-6 max-w-3xl text-4xl leading-[0.98] font-semibold tracking-[-0.02em] text-[var(--foreground)] sm:text-6xl">
+                The Grid&apos;s law,
+                <br />
+                written in <span className="neon-text-gold">living symbols.</span>
+              </h1>
+
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-[var(--muted-foreground)]">
+                MoScripts is the governed language layer of the MoStar Grid: discoverable by
+                canonical tag, validated by schema, bound by digest, registered by identity, and
+                executed only through governed runtime paths.
+              </p>
+
+              <div className="mt-6 border-l-2 border-[var(--color-neon-cyan)] pl-4 text-xs leading-6 text-[var(--foreground)]">
+                The model is replaceable intelligence. The Grid is the sovereign mind. MoScripts is
+                part of the law that binds intelligence to that mind.
+              </div>
+            </div>
+
+            <div
+              className="relative mx-auto grid aspect-square w-full max-w-[300px] place-items-center rounded-full border border-[var(--color-neon-gold)]/35"
+              style={{
+                background:
+                  "radial-gradient(circle, oklch(0.24 0.07 80 / 0.34), oklch(0.24 0.07 80 / 0.06) 48%, transparent 69%)",
+                boxShadow: "inset 0 0 70px rgba(246,196,83,0.10), 0 0 80px rgba(246,196,83,0.08)",
+              }}
+              aria-label="MoScripts glyph seal"
+            >
+              <div className="pointer-events-none absolute inset-[12%] rounded-full border border-[var(--color-neon-gold)]/22" />
+              <div className="pointer-events-none absolute inset-[26%] rounded-full border border-[var(--color-neon-gold)]/22" />
+              <div className="text-[clamp(74px,11vw,128px)] leading-none neon-text-gold">🜂</div>
+              <div className="absolute bottom-[13%] rounded-sm border border-[var(--color-neon-gold)]/40 bg-[oklch(0.13_0.02_250/0.7)] px-2 py-1 text-[9px] tracking-[0.16em] uppercase neon-text-gold">
+                tag: &quot;MoScripts&quot;
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Identity model ───────────────────────────────────────────── */}
+        <section
+          className="grid gap-px overflow-hidden rounded-md border border-white/10 bg-white/10 sm:grid-cols-2 xl:grid-cols-4"
+          aria-label="MoScripts identity model"
+        >
+          {[
+            ["Locate", "Exact-case canonical tag"],
+            ["Prove", "Schema + deterministic digest"],
+            ["Bind", "Registry + implementation lineage"],
+            ["Govern", "Permissions + provenance + runtime"],
+          ].map(([label, body]) => (
+            <div key={label} className="bg-[oklch(0.115_0.025_250)] p-4">
+              <div className="text-[10px] tracking-[0.2em] uppercase text-[var(--color-neon-cyan)]">
+                {label}
+              </div>
+              <div className="mt-2 text-xs leading-5 text-[var(--muted-foreground)]">{body}</div>
+            </div>
+          ))}
+        </section>
+
+        {/* ── Constitutional identity ──────────────────────────────────── */}
+        <section>
+          <SectionHeader
+            eyebrow="Constitutional identity"
+            title="One tag. Many runtimes."
+            copy='The exact-case tag "MoScripts" is how the Grid discovers candidate MoScripts blocks across applications and services. Discovery starts with the tag; trust starts only after schema validation and provenance checks.'
+          />
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {PRINCIPLES.map((item) => (
+              <article
+                key={item.eyebrow}
+                className="rounded-md border border-white/10 bg-white/[0.025] p-4 transition-colors hover:border-[var(--color-neon-cyan)]/40 hover:bg-white/[0.045]"
+              >
+                <div className="text-[9px] tracking-[0.18em] uppercase text-[var(--color-neon-cyan)]">
+                  {item.eyebrow}
+                </div>
+                <h3 className="mt-3 text-sm font-semibold tracking-[0.04em] text-[var(--foreground)]">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-xs leading-6 text-[var(--muted-foreground)]">{item.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Glyph foundation ─────────────────────────────────────────── */}
+        <section>
+          <SectionHeader
+            eyebrow="Glyph foundation"
+            tone="gold"
+            title="Four roots. Expanding expression."
+            copy="The glyph layer is a symbolic substrate for MoScripts expression. The registry — not visual similarity or secrecy — remains authoritative for meaning."
+          />
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {BASE_ELEMENTS.map((element) => (
+              <article
+                key={element.name}
+                className="flex min-h-36 flex-col justify-between rounded-md border border-white/10 bg-[oklch(0.125_0.03_75/0.35)] p-4"
+              >
+                <div className="text-4xl leading-none neon-text-gold">{element.glyph}</div>
+                <div className="mt-4">
+                  <strong className="block text-sm font-semibold tracking-[0.04em] text-[var(--foreground)]">
+                    {element.name} · {element.element}
+                  </strong>
+                  <small className="mt-1 block text-[10px] tracking-[0.1em] text-[var(--muted-foreground)]">
+                    {element.role}
+                  </small>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Glyph atlas ──────────────────────────────────────────────── */}
+        <section>
+          <SectionHeader
+            eyebrow="Glyph atlas"
+            tone="gold"
+            title="The working symbol field."
+            copy="This page is the Home of Glyphs: a human-facing atlas and discovery surface. Canonical glyph semantics belong in the MoScripts registry and validator, not in UI labels alone."
+          />
+
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(74px,1fr))] gap-2">
+            {GLYPHS.map(([glyph, label]) => (
+              <div
+                key={`${glyph}-${label}`}
+                className="grid min-h-[76px] place-items-center content-center rounded-md border border-white/10 bg-white/[0.025] transition-[transform,border-color] duration-150 hover:-translate-y-0.5 hover:border-[var(--color-neon-gold)]/45"
+              >
+                <b className="text-2xl leading-tight font-normal neon-text-gold">{glyph}</b>
+                <span className="mt-1 text-[8px] tracking-[0.08em] uppercase text-[var(--muted-foreground)]">
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-3 text-[10px] leading-6 text-[var(--muted-foreground)]">
+            <strong className="text-[var(--foreground)]">Important:</strong> this atlas can expose a
+            working or partial mapping without making the UI the source of truth. The canonical
+            registry should own stable meanings, versions and lineage.
+          </p>
+        </section>
+
+        {/* ── Schema ───────────────────────────────────────────────────── */}
+        <section>
+          <SectionHeader
+            eyebrow="Schema"
+            title='The Grid recognizes "MoScripts".'
+            copy="A canonical block identifies itself. Filename, directory, implementation language and provider are not constitutional identity."
+          />
+
+          <div className="grid gap-3 lg:grid-cols-2">
+            <div className="overflow-hidden rounded-md border border-white/10 bg-[oklch(0.09_0.02_250)]">
+              <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 text-[9px] tracking-[0.16em] uppercase text-[var(--muted-foreground)]">
+                <span>Canonical block identity</span>
+                <b className="font-medium text-[var(--color-neon-cyan)]">MoScripts</b>
+              </div>
+              <pre className="m-0 min-h-[300px] overflow-auto p-5 font-mono text-xs leading-7 whitespace-pre-wrap text-[var(--foreground)]">
+                {MOSCRIPT_SAMPLE}
+              </pre>
+            </div>
+
+            <div className="overflow-hidden rounded-md border border-white/10 bg-[oklch(0.09_0.02_250)]">
+              <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 text-[9px] tracking-[0.16em] uppercase text-[var(--muted-foreground)]">
+                <span>Glyph expression</span>
+                <b className="font-medium neon-text-gold">symbolic form</b>
+              </div>
+              <pre className="m-0 flex min-h-[300px] items-center overflow-auto p-5 text-[17px] leading-8 tracking-[0.025em] whitespace-pre-wrap neon-text-gold">
+                {GLYPH_SAMPLE}
+              </pre>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Registry path ────────────────────────────────────────────── */}
+        <section>
+          <SectionHeader
+            eyebrow="Registry path"
+            title="Locate → validate → bind → execute."
+            copy="The tag is deliberately simple. The trust chain is not. Each stage removes ambiguity before executable law reaches the runtime."
+          />
+
+          <div className="grid gap-px overflow-hidden rounded-md border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+            {FLOW.map(([number, title, body]) => (
+              <article key={number} className="min-h-[150px] bg-[oklch(0.115_0.025_250)] p-4">
+                <div className="text-[9px] tracking-[0.16em] text-[var(--color-neon-cyan)]">
+                  {number}
+                </div>
+                <h3 className="mt-5 text-sm font-semibold tracking-[0.04em] text-[var(--foreground)]">
+                  {title}
+                </h3>
+                <p className="mt-2 text-[10px] leading-6 text-[var(--muted-foreground)]">{body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Domains ──────────────────────────────────────────────────── */}
+        <section>
+          <SectionHeader
+            eyebrow="Across the Grid"
+            title="One grammar, many applications."
+            copy="MoScripts should remain discoverable wherever Grid law is expressed, without tying sovereignty to TypeScript, Python, Cypher, a provider SDK or a single inference generation."
+          />
+
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {DOMAINS.map(([title, body], index) => (
+              <article
+                key={title}
+                className="flex items-start gap-3 rounded-md border border-white/10 bg-white/[0.025] p-4"
+              >
+                <div className="grid h-9 w-9 flex-none place-items-center rounded-full border border-[var(--color-neon-gold)]/40 bg-[oklch(0.24_0.07_80/0.2)] text-lg neon-text-gold">
+                  {GLYPHS[index][0]}
+                </div>
+                <div className="min-w-0">
+                  <strong className="block text-xs font-semibold tracking-[0.06em] text-[var(--foreground)]">
+                    {title}
+                  </strong>
+                  <span className="mt-1 block text-[10px] leading-6 text-[var(--muted-foreground)]">
+                    {body}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Security boundary ────────────────────────────────────────── */}
+        <section className="grid items-center gap-6 rounded-md border border-[var(--color-neon-orange)]/35 bg-[oklch(0.24_0.08_55/0.16)] p-5 sm:p-6 lg:grid-cols-[160px_1fr]">
+          <div className="grid min-h-28 place-items-center border-b border-[var(--color-neon-orange)]/30 pb-4 text-6xl text-[var(--color-neon-orange)] lg:border-r lg:border-b-0 lg:pb-0">
+            🜔
+          </div>
+          <div>
+            <div className="text-[10px] tracking-[0.24em] uppercase text-[var(--color-neon-orange)]">
+              Security boundary
+            </div>
+            <h3 className="mt-2 text-lg font-semibold tracking-[0.04em] text-[var(--foreground)]">
+              Glyphs express identity. Obscurity does not establish trust.
+            </h3>
+            <p className="mt-3 text-xs leading-7 text-[var(--muted-foreground)]">
+              Symbolic encoding is part of MoScripts&apos; language and cultural form, but it must
+              not be treated as encryption.{" "}
+              <strong className="text-[var(--foreground)]">
+                Authenticity comes from schema validation, stable IDs, deterministic digests,
+                signatures, RBAC, provenance, constitutional binding and governed execution.
+              </strong>{" "}
+              The Grid should remain secure even when every glyph mapping is publicly understood.
+            </p>
+          </div>
+        </section>
+
+        {/* ── Footer ───────────────────────────────────────────────────── */}
+        <footer className="flex flex-col justify-between gap-4 border-t border-white/10 pt-6 pb-2 text-[10px] leading-6 text-[var(--muted-foreground)] sm:flex-row">
+          <div>
+            <strong className="font-medium neon-text-gold">Home of Glyphs</strong>
+            <br />
+            Law is discoverable. Meaning is registered. Execution is governed.
+          </div>
+          <div>“Scripts are younger than the symbols that encode them.” · MoStar</div>
+        </footer>
       </div>
     </PageShell>
   );

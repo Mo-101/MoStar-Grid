@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
+import logoUrl from "../assets/elements/MStarLg.png?url";
 import { reportMoScriptsError } from "../lib/moscripts-error-reporting";
 
 function NotFoundComponent() {
@@ -78,16 +79,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "MoStar Grid" },
+      { name: "description", content: "MoStar Grid — Sovereign covenant intelligence." },
+      { name: "author", content: "MoStar Intelligent Systems" },
+      { property: "og:title", content: "MoStar Grid" },
+      { property: "og:description", content: "MoStar Grid — Sovereign covenant intelligence." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@MoStarSystems" },
     ],
     links: [
+      { rel: "icon", type: "image/png", href: logoUrl },
+      { rel: "apple-touch-icon", type: "image/png", href: logoUrl },
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },

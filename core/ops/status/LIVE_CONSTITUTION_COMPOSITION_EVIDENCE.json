@@ -1,0 +1,34 @@
+{
+  "schema": "mostar.live-constitution-composition-evidence.v1",
+  "executed_at": "2026-09-05T19:05:14.686745+00:00",
+  "source_commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+  "worktree_state": "WORKTREE_UNCOMMITTED",
+  "read_only": true,
+  "query_source": "front/app/src/lib/mind/constitution-composition.ts",
+  "query_source_digest": "96d4a2e16168d5095f9f4bb56ea96de2198d7e4cb7daa93e57a3efa514676d1c",
+  "query": "MATCH (c:Constitution {constitution_hash: $constitution_hash})\nMATCH (c)-[:ORIGINATES_FROM]->(p:Provenance)\nMATCH (p)-[:ATTESTED_BY]->(a:Attestation)\nWHERE p.constitution_hash = c.constitution_hash\n  AND a.constitution_hash = c.constitution_hash\nRETURN c.constitution_hash AS constitution_hash,\n       p.constitution_hash AS provenance_hash,\n       a.constitution_hash AS attestation_hash,\n       a.subject_digest AS attestation_subject_digest\nLIMIT 2",
+  "bound_parameters": {
+    "constitution_hash": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87"
+  },
+  "database": "neo4j",
+  "driver_calls": 3,
+  "result_rows": [
+    {
+      "constitution_hash": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+      "provenance_hash": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+      "attestation_hash": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+      "attestation_subject_digest": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87"
+    }
+  ],
+  "constitution_root_count": 1,
+  "valid_chain_count": 1,
+  "competing_valid_chain_count": 0,
+  "topology_chain_count": 1,
+  "digest_conflict_count": 0,
+  "constitution_digest": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+  "previous_hash": null,
+  "lineage": "GENESIS",
+  "custody_record": "first authoritative record",
+  "result": "PASS",
+  "failure_reasons": []
+}

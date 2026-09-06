@@ -220,6 +220,8 @@ class GridOrchestrator:
             startup_ctx["verifier"] = self._verifier
             startup_ctx["runtime_health"] = self.runtime_health
 
+            self.runtime_health.mark_governance_ready()
+
             startup_events = self.moscript.fire_trigger("on_startup", startup_ctx)
 
             for event in startup_events:
@@ -227,8 +229,6 @@ class GridOrchestrator:
                     result = event.get("result")
                     if isinstance(result, GridReadiness):
                         self._grid_readiness = result
-
-            self.runtime_health.mark_governance_ready()
         except Exception as exc:
             error_code = postgres_error_code(exc)
             self.runtime_health.mark_governance_blocked(error_code)

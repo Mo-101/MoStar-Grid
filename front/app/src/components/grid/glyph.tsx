@@ -6,6 +6,7 @@ import g12 from "@/assets/moCons/g12.png";
 import g11 from "@/assets/moCons/g11.png";
 import g7 from "@/assets/moCons/g7.png";
 import g3 from "@/assets/moCons/g3.png";
+import g14 from "@/assets/moCons/g14.png";
 
 export type GlyphName =
   | "covenant"   // blue inverted-triangle bar — main MoStar / hand replacement
@@ -15,7 +16,10 @@ export type GlyphName =
   | "spark"      // blue 4-point sparkle — essence / info
   | "eye"        // blue eye-spiral — vision
   | "eyeLight"   // white eye-spiral — light variant
-  | "venus";     // gold venus — gold accent
+  | "venus"      // gold venus — gold accent
+  | "core"       // g10 — grid core, center of the covenant ring
+  | "flame"      // g14 — IKANG / fire
+  | "earth";     // g8 — ISONG / earth
 
 const MAP: Record<GlyphName, { url: string }> = {
   covenant: { url: g2 },
@@ -26,17 +30,18 @@ const MAP: Record<GlyphName, { url: string }> = {
   eye: { url: g7 },
   eyeLight: { url: g3 },
   venus: { url: g10 },
+  core: { url: g10 },
+  flame: { url: g14 },
+  earth: { url: g8 },
 };
 
 export function Glyph({
   name,
   size = 40,
-  glow,
   className = "",
 }: {
   name: GlyphName;
   size?: number;
-  glow?: string; // css color
   className?: string;
 }) {
   const src = MAP[name].url;
@@ -48,11 +53,7 @@ export function Glyph({
       width={size}
       height={size}
       className={`inline-block select-none object-contain ${className}`}
-      style={{
-        width: size,
-        height: size,
-        filter: glow ? `drop-shadow(0 0 8px ${glow})` : undefined,
-      }}
+      style={{ width: size, height: size }}
     />
   );
 }

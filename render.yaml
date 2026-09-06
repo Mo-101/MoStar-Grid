@@ -109,5 +109,3 @@ services:
         sync: false  # set to mostar-voice's public onrender.com URL
       - key: VITE_ENABLE_LIVE_GRID_SERVICES
         value: "true"
-      - key: VITE_MOSTAR_TOKEN
-        sync: false

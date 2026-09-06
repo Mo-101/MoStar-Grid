@@ -37,7 +37,7 @@ export const GRID_ELEMENTS: readonly GridElement[] = [
     aspect: "SPIRIT",
     triad: ["Awakening", "Change", "Fire"],
     tint: "neon-red",
-    glyph: "ban",
+    glyph: "flame",
   },
   {
     id: "mmong",
@@ -67,7 +67,7 @@ export const GRID_ELEMENTS: readonly GridElement[] = [
     aspect: "BODY",
     triad: ["Form", "Action", "Creation"],
     tint: "neon-gold",
-    glyph: "eye",
+    glyph: "earth",
     reverence: "Eka Isong — Mother Earth",
   },
 ] as const;

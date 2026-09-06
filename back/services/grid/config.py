@@ -1,6 +1,6 @@
 """
 MoStar Grid — Configuration
-The Flame Architect · MoStar Industries
+The Flame Architect · MoStar Intelligent Systems
 """
 import os
 from pathlib import Path
@@ -55,7 +55,9 @@ def ensure_cluster_dirs() -> None:
 # === Neo4j ===
 NEO4J_URI = _required_env("NEO4J_URI")
 NEO4J_USER = _required_env("NEO4J_USER")
-NEO4J_PASSWORD = _required_env("NEO4J_PASSWORD")
+# NEO4J_PASSWORD is stored outside the project and released by attestation.
+# Use grid.config.get_neo4j_password() or back/services/grid/credentials.py.
+from .credentials import get_neo4j_password
 NEO4J_DATABASE = _required_env("NEO4J_DATABASE")
 NEO4J_EXPECTED_HOST = os.getenv("NEO4J_EXPECTED_HOST", "")
 NEO4J_EXPECTED_PORT = int(os.getenv("NEO4J_EXPECTED_PORT", "47687"))

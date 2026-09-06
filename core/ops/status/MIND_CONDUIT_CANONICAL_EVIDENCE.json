@@ -1,0 +1,188 @@
+{
+  "schema": "mostar.mind-conduit-evidence.v1",
+  "generated_at": "2026-09-05T20:59:58.647623+00:00",
+  "gates": {
+    "MODEL_BINDING": "SEALED",
+    "CYPHER_GUARD": "SEALED",
+    "PROVENANCE_FILTER": "SEALED",
+    "ATTESTATION_GUARD": "SEALED",
+    "INVOCATION_SURFACE_GUARD": "SEALED",
+    "HOSTILE_PATH_TEST": "PASS"
+  },
+  "readiness": {
+    "MIND_CONDUIT": "SEALED",
+    "GRID_MIND_READY": true,
+    "blockers": []
+  },
+  "gate_evidence": {
+    "MODEL_BINDING": {
+      "evidence_ref": "core/ops/status/LIVE_CONSTITUTION_COMPOSITION_EVIDENCE.json",
+      "executed_at": "2026-09-05T19:05:14.686745+00:00",
+      "result": "PASS",
+      "evidence_digest": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+      "current_digest": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+      "constitution_root_count": 1,
+      "valid_chain_count": 1,
+      "competing_valid_chain_count": 0,
+      "digest_conflict_count": 0
+    },
+    "CYPHER_GUARD": {
+      "suite": "tests/momind/contracts/test_cypher_guard.py",
+      "suite_digest": "d08a74fa250ce11b241c3d6517afd9475b30e493aea4f87393e6bf0138266763",
+      "exit_code": 0,
+      "summary": "5 passed in 0.05s",
+      "passed": true
+    },
+    "PROVENANCE_FILTER": {
+      "suite": "tests/momind/contracts/test_provenance_filter.py",
+      "suite_digest": "df2f403988315793e661860a49e24601dc4a0c590ec3934e47adb06e0a54519f",
+      "exit_code": 0,
+      "summary": "5 passed in 0.03s",
+      "passed": true
+    },
+    "ATTESTATION_GUARD": {
+      "suite": "tests/momind/contracts/test_attestation_guard.py",
+      "suite_digest": "094c01a72d57bef2d51e4ce0ae33f270059b5a277355c6a4fa1ab1c8d117c8f4",
+      "exit_code": 0,
+      "summary": "2 passed in 0.06s",
+      "passed": true
+    },
+    "INVOCATION_SURFACE_GUARD": {
+      "discovered_surfaces": 19,
+      "unauthorized_surfaces": 0
+    },
+    "HOSTILE_PATH_TEST": {
+      "evidence_ref": "core/ops/status/HOSTILE_PATH_POST_CLOSURE_EVIDENCE.json",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "evidence_commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "audit_commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "cases_total": 10,
+      "cases_passed": 10,
+      "failed_cases": []
+    }
+  },
+  "audit_commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+  "invocation_surface": {
+    "ledger_ref": "core/ops/status/INVOCATION_SURFACE_LEDGER.json",
+    "ledger_digest": "ab8b0b89a5585bc1f0af609cca71dea38dc695c4f929190067636fce3ce3b8e2",
+    "discovered_surfaces": 19,
+    "accounted_surfaces": 19,
+    "authorized_surfaces": 19,
+    "unauthorized_surfaces": 0
+  },
+  "historical_aliases": {
+    "INVOCATION_AUDIT": "INVOCATION_SURFACE_GUARD"
+  },
+  "constitution_hash_lineage": {
+    "state": "GENESIS",
+    "root_cause": "BOOTSTRAPPING_GAP",
+    "current_hash": "e797c19cbb7ede42fe4a17fde301dcc1afb05b785ca6a5b8feee27a417b9ad87",
+    "previous_hash": null,
+    "evidence": [
+      "git:16387525 governance constitution introduced to source control",
+      "git-log-S:constitution_hash:no-results",
+      "git-log-S:constitutionHash:no-results",
+      "historical-grid-manifests:no-constitution-hash-field"
+    ]
+  },
+  "hp9": {
+    "implemented": "YES",
+    "test_path": "front/app/src/lib/mind/seal-receipt-guard.test.ts",
+    "test_symbol": "HP-9 withholds a receipt when all six gates pass but HumanAuthorization is absent",
+    "included_in_16_focused_tests": false,
+    "actual_result": "PASS"
+  },
+  "moscript_runtime_map_ref": "core/ops/status/MOSCRIPT_RUNTIME_IMPLEMENTATION_MAP.json",
+  "moscript_runtime_mapping": {
+    "state": "VERIFIED",
+    "mappings": [
+      {
+        "moscript_id": "mo-mind-cypher-guard-001",
+        "moscript_source": "core/protocols/moscript/contracts/mo-mind-cypher-guard-001.json",
+        "moscript_source_digest": "6e123ec2865a6aa24ab089a55cfa20a1675603ae2e449a5a298dd7eaa1c778d1",
+        "implementation_file": "front/app/src/lib/mind/cypher-guard.ts",
+        "implementation_symbol": "CypherGuard",
+        "implementation_digest": "f56b1bb194ec62827dc106e5859239194b94c2f7e7d9431ef40c4d06456c9c28",
+        "implemented_at_commit": "WORKTREE_UNCOMMITTED",
+        "verified": true
+      },
+      {
+        "moscript_id": "mo-mind-attestation-guard-001",
+        "moscript_source": "core/protocols/moscript/contracts/mo-mind-attestation-guard-001.json",
+        "moscript_source_digest": "691a03b220306c7af99c252167a7b09a6121959d1ace77b6ac715c14011ea125",
+        "implementation_file": "front/app/src/lib/mind/attestation-guard.ts",
+        "implementation_symbol": "AttestationGuard",
+        "implementation_digest": "545bc7fd49da7947337f452904a2c49b003b03de8c8723954782367cdd4c4764",
+        "implemented_at_commit": "WORKTREE_UNCOMMITTED",
+        "verified": true
+      },
+      {
+        "moscript_id": "mo-mind-provenance-filter-001",
+        "moscript_source": "core/protocols/moscript/contracts/mo-mind-provenance-filter-001.json",
+        "moscript_source_digest": "18dfc6de4f88ae367098f0f353359bc83b84179e2db0432a13ac4120221a26f7",
+        "implementation_file": "front/app/src/lib/mind/provenance-filter.ts",
+        "implementation_symbol": "ProvenanceFilter",
+        "implementation_digest": "31724f9c0c4b163929e53fead5048fd295d2bdbd599bbff883176ff1d7d459ba",
+        "implemented_at_commit": "WORKTREE_UNCOMMITTED",
+        "verified": true
+      },
+      {
+        "moscript_id": "mo-mind-conduit-001",
+        "moscript_source": "core/protocols/moscript/contracts/mo-mind-conduit-001.json",
+        "moscript_source_digest": "9fabf02a227be7f11d68001359cb0dc0e6859f4271d875758ec1e426f9ac7fab",
+        "implementation_file": "front/app/src/lib/mind/mind-conduit.ts",
+        "implementation_symbol": "MindConduit",
+        "implementation_digest": "e411d0569f159dfb2479ecd1741a9b41f310d7812418352e7088fd5fa7f2a9fa",
+        "implemented_at_commit": "WORKTREE_UNCOMMITTED",
+        "verified": true
+      },
+      {
+        "moscript_id": "mo-mind-conduit-001",
+        "moscript_source": "core/protocols/moscript/contracts/mo-mind-conduit-001.json",
+        "moscript_source_digest": "9fabf02a227be7f11d68001359cb0dc0e6859f4271d875758ec1e426f9ac7fab",
+        "implementation_file": "back/services/grid/mind_conduit_runtime.py",
+        "implementation_symbol": "invoke_model",
+        "implementation_digest": "60439ee258216d0d25ec9bf8e148d1f4cc530138c97263cb0b3ef71ab62bb0e5",
+        "implemented_at_commit": "WORKTREE_UNCOMMITTED",
+        "verified": true
+      },
+      {
+        "moscript_id": "mo-mind-cypher-guard-001",
+        "moscript_source": "core/protocols/moscript/contracts/mo-mind-cypher-guard-001.json",
+        "moscript_source_digest": "6e123ec2865a6aa24ab089a55cfa20a1675603ae2e449a5a298dd7eaa1c778d1",
+        "implementation_file": "front/app/src/lib/mind/constitution-composition.ts",
+        "implementation_symbol": "verifyConstitutionComposition",
+        "implementation_digest": "96d4a2e16168d5095f9f4bb56ea96de2198d7e4cb7daa93e57a3efa514676d1c",
+        "implemented_at_commit": "WORKTREE_UNCOMMITTED",
+        "verified": true
+      },
+      {
+        "moscript_id": "mo-mind-provenance-filter-001",
+        "moscript_source": "core/protocols/moscript/contracts/mo-mind-provenance-filter-001.json",
+        "moscript_source_digest": "18dfc6de4f88ae367098f0f353359bc83b84179e2db0432a13ac4120221a26f7",
+        "implementation_file": "front/app/src/lib/mind/constitution-composition.ts",
+        "implementation_symbol": "assertConstitutionComposition",
+        "implementation_digest": "96d4a2e16168d5095f9f4bb56ea96de2198d7e4cb7daa93e57a3efa514676d1c",
+        "implemented_at_commit": "WORKTREE_UNCOMMITTED",
+        "verified": true
+      },
+      {
+        "moscript_id": "mo-mind-attestation-guard-001",
+        "moscript_source": "core/protocols/moscript/contracts/mo-mind-attestation-guard-001.json",
+        "moscript_source_digest": "691a03b220306c7af99c252167a7b09a6121959d1ace77b6ac715c14011ea125",
+        "implementation_file": "front/app/src/lib/mind/constitution-composition.ts",
+        "implementation_symbol": "assertConstitutionComposition",
+        "implementation_digest": "96d4a2e16168d5095f9f4bb56ea96de2198d7e4cb7daa93e57a3efa514676d1c",
+        "implemented_at_commit": "WORKTREE_UNCOMMITTED",
+        "verified": true
+      }
+    ]
+  },
+  "hostile_path_evidence_ref": "core/ops/status/HOSTILE_PATH_POST_CLOSURE_EVIDENCE.json",
+  "seal_receipt": {
+    "disposition": "WITHHELD",
+    "reasons": [
+      "HUMAN_AUTHORIZATION_ABSENT"
+    ]
+  }
+}

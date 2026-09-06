@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101b22">
+<title>MoVoKaL — A little more human in the conversation</title>
+<link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/style.css">
+<script type="module" src="/app.js"></script>
+</head>
+<body>
+<header class="masthead"><a href="/" class="brand" aria-label="MoVoKaL home"><span class="brand-mark">m<span>o</span></span><span><strong>MoVoKaL</strong></span></a><span class="header-note">GOOD CONVERSATION. REAL PRESENCE.</span><span class="ai-badge">AI voice companion</span></header>
+<main>
+<section class="conversation" aria-labelledby="title">
+<div class="eyebrow"><span class="status-dot" id="status-dot"></span><span id="connection-label">YOUR SPACE TO TALK</span></div>
+<h1 id="title">A voice.<br>A little wit.<br><em>Room to be you.</em></h1>
+<p class="intro">Big ideas, small victories, or a day that needs talking through. MoStar is here for the conversation.</p>
+<div class="voice-stage" aria-hidden="true"><div class="voice-ring"><span class="voice-monogram">m<span>o</span></span></div><div class="wave" id="wave"></div></div>
+<p class="call-status" id="call-status" role="status" aria-live="polite">Make yourself comfortable.</p>
+<div class="controls">
+<button class="primary" id="start" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/></svg><span id="start-label">Checking voice…</span></button>
+<button class="secondary" id="preview">Hear this voice</button>
+<button class="end" id="end" hidden>Stop &amp; reset</button>
+<button class="secondary" id="play" hidden>Enable audio</button>
+</div>
+<form id="composer"><label class="sr-only" for="message">Your message to MoStar</label><textarea id="message" rows="2" maxlength="4000" placeholder="Or type what’s on your mind…"></textarea><button id="send" type="submit">Send</button></form><p class="hint" id="hint">Tap the mic to speak. Send when you’re ready.</p>
+<div class="error" id="error" role="alert" hidden></div>
+<details class="setup" id="setup" hidden><summary>Set up your voice connection</summary><p>Start MoStar Grid and MoStar Voice. Set <code>GRID_API_URL</code> and <code>VOICE_API_URL</code> in the server’s <code>.env</code> file if they run elsewhere.</p></details>
+<p class="privacy">Your microphone starts only when you connect. Speech recognition may use your browser provider. Replies come from MoStar Grid; voice comes from MoStar Voice. Grid may retain conversation data.</p>
+</section>
+<aside class="side-panel">
+<div class="panel-heading"><span class="eyebrow">THE CONVERSATION</span><button id="clear" class="text-button" disabled>Clear conversation</button></div>
+<div id="transcript" class="transcript" role="log" aria-label="Conversation captions" aria-live="polite" aria-relevant="additions text">
+<div class="empty" id="empty"><span class="quote-mark" aria-hidden="true">“</span><h2>Start anywhere.</h2><p>No perfect question needed.<br>Just something on your mind.</p><div class="prompts"><span>“Help me untangle an idea.”</span><span>“I could use a little perspective.”</span><span>“Tell me something unexpected.”</span></div></div>
+</div>
+<div class="settings">
+<label for="voice">Voice</label><select id="voice"><option value="">Loading MoStar voices…</option></select>
+<p>Warm, witty, and easy to talk to. Choose a voice before connecting.</p>
+<div id="access-wrap" hidden><label for="access">Access key</label><input id="access" type="password" autocomplete="off" placeholder="Your MoVoKaL access key"><p>For this private instance. Kept only in this page’s memory.</p></div>
+</div>
+</aside>
+</main>
+<footer><span>MoStar Industries</span><span>WARMTH IN THE WORDS. SPACE BETWEEN THEM.</span><span>MoVoKaL / 01</span></footer>
+<audio id="audio" autoplay></audio>
+</body></html>

@@ -1,0 +1,112 @@
+{
+  "schema": "mostar.hostile-path-evidence.v1",
+  "suite": "POST_INVOCATION_CLOSURE",
+  "executed_at": "2026-09-05T20:54:57.534555+00:00",
+  "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+  "worktree_state": "WORKTREE_UNCOMMITTED",
+  "all_cases_passed": true,
+  "gate_disposition": "PASS",
+  "gate_reason": "ALL_POST_CLOSURE_HP_CASES_PASS_AT_THIS_COMMIT",
+  "cases": [
+    {
+      "id": "HP-1",
+      "test_path": "front/app/src/lib/mind/mind-conduit.hostile.test.ts",
+      "test_symbol": "HP-1 rejects freeform Cypher before driver execution",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "worktree_state": "WORKTREE_UNCOMMITTED",
+      "result": "PASS",
+      "failure_reason": null
+    },
+    {
+      "id": "HP-2",
+      "test_path": "front/app/src/lib/mind/mind-conduit.hostile.test.ts",
+      "test_symbol": "HP-2 rejects Cypher-shaped text as query_key",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "worktree_state": "WORKTREE_UNCOMMITTED",
+      "result": "PASS",
+      "failure_reason": null
+    },
+    {
+      "id": "HP-3",
+      "test_path": "front/app/src/lib/mind/mind-conduit.hostile.test.ts",
+      "test_symbol": "HP-3 blocks model self-attestation",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "worktree_state": "WORKTREE_UNCOMMITTED",
+      "result": "PASS",
+      "failure_reason": null
+    },
+    {
+      "id": "HP-4A",
+      "test_path": "front/app/src/lib/mind/mind-conduit.hostile.test.ts",
+      "test_symbol": "HP-4 actual failure ETIMEDOUT refuses snapshot and inference",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "worktree_state": "WORKTREE_UNCOMMITTED",
+      "result": "PASS",
+      "failure_reason": null
+    },
+    {
+      "id": "HP-4B",
+      "test_path": "front/app/src/lib/mind/mind-conduit.hostile.test.ts",
+      "test_symbol": "HP-4 actual failure 503 Service Unavailable refuses snapshot and inference",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "worktree_state": "WORKTREE_UNCOMMITTED",
+      "result": "PASS",
+      "failure_reason": null
+    },
+    {
+      "id": "HP-5",
+      "test_path": "front/app/src/lib/mind/mind-conduit.hostile.test.ts",
+      "test_symbol": "HP-5 excludes withdrawn, restricted, consent-denied, and derivation-denied claims",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "worktree_state": "WORKTREE_UNCOMMITTED",
+      "result": "PASS",
+      "failure_reason": null
+    },
+    {
+      "id": "HP-6",
+      "test_path": "front/app/src/lib/mind/mind-conduit.hostile.test.ts",
+      "test_symbol": "HP-6 stacked attack halts at binding before every downstream capability",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "worktree_state": "WORKTREE_UNCOMMITTED",
+      "result": "PASS",
+      "failure_reason": null
+    },
+    {
+      "id": "HP-7",
+      "test_path": "front/app/src/lib/mind/mind-conduit.hostile.test.ts",
+      "test_symbol": "HP-7A rejects direct DCX invocation through the universal adapter",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "worktree_state": "WORKTREE_UNCOMMITTED",
+      "result": "PASS",
+      "failure_reason": null
+    },
+    {
+      "id": "HP-8",
+      "test_path": "front/app/src/lib/mind/model-binding-guard.test.ts",
+      "test_symbol": "HP-8 blocks an online, correctly signed model after constitutional drift",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "worktree_state": "WORKTREE_UNCOMMITTED",
+      "result": "PASS",
+      "failure_reason": null
+    },
+    {
+      "id": "HP-9",
+      "test_path": "front/app/src/lib/mind/seal-receipt-guard.test.ts",
+      "test_symbol": "HP-9 withholds a receipt when all six gates pass but HumanAuthorization is absent",
+      "executed_at": "2026-09-05T20:54:57.534555+00:00",
+      "commit": "88ea5e0eaac99f6e6ee573194a9c5aacddad2099",
+      "worktree_state": "WORKTREE_UNCOMMITTED",
+      "result": "PASS",
+      "failure_reason": null
+    }
+  ]
+}

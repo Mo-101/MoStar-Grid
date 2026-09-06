@@ -14,7 +14,7 @@ import os
 import time
 import edge_tts
 import feedparser
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from contextlib import asynccontextmanager
 from urllib.parse import urlparse
@@ -57,6 +57,13 @@ from grid.config import (
 )
 from grid.config import OLLAMA_BASE_URL, OLLAMA_KEEP_ALIVE, OLLAMA_REQUEST_TIMEOUT
 from grid.orchestrator import CommitFailedError, CommitForbiddenError, GridOrchestrator
+from grid.mind_conduit_runtime import (
+    OLLAMA_CHAT_PATH,
+    OLLAMA_GENERATE_PATH,
+    governed_http_post,
+    invoke_dcx,
+    invoke_model,
+)
 from grid.semantic_api import router as semantic_router
 from grid.mostar_artifacts import router as mostar_artifacts_router
 from grid.mostar_gap_register import router as mostar_gap_register_router
@@ -69,6 +76,7 @@ from grid.watchers import (
     mood_engine,
     executor_watcher,
     mindgraph_reconnect_watcher,
+    dcx_reconnect_watcher,
     control_plane_reconnect_watcher,
 )
 from grid.memory import (
@@ -122,6 +130,7 @@ async def lifespan(app: FastAPI):
     asyncio.create_task(autonomous_announcer(app.state.memory_layer))
     asyncio.create_task(executor_watcher(orchestrator))
     asyncio.create_task(mindgraph_reconnect_watcher(orchestrator))
+    asyncio.create_task(dcx_reconnect_watcher(orchestrator))
     asyncio.create_task(control_plane_reconnect_watcher(orchestrator))
 
     yield
@@ -474,15 +483,20 @@ async def _probe_dcx() -> dict:
 
             for model in present:
                 try:
-                    resp = await client.post(
-                        "/api/generate",
-                        json={
+                    payload = {
                             "model": model,
                             "prompt": "Reply with one word: alive",
                             "stream": False,
                             "keep_alive": OLLAMA_KEEP_ALIVE,
                             "options": {"temperature": 0, "num_predict": 8},
-                        },
+                        }
+                    resp = await invoke_model(
+                        caller="api.deep_dcx_health",
+                        model_id=model,
+                        snapshot_identity="health-probe:no-memory",
+                        adapter=lambda context: governed_http_post(
+                            context, client, OLLAMA_GENERATE_PATH, payload
+                        ),
                     )
                     resp.raise_for_status()
                     text = str(resp.json().get("response", "")).strip()
@@ -609,7 +623,7 @@ class DisputeRegisterRequest(BaseModel):
 
 # ── LLM Helper ─────────────────────────────────────────────────────
 
-async def run_mostar_llm(prompt: dict) -> dict:
+async def invoke_mostar_voice_model(prompt: dict) -> dict:
     model = "phi4:latest"
     if orchestrator.dcx._available_models:
         model = next(iter(orchestrator.dcx._available_models))
@@ -627,12 +641,20 @@ async def run_mostar_llm(prompt: dict) -> dict:
     ]
     
     try:
-        resp = await orchestrator.dcx._client.post("/api/chat", json={
+        payload = {
             "model": model,
             "messages": messages,
             "format": "json",
             "stream": False,
-        })
+        }
+        resp = await invoke_model(
+            caller="api.run_mostar_llm",
+            model_id=model,
+            snapshot_identity="voice-agent:governed-input",
+            adapter=lambda context: governed_http_post(
+                context, orchestrator.dcx._client, OLLAMA_CHAT_PATH, payload
+            ),
+        )
         resp.raise_for_status()
         content = resp.json().get("message", {}).get("content", "{}")
         return json.loads(content)
@@ -755,6 +777,17 @@ async def mindgraph_status():
     return await orchestrator.mindgraph.get_graph_stats()
 
 
+@app.get("/api/senses/africa")
+async def africa_senses(force: bool = False):
+    """Normalized continental weather, health, and sovereignty projections."""
+    from grid.external_data import fetch_africa_senses
+
+    return JSONResponse(
+        content=_with_cluster(await fetch_africa_senses(force=force)),
+        headers={"Cache-Control": "no-store, max-age=0", "Pragma": "no-cache"},
+    )
+
+
 @app.get("/api/truthgate/report")
 async def generate_truthgate_report(request: Request):
     """
@@ -845,7 +878,7 @@ async def autonomous_announcer(memory_layer):
                 "system": 'You are Woo. Be concise. State the new event clearly and its implication.',
                 "user": f"New Event: {event.text}\nSeverity: {event.severity}\nGenerate a short broadcast to Flame."
             }
-            res = await run_mostar_llm(prompt)
+            res = await invoke_mostar_voice_model(prompt)
             speech = res.get("speech", f"Flame, critical event detected: {event.text}")
             
             audio_path = await synthesize_woo_voice(speech, mood=event.mood)
@@ -865,9 +898,47 @@ async def autonomous_announcer(memory_layer):
 
 
 @app.get("/api/memory/recent")
-async def memory_recent(limit: int = 10):
+async def memory_recent(limit: int = 10, window_hours: int = 24):
     try:
-        return await get_recent_memory(orchestrator.mindgraph._driver, limit)
+        memory = await get_recent_memory(orchestrator.mindgraph._driver, max(limit, 25))
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=max(1, min(window_hours, 168)))
+
+        def is_current(item: dict) -> bool:
+            try:
+                value = datetime.fromisoformat(str(item.get("created_at", "")).replace("Z", "+00:00"))
+                if value.tzinfo is None:
+                    value = value.replace(tzinfo=timezone.utc)
+                return value.astimezone(timezone.utc) >= cutoff
+            except (TypeError, ValueError):
+                return False
+
+        bus_events = [event.to_dict() for event in event_bus.recent(limit)]
+        graph_events = memory.get("events", [])
+        combined: dict[str, dict] = {}
+        for item in [*bus_events, *graph_events]:
+            key = str(item.get("source_id") or item.get("id") or f"{item.get('type')}:{item.get('content') or item.get('text')}:{item.get('created_at')}")
+            normalized = dict(item)
+            normalized["content"] = normalized.get("content") or normalized.get("text") or ""
+            normalized["cluster"] = normalized.get("cluster") or MOSTAR_CLUSTER_ID
+            combined[key] = normalized
+
+        current_events = sorted(
+            (item for item in combined.values() if is_current(item)),
+            key=lambda item: str(item.get("created_at", "")),
+            reverse=True,
+        )[:limit]
+        current_utterances = [item for item in memory.get("utterances", []) if is_current(item)][:limit]
+        archived = len(graph_events) + len(memory.get("utterances", [])) - len(
+            [item for item in [*graph_events, *memory.get("utterances", [])] if is_current(item)]
+        )
+        return {
+            "events": current_events,
+            "utterances": current_utterances,
+            "retrieved_at": datetime.now(timezone.utc).isoformat(),
+            "feed_state": "LIVE" if current_events or current_utterances else "NO_CURRENT_SIGNALS",
+            "freshness_window_seconds": int((datetime.now(timezone.utc) - cutoff).total_seconds()),
+            "archived_records_excluded": max(0, archived),
+        }
     except Exception as e:
         logger.error(f"Failed to get recent memory: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -963,13 +1034,20 @@ async def get_autonomous_briefing(write_log: bool = False):
             f"WHO health signals: {who_summary or 'unavailable'}."
         )
         try:
-            dcx_res = await asyncio.wait_for(
-                orchestrator.dcx.think(
-                    query=prompt_user,
-                    layer=DCXLayer.BODY,
-                    graph_context=None,
+            dcx_res = await invoke_model(
+                caller="api.grid_snapshot",
+                model_id=orchestrator.dcx._models[DCXLayer.BODY],
+                snapshot_identity="grid-snapshot:source-backed",
+                adapter=lambda context: asyncio.wait_for(
+                    invoke_dcx(
+                        context,
+                        orchestrator.dcx,
+                        query=prompt_user,
+                        layer=DCXLayer.BODY,
+                        graph_context=None,
+                    ),
+                    timeout=45,
                 ),
-                timeout=45,
             )
             briefing_text = dcx_res.content.strip()
             if not briefing_text or briefing_text.startswith("[DCX "):
@@ -1095,7 +1173,7 @@ Return JSON only:
         "tool_result": tool_result,
     }
 
-    result = await run_mostar_llm(prompt)
+    result = await invoke_mostar_voice_model(prompt)
 
     return {
         "ok": True,
@@ -1111,11 +1189,25 @@ async def think(req: ThinkRequest):
     Execute a full Talk → Learn → Remember cycle.
     The core intelligence endpoint.
     """
+    mind = orchestrator._mind_conduit_status()
+    if not mind["GRID_MIND_READY"]:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "error": "GRID_MIND_NOT_READY",
+                "mind_conduit": mind["MIND_CONDUIT"],
+                "blockers": mind["blockers"],
+            },
+        )
     force_layer = DCXLayer(req.layer) if req.layer else None
     try:
         result = await orchestrator.think(req.query, force_layer=force_layer)
     except CommitForbiddenError as e:
         raise HTTPException(status_code=403, detail=str(e))
+    except RuntimeError as e:
+        if str(e) == "MIND_CONDUIT_NOT_SEALED":
+            raise HTTPException(status_code=503, detail=str(e))
+        raise
     return {
         "layer": result.dcx_layer,
         "model": result.dcx_model,
@@ -1844,32 +1936,6 @@ async def watchtower_stats():
         "pending": counts.get("PENDING_REVIEW", 0) + counts.get("SCANNED", 0),
         "flagged": flagged_record["count"] if flagged_record else 0,
     }
-
-
-@watchtower_router.delete("/agents/{agent_id}")
-async def watchtower_delete_agent(agent_id: str):
-    driver = _require_mindgraph()
-    async with driver.session(database=NEO4J_DATABASE) as session:
-        result = await session.run(
-            """
-            MATCH (a:Agent {id: $id})
-            WITH a, a.name AS name
-            DETACH DELETE a
-            RETURN name
-            """,
-            id=agent_id,
-        )
-        record = await result.single()
-
-    if not record:
-        raise HTTPException(status_code=404, detail=f"Agent {agent_id} not found")
-
-    await _emit_watchtower_event(
-        "AGENT_DELETED",
-        agent_id,
-        f"Agent {agent_id} permanently removed",
-    )
-    return {"deleted": agent_id}
 
 
 app.include_router(watchtower_router)

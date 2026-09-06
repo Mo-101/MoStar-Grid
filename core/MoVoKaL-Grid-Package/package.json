@@ -1,0 +1,16 @@
+{
+  "name": "mostar-vokal",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Warm, witty voice conversations powered by MoStar Grid",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.mjs",
+    "dev": "node --watch --env-file-if-exists=.env server.mjs",
+    "test": "node --test",
+    "check": "node --check server.mjs && node --check lib/grid.mjs && node --check public/app.js"
+  }
+}

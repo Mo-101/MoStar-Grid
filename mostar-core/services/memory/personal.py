@@ -15,7 +15,7 @@ class PersonalMemory:
             tags=["Creator", "User"],
             metadata={
                 "role": "Lead Architect",
-                "organization": "MoStar Industries"
+                "organization": "MoStar Intelligent Systems"
             }
         )
         fgrid_graph.add_entity(mo)

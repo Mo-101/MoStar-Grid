@@ -172,6 +172,45 @@ async def mindgraph_reconnect_watcher(orchestrator):
         await asyncio.sleep(60)
 
 
+async def dcx_reconnect_watcher(orchestrator):
+    """Re-probe the DCX trinity on an interval, not once at boot.
+
+    orchestrator.boot() calls dcx.connect() exactly once. Everything the
+    Grid reports about DCX afterwards — state, present_models, checked_at —
+    is served from that single snapshot, so the health card was a
+    photograph wearing the clothes of a live check: a box whose Ollama had
+    been reachable for hours still read UNREACHABLE / 0 of 3 pulled, with a
+    checked_at frozen at process start.
+
+    Unlike the MindGraph watcher this re-probes even while connected. A
+    retry-only-when-down loop can restore a dropped link but can never
+    notice one dropping, and it would leave checked_at stale for the whole
+    lifetime of a healthy process.
+    """
+    logger.info("DCXReconnectWatcher started.")
+    while True:
+        was_connected = orchestrator.dcx.connected
+        try:
+            await orchestrator.dcx.connect()
+            if orchestrator.dcx.connected:
+                orchestrator.runtime_health.mark_up("ollama")
+                if not was_connected:
+                    logger.info(
+                        "DCXReconnectWatcher: Ollama reachable again (%s of %s present).",
+                        len(orchestrator.dcx.present_models),
+                        len(orchestrator.dcx.expected_models),
+                    )
+            else:
+                orchestrator.runtime_health.mark_down("ollama", "OLLAMA_UNAVAILABLE")
+                if was_connected:
+                    logger.warning("DCXReconnectWatcher: Ollama went unreachable.")
+        except Exception as e:
+            orchestrator.runtime_health.mark_down("ollama", "OLLAMA_UNAVAILABLE")
+            logger.warning(f"DCXReconnectWatcher: probe failed ({e})")
+
+        await asyncio.sleep(60)
+
+
 async def control_plane_reconnect_watcher(orchestrator):
     """Retry sovereign local Postgres governance independently."""
     logger.info("ControlPlaneReconnectWatcher started.")

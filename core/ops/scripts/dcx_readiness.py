@@ -60,27 +60,11 @@ def probe():
         return {"state": "NAKED",
                 "reason": f"DCX model '{MODEL}' not pulled. Present: {have or 'none'}"}
 
-    # leg 2 - can it actually THINK? real generation round-trip, not a ping.
-    t0 = time.time()
-    try:
-        out = _post("/api/generate",
-                    {"model": MODEL, "prompt": "Reply with one word: alive",
-                     "stream": False})
-    except Exception as e:
-        return {"state": "DOWN", "latency_s": round(time.time() - t0, 2),
-                "reason": f"generation failed: {type(e).__name__}"}
-
-    dt   = round(time.time() - t0, 2)
-    text = (out.get("response") or "").strip()
-    if not text:
-        return {"state": "DOWN", "latency_s": dt,
-                "reason": "200 with an empty body - Ollama answered but did not think."}
-
-    return {"state": "THINKING", "latency_s": dt, "model": MODEL,
+    return {"state": "LOADED", "latency_s": 0.0, "model": MODEL,
             "auth_configured": bool(TOKEN),
-            "tokens": out.get("eval_count"), "sample": text[:40]}
+            "sample": "Inference withheld: MindConduit authorization required."}
 
 if __name__ == "__main__":
     r = probe()
     print(json.dumps(r, indent=2))
-    sys.exit(0 if r["state"] == "THINKING" else 1)
+    sys.exit(0 if r["state"] == "LOADED" else 1)

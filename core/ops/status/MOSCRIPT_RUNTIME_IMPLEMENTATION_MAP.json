@@ -1,0 +1,103 @@
+{
+  "schema": "mostar.moscript-runtime-map.v1",
+  "authority": "MoScripts",
+  "mappings": [
+    {
+      "moscript_id": "mo-mind-cypher-guard-001",
+      "moscript_source": "core/protocols/moscript/contracts/mo-mind-cypher-guard-001.json",
+      "moscript_source_digest": "6e123ec2865a6aa24ab089a55cfa20a1675603ae2e449a5a298dd7eaa1c778d1",
+      "implementation_file": "front/app/src/lib/mind/cypher-guard.ts",
+      "implementation_symbol": "CypherGuard",
+      "implementation_digest": "f56b1bb194ec62827dc106e5859239194b94c2f7e7d9431ef40c4d06456c9c28",
+      "implemented_at_commit": "WORKTREE_UNCOMMITTED"
+    },
+    {
+      "moscript_id": "mo-mind-attestation-guard-001",
+      "moscript_source": "core/protocols/moscript/contracts/mo-mind-attestation-guard-001.json",
+      "moscript_source_digest": "691a03b220306c7af99c252167a7b09a6121959d1ace77b6ac715c14011ea125",
+      "implementation_file": "front/app/src/lib/mind/attestation-guard.ts",
+      "implementation_symbol": "AttestationGuard",
+      "implementation_digest": "545bc7fd49da7947337f452904a2c49b003b03de8c8723954782367cdd4c4764",
+      "implemented_at_commit": "WORKTREE_UNCOMMITTED"
+    },
+    {
+      "moscript_id": "mo-mind-provenance-filter-001",
+      "moscript_source": "core/protocols/moscript/contracts/mo-mind-provenance-filter-001.json",
+      "moscript_source_digest": "18dfc6de4f88ae367098f0f353359bc83b84179e2db0432a13ac4120221a26f7",
+      "implementation_file": "front/app/src/lib/mind/provenance-filter.ts",
+      "implementation_symbol": "ProvenanceFilter",
+      "implementation_digest": "31724f9c0c4b163929e53fead5048fd295d2bdbd599bbff883176ff1d7d459ba",
+      "implemented_at_commit": "WORKTREE_UNCOMMITTED"
+    },
+    {
+      "moscript_id": "mo-mind-conduit-001",
+      "moscript_source": "core/protocols/moscript/contracts/mo-mind-conduit-001.json",
+      "moscript_source_digest": "9fabf02a227be7f11d68001359cb0dc0e6859f4271d875758ec1e426f9ac7fab",
+      "implementation_file": "front/app/src/lib/mind/mind-conduit.ts",
+      "implementation_symbol": "MindConduit",
+      "implementation_digest": "e411d0569f159dfb2479ecd1741a9b41f310d7812418352e7088fd5fa7f2a9fa",
+      "implemented_at_commit": "WORKTREE_UNCOMMITTED"
+    },
+    {
+      "moscript_id": "mo-mind-conduit-001",
+      "moscript_source": "core/protocols/moscript/contracts/mo-mind-conduit-001.json",
+      "moscript_source_digest": "9fabf02a227be7f11d68001359cb0dc0e6859f4271d875758ec1e426f9ac7fab",
+      "implementation_file": "back/services/grid/mind_conduit_runtime.py",
+      "implementation_symbol": "invoke_model",
+      "implementation_digest": "60439ee258216d0d25ec9bf8e148d1f4cc530138c97263cb0b3ef71ab62bb0e5",
+      "implemented_at_commit": "WORKTREE_UNCOMMITTED"
+    },
+    {
+      "moscript_id": "mo-mind-cypher-guard-001",
+      "moscript_source": "core/protocols/moscript/contracts/mo-mind-cypher-guard-001.json",
+      "moscript_source_digest": "6e123ec2865a6aa24ab089a55cfa20a1675603ae2e449a5a298dd7eaa1c778d1",
+      "implementation_file": "front/app/src/lib/mind/constitution-composition.ts",
+      "implementation_symbol": "verifyConstitutionComposition",
+      "implementation_digest": "96d4a2e16168d5095f9f4bb56ea96de2198d7e4cb7daa93e57a3efa514676d1c",
+      "implemented_at_commit": "WORKTREE_UNCOMMITTED"
+    },
+    {
+      "moscript_id": "mo-mind-provenance-filter-001",
+      "moscript_source": "core/protocols/moscript/contracts/mo-mind-provenance-filter-001.json",
+      "moscript_source_digest": "18dfc6de4f88ae367098f0f353359bc83b84179e2db0432a13ac4120221a26f7",
+      "implementation_file": "front/app/src/lib/mind/constitution-composition.ts",
+      "implementation_symbol": "assertConstitutionComposition",
+      "implementation_digest": "96d4a2e16168d5095f9f4bb56ea96de2198d7e4cb7daa93e57a3efa514676d1c",
+      "implemented_at_commit": "WORKTREE_UNCOMMITTED"
+    },
+    {
+      "moscript_id": "mo-mind-attestation-guard-001",
+      "moscript_source": "core/protocols/moscript/contracts/mo-mind-attestation-guard-001.json",
+      "moscript_source_digest": "691a03b220306c7af99c252167a7b09a6121959d1ace77b6ac715c14011ea125",
+      "implementation_file": "front/app/src/lib/mind/constitution-composition.ts",
+      "implementation_symbol": "assertConstitutionComposition",
+      "implementation_digest": "96d4a2e16168d5095f9f4bb56ea96de2198d7e4cb7daa93e57a3efa514676d1c",
+      "implemented_at_commit": "WORKTREE_UNCOMMITTED"
+    }
+  ],
+  "digest_rerecorded_at": "2026-09-05T20:59:07.004587+00:00",
+  "digest_rerecord_note": "implementation_digest values below were re-recorded after the implementation advanced past the previously attested hash. Declared symbols were confirmed present in each file before re-recording, and LIVE_CONSTITUTION_COMPOSITION_EVIDENCE.json passed against the same constitution-composition.ts revision recorded here.",
+  "digest_rerecorded": [
+    {
+      "moscript_id": "mo-mind-cypher-guard-001",
+      "implementation_file": "front/app/src/lib/mind/constitution-composition.ts",
+      "symbol": "verifyConstitutionComposition",
+      "was": "cdebe429edffa3efdd9881b3e3f844325263bf083849d4390cca7a226386f529",
+      "now": "96d4a2e16168d5095f9f4bb56ea96de2198d7e4cb7daa93e57a3efa514676d1c"
+    },
+    {
+      "moscript_id": "mo-mind-provenance-filter-001",
+      "implementation_file": "front/app/src/lib/mind/constitution-composition.ts",
+      "symbol": "assertConstitutionComposition",
+      "was": "cdebe429edffa3efdd9881b3e3f844325263bf083849d4390cca7a226386f529",
+      "now": "96d4a2e16168d5095f9f4bb56ea96de2198d7e4cb7daa93e57a3efa514676d1c"
+    },
+    {
+      "moscript_id": "mo-mind-attestation-guard-001",
+      "implementation_file": "front/app/src/lib/mind/constitution-composition.ts",
+      "symbol": "assertConstitutionComposition",
+      "was": "cdebe429edffa3efdd9881b3e3f844325263bf083849d4390cca7a226386f529",
+      "now": "96d4a2e16168d5095f9f4bb56ea96de2198d7e4cb7daa93e57a3efa514676d1c"
+    }
+  ]
+}

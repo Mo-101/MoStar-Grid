@@ -1,5 +1,61 @@
 import { describe, expect, it } from "vitest";
-import { deriveCeremonyProgress, deriveNodeCues } from "./bootConductor";
+import {
+  BootConductor,
+  deriveCeremonyProgress,
+  deriveNodeCues,
+  isDcxMindBound,
+} from "./bootConductor";
+
+describe("BootConductor narration contract", () => {
+  it("requests exactly one narration segment source for every orb, in orb order", async () => {
+    const requested: string[][] = [];
+    const nodes = [
+      { id: "first", label: "FIRST ORB", probe: async () => true },
+      { id: "second", label: "SECOND ORB", probe: async () => true },
+    ];
+    const conductor = new BootConductor(nodes, async (labels) => {
+      requested.push(labels);
+      return { audioUrl: null, audioMs: 2_000, segments: [] };
+    });
+
+    await conductor.arm();
+
+    expect(requested).toEqual([["FIRST ORB", "SECOND ORB"]]);
+  });
+
+  it("arms without starting: no probe runs until the operator begins", async () => {
+    // The Grid must wait to be woken deliberately. Arming only gathers
+    // narration and builds the clock — if this ever starts the ceremony, the
+    // START AWAKENING button becomes unreachable and boot runs on its own.
+    let probes = 0;
+    const nodes = [
+      {
+        id: "first",
+        label: "FIRST ORB",
+        probe: async () => {
+          probes += 1;
+          return true;
+        },
+      },
+    ];
+    const conductor = new BootConductor(nodes, async () => ({
+      audioUrl: null,
+      audioMs: 2_000,
+      segments: [],
+    }));
+
+    const frames: string[] = [];
+    conductor.subscribe((frame) => frames.push(frame.phase));
+
+    await conductor.arm();
+
+    expect(probes).toBe(0);
+    expect(frames.at(-1)).toBe("ARMED");
+    expect(frames).not.toContain("RUNNING");
+    // No teardown needed: an armed-but-unstarted conductor holds no frame loop
+    // and no playing audio, which is precisely what this test asserts.
+  });
+});
 
 describe("deriveNodeCues", () => {
   it("places nodes inside measured narration segments", () => {
@@ -44,5 +100,16 @@ describe("deriveCeremonyProgress", () => {
     expect(deriveCeremonyProgress(999, 4_000, segments, 2)).toBe(0.5);
     expect(deriveCeremonyProgress(1_000, 4_000, segments, 2)).toBe(1);
     expect(deriveCeremonyProgress(4_000, 4_000, segments, 2)).toBe(1);
+  });
+});
+
+describe("DCX cognitive binding", () => {
+  it("does not treat a loaded process as a sealed Grid mind", () => {
+    expect(isDcxMindBound({ state: "LOADED", sealed: false })).toBe(false);
+  });
+
+  it("requires process seal and binding seal together", () => {
+    expect(isDcxMindBound({ state: "SEALED", sealed: true })).toBe(false);
+    expect(isDcxMindBound({ state: "SEALED", sealed: true, binding: "SEALED" })).toBe(true);
   });
 });

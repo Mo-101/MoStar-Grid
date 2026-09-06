@@ -1,21 +1,37 @@
 /**
  * gridVoiceClient — talks to MoStar Voice Service (Piper, :41071).
  *
- * WHAT CHANGED
- *   1. `duration_ms` is gone. It measured how long Piper took to think and
- *      published it as if it were the length of the utterance. Replaced by
- *      `synthesis_ms` (cost) and `audio_ms` (what the ear hears). Legacy
- *      servers are read defensively — see readSpeak().
- *   2. `narrate()` no longer throws in preview. It returns a silent plan
- *      with audioUrl: null, so the boot conductor takes the silent path by
- *      design rather than by exception.
- *   3. Timeouts abort the request. The old withTimeout rejected the promise
- *      but left the fetch running — a 180-second orphan holding a socket.
- *   4. narrate() gets its own short budget. A boot screen cannot wait three
- *      minutes for a ceremony.
- *   5. The response shape is validated. An old server returning the /speak
- *      shape to /narrate used to crash on data.segments.map.
+ * ROLE
+ *   Voice projects what the Grid has already decided to say. It is not
+ *   state, not authority, not truth. A voice may disappear; the Grid
+ *   must continue. Silence is a valid, deliberate output — not an error.
+ *
+ * WHAT CHANGED (this pass)
+ *   1. Timeout now covers the full exchange, not just headers. The
+ *      previous fetchWithTimeout cleared its timer as soon as fetch()
+ *      resolved — which happens once headers arrive — so a response
+ *      that stalled mid-body could hang indefinitely past its stated
+ *      budget. fetchWithinBudget keeps the abort armed until the body
+ *      has actually been consumed.
+ *   2. Narration validation is now real validation, not a shape guess.
+ *      audio_ms / synthesis_ms must be finite and non-negative; every
+ *      segment needs string text, finite non-negative start/end with
+ *      start <= end <= audio_ms; segments must be monotonic and
+ *      non-overlapping. Anything else collapses to silent continuity
+ *      rather than being trusted because it happened to parse.
+ *   3. speak() failure handling is explicit. Invalid JSON and an
+ *      invalid response shape now throw clear, named errors instead of
+ *      an uncaught parse exception or a blind `as` cast on untrusted
+ *      fields. speak() still throws on failure by design: it's a
+ *      direct, single request a caller explicitly made and should know
+ *      failed. narrate() is the one required to degrade to silence,
+ *      because it drives continuity of a running ceremony — that
+ *      asymmetry is intentional, not an oversight.
+ *   4. `duration_ms` (legacy) is still accepted, but only ever lands in
+ *      synthesis_ms. It measured how long Piper took to think, not how
+ *      long the audio runs, and never gets promoted into audio_ms.
  */
+
 import { GRID_SERVICES, GRID_VOICE_NAME, LIVE_GRID_SERVICES } from "@/config/gridServices";
 import { silentSegmentPlan } from "@/lib/gridSnapshot";
 
@@ -71,16 +87,23 @@ const SPEAK_TIMEOUT_MS = 180_000; // long-form console synthesis
 const NARRATE_TIMEOUT_MS = 12_000; // boot ceremony — must not hang the screen
 const PROBE_TIMEOUT_MS = 3_000;
 
-/** Aborts the underlying request, not just the promise wrapping it. */
-async function fetchWithTimeout(
+/**
+ * Runs one request/response transaction inside a single timeout budget.
+ * The abort stays armed until `consume` has finished reading the body,
+ * so a stall after headers is still caught — not just a stall before
+ * them.
+ */
+async function fetchWithinBudget<T>(
   input: string,
-  init: RequestInit = {},
-  ms = SPEAK_TIMEOUT_MS,
-): Promise<Response> {
+  init: RequestInit,
+  ms: number,
+  consume: (response: Response) => Promise<T>,
+): Promise<T> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), ms);
   try {
-    return await fetch(input, { ...init, signal: controller.signal });
+    const response = await fetch(input, { ...init, signal: controller.signal });
+    return await consume(response);
   } catch (err) {
     if ((err as Error).name === "AbortError") {
       throw new Error(`Voice request aborted after ${ms}ms`);
@@ -91,8 +114,35 @@ async function fetchWithTimeout(
   }
 }
 
+function fetchJsonWithinBudget<T>(
+  input: string,
+  init: RequestInit = {},
+  ms = SPEAK_TIMEOUT_MS,
+): Promise<{ response: Response; data: T }> {
+  return fetchWithinBudget(input, init, ms, async (response) => ({
+    response,
+    data: (await response.json()) as T,
+  }));
+}
+
+function fetchTextWithinBudget(
+  input: string,
+  init: RequestInit = {},
+  ms = SPEAK_TIMEOUT_MS,
+): Promise<{ response: Response; text: string }> {
+  return fetchWithinBudget(input, init, ms, async (response) => ({
+    response,
+    text: await response.text(),
+  }));
+}
+
 function absolutise(url: string): string {
   return url.startsWith("/") ? `${GRID_SERVICES.voice}${url}` : url;
+}
+
+/** Finite, non-negative — the only shape a real duration can have. */
+function isFiniteNonNegative(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0;
 }
 
 function mockSpeak(req: SpeakRequest): SpeakResponse {
@@ -107,30 +157,36 @@ function mockSpeak(req: SpeakRequest): SpeakResponse {
 }
 
 /**
- * Reads either the corrected shape or the legacy one. A legacy `duration_ms`
- * is treated as synthesis cost — which is what it always actually was — and
- * audio_ms stays null rather than inheriting the lie.
+ * Reads either the corrected shape or the legacy one. A legacy
+ * `duration_ms` is treated as synthesis cost — which is what it always
+ * actually was — and audio_ms stays null rather than inheriting the
+ * lie. Every field is checked before use; nothing is cast on faith.
  */
 function readSpeak(data: Record<string, unknown>, fallbackPersona: string): SpeakResponse {
-  const audioMs = typeof data.audio_ms === "number" ? data.audio_ms : null;
-  const synthMs =
-    typeof data.synthesis_ms === "number"
-      ? data.synthesis_ms
-      : typeof data.duration_ms === "number"
-        ? data.duration_ms
-        : null;
+  const audioMs = isFiniteNonNegative(data.audio_ms) ? data.audio_ms : null;
+  const synthesisMs = isFiniteNonNegative(data.synthesis_ms)
+    ? data.synthesis_ms
+    : isFiniteNonNegative(data.duration_ms)
+      ? data.duration_ms
+      : null;
 
   return {
     audio_ms: audioMs,
-    synthesis_ms: synthMs,
-    persona: (data.persona as string) ?? fallbackPersona,
-    engine: (data.engine as string) ?? "piper",
-    request_id: (data.request_id as string) ?? crypto.randomUUID(),
-    audio_url: data.audio_url ? absolutise(data.audio_url as string) : undefined,
-    audio_base64: data.audio_base64 as string | undefined,
+    synthesis_ms: synthesisMs,
+    persona: typeof data.persona === "string" ? data.persona : fallbackPersona,
+    engine: typeof data.engine === "string" ? data.engine : "piper",
+    request_id: typeof data.request_id === "string" ? data.request_id : crypto.randomUUID(),
+    audio_url: typeof data.audio_url === "string" ? absolutise(data.audio_url) : undefined,
+    audio_base64: typeof data.audio_base64 === "string" ? data.audio_base64 : undefined,
   };
 }
 
+/**
+ * speak() throws on failure by design — see WHAT CHANGED §3. Every
+ * failure mode gets a clear, named error rather than an uncaught
+ * exception, but it is still a throw: the caller asked for a specific
+ * utterance and should know if it didn't happen.
+ */
 export async function speak(req: SpeakRequest): Promise<SpeakResponse> {
   if (!LIVE_GRID_SERVICES) return mockSpeak(req);
 
@@ -142,7 +198,7 @@ export async function speak(req: SpeakRequest): Promise<SpeakResponse> {
     format: req.format ?? "wav",
   };
 
-  const res = await fetchWithTimeout(
+  const { response, text } = await fetchTextWithinBudget(
     `${GRID_SERVICES.voice}/speak`,
     {
       method: "POST",
@@ -152,28 +208,60 @@ export async function speak(req: SpeakRequest): Promise<SpeakResponse> {
     SPEAK_TIMEOUT_MS,
   );
 
-  if (!res.ok) throw new Error(`Voice /speak ${res.status}: ${await res.text()}`);
-  return readSpeak(await res.json(), body.persona);
+  if (!response.ok) {
+    throw new Error(`Voice /speak ${response.status}: ${text}`);
+  }
+
+  let data: unknown;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error("Voice /speak returned invalid JSON");
+  }
+
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Voice /speak returned invalid response shape");
+  }
+
+  return readSpeak(data as Record<string, unknown>, body.persona);
 }
 
-function isNarrationShape(d: unknown): d is {
+/**
+ * Real validation, not a shape guess. Rejects NaN/Infinity/negative
+ * timing, missing segment text, out-of-order or overlapping segments,
+ * and anything that claims to end after the narration's own audio_ms.
+ * Unknown or malformed shape returns false — the caller falls back to
+ * silentNarration rather than trusting a partial match.
+ */
+function isNarrationShape(data: unknown): data is {
   audio_url: string;
   audio_ms: number;
   synthesis_ms?: number;
   segments: NarrationSegment[];
 } {
-  const o = d as Record<string, unknown>;
-  return (
-    !!o &&
-    typeof o.audio_url === "string" &&
-    typeof o.audio_ms === "number" &&
-    Array.isArray(o.segments) &&
-    o.segments.every(
-      (s: unknown) =>
-        typeof (s as NarrationSegment)?.start_ms === "number" &&
-        typeof (s as NarrationSegment)?.end_ms === "number",
-    )
-  );
+  if (!data || typeof data !== "object" || Array.isArray(data)) return false;
+  const o = data as Record<string, unknown>;
+
+  if (typeof o.audio_url !== "string") return false;
+  if (!isFiniteNonNegative(o.audio_ms)) return false;
+  if (o.synthesis_ms !== undefined && !isFiniteNonNegative(o.synthesis_ms)) return false;
+  if (!Array.isArray(o.segments)) return false;
+
+  let previousEnd = 0;
+  for (const raw of o.segments) {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return false;
+    const segment = raw as Record<string, unknown>;
+
+    if (typeof segment.text !== "string") return false;
+    if (!isFiniteNonNegative(segment.start_ms) || !isFiniteNonNegative(segment.end_ms)) return false;
+    if (segment.start_ms > segment.end_ms) return false;
+    if (segment.end_ms > o.audio_ms) return false;
+    if (segment.start_ms < previousEnd) return false; // overlap or out of order
+
+    previousEnd = segment.end_ms;
+  }
+
+  return true;
 }
 
 /** A plan the conductor can run with no audio at all. Not an error state. */
@@ -188,15 +276,19 @@ export function silentNarration(segments: string[]): NarrationResponse {
   };
 }
 
-export async function narrate(
-  segments: string[],
-  mood: Mood = "ceremonial",
-): Promise<NarrationResponse> {
+/**
+ * narrate() never throws to its caller. Every failure mode — timeout,
+ * bad status, invalid JSON, malformed shape — collapses to
+ * silentNarration(). The ceremony continues; only the acoustic layer
+ * is absent. This is the asymmetry with speak() described in WHAT
+ * CHANGED §3, and it is intentional.
+ */
+export async function narrate(segments: string[], mood: Mood = "ceremonial"): Promise<NarrationResponse> {
   if (!LIVE_GRID_SERVICES) return silentNarration(segments);
 
   let data: unknown;
   try {
-    const res = await fetchWithTimeout(
+    const result = await fetchJsonWithinBudget<unknown>(
       `${GRID_SERVICES.voice}/narrate`,
       {
         method: "POST",
@@ -205,14 +297,15 @@ export async function narrate(
       },
       NARRATE_TIMEOUT_MS,
     );
-    if (!res.ok) throw new Error(`Voice /narrate ${res.status}`);
-    data = await res.json();
+    if (!result.response.ok) return silentNarration(segments);
+    data = result.data;
   } catch {
-    return silentNarration(segments); // voice failed; the ceremony continues
+    // Voice failed, timed out, or the body never resolved within budget.
+    return silentNarration(segments);
   }
 
   if (!isNarrationShape(data)) {
-    // Server is on the old contract. Do not guess cue points from it.
+    // Old contract, or garbage. Do not guess cue points from it.
     return silentNarration(segments);
   }
 
@@ -230,9 +323,13 @@ export async function voiceHealth(): Promise<HealthResponse> {
     return { status: "healthy", engine: "mock", voice: GRID_VOICE_NAME, mock: true };
   }
   try {
-    const res = await fetchWithTimeout(`${GRID_SERVICES.voice}/health`, {}, PROBE_TIMEOUT_MS);
-    if (!res.ok) return { status: "degraded", detail: `HTTP ${res.status}` };
-    return (await res.json()) as HealthResponse;
+    const { response, data } = await fetchJsonWithinBudget<HealthResponse>(
+      `${GRID_SERVICES.voice}/health`,
+      {},
+      PROBE_TIMEOUT_MS,
+    );
+    if (!response.ok) return { status: "degraded", detail: `HTTP ${response.status}` };
+    return data;
   } catch (err) {
     return { status: "down", detail: (err as Error).message };
   }
@@ -243,10 +340,13 @@ export async function listVoices(): Promise<VoiceOption[]> {
     return [{ id: GRID_VOICE_NAME, label: "Mock voice (preview)", status: "available" }];
   }
   try {
-    const res = await fetchWithTimeout(`${GRID_SERVICES.voice}/voices`, {}, PROBE_TIMEOUT_MS);
-    if (!res.ok) return [];
-    const data = (await res.json()) as { voices?: VoiceOption[] };
-    return data.voices ?? [];
+    const { response, data } = await fetchJsonWithinBudget<{ voices?: VoiceOption[] }>(
+      `${GRID_SERVICES.voice}/voices`,
+      {},
+      PROBE_TIMEOUT_MS,
+    );
+    if (!response.ok) return [];
+    return Array.isArray(data.voices) ? data.voices : [];
   } catch {
     return [];
   }

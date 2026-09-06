@@ -78,5 +78,9 @@ class EventBus:
         for q in self._queues:
             await q.put(event)
 
+    def recent(self, limit: int = 50) -> List[GridEvent]:
+        """Return newest in-process observations without exposing mutable history."""
+        return list(reversed(self._history[-max(0, limit):]))
+
 # Global singleton event bus
 event_bus = EventBus()
